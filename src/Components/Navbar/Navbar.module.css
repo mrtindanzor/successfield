@@ -1,0 +1,31 @@
+nav{
+  position: fixed;
+  background-color: var(--w-color);
+  overflow: hidden;
+  overflow-y: auto;
+  display: none;
+  z-index: 10;
+}
+
+@media (max-width: 630px) {
+  nav{
+    top: 51px;
+    height: calc(100vh - 51px);
+    width: 95vw;
+    padding: 10px;
+    flex-direction: column;
+    box-shadow: 2px 0 2px 2px var(--b-color);
+  }
+}
+@media (min-width: 630px) {
+  nav{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    height: calc(80vh - 50px);
+    flex-wrap: wrap;
+    box-shadow: 0 0 3px 2px var(--b-color);
+  }
+}

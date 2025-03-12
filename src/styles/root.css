@@ -1,0 +1,52 @@
+@font-face {
+  font-family: raleway;
+  src: url('../assets/fonts/raleway/Raleway-Black.ttf');
+}
+@font-face {
+  font-family: raleway-l;
+  src: url('../assets/fonts/raleway/Raleway-Light.ttf');
+}
+@font-face {
+  font-family: raleway-m;
+  src: url('../assets/fonts/raleway/Raleway-Medium.ttf');
+}
+@font-face {
+  font-family: raleway-i;
+  src: url('../assets/fonts/raleway/Raleway-Italic.ttf');
+}
+@font-face {
+  font-family: texturina-bold;
+  src: url('../assets/fonts/texturina/Texturina_14pt-Bold.ttf');
+}
+@font-face {
+  font-family: texturina;
+  src: url('../assets/fonts/texturina/Texturina_14pt-Black.ttf');
+}
+@font-face {
+  font-family: texturina-i;
+  src: url('../assets/fonts/texturina/Texturina_14pt-Italic.ttf');
+}
+:root{
+  --p-color: #039703;
+  --s-color: #d41f1f;
+  --t-color: rgb(161, 3, 161);
+
+  --b-color: black;
+  --w-color: white;
+  --f-size: 14px;
+  --s-size: 18px;
+  --t-size: 22px;
+  --fo-size: 26px;
+  --fi-size: 30px;
+  --si-size: 40px;
+}
+*{
+  margin: 0;
+  padding: 0;
+  font-family: raleway-m;
+  color: black;
+  box-sizing: border-box;
+}
+*:not(h1, h2, h3, h4, h5, h6){
+  font-size: var(--f-size);
+}
