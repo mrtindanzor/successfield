@@ -1,6 +1,9 @@
 .notFound{
-  margin-inline: auto;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   width: fit-content;
+  text-align: center;
   display: flex;
   flex-direction: column;
   gap: 25px;

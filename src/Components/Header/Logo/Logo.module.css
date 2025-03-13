@@ -1,6 +1,9 @@
 .logo{
   aspect-ratio: 1/1;
 }
+.logoText{
+  font-weight: 500;
+}
 .logoContainer{
   text-decoration: none;
 }
@@ -26,7 +29,7 @@
     align-items: center;
   }
   .logoText{
-    font-size: var(--fo-size);
+    font-size: var(--t-size);
   }
   .logo{
     height: 40px;

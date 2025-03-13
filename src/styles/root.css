@@ -46,7 +46,23 @@
   font-family: raleway-m;
   color: black;
   box-sizing: border-box;
+  user-select: none;
 }
 *:not(h1, h2, h3, h4, h5, h6){
   font-size: var(--f-size);
+}
+* ::-webkit-scrollbar{
+  background-color: var(--b-color);
+  width: 3px;
+}
+* ::-webkit-scrollbar-thumb{
+  width: 5px;
+  cursor: grab;
+  background-color: var(--w-color);
+  border-left: 1px solid var(--b-color);
+}
+body{
+  min-width: 100vw;
+  min-height: 100vh;
+  padding-top: 50px;
 }
