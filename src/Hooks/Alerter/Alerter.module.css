@@ -1,0 +1,14 @@
+.alerter{
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  padding-block: 10px;
+  padding-inline: 10px 70px;
+  background-color: var(--p-color);
+  color: var(--w-color);
+  z-index: 999;
+  border-left: 10px solid var(--b-color);
+  border-right: 2px solid var(--b-color);
+  text-transform: uppercase;
+  min-width: min(90vw, 300px);
+}

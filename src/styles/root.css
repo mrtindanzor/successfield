@@ -15,7 +15,7 @@
   src: url('../assets/fonts/raleway/Raleway-Italic.ttf');
 }
 @font-face {
-  font-family: texturina-bold;
+  font-family: texturina-b;
   src: url('../assets/fonts/texturina/Texturina_14pt-Bold.ttf');
 }
 @font-face {
@@ -29,10 +29,13 @@
 :root{
   --p-color: #039703;
   --s-color: #d41f1f;
-  --t-color: rgb(161, 3, 161);
-
+  --t-color: purple;
+  --glossy-l-color: rgba(255, 255, 255, 0.293);
+  --glossy-m-color: rgba(255, 255, 255, 0.593);
+  --glossy-h-color: rgba(255, 255, 255, 0.793);
   --b-color: black;
   --w-color: white;
+
   --f-size: 14px;
   --s-size: 18px;
   --t-size: 22px;
@@ -64,5 +67,12 @@
 body{
   min-width: 100vw;
   min-height: 100vh;
-  padding-top: 50px;
+  padding-top: 55px;
+}
+[aria-current='page'].active {
+  background-color: var(--s-color) !important;
+  color: var(--w-color) !important;
+}
+[aria-current='page'].active *{
+  fill: var(--w-color) !important;
 }

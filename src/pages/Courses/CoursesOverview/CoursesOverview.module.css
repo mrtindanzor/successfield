@@ -1,0 +1,9 @@
+.mainContent{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, min(300px, 45%));
+  padding-block: 30px;
+  padding-inline: 10px;
+  justify-content: center;
+  column-gap: 30px;
+  row-gap: 50px;
+}

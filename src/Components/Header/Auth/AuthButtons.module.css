@@ -20,6 +20,7 @@
   overflow: hidden;
   z-index: 1;
   transition: .3s;
+  padding: 5px;
 }
 .loginLink::before{
   content: '';
@@ -48,6 +49,7 @@
   text-decoration: none;
   overflow: hidden;
   z-index: 0;
+  padding: 5px;
   transition: .3s linear;
 }
 .signUpLink:hover{
