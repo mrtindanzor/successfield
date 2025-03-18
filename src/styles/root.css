@@ -28,6 +28,7 @@
 }
 :root{
   --p-color: #039703;
+  --l-p-color: lightgreen;
   --s-color: #d41f1f;
   --t-color: purple;
   --glossy-l-color: rgba(255, 255, 255, 0.293);

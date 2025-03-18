@@ -1,13 +1,18 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useSetAlert } from "../Alerter/Alerter";
 
-export default function useAuthentication(credentials){
+const AuthContext = createContext()
+
+function useAuthentication(){
+  const setAlert = useSetAlert()
   const stringPattern = /^[\w\s.,-]+$/
   const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [token, setToken] = useState(null)
   const [currentUser, setCurrentUser] = useState(null)
   const [initialRefreshPending, setInitialRefreshPending] = useState(true)
-  const refreshIntervalRef = useRef()
+  const fetchesRef = useRef(0)
+  const autoFetchTokenRef = useRef()
   const baseUri = 'http://localhost:8000/'
 
   const headers = useMemo(() => {
@@ -16,36 +21,36 @@ export default function useAuthentication(credentials){
     return h
   },[])
 
+  const autoFetchToken = () => {
+    autoFetchTokenRef.current = setInterval(refreshToken, 14 * 60 * 1000)
+    fetchesRef.current = 1
+  }
+  
   useEffect(() => {
-    
-    if(!isLoggedIn && refreshIntervalRef.current) clearInterval(refreshIntervalRef.current)
+    !isLoggedIn && fetchesRef.current < 1 && refreshToken()
+      .then( res => {
+        clearInterval(autoFetchToken)
+        setInitialRefreshPending(false)
+      })
 
-    updateInitialPending()
+    if(isLoggedIn) autoFetchToken()
+    if(fetchesRef.current > 0 && !isLoggedIn) autoFetchTokenRef.current && clearInterval(autoFetchTokenRef.current)
 
     return () => {
-      if(refreshIntervalRef.current) clearInterval(refreshIntervalRef.current)
-    }
-  },[])
-
-  useEffect(() => {
-    if(isLoggedIn){
-      startRefresh()
+      if(!isLoggedIn && autoFetchTokenRef.current) {
+        clearInterval(autoFetchTokenRef.current)
+      }
     }
   },[isLoggedIn])
 
-  async function updateInitialPending(){
-    await startRefresh()
-    setInitialRefreshPending(false)
-  }
+  useEffect(() => {
+    token && setIsLoggedIn(true)
+    !token && setIsLoggedIn(false)
+  },[token])
 
-  async function startRefresh(){
-    const userLoggedIn = await refreshToken()
-    if(!userLoggedIn) return
-    const interval = 14 * 60 * 1000
-    refreshIntervalRef.current = setInterval(refreshToken, interval)
-  }
 
-  async function registration(){
+
+  async function registration(credentials, navigate){
     let { firstname, middlename, surname, email, password, cpassword } = credentials
     if(!firstname) return { msg: 'Enter your firstname' }
     if(firstname.length < 3) return { msg: 'Firstname too short' }
@@ -70,15 +75,16 @@ export default function useAuthentication(credentials){
       const response = await fetch(uri, options)
       if(!response.ok) return { msg: 'An error occured'} 
       const res = await response.json()
-      return { msg: res.msg}
+      setAlert(res.msg)
+      if(res.status === 201) setTimeout(() => navigate('/users/students-area'), 5000)
     } 
       catch(err){
-        return { msg: err.message}
+        setAlert(err.msg)
     }
 
   }
   
-  async function login(){
+  async function login(credentials, navigate){
     const email = credentials.email?.toLowerCase()
     const password = credentials.password
 
@@ -92,21 +98,22 @@ export default function useAuthentication(credentials){
 
     try{
       const response = await fetch(uri, options)
-      if(!response.ok) return { msg: 'An error occured'}
+      if(!response.ok) return setAlert('An error occured')
       const res = await response.json()
       switch(res.status){
         case 200: 
           setToken(res.token)
           setCurrentUser(res.user)
-          setIsLoggedIn(true)
-            break;
+          setAlert(res.msg)
+          setTimeout(() => navigate('/'), 4000)
+            break
         
         default: 
-          return { msg: res.msg}
+          return setAlert(res.msg)
       }
     }
       catch(err){
-        return { msg: err.message}
+        return setAlert(err.message)
       }
   }
 
@@ -120,19 +127,31 @@ export default function useAuthentication(credentials){
       if(res.token){
         setToken(res.token)
         setCurrentUser(res.user)
-        setIsLoggedIn(true)
-        return true
+        return { loggedIn : true }
       } else{
         setToken(null)
         setCurrentUser(null)
-        setIsLoggedIn(false)
-        return false
+        return { loggedIn : false }
       }
     }
       catch(err){
-        return
+        return false
       }
   }
 
   return { isLoggedIn, initialRefreshPending, registration, login, currentUser }
+}
+
+export default function AuthenticationProvider({ children }){
+  const auth = useAuthentication()
+  
+  return (
+    <AuthContext.Provider value={ auth }>
+      { children }
+    </AuthContext.Provider>
+  )
+}
+
+export function useAuth(){
+  return useContext(AuthContext)
 }

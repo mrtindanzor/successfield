@@ -2,6 +2,10 @@
   width: 20px;
 }
 
+.menuList li:nth-of-type(odd){
+  background-color: var(--l-p-color);
+}
+
 @media (max-width: 630px) {
   .desktopNav{
     display: none !important;
@@ -27,9 +31,6 @@
       display: flex;
       flex-direction: column;
       list-style: none;
-    }
-    .menuItem, .subListItem, .subListBtn{
-      border-bottom: 1px solid var(--b-color);
     }
     .menuItem > a, .menuItem > span, .subListItem > a, .subListItem > span, .subListBtn{
       display: flex;
@@ -112,8 +113,8 @@
     display: none;
   }
   .menuBtn{
-    fill: var(--w-color);
-    height: 40px;
+    fill: var(--b-color);
+    height: 30px;
   }
   .closeBtn{
     fill: var(--t-color);
@@ -132,10 +133,10 @@
     fill: var(--w-color);
   }
   .menuButton{
-    background-color: var(--b-color);
     color: var(--w-color);
-    height: 40px;
+    height: 30px;
     cursor: pointer;
+    margin-right: 10px;
     aspect-ratio: 1/1;
   }
 }
@@ -187,12 +188,12 @@
       padding: 10px;
       min-width: 200px;
       padding-inline: 10px 0;
-      border-bottom: 1px solid var(--b-color);
       text-decoration: none;
       overflow: hidden;
       cursor: pointer;
       z-index: 0;
     }
+    
     .menuList li > *:hover {
       color: var(--w-color);
       fill: var(--w-color);
@@ -227,12 +228,14 @@
     .subList{
       position: absolute;
       display: none;
+      min-width: 260px;
       top: 0;
       left: calc(100% + 8px);
       border: 1px solid var(--b-color)
     }
     .subList > :last-child a{
       border-bottom: none;
+      background-color: var(--w-color);
     }
   }
 }

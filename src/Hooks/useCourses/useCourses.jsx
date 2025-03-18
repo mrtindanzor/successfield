@@ -1,26 +1,47 @@
-import coursesDb from "./coursesDb";
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-export default function useCourses(){
-  const [Courses, setCourses] = useState(coursesDb)
+const CoursesContext = createContext()
 
-  const coursesList = []
-  Courses.map(el => {
-    coursesList.push({ course: el.course })
-  })
+export default function CoursesProvider({ children }){
+  const [Courses, setCourses] = useState([])
+  const [coursesList, setCoursesList] = useState([])
+  const [currentCourse, setCurrentCourse ] = useState([])
+
+  useEffect(() =>{
+    fetchCourses()
+  }, [])
+
 
   async function fetchCourses(){
+    const uri = 'http://localhost:8000/courses'
+    const headers = new Headers()
+    headers.append('Content-Type', 'application/json')
+    const method = 'POST'
+    const response = await fetch(uri, { method, headers})
+    if(!response.ok) return setCourses(null)
+    const res = await response.json()
+    updateCoursesList(res.courses)
+    return setCourses(res.courses)
+  }
+
+  function getCourse(searchCourse){
+    setCurrentCourse(Courses.find(course => course.course === searchCourse))
     return
   }
-  async function addCourse(){
 
+  function updateCoursesList(allCourses){
+    const filtered = []
+    allCourses.map((course) => {
+      filtered.push({ course: course.course})
+    })
+    setCoursesList([...filtered])
   }
 
-  function getCourse(course){
-    const findCourse = Courses.find(el => el.course === course.trim().toLowerCase())
-    if(!findCourse) return null
-    return findCourse
-  }
-
-  return { coursesList, getCourse }
+  return (
+    <CoursesContext.Provider value={ { coursesList, getCourse } }>
+      { children }
+    </CoursesContext.Provider>
+  )
 }
+
+export function useCourses(){ return useContext(CoursesContext) }

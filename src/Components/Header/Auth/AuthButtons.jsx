@@ -1,8 +1,7 @@
 import icons from "../../../Icons/icons.jsx";
 import styles from "./AuthButtons.module.css";
-import useAuthentication from "../../../Hooks/useAuthentication/useAuthentication";
-import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../../Hooks/useAuthentication/useAuthentication";
 
 const loginBtn = icons.login(styles.loginBtn, 'Log in' )
 const signUpBtn = icons.signUp(styles.signUpBtn, 'Sign up' )
@@ -10,13 +9,13 @@ const userIcon = icons.userLine(styles.userIcon, 'My Profile')
 
 function NotLoggedIn(){
   return (
-    <div className={styles.authBtns}>
-      <NavLink to='/users/students-area' className={styles.loginLink}>
-        {loginBtn}
+    <div className={ styles.authBtns }>
+      <NavLink to='/users/students-area' className={ styles.loginLink }>
+        { loginBtn }
         Log in
       </NavLink>
-      <NavLink to='/users/join' className={styles.signUpLink}>
-        {signUpBtn}
+      <NavLink to='/users/join' className={ styles.signUpLink }>
+        { signUpBtn }
         Sign up
       </NavLink>
     </div>
@@ -26,7 +25,7 @@ function NotLoggedIn(){
 function MyProfile(){
 
   return (
-      <div className={styles.profileTab}>
+      <div className={ styles.profileTab }>
         { userIcon }
         Profile
       </div>
@@ -34,12 +33,13 @@ function MyProfile(){
 }
 
 export default function AuthButtons(){
-  const { isLoggedIn, initialRefreshPending } = useAuthentication()
-  const [loggedIn, setLoggedIn] = useState(isLoggedIn)
+  const { isLoggedIn, initialRefreshPending } = useAuth()
 
-  useEffect(() => {
-    setLoggedIn(isLoggedIn)
-  },[isLoggedIn])
-
-  return !initialRefreshPending ? loggedIn ? <MyProfile /> : <NotLoggedIn /> : null
+  return (
+    <>
+      
+      { !initialRefreshPending && isLoggedIn && <MyProfile /> }
+      { !initialRefreshPending && !isLoggedIn && <NotLoggedIn /> }
+    </>
+  )
 }

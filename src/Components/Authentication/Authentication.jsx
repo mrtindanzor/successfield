@@ -1,31 +1,13 @@
 import icons from "./../../Icons/icons";
 import styles from "./Authentication.module.css";
-import useAlerter from "../../Hooks/Alerter/Alerter";
-import useAuthentication from "../../Hooks/useAuthentication/useAuthentication";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSetAlert } from "../../Hooks/Alerter/Alerter";
+import { useAuth } from "../../Hooks/useAuthentication/useAuthentication";
 
 const hideIcon = icons.eyeClose(styles.passwordIcon, 'Show')
 const showIcon = icons.eyeClose(styles.passwordIcon, 'Hide')
 
-async function handleFormSubmission(e, page, handler, setAlert){
-  e.preventDefault()
-
-  if(page === 'join'){
-    try{
-      const response = await handler()
-      setAlert(response.msg)
-    } catch(err) {
-      setAlert(err.message)
-    }
-  } else{
-    try{
-      const response = await handler()
-      setAlert(response.msg)
-    } catch(err){
-      setAlert(err.message)
-    }
-  }
-}
 
 export default function Authentication({ page }){
   const [firstname, setFirstname] = useState('')
@@ -36,9 +18,12 @@ export default function Authentication({ page }){
   const [cpassword, setCpassword] = useState('')
   const [passIcon, setPassIcon] = useState(hideIcon)
   const [cpassIcon, setCpassIcon] = useState(hideIcon)
-  const { setAlert, Alerter} = useAlerter()
+  const setMsg = useSetAlert()
+  const navigate = useNavigate()
+
+  
   const credentials = page === 'join' ? { firstname, middlename, surname, email, password, cpassword } : { email, password }
-  const { login, registration } = useAuthentication(credentials)
+  const { login, registration } = useAuth()
   
   const firstnameLabel = <label>
                           <span>Firstname: </span>
@@ -72,12 +57,30 @@ export default function Authentication({ page }){
                             <span className={styles.passwordIconBtn}> { cpassIcon } </span>
                           </label>
 
-  const handler = page === 'join' ? registration : login
+const handler = page === 'join' ? registration : login
+async function handleFormSubmission(e){
+  e.preventDefault()
+
+  if(page === 'join'){
+    try{
+      const res = await handler(credentials, navigate)
+      if(res && res.msg) setMsg(res.msg)
+      } catch(err) {
+    setMsg(err.message)
+    }
+  } else{
+    try{
+      const res = await handler(credentials, navigate)
+      if(res && res.msg) setMsg(res.msg)
+    } catch(err){
+      setMsg(err.message)
+    }
+  }
+}
 
   return (
     <>
-      <Alerter />
-      <form onSubmit={(e) => handleFormSubmission(e, page, handler, setAlert)} className={styles.authForm}>
+      <form onSubmit={(e) => handleFormSubmission(e)} className={styles.authForm}>
         <h3>
           { page === 'join' ? 'Create an account' : 'Sign in' }
         </h3>

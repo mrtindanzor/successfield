@@ -2,6 +2,7 @@ header{
   position: fixed;
   inset: 0;
   display: flex;
+  justify-content: flex-start;
   align-items: center;
   padding-left: 10px;
   padding-block: 2px;
@@ -12,9 +13,8 @@ header{
   z-index: 1000;
 }
 @media (max-width: 650px) {
-  header{
-    justify-content: space-between;
-
+  header > :last-child{
+    margin-left: auto;
   }
 }
 @media (min-width: 650px) {
