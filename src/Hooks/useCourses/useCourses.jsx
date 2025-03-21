@@ -5,7 +5,6 @@ const CoursesContext = createContext()
 export default function CoursesProvider({ children }){
   const [Courses, setCourses] = useState([])
   const [coursesList, setCoursesList] = useState([])
-  const [currentCourse, setCurrentCourse ] = useState([])
 
   useEffect(() =>{
     fetchCourses()
@@ -18,15 +17,15 @@ export default function CoursesProvider({ children }){
     headers.append('Content-Type', 'application/json')
     const method = 'POST'
     const response = await fetch(uri, { method, headers})
-    if(!response.ok) return setCourses(null)
+    if(!response.ok) return setCourses([])
     const res = await response.json()
     updateCoursesList(res.courses)
     return setCourses(res.courses)
   }
 
   function getCourse(searchCourse){
-    setCurrentCourse(Courses.find(course => course.course === searchCourse))
-    return
+    const course =  Courses.find(course => course.course === searchCourse)
+    return course
   }
 
   function updateCoursesList(allCourses){

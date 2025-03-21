@@ -8,7 +8,7 @@ export default function CourseCard({ pic = '', title }){
   const placeholder = pic ? <img src={ pic } alt={ courseAcronym } className={ styles.coursePic } /> : <div className={ styles.acronym}> { courseAcronym } </div>
 
   return (
-    <Link className={ styles.courseCard } to={ courseLink }>
+    <Link className={ styles.courseCard } to={ '/courses/' + courseLink }>
       { placeholder }
       <span className={ styles.title }> { capitalize( title ) } </span>
     </Link>

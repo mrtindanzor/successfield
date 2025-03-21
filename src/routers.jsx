@@ -4,6 +4,7 @@ import CoursesOverview from "./pages/Courses/CoursesOverview/CoursesOverview";
 import Home from "./pages/Home/Home";
 import LayoutOne from "./Components/Layouts/LayoutOne";
 import NotFound from "./pages/NotFound/NotFound";
+import NotAuthenticated from './Components/ProtectRoutes/NotAuthenticated'
 import { Route, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
 
 const router = createBrowserRouter(
