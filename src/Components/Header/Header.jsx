@@ -6,7 +6,7 @@ import { DeskMenuButton, MenuButton } from "../Navbar/Navbar";
 export default function Header(){
 
   return (
-    <header>
+    <header className={ styles.header }>
       <MenuButton />
       <Logo />
       <DeskMenuButton />
