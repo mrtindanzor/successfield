@@ -28,6 +28,11 @@ export default function CoursesProvider({ children }){
     return course
   }
 
+  function getModule(searchCourse){
+    const course =  Courses.find(course => course.course === searchCourse)
+    return course.modules
+  }
+
   function updateCoursesList(allCourses){
     const filtered = []
     allCourses.map((course) => {
@@ -37,7 +42,7 @@ export default function CoursesProvider({ children }){
   }
 
   return (
-    <CoursesContext.Provider value={ { coursesList, getCourse } }>
+    <CoursesContext.Provider value={ { coursesList, getCourse, getModule } }>
       { children }
     </CoursesContext.Provider>
   )

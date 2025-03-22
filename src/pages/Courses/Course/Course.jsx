@@ -1,8 +1,9 @@
 import styles from "./Course.module.css";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useCourses } from "./../../../Hooks/useCourses/useCourses";
 import CourseCard from "../../../Components/CourseCard/CourseCard";
+import { formatUrl } from "../../../core";
 
 function SubListItem(props){
   const { list } = props
@@ -24,16 +25,31 @@ function SubListItem(props){
   )
 }
 
+function ModuleList({ list }){
+
+  list.sort((x, y) => x.index - y.index)
+
+  return (
+    <ul className={ styles.subList }>
+      {
+        list.map(function( module, i){
+          return <li key={ i }> <span className={ styles.moduleIndex }> { module.index } </span> { module.title } </li>
+        })
+      }
+    </ul>
+  )
+}
+
 export default function Course(){
   const [currentCourse, setCurrentCourse] = useState(null)
   const { getCourse, coursesList } = useCourses()
   let { course } = useParams()
-  course = course.trim().toLocaleLowerCase().split('-').join(' ')
+  course = formatUrl(course)
   const listContainerRef = useRef()
 
 
   function activeSubList(e = ''){
-    const spans = listContainerRef.current.querySelectorAll('span')
+    const spans = listContainerRef.current.querySelectorAll('div > span')
     for (const span of spans){
       span.style.backgroundColor = 'var(--t-green)'
       const list = span.nextElementSibling
@@ -65,24 +81,29 @@ export default function Course(){
                             <SubListItem content={ currentCourse.fee } />
                           </div> }
       
+        { currentCourse && currentCourse.modules.length > 0 ? <Link to={ '' + currentCourse.modules.sort((x, y) => x.index - y.index)[0].index } className={ styles.startCourse }> Start Course </Link> : null }
       <hr />
 
       <div className={ styles.listContainer } ref={ listContainerRef }>
-        { currentCourse && <div className={ styles.courseOutline } onClick={ (e) => activeSubList(e) } >
-                              <span> Outlines </span>
+        { currentCourse && <div className={ styles.courseOutline } >
+                              <span  onClick={ (e) => activeSubList(e) }> Outlines </span>
                               <SubListItem list={ currentCourse.outlines } />
                             </div> }
-        { currentCourse && <div className={ styles.courseObjective } onClick={ (e) => activeSubList(e) } >
-                              <span> Objectives </span>
+        { currentCourse && <div className={ styles.courseObjective } >
+                              <span  onClick={ (e) => activeSubList(e) }> Objectives </span>
                               <SubListItem list={ currentCourse.objectives } />
                             </div> }
-        { currentCourse && <div className={ styles.courseBenefit } onClick={ (e) => activeSubList(e) } >
-                              <span> Benefits </span>
+        { currentCourse && <div className={ styles.courseBenefit } >
+                              <span  onClick={ (e) => activeSubList(e) }> Benefits </span>
                               <SubListItem list={ currentCourse.benefits } />
                             </div> }
-        { currentCourse && <div className={ styles.courseCertificate } onClick={ (e) => activeSubList(e) } >
-                              <span> Certificate </span>
+        { currentCourse && <div className={ styles.courseCertificate } >
+                              <span  onClick={ (e) => activeSubList(e) }> Certificate </span>
                               <SubListItem content={ currentCourse.certificate } />
+                            </div> }
+        { currentCourse && <div className={ styles.courseModule } >
+                              <span  onClick={ (e) => activeSubList(e) }> Modules </span>
+                              <ModuleList list={ currentCourse.modules } />
                             </div> }
       </div>
 

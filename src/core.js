@@ -18,6 +18,11 @@ export function capitalize(phrase){
   return newPhrase
 }
 
+export function formatUrl(url){
+  let newUrl = url.toLowerCase().trim().split('-').join(' ')
+  return newUrl
+}
+
 export function createAcronym(title){
   let ac = []
   let words = title.trim().toUpperCase().split(' ')

@@ -10,7 +10,7 @@ function useAuthentication(){
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [token, setToken] = useState(null)
   const [currentUser, setCurrentUser] = useState(null)
-  const [initialRefreshPending, setInitialRefreshPending] = useState(true)
+  const [initialFetch, setInitialFetch] = useState(true)
   const fetchesRef = useRef(0)
   const autoFetchTokenRef = useRef()
   const baseUri = 'http://localhost:8000/'
@@ -30,7 +30,7 @@ function useAuthentication(){
     !isLoggedIn && fetchesRef.current < 1 && refreshToken()
       .then( res => {
         clearInterval(autoFetchToken)
-        setInitialRefreshPending(false)
+        setInitialFetch(false)
       })
 
     if(isLoggedIn) autoFetchToken()
@@ -42,11 +42,6 @@ function useAuthentication(){
       }
     }
   },[isLoggedIn])
-
-  useEffect(() => {
-    token && setIsLoggedIn(true)
-    !token && setIsLoggedIn(false)
-  },[token])
 
 
 
@@ -104,6 +99,7 @@ function useAuthentication(){
         case 200: 
           setToken(res.token)
           setCurrentUser(res.user)
+          setIsLoggedIn(true)
           setAlert(res.msg)
           setTimeout(() => navigate('/'), 4000)
             break
@@ -127,10 +123,12 @@ function useAuthentication(){
       if(res.token){
         setToken(res.token)
         setCurrentUser(res.user)
+        setIsLoggedIn(true)
         return { loggedIn : true }
       } else{
         setToken(null)
         setCurrentUser(null)
+        setIsLoggedIn(false)
         return { loggedIn : false }
       }
     }
@@ -139,7 +137,7 @@ function useAuthentication(){
       }
   }
 
-  return { isLoggedIn, initialRefreshPending, registration, login, currentUser }
+  return { isLoggedIn, initialFetch, registration, login, currentUser }
 }
 
 export default function AuthenticationProvider({ children }){

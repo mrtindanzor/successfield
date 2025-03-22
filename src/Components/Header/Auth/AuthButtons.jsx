@@ -33,13 +33,13 @@ function MyProfile(){
 }
 
 export default function AuthButtons(){
-  const { isLoggedIn, initialRefreshPending } = useAuth()
+  const { isLoggedIn, initialFetch } = useAuth()
 
   return (
     <>
       
-      { !initialRefreshPending && isLoggedIn && <MyProfile /> }
-      { !initialRefreshPending && !isLoggedIn && <NotLoggedIn /> }
+      { !initialFetch && isLoggedIn && <MyProfile /> }
+      { !initialFetch && !isLoggedIn && <NotLoggedIn /> }
     </>
   )
 }

@@ -6,7 +6,7 @@ const loader = <div className={ styles.loader }>
               </div>
 
 export default function StarterLoader(){
-  const { initialRefreshPending } = useAuth()
+  const { initialFetch } = useAuth()
 
-  return  initialRefreshPending ? loader : null 
+  return  initialFetch ? loader : null 
 }
