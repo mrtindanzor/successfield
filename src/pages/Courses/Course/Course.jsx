@@ -1,4 +1,4 @@
-import styles from "./Course.module.css";
+import styles from "./Courses.module.css";
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useCourses } from "./../../../Hooks/useCourses/useCourses";
