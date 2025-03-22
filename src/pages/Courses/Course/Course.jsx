@@ -5,6 +5,7 @@ import { useCourses } from "./../../../Hooks/useCourses/useCourses";
 import CourseCard from "../../../Components/CourseCard/CourseCard";
 import { formatUrl } from "../../../core";
 
+
 function SubListItem(props){
   const { list } = props
   const { content } = props
