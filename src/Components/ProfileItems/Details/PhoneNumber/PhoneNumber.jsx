@@ -6,7 +6,7 @@ export default function PhoneNumber(){
 
   return (
     <form className={ styles.form }>
-      <input type="tel" className={ styles.PhoneNumberBox } value={ currentUser.phoneNumber } />
+      <input type="tel" className={ styles.PhoneNumberBox } value={ currentUser.phone } />
       <button className={ styles.submitButton }> Change phone number </button>
     </form>
   )
