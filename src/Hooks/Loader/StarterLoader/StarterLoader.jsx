@@ -1,5 +1,5 @@
 import styles from "./StarterLoader.module.css";
-import { useAuth } from "./../../useAuthentication/useAuthentication";
+import useAuth from "./../../../Contexts/AuthenticationContext/AuthenticationContext";
 
 const loader = <div className={ styles.loader }>
                   <div className={ styles.one }></div>

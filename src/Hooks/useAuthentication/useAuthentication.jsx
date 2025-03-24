@@ -1,9 +1,8 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSetAlert } from "../Alerter/Alerter";
+import useServerUri from "../../Contexts/serverContexts/baseServer";
 
-const AuthContext = createContext()
-
-function useAuthentication(){
+export default function useAuthentication(){
   const setAlert = useSetAlert()
   const stringPattern = /^[\w\s.,-]+$/
   const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
@@ -13,7 +12,7 @@ function useAuthentication(){
   const [initialFetch, setInitialFetch] = useState(true)
   const fetchesRef = useRef(0)
   const autoFetchTokenRef = useRef()
-  const baseUri = 'http://localhost:8000/'
+  const serverUri = useServerUri()
 
   const headers = useMemo(() => {
     const h = new Headers()
@@ -62,7 +61,7 @@ function useAuthentication(){
     if(password !== cpassword) return { msg: 'Passwords do not match' }
 
 
-    const uri = baseUri + 'users/register'
+    const uri = serverUri + 'users/register'
     const body = JSON.stringify({ firstname, middlename, surname, email, password, cpassword })
     const options = { method: 'PUT', headers, body }
 
@@ -87,7 +86,7 @@ function useAuthentication(){
     if(!password) return { msg: 'Enter your password'}
     if(!emailPattern.test(email)) return { msg: 'Enter a valid email address'}
 
-    const uri = baseUri + 'users/login'
+    const uri = serverUri + 'users/login'
     const body = JSON.stringify({email, password})
     const options = { method: 'POST', headers, body, credentials: 'include' }
 
@@ -114,7 +113,7 @@ function useAuthentication(){
   }
 
   async function refreshToken(){
-    const uri = baseUri + 'users/newToken'
+    const uri = serverUri + 'users/newToken'
     const method = 'POST'
     try{
       const response = await fetch(uri, { method, headers, credentials: 'include' })
@@ -137,19 +136,12 @@ function useAuthentication(){
       }
   }
 
-  return { isLoggedIn, initialFetch, registration, login, currentUser }
+  async function logout(){
+    const uri = serverUri + 'logout'
+    const method = 'POST'
+    
+  }
+
+  return { isLoggedIn, initialFetch, registration, login, logout, currentUser }
 }
 
-export default function AuthenticationProvider({ children }){
-  const auth = useAuthentication()
-  
-  return (
-    <AuthContext.Provider value={ auth }>
-      { children }
-    </AuthContext.Provider>
-  )
-}
-
-export function useAuth(){
-  return useContext(AuthContext)
-}

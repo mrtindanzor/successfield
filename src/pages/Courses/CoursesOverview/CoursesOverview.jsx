@@ -1,6 +1,6 @@
 import CourseCard from "../../../Components/CourseCard/CourseCard";
 import styles from "./CoursesOverview.module.css";
-import { useCourses } from "../../../Hooks/useCourses/useCourses";
+import useCourses from "./../../../Contexts/CourseContext/CoursesContext";
 
 export default function CoursesOverview(){
   const { coursesList } = useCourses()

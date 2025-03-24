@@ -1,0 +1,58 @@
+.form, .certificateDetails, .invalidCertificate{
+  display: grid;
+  gap: 30px;
+  margin-inline: auto;
+  width: min(95%, 700px);
+  border: 2px solid var(--t-green);
+  padding: 20px 30px;
+  margin-top: 40px;
+}
+.form h1, .invalidCertificate h2{
+  font-family: 'texturina';
+  text-transform: uppercase;
+}
+.searchLabel, .certificateDetails > div{
+  display: grid;
+  gap: 10px;
+}
+.searchLabel *, .certificateDetails *{
+  width: 100%;
+  font-size: var(--s-size);
+}
+.searchLabel span{
+  font-family: 'texturina';
+}
+.searchBox{
+  padding: 7px 10px;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+.submitButton{
+  padding-block: 10px;
+  background: var(--p-color);
+  color: var(--w-color);
+  border: 1px solid currentColor;
+  font-size: var(--s-size);
+  font-weight: 500;
+  cursor: pointer;
+}
+.submitButton:hover{
+  background: var(--t-green);
+}
+.certificateDetails > div b, .invalidCertificate b{
+  color: var(--p-color);
+  text-transform: uppercase;
+  font-size: var(--t-size);
+  font-family: texturina;
+}
+.certificateDetails > div span, .invalidCertificate span{
+  font-family: arial;
+  font-size: var(--t-size);
+  text-transform: uppercase;
+}
+.invalidCertificate b{
+    color: var(--b-color);
+  }
+.invalidCertificate span{
+  color: var(--s-color);
+}

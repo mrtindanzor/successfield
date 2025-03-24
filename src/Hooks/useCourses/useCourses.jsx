@@ -1,10 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import useServerUri from "../../Contexts/serverContexts/baseServer";
 
-const CoursesContext = createContext()
-
-export default function CoursesProvider({ children }){
+export default function useCourse(){
   const [Courses, setCourses] = useState([])
   const [coursesList, setCoursesList] = useState([])
+  const serverUri = useServerUri()
 
   useEffect(() =>{
     fetchCourses()
@@ -12,7 +12,7 @@ export default function CoursesProvider({ children }){
 
 
   async function fetchCourses(){
-    const uri = 'http://localhost:8000/courses'
+    const uri = serverUri + 'courses'
     const headers = new Headers()
     headers.append('Content-Type', 'application/json')
     const method = 'POST'
@@ -41,11 +41,5 @@ export default function CoursesProvider({ children }){
     setCoursesList([...filtered])
   }
 
-  return (
-    <CoursesContext.Provider value={ { coursesList, getCourse, getModule } }>
-      { children }
-    </CoursesContext.Provider>
-  )
+  return  { coursesList, getCourse, getModule }
 }
-
-export function useCourses(){ return useContext(CoursesContext) }

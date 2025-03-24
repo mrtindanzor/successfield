@@ -99,6 +99,7 @@
   cursor: pointer;
   z-index: 0;
   overflow: hidden;
+  text-decoration: none;
 }
 .profileTab::after{
   content: '';

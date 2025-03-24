@@ -1,20 +1,23 @@
 import "./styles/root.css";
-import AuthenticationProvider from "./Hooks/useAuthentication/useAuthentication";
-import CoursesProvider from "./Hooks/useCourses/useCourses";
+import { AuthenticationProvider } from "./Contexts/AuthenticationContext/AuthenticationContext";
+import { CoursesProvider } from "./Contexts/CourseContext/CoursesContext";
 import router from "./routers";
 import { RouterProvider } from "react-router-dom";
 import { AlertMsgProvider } from "./Hooks/Alerter/Alerter";
+import { ServerProvider } from "./Contexts/serverContexts/baseServer";
 
 function App() {
 
   return (
-    <AlertMsgProvider>
-      <AuthenticationProvider>
-        <CoursesProvider>
-            <RouterProvider router={router} />
-        </CoursesProvider>
-      </AuthenticationProvider>
-    </AlertMsgProvider>
+    <ServerProvider>
+      <AlertMsgProvider>
+        <AuthenticationProvider>
+          <CoursesProvider>
+              <RouterProvider router={router} />
+          </CoursesProvider>
+        </AuthenticationProvider>
+      </AlertMsgProvider>
+    </ServerProvider>
   )
 }
 

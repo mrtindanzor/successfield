@@ -1,8 +1,7 @@
 import icons from "../../../Icons/icons.jsx";
 import styles from "./AuthButtons.module.css";
-import { NavLink } from "react-router-dom";
-import { useAuth } from "../../../Hooks/useAuthentication/useAuthentication";
-
+import { NavLink, Link } from "react-router-dom";
+import useAuth from './../../../Contexts/AuthenticationContext/AuthenticationContext'
 const loginBtn = icons.login(styles.loginBtn, 'Log in' )
 const signUpBtn = icons.signUp(styles.signUpBtn, 'Sign up' )
 const userIcon = icons.userLine(styles.userIcon, 'My Profile')
@@ -25,10 +24,10 @@ function NotLoggedIn(){
 function MyProfile(){
 
   return (
-      <div className={ styles.profileTab }>
+      <Link to='/dashboard/profile' className={ styles.profileTab }>
         { userIcon }
         Profile
-      </div>
+      </Link>
   )
 }
 

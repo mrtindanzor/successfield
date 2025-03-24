@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useCourses } from '../../../Hooks/useCourses/useCourses'
+import useCourses from './../../../Contexts/CourseContext/CoursesContext'
 import styles from './Module.module.css'
 import { useParams } from 'react-router-dom'
 import { formatUrl } from '../../../core'

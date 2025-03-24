@@ -1,0 +1,55 @@
+@media (min-width: 768px){
+  .subList{
+    padding-inline: 2px;
+    list-style: none;
+    border-right: 2px solid var(--t-green);
+    border-bottom: 2px solid var(--t-green);
+  }
+  .subList li{
+    position: relative;
+    padding: 20px;
+    border-bottom: 1px solid var(--t-green);
+    min-width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .subList li::after{
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--t-green);
+    transform: translateX(-100%);
+    transition: .1s linear;
+    z-index: -1;
+  }
+  .subList li:hover{
+    color: var(--w-color);
+  }
+  .subList li:hover::after{
+    transform: translateX(0);
+    transition: .3s linear;
+  }
+  .subList li:hover *{
+    color: var(--w-color);
+  }
+}
+
+@media (max-width: 768px) {
+  .subList{
+    list-style: none;
+    padding: 0;
+  }
+  .subList li{
+    padding: 20px;
+    border-bottom: 2px solid var(--t-green);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

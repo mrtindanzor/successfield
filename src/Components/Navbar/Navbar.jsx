@@ -2,8 +2,8 @@ import icons from "../../Icons/icons";
 import styles from "./Navbar.module.css";
 import { createContext, useContext, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { useAuth } from "../../Hooks/useAuthentication/useAuthentication";
-import { useCourses } from "../../Hooks/useCourses/useCourses";
+import useAuth from "./../../Contexts/AuthenticationContext/AuthenticationContext";
+import useCourses from "./../../Contexts/CourseContext/CoursesContext";
 import { capitalize } from "./../../core";
 
 const arrowRight = icons.chevronRight(styles.arrowRight, 'More')

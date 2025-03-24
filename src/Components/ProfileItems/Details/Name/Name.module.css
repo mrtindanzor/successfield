@@ -1,0 +1,37 @@
+.form{
+  display: flex;
+  flex-direction: column;
+  border: 1px solid;
+  align-items: center;
+  padding: 20px;
+}
+.form i{
+  background-color: var(--b-color);
+  color: var(--w-color);
+  padding-inline: 10px;
+}
+.form label, .form i{
+  display: grid;
+  gap: 5px;
+  width: min(400px, 90%);
+  padding-block: 10px;
+}
+.form label span{
+  font-size: var(--s-size);
+  font-family: texturina;
+  color: var(--p-color);
+}
+.form label input{
+  padding: 5px 10px;
+  text-transform: capitalize;
+}
+.form button{
+  width: min(400px, 90%);
+  display: block;
+  padding: 10px;
+  border: 1px solid var(--w-color);
+  color: var(--w-color);
+  background-color: var(--p-color);
+  margin-top: 10px;
+  cursor: pointer;
+}

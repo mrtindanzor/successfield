@@ -1,7 +1,7 @@
 import styles from "./Courses.module.css";
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useCourses } from "./../../../Hooks/useCourses/useCourses";
+import useCourses from "./../../../Contexts/CourseContext/CoursesContext";
 import CourseCard from "../../../Components/CourseCard/CourseCard";
 import { formatUrl } from "../../../core";
 
