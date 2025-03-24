@@ -2,12 +2,11 @@
   .subList{
     padding-inline: 2px;
     list-style: none;
-    border-right: 2px solid var(--t-green);
-    border-bottom: 2px solid var(--t-green);
   }
   .subList li{
     position: relative;
     padding: 20px;
+    border-left: 1px solid var(--t-green);
     border-bottom: 1px solid var(--t-green);
     min-width: 150px;
     display: flex;

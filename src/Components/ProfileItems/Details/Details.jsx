@@ -6,7 +6,6 @@ export default function Details(){
   const { activeMainList, activeSubList, mainListItems, dashboardRef } = useProfileList()
   useEffect(() => {
     if(activeSubList){
-      console.log(activeSubList)
       dashboardRef.current.style.transform = 'translateX(-200%)'
     }
   }, [activeSubList])

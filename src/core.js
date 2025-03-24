@@ -23,6 +23,11 @@ export function formatUrl(url){
   return newUrl
 }
 
+export function getBaseUrl(url){
+  let splitUrl = url.split('/').splice(0,3)
+  return splitUrl.join('/')
+}
+
 export function createAcronym(title){
   let ac = []
   let words = title.trim().toUpperCase().split(' ')

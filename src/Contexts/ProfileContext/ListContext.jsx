@@ -2,6 +2,8 @@ import { createContext, useContext, useState, useRef } from "react";
 import icons from './../../Icons/icons'
 import styles from './ListContext.module.css'
 import Name from "../../Components/ProfileItems/Details/Name/Name";
+import Email from "../../Components/ProfileItems/Details/Email/Email";
+import PhoneNumber from "../../Components/ProfileItems/Details/PhoneNumber/PhoneNumber";
 
 
 const ProfileListContext = createContext()
@@ -14,8 +16,12 @@ export function ProfileListProvider({ children }){
         { subList: 'Name',
           section: <Name />
          },
-        { subList: 'Email' },
-        { subList: 'Phone number' },
+        { subList: 'Email',
+          section: <Email />
+         },
+        { subList: 'Phone number', 
+          section: <PhoneNumber />
+         },
         { subList: 'Change password' },
         { subList: 'Reset password' },
       ]

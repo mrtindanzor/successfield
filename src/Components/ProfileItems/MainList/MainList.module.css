@@ -3,8 +3,6 @@
     padding-inline: 2px;
     display: flex;
     flex-direction: column;
-    border-right: 2px solid var(--p-color);
-    border-bottom: 2px solid var(--p-color);
   }
   .mainList li{
     position: relative;
@@ -12,6 +10,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
+    border-right: 1px solid var(--p-color);
     border-bottom: 1px solid var(--p-color);
     padding: 20px 10px;
     cursor: pointer;

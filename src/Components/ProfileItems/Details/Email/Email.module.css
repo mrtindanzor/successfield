@@ -1,0 +1,20 @@
+.form{
+  display: flex;
+  gap: 25px;
+  flex-direction: column;
+  align-items: center;
+  margin-inline: auto;
+  padding-top: 40px;
+}
+.form > *{
+  padding: 10px;
+  font-size: var(--s-size);
+  border: 1px solid var(--p-color);
+  width: min(500px, 90%);
+  border-radius: 5px;
+}
+.form .submitButton{
+  background-color: var(--p-color);
+  color: var(--w-color);
+  cursor: pointer;
+}
