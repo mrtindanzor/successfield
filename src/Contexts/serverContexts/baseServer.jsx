@@ -4,7 +4,7 @@ import { createContext, useContext } from "react";
 const ServerContext = createContext()
 
 export function ServerProvider({ children }){
-  const serverUri = 'http://localhost:8000/'
+  const serverUri = 'https://successfield-server.onrender.com/'
 
   return (
     <ServerContext.Provider value={ serverUri }>
