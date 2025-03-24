@@ -97,7 +97,7 @@ export default function useAuthentication(){
       switch(res.status){
         case 200: 
           setToken(res.token)
-          setCurrentUser(res.user)
+          setCurrentUser(res.newUser)
           setIsLoggedIn(true)
           setAlert(res.msg)
           setTimeout(() => navigate('/'), 4000)
