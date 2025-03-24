@@ -1,0 +1,10 @@
+@media (max-width: 768px) {
+  .detailsList{
+    background-color: var(--w-color);
+    z-index: 1;
+    transform: translateX(-200%);
+  }
+  .detailsList > *{
+    border: none;
+  }
+}

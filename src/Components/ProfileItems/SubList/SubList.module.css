@@ -43,6 +43,9 @@
   .subList{
     list-style: none;
     padding: 0;
+    z-index: 1;
+    transform: translateX(-100%);
+    background-color: var(--w-color);
   }
   .subList li{
     padding: 20px;

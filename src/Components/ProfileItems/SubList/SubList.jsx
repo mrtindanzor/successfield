@@ -7,7 +7,7 @@ export default function SubList(){
 
   useEffect(() => {
     if(activeMainList){
-      dashboardRef.current.style.transform = 'translateX(-100%)'
+      // dashboardRef.current.style.transform = 'translateX(-100%)'
     }
   }, [activeMainList])
 

@@ -6,18 +6,18 @@ export default function Details(){
   const { activeMainList, activeSubList, mainListItems, dashboardRef } = useProfileList()
   useEffect(() => {
     if(activeSubList){
-      dashboardRef.current.style.transform = 'translateX(-200%)'
+      // dashboardRef.current.style.transform = 'translateX(-200%)'
     }
   }, [activeSubList])
 
   return (
     <>
       {
-        activeSubList ? <>
+        activeSubList ? <div className={ styles.detailsList }>
                           { 
                             mainListItems[activeMainList].list[activeSubList].section
                           }
-                        </> : null
+                        </div> : null
       }
     </>
   )
