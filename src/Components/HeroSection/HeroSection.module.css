@@ -1,12 +1,18 @@
 .heroSection{
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr 2fr 3fr 1fr 1fr;
-  grid-template-rows: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding-block: 8%;
+  padding-inline: 10%;
   min-height: calc(100vh - 55px);
   min-height: calc(100svh - 55px);
   width: 100vw;
   z-index: 0;
+}
+.heroSection > *{
+  width: fit-content;
+
 }
 .backgroundImage{
   position: absolute;
@@ -21,15 +27,17 @@
   font-size: var(--si-size);
   padding: 10px 20px;
   background-color: var(--glossy-h-color);
+  color: var(--p-color);
   width: fit-content;
   height: fit-content;
 }
 .description{
   background-color: var(--glossy-m-color);
-  font-weight: 900;
+  font-weight: 500;
   display: flex;
   align-items: center;
   min-height: fit-content;
+  max-width: 600px;
   padding: 20px 30px;
   font-size: var(--t-size);
   color: var(--b-color);
@@ -41,7 +49,9 @@
   padding: 20px;
   color: var(--w-color);
   width: fit-content;
+  min-width: fit-content;
   height: fit-content;
+  border-radius: 4px;
   text-decoration: none;
   font-size: var(--s-size);
   background-color: var(--s-color);

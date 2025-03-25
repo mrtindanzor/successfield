@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSetAlert } from "../Alerter/Alerter";
 import useServerUri from "../../Contexts/serverContexts/baseServer";
+import { jwtDecode } from 'jwt-decode'
 
 export default function useAuthentication(){
   const setAlert = useSetAlert()
@@ -97,7 +98,8 @@ export default function useAuthentication(){
       switch(res.status){
         case 200: 
           setToken(res.token)
-          setCurrentUser(res.newUser)
+          const decodedUser = jwtDecode(res.token)
+          setCurrentUser(decodedUser)
           setIsLoggedIn(true)
           setAlert(res.msg)
           setTimeout(() => navigate('/'), 4000)
@@ -121,7 +123,10 @@ export default function useAuthentication(){
       const res = await response.json()
       if(res.token){
         setToken(res.token)
-        setCurrentUser(res.user)
+        const decodedUser = jwtDecode(res.token)
+        delete decodedUser.iat
+        delete decodedUser.exp
+        setCurrentUser(decodedUser)
         setIsLoggedIn(true)
         return { loggedIn : true }
       } else{
