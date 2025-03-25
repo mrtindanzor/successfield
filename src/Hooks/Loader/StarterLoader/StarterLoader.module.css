@@ -5,11 +5,20 @@
   width: 100vw;
   overflow: hidden;
   z-index: 1001;
-  background: var(--glossy-h-color);
+  background: var(--b-color);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 15px;
+}
+.logo{
+  width: 200px;
+  aspect-ratio: 1/1;
+}
+.loadText{
+  color: var(--w-color);
+  font-size: var(--fi-size);
 }
 .one {
   width: 15px; 

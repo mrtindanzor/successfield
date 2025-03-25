@@ -8,7 +8,7 @@ export default function VerifyCerificate(){
   const [ details, setDetails ] = useState('')
   const [ invalid, setInvalid ] = useState(false)
 
-  const handleFormSubmit = async (e, certificateCode) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault()
     const { serverUri } = useServerUri()
     const uri = serverUri + 'verifyCertificate'
@@ -18,6 +18,7 @@ export default function VerifyCerificate(){
       return h
     })
     const method = 'POST'
+    const certificateCode = certificateCodeRef.current
     const body = JSON.stringify({ certificateCode: certificateCode.toLowerCase().trim() })
     
     const response = await fetch(uri, { method, headers, body })
