@@ -5,24 +5,22 @@ import useServerUri from '../../Contexts/serverContexts/baseServer'
 
 export default function VerifyCerificate(){
   const certificateCodeRef = useRef('')
+  const serverUri = useServerUri()
+  console.log(serverUri)
   const [ details, setDetails ] = useState('')
   const [ invalid, setInvalid ] = useState(false)
 
   const handleFormSubmit = async (e) => {
     e.preventDefault()
-    const { serverUri } = useServerUri()
-    const uri = serverUri + 'verifyCertificate'
-    const headers = useMemo(() => {
-      const h = new Headers()
-      h.append('Content-Type', 'application/json')
-      return h
-    })
+    const uri = serverUri + 'verify-certificate'
+    const headers = new Headers()
+    headers.append('Content-Type', 'application/json')
     const method = 'POST'
-    const certificateCode = certificateCodeRef.current
+    const certificateCode = certificateCodeRef.current.value
     const body = JSON.stringify({ certificateCode: certificateCode.toLowerCase().trim() })
-    
+    console.log('here')
     const response = await fetch(uri, { method, headers, body })
-    
+    console.log('there')
     if(!response.ok) return { status: 500, msg: 'An error occured.' }
 
     const res = await response.json()
