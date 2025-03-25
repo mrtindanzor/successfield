@@ -1,19 +1,41 @@
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import styles from './VerifyCertificate.module.css'
 import { useCallback } from 'react'
+import useServerUri from '../../Contexts/serverContexts/baseServer'
 
 export default function VerifyCerificate(){
   const certificateCodeRef = useRef('')
   const [ details, setDetails ] = useState('')
   const [ invalid, setInvalid ] = useState(false)
 
-  const handleFormSubmit = useCallback((e) => {
+  const handleFormSubmit = async (e, certificateCode) => {
     e.preventDefault()
+    const { serverUri } = useServerUri()
+    const uri = serverUri + 'verifyCertificate'
+    const headers = useMemo(() => {
+      const h = new Headers()
+      h.append('Content-Type', 'application/json')
+      return h
+    })
+    const method = 'POST'
+    const body = JSON.stringify({ certificateCode: certificateCode.toLowerCase().trim() })
+    
+    const response = await fetch(uri, { method, headers, body })
+    
+    if(!response.ok) return { status: 500, msg: 'An error occured.' }
 
-    const res = {name:'simon', studentNumber: 'sfc', certificateCode: 'sfc', programme: 'business', dateCompleted: 'december'}
-    return setDetails({...res})
+    const res = await response.json()
+    
+    switch(res.status){
+      case 200: 
+          setDetails(res.certificate)
+        break
 
-  }, [])
+      case 403:
+          setInvalid(true)
+        break
+    }
+  }
 
   const resetDetailsAndInvalid = useCallback(() => {
     setDetails('')
