@@ -6,7 +6,7 @@ import { useSetAlert } from "../../Hooks/Alerter/Alerter";
 import useAuth from './../../Contexts/AuthenticationContext/AuthenticationContext'
 
 const hideIcon = icons.eyeClose(styles.passwordIcon, 'Show')
-const showIcon = icons.eyeClose(styles.passwordIcon, 'Hide')
+const showIcon = icons.eyeOpen(styles.passwordIcon, 'Hide')
 
 
 export default function Authentication({ page }){
@@ -16,8 +16,8 @@ export default function Authentication({ page }){
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [cpassword, setCpassword] = useState('')
-  const [passIcon, setPassIcon] = useState(hideIcon)
-  const [cpassIcon, setCpassIcon] = useState(hideIcon)
+  const [isPassVisible, setIsPassVisible] = useState(false)
+  const [isCpassVisible, setIsCpassVisible] = useState(false)
   const setMsg = useSetAlert()
   const navigate = useNavigate()
 
@@ -28,7 +28,13 @@ export default function Authentication({ page }){
     setEmail('')
     setPassword('')
     setCpassword('')
+    setIsPassVisible(false)
+    setIsCpassVisible(false)
   }, [page])
+
+  useEffect(() => {
+    console.log(isCpassVisible, isPassVisible)
+  }, [isPassVisible, isCpassVisible])
 
   
   const credentials = page === 'join' ? { firstname, middlename, surname, email, password, cpassword } : { email, password }
@@ -56,17 +62,27 @@ export default function Authentication({ page }){
 
     const passwordLabel = <label>
                             <span>Password: </span>
-                            <input type="password" onChange={ (e) => setPassword(e.target.value) } value={ password } />
-                            <span className={styles.passwordIconBtn}> { passIcon } </span>
+                            <input type={ isPassVisible ? 'text' : 'password' } onChange={ (e) => setPassword(e.target.value) } value={ password } />
+                            <span className={styles.passwordIconBtn} onClick={ () => toggleIconVisibility('password') }> { !isPassVisible ? hideIcon : showIcon } </span>
                           </label>
 
     const cpasswordLabel = <label>
                             <span>Confirm password: </span>
-                            <input type="password" onChange={ (e) => setCpassword(e.target.value) } value={ cpassword } />
-                            <span className={styles.passwordIconBtn}> { cpassIcon } </span>
+                            <input type={ isCpassVisible ? 'text' : 'password' } onChange={ (e) => setCpassword(e.target.value) } value={ cpassword } />
+                            <span className={styles.passwordIconBtn} onClick={ () => toggleIconVisibility('cpassword') }> { !isCpassVisible ? hideIcon : showIcon } </span>
                           </label>
 
 const handler = page === 'join' ? registration : login
+
+function toggleIconVisibility(object){
+  if(object === 'password'){
+      setIsPassVisible(v => !v)
+    }
+  if(object === 'cpassword'){
+      setIsCpassVisible(v => !v)
+    }
+}
+
 async function handleFormSubmission(e){
   e.preventDefault()
 

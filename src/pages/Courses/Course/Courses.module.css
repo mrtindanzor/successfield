@@ -70,6 +70,8 @@
   font-size: var(--s-size);
   font-weight: 400;
   width:min(130px, 45%);
+  min-width: fit-content;
+  border: 1px solid currentColor;
   padding: 10px 20px;
   display: inline-block;
 

@@ -38,12 +38,12 @@
   --b-color: black;
   --w-color: white;
 
-  --f-size: 14px;
-  --s-size: 18px;
-  --t-size: 22px;
-  --fo-size: 26px;
-  --fi-size: 30px;
-  --si-size: 40px;
+  --f-size: 16px;
+  --s-size: 20px;
+  --t-size: 24px;
+  --fo-size: 28px;
+  --fi-size: 32px;
+  --si-size: 36px;
 }
 *{
   margin: 0;
@@ -57,6 +57,15 @@
 }
 *:not(h1, h2, h3, h4, h5, h6){
   font-size: var(--f-size);
+}
+h1{
+  font-size: var(--fo-size);
+}
+h2{
+  font-size: var(--t-size);
+}
+h3{
+  font-size: var(--s-size);
 }
 * ::-webkit-scrollbar{
   background-color: var(--b-color);

@@ -2,15 +2,16 @@ import styles from "./CourseCard.module.css";
 import { Link } from "react-router-dom";
 import { capitalize, createAcronym } from "../../core";
 
-export default function CourseCard({ pic = '', title }){
+export default function CourseCard({ pic = '', title, overview }){
   const courseLink = title.toLowerCase().trim().split(' ').join('-')
   const courseAcronym = createAcronym(title)
   const placeholder = pic ? <img src={ pic } alt={ courseAcronym } className={ styles.coursePic } /> : <div className={ styles.acronym}> { courseAcronym } </div>
 
   return (
-    <Link className={ styles.courseCard } to={ '/courses/' + courseLink }>
+    <div className={ styles.courseCard } >
       { placeholder }
       <span className={ styles.title }> { capitalize( title ) } </span>
-    </Link>
+      { overview && <Link to={ '/courses/' + courseLink } className={ styles.cardLink }> Start course </Link> }
+    </div>
   )
 }
