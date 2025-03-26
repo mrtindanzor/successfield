@@ -35,7 +35,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: calc(100vw - 50px);
+  width: 100vw;
   height: fit-content;
   min-height: 100vh;
   overflow: hidden;
