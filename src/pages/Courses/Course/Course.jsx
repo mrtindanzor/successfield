@@ -56,6 +56,15 @@ export default function Course(){
     const subLists = spans[0].parentElement.nextElementSibling.querySelectorAll('ul')
     const contentLists = spans[0].parentElement.nextElementSibling.querySelectorAll('p')
     const contentList = [...subLists, ...contentLists]
+
+    if(!e){
+      contentList.forEach((list, index) => {
+        if(index !== 0) list.style.display = 'none'
+      })
+
+      return
+    }
+
     let i = ''
     spans.forEach((span, index) => {
       span.style.backgroundColor = 'var(--t-green)'
@@ -132,6 +141,10 @@ export default function Course(){
     const searhCourse = getCourse(course)
     setCurrentCourse(searhCourse)
   },[course, coursesList])
+
+  useEffect(() => {
+    currentCourse && activeSubList('')
+  }, [currentCourse])
 
   return (
     <>

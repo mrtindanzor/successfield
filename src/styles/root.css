@@ -72,7 +72,7 @@ body{
   min-width: 100vw;
   min-height: 100vh;
   padding-top: 55px;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
 }
 [aria-current='page'].active {
   background-color: var(--s-color) !important;
