@@ -14,10 +14,10 @@ export default function CoursesOverview(){
 
   return (
     <>
-      <h2 className={ styles.description }> { Content.description } </h2>
-      <div className={ styles.mainContent }>
+      <p className={ styles.description }> { Content.description } </p>
+      <div className={ styles.mainContent } aria-label="All courses">
       {
-        coursesList.map((course, index) => <CourseCard title={ course.course } key={ index } />)
+        coursesList.map((course, index) => <CourseCard title={ course.course } key={ index } overview={ true } />)
       }
 
       </div>
