@@ -1,3 +1,7 @@
+.description{
+  padding: 50px 20px;
+  font-weight: 500;
+}
 .mainContent{
   display: grid;
   justify-content: center;
@@ -11,14 +15,4 @@
   .mainContent{
     grid-template-columns: repeat(auto-fit, min(300px, 45%));
   }
-}
-
-@media (max-width: 650px) {
-  .mainContent{
-    grid-template-columns: repeat(auto-fit, 49%);
-  }
-  .mainContent > *{
-    width: ;
-  }
-  
 }

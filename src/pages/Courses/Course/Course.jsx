@@ -20,7 +20,7 @@ function SubListItem(props){
             }
           </ul>
           : 
-          <p>
+          <p className={ styles.listContent }>
             { content }
           </p>
   )
@@ -41,6 +41,8 @@ function ModuleList({ list }){
   )
 }
 
+
+
 export default function Course(){
   const [currentCourse, setCurrentCourse] = useState(null)
   const { getCourse, coursesList } = useCourses()
@@ -51,14 +53,79 @@ export default function Course(){
 
   function activeSubList(e = ''){
     const spans = listContainerRef.current.querySelectorAll('div > span')
-    for (const span of spans){
+    const subLists = spans[0].parentElement.nextElementSibling.querySelectorAll('ul')
+    const contentLists = spans[0].parentElement.nextElementSibling.querySelectorAll('p')
+    const contentList = [...subLists, ...contentLists]
+    let i = ''
+    spans.forEach((span, index) => {
       span.style.backgroundColor = 'var(--t-green)'
-      const list = span.nextElementSibling
-      list.style.display = 'none'
-    }
+      if(span === e.target) {
+        span.style.backgroundColor = 'var(--p-color)'
+        i = index
+      }  
+    })
 
-    e.target.style.backgroundColor = 'var(--p-color)'
-    e.target.nextElementSibling.style.display = 'flex'
+    contentList.forEach((list, index) => {
+      list.style.display = 'none'
+      if(index === i) list.style.display = 'flex'
+    })
+  }
+
+  function ShowList({ currentCourse }){
+    const list = [
+      {
+        title: 'Outlines',
+        list: currentCourse.outlines
+      },
+      {
+        title: 'Benefits',
+        list: currentCourse.benefits
+      },
+      {
+        title: 'Objectives',
+        list: currentCourse.objectives
+      },
+      {
+        title: 'Modules',
+        modules: currentCourse.modules
+      },
+      {
+        title: 'Certificate',
+        content: currentCourse.certificate
+      }
+  ]
+  
+    return (
+      <>
+        <div className={ styles.listButtons }>
+          { 
+            list.map((button, index) => {
+              return <span key={ index } onClick={ (e) => activeSubList(e) } > { button.title } </span>
+            }) 
+          }
+        </div>
+        <div>
+          {
+            list.map((currentList, index) => {
+              if(currentList.list){
+                return <SubListItem key={ index } list={ currentList.list } />
+              } else if(currentList.modules){
+                  return (<ul className={ styles.subList }>
+                    {
+                      currentList.modules.map((module, i) => {
+                        return <li key={ i } className={ styles.moduleList }> <span className={ styles.moduleIndex }> { module.index } </span> { module.title } </li>
+                      })
+                    }
+                  </ul>)
+              }
+                else {
+                  return <SubListItem key={ index } content={ currentList.content } />
+                }
+            })
+          }
+        </div>
+      </>
+    )
   }
 
   useEffect(() => {
@@ -86,26 +153,7 @@ export default function Course(){
       <hr />
 
       <div className={ styles.listContainer } ref={ listContainerRef }>
-        { currentCourse && <div className={ styles.courseOutline } >
-                              <span  onClick={ (e) => activeSubList(e) }> Outlines </span>
-                              <SubListItem list={ currentCourse.outlines } />
-                            </div> }
-        { currentCourse && <div className={ styles.courseObjective } >
-                              <span  onClick={ (e) => activeSubList(e) }> Objectives </span>
-                              <SubListItem list={ currentCourse.objectives } />
-                            </div> }
-        { currentCourse && <div className={ styles.courseBenefit } >
-                              <span  onClick={ (e) => activeSubList(e) }> Benefits </span>
-                              <SubListItem list={ currentCourse.benefits } />
-                            </div> }
-        { currentCourse && <div className={ styles.courseCertificate } >
-                              <span  onClick={ (e) => activeSubList(e) }> Certificate </span>
-                              <SubListItem content={ currentCourse.certificate } />
-                            </div> }
-        { currentCourse && <div className={ styles.courseModule } >
-                              <span  onClick={ (e) => activeSubList(e) }> Modules </span>
-                              <ModuleList list={ currentCourse.modules } />
-                            </div> }
+        { currentCourse && <ShowList currentCourse={ currentCourse } /> }
       </div>
 
     </>

@@ -2,7 +2,9 @@
   text-align: center;
   text-transform: uppercase;
   color: var(--p-color);
-  font-size: var(--fi-size);
+  font-size: var(--t-size);
+  word-wrap: break-word;
+  hyphens: auto;
   padding: 20px;
   font-family: texturina;
 }
@@ -16,66 +18,70 @@
 
 .courseFee{
   margin-left: 20px;
-  padding-block: 10px;
   display: flex;
+  align-items: center;
   gap: 10px;
+  font-size: var(--t-size);
+  font-family: arial;
 }
 .courseFee *{
   font-size: var(--t-size);
-  font-weight: 800;
+  font-family: arial;
+  font-weight: 600;
   text-transform: uppercase;
 }
 
 .listContainer{
   position: relative;
   display: flex;
+  flex-direction: column;
   width: 100vw;
+  height: fit-content;
+  min-height: 100vh;
   padding: 20px;
+  overflow-x: hidden;
 }
-.subList, .courseCertificate > :nth-child(2){
-  position: absolute;
-  left: 20px;
+.subList, .listContent{
   display: flex;
   flex-direction: column;
   gap: 10px;
   font-size: var(--s-size);
-  padding: 20px;
 }
-.subList > *, .courseCertificate > :nth-child(2) > *{
+.subList > *{
   letter-spacing: 1.3px;
   line-height: 1.4rem;
-
 }
-.courseOutline span{
-  background-color: var(--p-color);
+.moduleList{
+  display: flex;
+  gap: 15px;
+  align-items: center;
 }
-.courseOutline :nth-child(2), .courseObjective :nth-child(2), .courseBenefit :nth-child(2), .courseCertificate :nth-child(2), .courseModule :nth-child(2){
-  width: 100%;
+.listContent{
+  letter-spacing: 1.3px;
+  line-height: 2.5rem;
 }
-.courseObjective :nth-child(2), .courseBenefit :nth-child(2), .courseCertificate > :nth-child(2), .courseModule :nth-child(2){
-  display: none;
+.listButtons{
+  display: grid;
+  grid-gap: 2px;
+  grid-template-columns: repeat(auto-fit, min(130px, 45%));
+  margin-bottom: 10px;
 }
-.courseOutline span, .courseObjective span, .courseBenefit span, .courseCertificate span, .courseModule > span{
-  width: 100%;
+.listButtons span{
   color: var(--w-color);
   font-size: var(--s-size);
   font-weight: 400;
-  border-right: 1px solid var(--w-color);
   padding: 10px 20px;
-  display: block;
+  display: inline-block;
   background-color: var(--t-green);
   cursor: pointer;
 }
-.courseOutline span:hover, .courseObjective span:hover, .courseBenefit span:hover, .courseCertificate span:hover, .courseModule > span:hover{
+.listButtons > span:hover{
   background-color: var(--p-color);
 }
-.courseOutline span{
+.listButtons:first-child span:first-child{
   background-color: var(--p-color);
 }
-.courseCertificate > :nth-child(2){
-  padding-left: 0;
-}
-.subList:last-child{
+.subList > *{
   list-style: none;
 }
 .subList > li{
@@ -85,15 +91,13 @@
   border-bottom: 1px solid var(--t-green);
 }
 .moduleIndex{
-  margin-right: 10px;
   display: inline-flex;
-  font-size: var(--t-size);
-  width: 40px;
-  height: 40px;
+  min-width: 40px;
+  aspect-ratio: 1/1;
   color: var(--p-color);
   align-items: center;
   justify-content: center;
-  border: 4px solid var(--t-green);
+  border: 3px solid var(--t-green);
   border-radius: 50%;
 }
 .startCourse{
