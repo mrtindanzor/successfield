@@ -1,14 +1,14 @@
-import { useEffect } from 'react'
-import styles from './Details.module.css'
-import useProfileList from '../../../Contexts/ProfileContext/ListContext'
+// REACT //
+import { useEffect } from 'react';
+
+// STYLES //
+import styles from './Details.module.css';
+
+// OTHERS //
+import useProfileList from '../../../Contexts/ProfileContext/ListContext';
 
 export default function Details(){
-  const { activeMainList, activeSubList, mainListItems, dashboardRef } = useProfileList()
-  useEffect(() => {
-    if(activeSubList){
-      // dashboardRef.current.style.transform = 'translateX(-200%)'
-    }
-  }, [activeSubList])
+  const { activeMainList, activeSubList, mainListItems } = useProfileList()
 
   return (
     <>

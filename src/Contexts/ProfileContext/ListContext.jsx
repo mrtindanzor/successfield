@@ -4,6 +4,8 @@ import styles from './ListContext.module.css'
 import Name from "../../Components/ProfileItems/Details/Name/Name";
 import Email from "../../Components/ProfileItems/Details/Email/Email";
 import PhoneNumber from "../../Components/ProfileItems/Details/PhoneNumber/PhoneNumber";
+import ChangePassword from "../../Components/ProfileItems/Details/Password/ChangePassword/ChangePassword";
+import ResetPassword from "../../Components/ProfileItems/Details/Password/ResetPassword/ResetPassword";
 
 
 const ProfileListContext = createContext()
@@ -22,8 +24,12 @@ export function ProfileListProvider({ children }){
         { subList: 'Phone number', 
           section: <PhoneNumber />
          },
-        { subList: 'Change password' },
-        { subList: 'Reset password' },
+        { subList: 'Change password',
+          section: <ChangePassword />
+         },
+        { subList: 'Reset password',
+          section: <ResetPassword />
+         },
       ]
     },
     {

@@ -6,7 +6,6 @@ import useServerUri from '../../Contexts/serverContexts/baseServer'
 export default function VerifyCerificate(){
   const certificateCodeRef = useRef('')
   const serverUri = useServerUri()
-  console.log(serverUri)
   const [ details, setDetails ] = useState('')
   const [ invalid, setInvalid ] = useState(false)
 
