@@ -7,7 +7,7 @@ const ServerContext = createContext()
 export function ServerProvider({ children }){
   const location = window.location.href
   const currentUri = getBaseUrl(location)
-  const serverUri = currentUri === 'http://localhost:5173' ? 'http://localhost:8000/successfield/' : 'https://successfield-server.onrender.com/successfield/' + 'successfield/'
+  const serverUri = currentUri === 'http://localhost:5173' ? 'http://localhost:8000/successfield/' : 'https://successfield-server.onrender.com/successfield/'
   return (
     <ServerContext.Provider value={ serverUri }>
       { children } 
