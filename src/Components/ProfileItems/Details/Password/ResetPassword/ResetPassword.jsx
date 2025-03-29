@@ -4,7 +4,7 @@ import useAuth from '../../../../../Contexts/AuthenticationContext/Authenticatio
 
 export default function ResetPassword(){
   const { currentUser } = useAuth()
-  const [ verificationCode, setVerficationCode ] = useState(0)
+  const [ verificationCode, setVerficationCode ] = useState('')
   const [ verified, setVerified ] = useState(false)
   const [ password, setPassword ] = useState('')
 

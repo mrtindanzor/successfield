@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useServerUri from "../../Contexts/serverContexts/baseServer";
+import { jwtDecode } from 'jwt-decode'
 
 export default function useCourse(){
   const [Courses, setCourses] = useState([])
@@ -19,8 +20,11 @@ export default function useCourse(){
     const response = await fetch(uri, { method, headers})
     if(!response.ok) return setCourses([])
     const res = await response.json()
-    updateCoursesList(res.courses)
-    return setCourses(res.courses)
+    let c = [jwtDecode(res.courses)]
+    c = Object.values(c[0])
+    c = c.filter((course, i) => c.length !== i + 1)
+    updateCoursesList(c)
+    return setCourses(c)
   }
 
   function getCourse(searchCourse){
