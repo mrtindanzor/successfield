@@ -8,12 +8,12 @@ import styles from './Details.module.css';
 import useProfileList from '../../../Contexts/ProfileContext/ListContext';
 
 export default function Details(){
-  const { activeMainList, activeSubList, mainListItems } = useProfileList()
+  const { activeMainList, activeSubList, mainListItems, setActiveSubList } = useProfileList()
 
   return (
     <>
       {
-        activeSubList ? <div className={ styles.detailsList }>
+        activeSubList && mainListItems[activeMainList].list ? <div className={ styles.detailsList }>
                           { 
                             mainListItems[activeMainList].list[activeSubList].section
                           }

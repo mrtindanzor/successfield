@@ -34,24 +34,18 @@ export function ProfileListProvider({ children }){
     },
     {
       title: 'My Courses',
-      list: [
-        { subList: 'Name' }
-      ]
     },
     {
       title: 'My Certificates',
-      list: [
-        { subList: 'Name' }
-      ]
     },
 ]
   const [activeMainList, setActiveMainList] = useState('')
   const [activeSubList, setActiveSubList] = useState('')
   const arrowRight = icons.arrowRight(styles.arrowRight, 'More')
-  const dashboardRef = useRef()
+  const arrowLeft = icons.arrowLeft(styles.arrowRight, 'More')
 
   return (
-    <ProfileListContext.Provider value={ { activeMainList, activeSubList, setActiveMainList, setActiveSubList, mainListItems, arrowRight, dashboardRef } }>
+    <ProfileListContext.Provider value={ { activeMainList, activeSubList, setActiveMainList, setActiveSubList, mainListItems, arrowRight, arrowLeft } }>
       { children }
     </ProfileListContext.Provider>
   )
