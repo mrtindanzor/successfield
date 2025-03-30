@@ -146,7 +146,6 @@ export default function Course(){
 
   useEffect(() => {
     currentCourse && activeSubList('')
-    document.body.scrollTo({ top: 0 })
   }, [currentCourse])
 
   return (
