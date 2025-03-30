@@ -15,7 +15,8 @@ function SubListItem(props){
             {
               list.map(function(element, index){
                 const key = Object.keys(element)[0]
-                return <li key={ index }> { element[key] } </li>
+                const id = Object.keys(element)[1]
+                return <li key={ element[id] + index}> { element[key] } </li>
               })
             }
           </ul>
@@ -34,7 +35,7 @@ function ModuleList({ list }){
     <ul className={ styles.subList }>
       {
         list.map(function( module, i){
-          return <li key={ i }> <span className={ styles.moduleIndex }> { module.index } </span> { module.title } </li>
+          return <li key={ module.index }> <span className={ styles.moduleIndex }> { module.index } </span> { module.title } </li>
         })
       }
     </ul>
@@ -108,27 +109,28 @@ export default function Course(){
       <>
         <div className={ styles.listButtons }>
           { 
-            list.map((button, index) => {
-              return <span key={ index } onClick={ (e) => activeSubList(e) } > { button.title } </span>
+            list.map(( currentList, index) => {
+              return <span key={ currentList.title + 's' || index } onClick={ (e) => activeSubList(e) } > { currentList.title } </span>
             }) 
           }
         </div>
         <div>
           {
-            list.map((currentList, index) => {
+            list.map(( currentList, i) => {
               if(currentList.list){
-                return <SubListItem key={ index } list={ currentList.list } />
-              } else if(currentList.modules){
+                return <SubListItem key={ currentList.title + 1 || i  } list={ currentList.list } />
+              } 
+                else if(currentList.modules){
                   return (<ul className={ styles.subList }>
                     {
-                      currentList.modules.map((module, i) => {
-                        return <li key={ i } className={ styles.moduleList }> <span className={ styles.moduleIndex }> { module.index } </span> { module.title } </li>
+                      currentList.modules.map( module => {
+                        return <li key={ module.index } className={ styles.moduleList }> <span className={ styles.moduleIndex }> { module.index } </span> { module.title } </li>
                       })
                     }
                   </ul>)
               }
                 else {
-                  return <SubListItem key={ index } content={ currentList.content } />
+                  return <SubListItem key={ currentList.title + 2 } content={ currentList.content } />
                 }
             })
           }
@@ -144,6 +146,7 @@ export default function Course(){
 
   useEffect(() => {
     currentCourse && activeSubList('')
+    document.body.scrollTo({ top: 0 })
   }, [currentCourse])
 
   return (
