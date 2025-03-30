@@ -10,14 +10,15 @@ const showIcon = icons.eyeOpen(styles.passwordIcon, 'Hide')
 
 
 export default function Authentication({ page }){
-  const [firstname, setFirstname] = useState('')
-  const [middlename, setMiddlename] = useState('')
-  const [surname, setSurname] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [cpassword, setCpassword] = useState('')
-  const [isPassVisible, setIsPassVisible] = useState(false)
-  const [isCpassVisible, setIsCpassVisible] = useState(false)
+  const [ firstname, setFirstname ] = useState('')
+  const [ middlename, setMiddlename ] = useState('')
+  const [ surname, setSurname ] = useState('')
+  const [ email, setEmail ] = useState('')
+  const [ contact, setContact ] = useState('')
+  const [ password, setPassword ] = useState('')
+  const [ cpassword, setCpassword ] = useState('')
+  const [ isPassVisible, setIsPassVisible ] = useState(false)
+  const [ isCpassVisible, setIsCpassVisible ] = useState(false)
   const setMsg = useSetAlert()
   const navigate = useNavigate()
 
@@ -37,7 +38,7 @@ export default function Authentication({ page }){
   }, [isPassVisible, isCpassVisible])
 
   
-  const credentials = page === 'join' ? { firstname, middlename, surname, email, password, cpassword } : { email, password }
+  const credentials = page === 'join' ? { firstname, middlename, surname, email, contact, password, cpassword } : { email, password }
   const { login, registration } = useAuth()
   
   const firstnameLabel = <label>
@@ -58,6 +59,11 @@ export default function Authentication({ page }){
     const emailLabel = <label>
                             <span>Email: </span>
                             <input type="email" onChange={ (e) => setEmail(e.target.value) } value={ email } />
+                          </label>
+
+    const contactLabel = <label className={ styles.contactLabel }>
+                            <span>Contact: </span>
+                            <input type="number" onChange={ (e) => setContact(e.target.value) } value={ contact } autoComplete="off" />
                           </label>
 
     const passwordLabel = <label>
@@ -116,6 +122,7 @@ async function handleFormSubmission(e){
               { middlenameLabel }
               { surnameLabel }
               { emailLabel }
+              { contactLabel }
               { passwordLabel }
               { cpasswordLabel }
             </> :

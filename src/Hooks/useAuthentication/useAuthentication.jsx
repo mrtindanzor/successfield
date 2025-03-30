@@ -46,7 +46,8 @@ export default function useAuthentication(){
 
 
   async function registration(credentials, navigate){
-    let { firstname, middlename, surname, email, password, cpassword } = credentials
+    let { firstname, middlename, surname, email, contact, password, cpassword } = credentials
+    if(contact !== '') return { msg: 'Unable to complete registration at this time' }
     if(!firstname) return { msg: 'Enter your firstname' }
     if(firstname.length < 3) return { msg: 'Firstname too short' }
     if(!stringPattern.test(firstname)) return { msg: 'Firstname contains invalid characters' }

@@ -55,7 +55,8 @@
     transform: unset !important;
   }
   .profileDetails{
-    border-bottom: 7px solid;
+    background-color: var(--t-green);
+    border-bottom: 1px solid var(--w-color);
     padding: 10px;
     display: flex;
     gap: 20px;

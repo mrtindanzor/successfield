@@ -61,3 +61,8 @@
     width: 30px;
     height: 30px;
   }
+  .contactLabel{
+    height: 0;
+    overflow: hidden;
+    padding: 0 !important;
+  }
