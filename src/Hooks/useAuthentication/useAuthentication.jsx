@@ -103,7 +103,7 @@ export default function useAuthentication(){
           setCurrentUser(decodedUser)
           setIsLoggedIn(true)
           setAlert(res.msg)
-          setTimeout(() => navigate('/'), 4000)
+          setTimeout(() => navigate( decodedUser.admin ? '/admin' : '/'), 4000)
             break
         
         default: 

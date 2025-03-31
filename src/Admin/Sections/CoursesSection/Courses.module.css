@@ -1,0 +1,71 @@
+.coursesTab{
+  padding: 10px;
+}
+.tabSection{
+  list-style: none;
+  display: grid;
+  gap: 2px;
+  margin-bottom: 10px;
+  grid-template-columns: repeat(auto-fill, 180px);
+}
+.tabSection > li{
+  background-color: var(--p-color);
+  color: var(--w-color);
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  padding: 10px;
+}
+.tabSection > li:hover{
+  background-color: var(--l-p-color);
+}
+.addCourseForm{
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+.addCourseForm label{
+  background-color: var(--l-p-color);
+  padding: 20px;
+  display: flex;
+  width: min(900px, 100%);
+  gap: 5px;
+  flex-direction: column;
+  border-radius: 6px;
+}
+.addCourseForm label input:focus, .addCourseForm label > textarea{
+  outline: 1px solid var(--p-color);
+}
+.addCourseForm label input, .addCourseForm label > textarea{
+  display: block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  resize: vertical;
+  width: 100% !important;
+}
+.addCourseForm > label > div{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.addCourseForm > button{
+  width: min(900px, 100%);
+  background-color: var(--p-color);
+  color: var(--w-color);
+  cursor: pointer;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+}
+.addMore{
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  border-radius: 3px;
+  font-size: var(--t-size);
+  cursor: pointer;
+  padding: 5px 15px;
+  background-color: var(--b-color);
+  color: var(--w-color);
+}

@@ -1,0 +1,9 @@
+.header{
+  background-color: var(--s-color);
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: var(--s-size);
+  color: var(--w-color);
+  font-family: texturina;
+}

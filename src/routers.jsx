@@ -3,7 +3,6 @@ import { Route, createBrowserRouter, createRoutesFromElements } from "react-rout
 
 // COMPONENTS //
 import LayoutOne from "./Components/Layouts/LayoutOne";
-import AdminLayout from "./Admin/Components/Layouts/AdminLayout";
 import { NotAuthenticated } from './Components/ProtectRoutes/NotAuthenticated';
 
 // OTHERS //
@@ -16,13 +15,12 @@ import Module from "./pages/Courses/Module/Module";
 import VerifyCerificate from "./pages/VerifyCertificate/VerifyCertificate";
 import Dashboard from "./pages/Profile/Dashboard";
 import { ProfileListProvider } from "./Contexts/ProfileContext/ListContext";
+import AdminHome from "./Admin/Home/AdminHome";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route >
-      <Route path="/admin" element={ <AdminLayout /> } >
-
-      </Route>
+      <Route path="/admin" element={ <AdminHome /> } />
       <Route path='/' element={ <LayoutOne /> }>
       <Route index element={ <Home /> } />
       <Route path='verify-certificate' element={ <VerifyCerificate /> } />
