@@ -8,12 +8,14 @@ export default function SignedIn({ children }){
   const { isLoggedIn, initialFetch } = useAuth()
 
   useEffect(() => {
-    if(!initialFetch) isLoggedIn ? navigate('/', { replace: true }) : children
+    if(!initialFetch && isLoggedIn)  navigate('/', { replace: true })
   }, [isLoggedIn, initialFetch])
+
+  if(!initialFetch && !isLoggedIn) return <> { children } </>
 
   return(
     <>
-      loading....
+      loading
     </>
   )
 }

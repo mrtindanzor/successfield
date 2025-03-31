@@ -9,13 +9,12 @@ import icons from '../../Icons/icons'
 import Details from '../../Components/ProfileItems/Details/Details'
 
 export default function Dashboard(){
-  const { currentUser } = useAuth()
+  const { currentUser, userFullName } = useAuth()
   const userIcon = icons.userLine(styles.userIcon, 'Profile pic')
-  const name = capitalize(currentUser.firstname + (currentUser.middlename && ' ' + currentUser.middlename)  + ' ' + currentUser.surname)
   const { dashboardRef } = useProfileList()
 
   useEffect(() => {
-    document.title = capitalize('Dashboard - ' + name )
+    document.title = capitalize('Dashboard - ' + userFullName )
   }, [currentUser])
   
   return (
@@ -23,7 +22,7 @@ export default function Dashboard(){
       <div className={ styles.profileDetails }>
         { userIcon }
         <div>
-          <b> { name } </b>
+          <b> { userFullName } </b>
           <span> <span>Student ID: </span>{ currentUser.studentNumber } </span>
         </div>
       </div>

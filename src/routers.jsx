@@ -17,11 +17,16 @@ import Dashboard from "./pages/Profile/Dashboard";
 import { ProfileListProvider } from "./Contexts/ProfileContext/ListContext";
 import AdminHome from "./Admin/Home/AdminHome";
 import SignedIn from "./Components/ProtectRoutes/SignedIn";
+import OnlyAdmin from "./Components/ProtectRoutes/OnlyAdmin";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route >
-      <Route path="/admin" element={ <NotAuthenticated> <AdminHome /> </NotAuthenticated> } />
+      <Route path="/admin" element={ <NotAuthenticated>
+                                        <OnlyAdmin>
+                                          <AdminHome />
+                                        </OnlyAdmin> 
+                                      </NotAuthenticated> } />
       <Route path='/' element={ <LayoutOne /> }>
       <Route index element={ <Home /> } />
       <Route path='verify-certificate' element={ <VerifyCerificate /> } />
