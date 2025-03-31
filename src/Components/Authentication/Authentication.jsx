@@ -33,10 +33,6 @@ export default function Authentication({ page }){
     setIsCpassVisible(false)
   }, [page])
 
-  useEffect(() => {
-    console.log(isCpassVisible, isPassVisible)
-  }, [isPassVisible, isCpassVisible])
-
   
   const credentials = page === 'join' ? { firstname, middlename, surname, email, contact, password, cpassword } : { email, password }
   const { login, registration } = useAuth()

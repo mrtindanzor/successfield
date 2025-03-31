@@ -8,6 +8,7 @@ import styles from './Courses.module.css';
 import useCourses from './../../../Contexts/CourseContext/CoursesContext';
 
 function appendInput(e){
+  e.preventDefault()
   const element = e.target.parentElement
 
   const input = document.createElement('input')
