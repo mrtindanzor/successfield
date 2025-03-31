@@ -16,18 +16,19 @@ import VerifyCerificate from "./pages/VerifyCertificate/VerifyCertificate";
 import Dashboard from "./pages/Profile/Dashboard";
 import { ProfileListProvider } from "./Contexts/ProfileContext/ListContext";
 import AdminHome from "./Admin/Home/AdminHome";
+import SignedIn from "./Components/ProtectRoutes/SignedIn";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route >
-      <Route path="/admin" element={ <AdminHome /> } />
+      <Route path="/admin" element={ <NotAuthenticated> <AdminHome /> </NotAuthenticated> } />
       <Route path='/' element={ <LayoutOne /> }>
       <Route index element={ <Home /> } />
       <Route path='verify-certificate' element={ <VerifyCerificate /> } />
       <Route path='courses' element={ <CoursesOverview /> } />
       <Route path='courses/:course' element={ <Course /> } />
       <Route path='courses/:course/:module' element={ <NotAuthenticated> <Module /> </NotAuthenticated>} />
-      <Route path='users/:route' element={ <AuthenticationPage /> } />
+      <Route path='users/:route' element={ <SignedIn> <AuthenticationPage /> </SignedIn> } />
       <Route path='dashboard/profile' element={
         <NotAuthenticated> 
           <ProfileListProvider>

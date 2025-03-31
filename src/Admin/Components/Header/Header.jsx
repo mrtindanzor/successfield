@@ -1,20 +1,14 @@
 import styles from './Header.module.css'
 import { capitalize } from './../../../core'
+import useAuth from './../../../Contexts/AuthenticationContext/AuthenticationContext'
 
 export default function Header(){
-  const currentUser = {
-    firstname: 'simon',
-    middlename: 'mba',
-    surname: 'tindanzor',
-    admin: true
-  }
-
-  const adminName = capitalize(currentUser.firstname + (currentUser.middlename && ' ' + currentUser.middlename ) + ' ' + currentUser.surname)
+  const { userFullName } = useAuth()
 
 
   return (
     <div className={ styles.header }>
-      Admin: { adminName }
+      Admin: { userFullName }
     </div>
   )
 }

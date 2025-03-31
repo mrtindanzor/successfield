@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useSetAlert } from "../Alerter/Alerter";
 import useServerUri from "../../Contexts/serverContexts/baseServer";
 import { jwtDecode } from 'jwt-decode'
+import { capitalize } from "../../core";
 
 export default function useAuthentication(){
   const setAlert = useSetAlert()
@@ -10,6 +11,7 @@ export default function useAuthentication(){
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [token, setToken] = useState(null)
   const [currentUser, setCurrentUser] = useState(null)
+  const [userFullName, setUserFullName] = useState(null)
   const [initialFetch, setInitialFetch] = useState(true)
   const fetchesRef = useRef(0)
   const autoFetchTokenRef = useRef()
@@ -26,6 +28,10 @@ export default function useAuthentication(){
     fetchesRef.current = 1
   }
   
+  useEffect(() => { 
+    currentUser && setUserFullName(capitalize(currentUser.firstname + (currentUser.middlename && ' ' + currentUser.middlename ) + ' ' + currentUser.surname) )
+  }, [currentUser])
+
   useEffect(() => {
     !isLoggedIn && fetchesRef.current < 1 && refreshToken()
       .then( res => {
@@ -148,6 +154,6 @@ export default function useAuthentication(){
     
   }
 
-  return { isLoggedIn, initialFetch, registration, login, logout, currentUser }
+  return { isLoggedIn, initialFetch, registration, login, logout, currentUser, userFullName }
 }
 
