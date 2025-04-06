@@ -1,8 +1,8 @@
-import Authentication from "../../Components/Authentication/Authentication";
-import background from "./../../assets/images/hero.webp";
 import styles from "./AuthenticationPage.module.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Registration from "../../Components/Authentication/Registration/Registration";
+import Login from "../../Components/Authentication/Login/Login";
 
 export default function AuthenticationPage(){
   let { route } = useParams()
@@ -16,8 +16,9 @@ export default function AuthenticationPage(){
 
   return (
     <div className={styles.authPage}>
-      <Authentication page={ page } />
-      {/* <img src={ background } className={ styles.background }/> */}
+      {
+        page === 'join' ? <Registration /> : <Login />
+      }
     </div>
   )
 }
