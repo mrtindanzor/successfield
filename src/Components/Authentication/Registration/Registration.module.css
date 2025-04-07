@@ -23,7 +23,7 @@
   flex-direction: column;
   gap: 10px;
 }
-.authForm label span{
+.authForm label > span{
   font-size: var(--f-size);
   font-family: texturina;
   font-weight: 100;

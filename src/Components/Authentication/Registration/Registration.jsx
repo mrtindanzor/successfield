@@ -55,150 +55,216 @@ export default function Registration(){
   const cpassword = useRef('')
   const setMsg = useSetAlert()
   const navigate = useNavigate()
-  const { coursesList } = useCourses()
+  const coursesList = useMemo(() => {
+    const { coursesList } = useCourses()
+    return coursesList
+  }, [])
   
   const { registration } = useAuth()
   
-  const programmeLabel = <label>
-                           <span>Programme: *</span>
-                           <ul className={ styles.programme }>
-                              <span onClick={ e => toggleList(e, 'span')}> 
-                                { !programme && 'Select programme' } 
-                                { programme && capitalize(programme) }
-                                </span>
-                              <div>
-                                {
-                                  coursesList.map((course, index) => {
-                                    return <li key={ course.course + index } onClick={ e => {
-                                                                                  setProgramme(course.course.trim()?.toLowerCase())
-                                                                                  toggleList(e, 'list')
-                                                                                  } }> 
-                                              { capitalize(course.course) } 
-                                            </li>
-                                  })
-                                }
-                              </div>
-                           </ul>
-                        </label>
+  function ProgrammeLabel(){
 
-  const firstnameLabel = <label>
-                          <span>First name: *</span>
-                          <input type="text" ref={ firstname } required />
-                        </label>
+    return (
+      <label>
+        <span>Programme: *</span>
+        <ul className={ styles.programme }>
+          <span onClick={ e => toggleList(e, 'span')}> 
+            { !programme && 'Select programme' } 
+            { programme && capitalize(programme) }
+            </span>
+          <div>
+            {
+              coursesList.map((course, index) => {
+                return <li key={ course.course + index } onClick={ e => {
+                                                              setProgramme(course.course.trim()?.toLowerCase())
+                                                              toggleList(e, 'list')
+                                                              } }> 
+                          { capitalize(course.course) } 
+                        </li>
+              })
+            }
+          </div>
+        </ul>
+      </label>
+    )
+  }
+  function FirstnameLabel(){
 
-  const middlenameLabel = <label>
-                            <span>Middle name: </span>
-                            <input type="text" ref={ middlename } />
-                          </label>
+    return (
+      <label>
+        <span>First name: *</span>
+        <input type="text" ref={ firstname } required />
+      </label>
+    )
+  }
+  function MiddlenameLabel(){
 
-  const surnameLabel = <label>
-                          <span>Surname: *</span>
-                          <input type="text" ref={ surname } required />
-                        </label>
+    return (
+      <label>
+        <span>Middle name: </span>
+        <input type="text" ref={ middlename } />
+      </label>
 
-  const birthDateLabel = <label>
-                            <span>Birth date: *</span>
-                            <input type="date" ref={ birthDate } required  />
-                          </label>
+    )
+  } 
+  function SurnameLabel(){
 
-  const genderOptions = <div className={ styles.gender }>
-                          <span>Gender: *</span>
-                          <label>
-                            <input type="radio" name="gender" checked={ gender === 'male' } onChange={ (e) => setGender('male') } />
-                            <span>Male</span>
-                          </label>
-                          <label>
-                            <input type="radio" name="gender" checked={ gender === 'female' } onChange={ (e) => setGender('female') } />
-                            <span>Female</span>
-                          </label>
-                      </div>
+    return (
+      <label>
+        <span>Surname: *</span>
+        <input type="text" ref={ surname } required />
+      </label>
+    )
+  }
+  function BirthDateLabel(){
 
-  const addressSection = <div className={ styles.address }>
-                            <span>Address:</span>
-                            <label>
-                              <span>Country: *</span>
-                              <input type="text" value={ address.country } onChange={ (e) => setAddress(p => ({ ...p, country: e.target.value.toLowerCase() })) } required />
-                            </label>
+    return (
+      <label>
+        <span>Birth date: *</span>
+        <input type="date" ref={ birthDate } required  />
+      </label>
+    )
+  }
+  function GenderOptions(){
 
-                            <label>
-                              <span>State/Region: *</span>
-                              <input type="text" value={ address.region } onChange={ (e) => setAddress(p => ({ ...p, region: e.target.value.toLowerCase() })) } required />
-                            </label>
+    return (
+      <div className={ styles.gender }>
+        <span>Gender: *</span>
+        <label>
+          <input type="radio" name="gender" checked={ gender === 'male' } onChange={ (e) => setGender('male') } />
+          <span>Male</span>
+        </label>
+        <label>
+          <input type="radio" name="gender" checked={ gender === 'female' } onChange={ (e) => setGender('female') } />
+          <span>Female</span>
+        </label>
+      </div>
+    )
+  } 
+  function AddressSection(){
 
-                            <label>
-                              <span>City: *</span>
-                              <input type="text" value={ address.city } onChange={ (e) => setAddress(p => ({ ...p, city: e.target.value.toLowerCase() })) } required />
-                            </label>
+    return (
+      <div className={ styles.address }>
+        <span>Address:</span>
+        <label>
+          <span>Country: *</span>
+          <input type="text" value={ address.country } onChange={ (e) => setAddress(p => ({ ...p, country: e.target.value.toLowerCase() })) } required />
+        </label>
 
-                            <label>
-                              <span>Address Line 1: *</span>
-                              <input type="text" value={ address.address1 } onChange={ (e) => setAddress(p => ({ ...p, address1: e.target.value.toLowerCase() })) } required />
-                            </label>
+        <label>
+          <span>State/Region: *</span>
+          <input type="text" value={ address.region } onChange={ (e) => setAddress(p => ({ ...p, region: e.target.value.toLowerCase() })) } required />
+        </label>
 
-                            <label>
-                              <span>Address Line 2:</span>
-                              <input type="text" value={ address.address2 } onChange={ (e) => setAddress(p => ({ ...p, address2: e.target.value?.toLowerCase() })) } />
-                            </label>
-                         </div>
+        <label>
+          <span>City: *</span>
+          <input type="text" value={ address.city } onChange={ (e) => setAddress(p => ({ ...p, city: e.target.value.toLowerCase() })) } required />
+        </label>
 
-  const idLabel = <label>
-                      <span>National ID / Passport Document:</span>
-                      <input type="file" accept="image/*" className={ styles.uploadButton } ref={ idDocument } />
-                  </label>
+        <label>
+          <span>Address Line 1: *</span>
+          <input type="text" value={ address.address1 } onChange={ (e) => setAddress(p => ({ ...p, address1: e.target.value.toLowerCase() })) } required />
+        </label>
 
-  const idPhotoLabel = <label>
-                    <span>Passport Photo:</span>
-                    <input type="file" accept="image/*" className={ styles.uploadButton } ref={ passportPhoto } />
-                       </label>
+        <label>
+          <span>Address Line 2:</span>
+          <input type="text" value={ address.address2 } onChange={ (e) => setAddress(p => ({ ...p, address2: e.target.value?.toLowerCase() })) } />
+        </label>
+      </div>
+    )
+  }
+  function IdLabel(){
 
-  const phoneNumberLabel = <label>
-                          <span>Contact number: </span>
-                          <input type="number" ref={ phoneNumber } />
-                           </label>
+    return (
+      <label>
+          <span>National ID / Passport Document:</span>
+          <input type="file" accept="image/*" className={ styles.uploadButton } ref={ idDocument } />
+      </label>
 
-  const emailLabel = <label>
-                          <span>Email: </span>
-                          <input type="email" ref={ email } />
-                     </label>
+    )
+  } 
+  function IdPhotoLabel(){
 
-  const highestEducationLevelLabel = <label >
-                                      <span>Highest Level of Education:</span>
-                                      <ul className={ styles.educationLevels }>
-                                        <span onClick={ e => toggleList(e, 'span') }> 
-                                          { educationLevel && capitalize(educationLevel) } 
-                                          { !educationLevel && 'Select your highest level of education' }
-                                        </span>
-                                        <div>
-                                          {
-                                            educationLevels.map((el, index) => {
-                                              return <li key={ el + index } onClick={ (e) => {
-                                                                                                setEducationLevel(el.level.toLowerCase()) 
-                                                                                                toggleList(e, 'child')
-                                                                                              } }>
-                                                       { el.level } 
-                                                      </li>
-                                            })
-                                          }
-                                        </div>
-                                      </ul>
-                                    </label>
+    return (
+      <label>
+        <span>Passport Photo:</span>
+        <input type="file" accept="image/*" className={ styles.uploadButton } ref={ passportPhoto } />
+      </label>
+    )
+  } 
+  function PhoneNumberLabel(){
 
-  const passwordLabel = <label>
-                          <span>Password: </span>
-                          <input type={ isPassVisible ? 'text' : 'password' } ref={ password } />
-                          <span className={ styles.passwordIconBtn } onClick={ () => toggleIconVisibility('password') }> { !isPassVisible ? hideIcon : showIcon } </span>
-                        </label>
+    return (
+      <label>
+        <span>Contact number: </span>
+        <input type="number" ref={ phoneNumber } />
+      </label>  
+    )
+  }
+  function EmailLabel(){
 
-  const cpasswordLabel = <label>
-                          <span>Confirm password: </span>
-                          <input type={ isCpassVisible ? 'text' : 'password' } ref={ cpassword } />
-                          <span className={ styles.passwordIconBtn } onClick={ () => toggleIconVisibility('cpassword') }> { !isCpassVisible ? hideIcon : showIcon } </span>
-                        </label>
+    return (
+      <label>
+        <span>Email: </span>
+        <input type="email" ref={ email } />
+      </label>
+    )
+  }
+  function HighestEducationLevelLabel(){
 
-  const honeyPot = <label className={ styles.contactLabel }>
-                          <span>Contact: </span>
-                          <input type="number" ref={ contact } autoComplete="off" />
-                        </label>
+    return (
+      <label >
+        <span>Highest Level of Education:</span>
+        <ul className={ styles.educationLevels }>
+          <span onClick={ e => toggleList(e, 'span') }> 
+            { educationLevel && capitalize(educationLevel) } 
+            { !educationLevel && 'Select your highest level of education' }
+          </span>
+          <div>
+            {
+              educationLevels.map((el, index) => {
+                return <li key={ el + index } onClick={ (e) => {
+                                                                  setEducationLevel(el.level.toLowerCase()) 
+                                                                  toggleList(e, 'child')
+                                                                } }>
+                          { el.level } 
+                        </li>
+              })
+            }
+          </div>
+        </ul>
+      </label>
+    )
+  }
+  function PasswordLabel(){
+
+    return (
+      <label>
+        <span>Password: </span>
+        <input type={ isPassVisible ? 'text' : 'password' } ref={ password } />
+        <span className={ styles.passwordIconBtn } onClick={ () => toggleIconVisibility('password') }> { !isPassVisible ? hideIcon : showIcon } </span>
+      </label>
+    )
+  }
+  function CpasswordLabel(){
+  
+    return (
+      <label>
+        <span>Confirm password: </span>
+        <input type={ isCpassVisible ? 'text' : 'password' } ref={ cpassword } />
+        <span className={ styles.passwordIconBtn } onClick={ () => toggleIconVisibility('cpassword') }> { !isCpassVisible ? hideIcon : showIcon } </span>
+      </label>
+    )
+  }
+  function HoneyPot(){
+  
+    return (
+      <label className={ styles.contactLabel }>
+        <span>Contact: </span>
+        <input type="number" ref={ contact } autoComplete="off" />
+      </label>
+    )
+  } 
 
 const handler = registration
 
@@ -266,25 +332,25 @@ async function handleFormSubmission(e){
       <form onSubmit={ (e) => handleFormSubmission(e) } className={ styles.authForm }>
         <h3> Admission </h3>
         <div className={ styles.section }>
-          { programmeLabel }
-          { firstnameLabel }
-          { middlenameLabel }
-          { surnameLabel }
-          { birthDateLabel }
-          { genderOptions }
+          <ProgrammeLabel />
+          <FirstnameLabel />
+          <MiddlenameLabel />
+          <SurnameLabel />
+          <BirthDateLabel />
+          <GenderOptions />
         </div>
-        <div className={ styles.section }>
-          { idPhotoLabel }
-          { idLabel }
-          { addressSection }
-          { highestEducationLevelLabel }
+        <div className={ styles.section } >
+          <IdPhotoLabel />
+          <IdLabel />
+          <AddressSection />
+          <HighestEducationLevelLabel />
         </div>
-        <div className={ styles.section }>
-          { phoneNumberLabel }
-          { emailLabel }
-          { passwordLabel }
-          { cpasswordLabel }
-          { honeyPot }
+        <div className={ styles.section } >
+          <PhoneNumberLabel />
+          <EmailLabel />
+          <PasswordLabel />
+          <CpasswordLabel />
+          <HoneyPot />
         </div>
         <button className={ styles.button }> Apply </button>
       </form>

@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import useCourses from "./../../../Contexts/CourseContext/CoursesContext";
 import CourseCard from "../../../Components/CourseCard/CourseCard";
 import { formatUrl } from "../../../core";
+import PendingLoader from "../../../Hooks/Loader/PendingLoader/PendingLoader";
 
 
 function SubListItem(props){
@@ -110,7 +111,7 @@ export default function Course(){
         <div className={ styles.listButtons }>
           { 
             list.map(( currentList, index) => {
-              return <span key={ currentList.title + 's' || index } onClick={ (e) => activeSubList(e) } > { currentList.title } </span>
+              return <span key={ currentList.title + index } onClick={ (e) => activeSubList(e) } > { currentList.title } </span>
             }) 
           }
         </div>
@@ -118,19 +119,20 @@ export default function Course(){
           {
             list.map(( currentList, i) => {
               if(currentList.list){
-                return <SubListItem key={ currentList.title + 1 || i  } list={ currentList.list } />
+                const mkey = Object.values(currentList.list[i])[0]
+                return <SubListItem key={ mkey } list={ currentList.list } />
               } 
-                else if(currentList.modules){
-                  return (<ul className={ styles.subList }>
+              else if(currentList.modules){
+                return (<ul className={ styles.subList }>
                     {
-                      currentList.modules.map( module => {
-                        return <li key={ module.index } className={ styles.moduleList }> <span className={ styles.moduleIndex }> { module.index } </span> { module.title } </li>
+                      currentList.modules.map( (module, j) => {
+                        return <li key={ module.title + j } className={ styles.moduleList }> <span className={ styles.moduleIndex }> { module.index } </span> { module.title } </li>
                       })
                     }
                   </ul>)
               }
                 else {
-                  return <SubListItem key={ currentList.title + 2 } content={ currentList.content } />
+                  return <SubListItem key={ currentList.title } content={ currentList.content } />
                 }
             })
           }
@@ -150,7 +152,7 @@ export default function Course(){
 
   return (
     <>
-      { !currentCourse && <b>Loading...</b> }
+      { !currentCourse && <PendingLoader /> }
       { currentCourse && <h1 className={ styles.courseHeading }> { currentCourse.course } </h1> }
       { currentCourse &&  <CourseCard title={ currentCourse.course } /> }
       { currentCourse && <div className={ styles.courseOverview }>
