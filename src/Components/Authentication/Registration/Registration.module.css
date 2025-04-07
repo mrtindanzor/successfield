@@ -12,31 +12,36 @@
 .authForm > h3{
   position: relative;
   right: 10px;
-  font-size: var(--fo-size);
+  font-size: var(--t-size);
   color: var(--b-color);
   background-color: var(--w-color);
   padding: 10px;
 }
-.authForm > label{
+.authForm label{
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-.authForm > label > span{
-  font-size: var(--s-size);
+.authForm label > span{
+  font-size: var(--f-size);
   font-family: texturina;
   font-weight: 100;
   color: var(--p-color);
   letter-spacing: 1px;
 
 }
-.authForm > label > input{
+.authForm input{
+  border: none;
+  border-bottom: 1px solid var(--b-color);
+  background-color: transparent;
+}
+.authForm label > input[type='text']{
   padding-block: 10px;
   border: none;
   border-bottom: 1px solid var(--b-color);
 }
-.authForm > label > input:focus{
+.authForm label > input[type='text']:focus{
   border: none;
   outline: none;
   border-bottom: 1px dotted var(--t-color);
@@ -46,7 +51,7 @@
   border: 1px solid currentColor;
   background-color: var(--p-color);
   color: var(--w-color);
-  font-size: var(--s-size);
+  font-size: var(--f-size);
   cursor: pointer;
 }
 .passwordIconBtn{
@@ -61,8 +66,81 @@
   width: 30px;
   height: 30px;
 }
+.gender > label{
+  display: flex;
+  flex-direction: unset;
+}
+.gender > span, .address > span{
+  font-family: texturina;
+  color: var(--p-color);
+}
+.gender > label span, .address > label > span{
+  color: var(--b-color);
+  font-family: unset;
+}
 .contactLabel{
   height: 0;
   overflow: hidden;
   padding: 0 !important;
+}
+.uploadButton{
+  position: relative;
+  display: block;
+  background-color: transparent;
+  width: 100px;
+  height: 30px;
+  border-radius: 5px;
+}
+.uploadButton::after{
+  content: 'Upload';
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: var(--f-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--t-color);
+  color: var(--w-color);
+  border-radius: 5px;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+.address{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.educationLevels, .programme{
+  position: relative;
+  list-style: none;
+}
+.educationLevels > span, .programme > span{
+  border-bottom: 1px solid var(--b-color);
+  display: block;
+  padding: 10px;
+  cursor:text;
+}
+.educationLevels > div, .programme > div{
+  display: none;
+  flex-direction: column;
+  background-color: var(--w-color);
+}
+.educationLevels > div > li, .programme > div > li{
+  font-size: var(--f-size);
+  padding: 10px;
+  border-bottom: 1px solid var(--b-color);
+  cursor: pointer;
+}
+.educationLevels > div > li:hover, .programme > div > li:hover{
+  color: var(--w-color);
+  background-color: var(--p-color);
+}
+.section{
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 40px 20px;
+  background-color: var(--f-color);
+  z-index: 1;
 }

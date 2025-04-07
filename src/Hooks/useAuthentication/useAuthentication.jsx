@@ -52,8 +52,26 @@ export default function useAuthentication(){
 
 
   async function registration(credentials, navigate){
-    let { firstname, middlename, surname, email, contact, password, cpassword } = credentials
+    let {
+      programme,
+      firstname,
+      middlename,
+      surname,
+      birthDate,
+      address,
+      idDocument,
+      passportPhoto,
+      phoneNumber,
+      email,
+      educationLevel,
+      contact,
+      password,
+      cpassword
+    } = credentials
+
     if(contact !== '') return { msg: 'Unable to complete registration at this time' }
+    console.log(credentials)
+    if(!programme) return { msg: 'Select a programme' }
     if(!firstname) return { msg: 'Enter your firstname' }
     if(firstname.length < 3) return { msg: 'Firstname too short' }
     if(!stringPattern.test(firstname)) return { msg: 'Firstname contains invalid characters' }
@@ -62,6 +80,10 @@ export default function useAuthentication(){
     if(!surname) return { msg: 'Enter your surname' }
     if(surname.length < 3) return { msg: 'Surname too short' }
     if(!stringPattern.test(surname)) return { msg: 'Surname contains invalid characters' }
+    if(!address) return { msg: 'Fill your address' }
+    if(!idDocument) return { msg: 'Select an identification document to continue' }
+    if(!passportPhoto) return { msg: 'Add a passport picture' }
+    if(!phoneNumber) return { msg: 'Enter a valid phone number' }
     if(!email) return { msg: 'Enter your email address' }
     if(!emailPattern.test(email)) return { msg: 'Email address contains invalid characters' }
     if(!password) return { msg: 'Enter a password' }
@@ -70,8 +92,28 @@ export default function useAuthentication(){
 
 
     const uri = serverUri + 'users/register'
-    const body = JSON.stringify({ firstname, middlename, surname, email, password, cpassword })
-    const options = { method: 'PUT', headers, body }
+    const details = {
+      programme,
+      firstname,
+      middlename,
+      surname,
+      birthDate,
+      address,
+      idDocument,
+      passportPhoto,
+      phoneNumber,
+      email,
+      educationLevel,
+      contact,
+      password,
+      cpassword
+    }
+    const formData = new FormData()
+    for(const key in details){
+      formData.append(key, details[key])
+    }
+
+    const options = { method: 'PUT', body: formData }
 
     try{
       const response = await fetch(uri, options)
