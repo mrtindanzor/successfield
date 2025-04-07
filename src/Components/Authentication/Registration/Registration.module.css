@@ -23,7 +23,7 @@
   flex-direction: column;
   gap: 10px;
 }
-.authForm label > span{
+.authForm label span{
   font-size: var(--f-size);
   font-family: texturina;
   font-weight: 100;
@@ -36,12 +36,12 @@
   border-bottom: 1px solid var(--b-color);
   background-color: transparent;
 }
-.authForm label > input[type='text']{
+.authForm label input:not([type='radio']){
   padding-block: 10px;
   border: none;
   border-bottom: 1px solid var(--b-color);
 }
-.authForm label > input[type='text']:focus{
+.authForm label input:not([type='radio'],[type='date']):focus{
   border: none;
   outline: none;
   border-bottom: 1px dotted var(--t-color);
