@@ -10,6 +10,29 @@ import { capitalize } from "../../../core";
 const hideIcon = icons.eyeClose(styles.passwordIcon, 'Show')
 const showIcon = icons.eyeOpen(styles.passwordIcon, 'Hide')
 
+export function toggleList(e, el){
+  let list
+  let display
+  switch(el){
+    case 'span':
+        list = e.target.nextElementSibling
+        display = getComputedStyle(list).display
+
+        switch(display){
+          case 'none':
+              list.style.display = 'flex'
+            break
+
+          default: 
+              list.style.display = 'none'
+        }
+      break
+
+    default: 
+        list = e.target.parentElement
+        list.style.display = 'none'
+  }
+}
 
 export default function Registration(){
   const educationLevels = useMemo(() => {
@@ -276,29 +299,7 @@ function toggleIconVisibility(object){
       setIsCpassVisible(v => !v)
     }
 }
-function toggleList(e, el){
-  let list
-  let display
-  switch(el){
-    case 'span':
-        list = e.target.nextElementSibling
-        display = getComputedStyle(list).display
 
-        switch(display){
-          case 'none':
-              list.style.display = 'flex'
-            break
-
-          default: 
-              list.style.display = 'none'
-        }
-      break
-
-    default: 
-        list = e.target.parentElement
-        list.style.display = 'none'
-  }
-}
 async function handleFormSubmission(e){
   e.preventDefault()
 

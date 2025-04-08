@@ -35,16 +35,21 @@
   flex-direction: column;
   border-radius: 6px;
 }
-.addCourseForm label input:focus, .addCourseForm label > textarea{
+.addCourseForm label input:focus, .addCourseForm label > textarea:focus{
   outline: 1px solid var(--p-color);
 }
 .addCourseForm label input, .addCourseForm label > textarea{
   display: block;
+  line-height: 2rem;
   padding: 5px 10px;
   border-radius: 5px;
   border: none;
   resize: vertical;
   width: 100% !important;
+}
+.addCourseForm label > textarea{
+  min-height: 100px;
+  height: fit-content;
 }
 .addCourseForm > label > div{
   display: flex;
@@ -70,4 +75,31 @@
   padding: 5px 15px;
   background-color: var(--b-color);
   color: var(--w-color);
+}
+.coursesSelector{
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  background-color: var(--l-p-color);
+  padding: 20px;
+  list-style: none;
+}
+.coursesSelector > span{
+  background-color: var(--w-color);
+  border-bottom: 1px solid;
+  padding: 10px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+.coursesSelector > div{
+  flex-direction: column;
+  display: none;
+  background-color: var(--w-color);
+}
+.coursesSelector > div > li{
+  padding: 10px;
+  border-bottom: 1px solid var(--b-color);
 }

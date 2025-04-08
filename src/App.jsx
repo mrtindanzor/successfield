@@ -5,18 +5,21 @@ import router from "./routers";
 import { RouterProvider } from "react-router-dom";
 import { AlertMsgProvider } from "./Hooks/Alerter/Alerter";
 import { ServerProvider } from "./Contexts/serverContexts/baseServer";
+import { PendingLoaderProvider } from "./Hooks/Loader/PendingLoader/PendingLoader";
 
 function App() {
 
   return (
     <ServerProvider>
-      <AlertMsgProvider>
-        <AuthenticationProvider>
-          <CoursesProvider>
-              <RouterProvider router={router} />
-          </CoursesProvider>
-        </AuthenticationProvider>
-      </AlertMsgProvider>
+      <PendingLoaderProvider>
+        <AlertMsgProvider>
+          <AuthenticationProvider>
+            <CoursesProvider>
+                <RouterProvider router={router} />
+            </CoursesProvider>
+          </AuthenticationProvider>
+        </AlertMsgProvider>
+      </PendingLoaderProvider>
     </ServerProvider>
   )
 }

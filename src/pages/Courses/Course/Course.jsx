@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import useCourses from "./../../../Contexts/CourseContext/CoursesContext";
 import CourseCard from "../../../Components/CourseCard/CourseCard";
 import { formatUrl } from "../../../core";
-import PendingLoader from "../../../Hooks/Loader/PendingLoader/PendingLoader";
+import usePendingLoader from "../../../Hooks/Loader/PendingLoader/PendingLoader";
 
 
 function SubListItem(props){
@@ -47,6 +47,7 @@ function ModuleList({ list }){
 
 export default function Course(){
   const [currentCourse, setCurrentCourse] = useState(null)
+  const { setIsPendingLoader } = usePendingLoader()
   const { getCourse, coursesList } = useCourses()
   let { course } = useParams()
   course = formatUrl(course)
@@ -152,7 +153,8 @@ export default function Course(){
 
   return (
     <>
-      { !currentCourse && <PendingLoader /> }
+      { !currentCourse && setIsPendingLoader(true) }
+      { currentCourse && setIsPendingLoader(false) }
       { currentCourse && <h1 className={ styles.courseHeading }> { currentCourse.course } </h1> }
       { currentCourse &&  <CourseCard title={ currentCourse.course } /> }
       { currentCourse && <div className={ styles.courseOverview }>

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import useAuth from '../../../Contexts/AuthenticationContext/AuthenticationContext'
 import { useSetAlert } from '../../../Hooks/Alerter/Alerter'
 import icons from '../../../Icons/icons'
+import PendingLoader from '../../../Hooks/Loader/PendingLoader/PendingLoader'
 
 const hideIcon = icons.eyeClose(styles.passwordIcon, 'Show')
 const showIcon = icons.eyeOpen(styles.passwordIcon, 'Hide')
