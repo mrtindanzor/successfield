@@ -14,7 +14,7 @@ export default function SlideShowSection(){
       <div>
         {
           images.map( ( image, index ) => {
-            return <img src={ '/public/images/slides/' + image } className={ `${ styles.slideImage } ${ index === activeSlide ? styles.activeSlide : '' }` } />
+            return <img src={ '/images/slides/' + image } className={ `${ styles.slideImage } ${ index === activeSlide ? styles.activeSlide : '' }` } />
           })
         }
       </div>
