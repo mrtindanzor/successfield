@@ -90,6 +90,7 @@ function CourseStructure({ currentCourse }){
   const [ objectives, setObjectives] = useState(currentCourse && currentCourse.objectives || [])
   const [ benefits, setBenefits] = useState(currentCourse && currentCourse.benefits || [])
   const [ outlines, setOutlines] = useState(currentCourse && currentCourse.outlines || [])
+  const [ modules, setModules] = useState(currentCourse && currentCourse.modules || [])
   const [ formComplete, setFormComplete] = useState(false)
   const setters = { setCourse, setCourseCode, setOverview, setFee, setCertificate, setAvailability, setDuration, setObjectives, setBenefits, setOutlines, setFormComplete }
 
@@ -117,19 +118,58 @@ function CourseStructure({ currentCourse }){
     }
   }, [formComplete])
 
-  function appendInput(e, type){
+  function appendInput(e, type, object){
     e.preventDefault()
-    const item = { _id: Date.now(), [type]: '' }
-    
-    if(type === 'objective'){
-      setObjectives( prev => [...prev, item] )
+    let item = { _id: Date.now(), [type]: '' }
+
+    switch(object){
+      case 'objectives':
+        setObjectives( prev => [...prev, item] )
+          break
+      
+      case 'outlines':
+        setOutlines( prev => [...prev, item] )
+          break
+
+      case 'benefits':
+        setBenefits( prev => [...prev, item] )
+          break
+
+      case 'modules':
+        item = { 
+          _id: Date.now(),
+          index: modules.length + 1,
+          title: '',
+          outline: '',
+          objectives: [{ objective: '' }],
+          topics: [{ topic: '' }],
+          notes: [{ note: '' }]
+        }
+        setModules( prev => [ ...prev, item ] )
+          break
+
+      case 'moduleObjectives':
+        setModules( prev => prev.map( module => {
+          const objs = module.objectives
+          return { ...module, objectives: [ ...objs, item ] }
+        } ))
+        break
+        
+      case 'moduleTopics':
+        setModules( prev => prev.map( module => {
+          const tpcs = module.topics
+          return { ...module, topics: [ ...tpcs, item ] }
+        } ))
+          break
+        
+      case 'moduleNotes':
+        setModules( prev => prev.map( module => {
+          const nts = module.notes
+          return { ...module, notes: [ ...nts, item ] }
+        } ))
+          break
     }
-    if(type === 'outline'){
-      setOutlines( prev => [...prev, item] )
-    }
-    if(type === 'benefit'){
-      setBenefits( prev => [...prev, item] )
-    }
+
   }
 
   return (
@@ -201,7 +241,7 @@ function CourseStructure({ currentCourse }){
                 } />
               })
             }
-            <span onClick={ (e) => appendInput(e, 'objective') } className={ styles.addMore }> + </span>
+            <span onClick={ (e) => appendInput(e, 'objective', 'objectives') } className={ styles.addMore }> + </span>
           </div>
         </label>
 
@@ -223,7 +263,7 @@ function CourseStructure({ currentCourse }){
                 }  />
               })
             }
-            <span onClick={ (e) => appendInput(e, 'outline') } className={ styles.addMore }> + </span>
+            <span onClick={ (e) => appendInput(e, 'outline', 'outlines') } className={ styles.addMore }> + </span>
           </div>
         </label>
 
@@ -245,10 +285,129 @@ function CourseStructure({ currentCourse }){
                 } />
               })
             }
-            <span onClick={ (e) => appendInput(e, 'benefit') } className={ styles.addMore }> + </span>
+            <span onClick={ (e) => appendInput(e, 'benefit', 'benefits') } className={ styles.addMore }> + </span>
           </div>
         </label>
-        <button> Add course </button>
+
+        <label data-value='modules'>
+          <span>
+            Modules:
+          </span>
+          <div>
+            {
+              modules.map((module, index) => {
+                return <div>
+                        <br />
+                        <hr />
+                        <br />
+                        <span> Module { module.index } </span>
+
+                        <label>
+                          <span> Title </span>
+                          <input type="text" key={ 'moduleTitle' + index } value={ module.title } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, title: e.target.value } : currentModule) ) } />
+                        </label>
+
+                        <label>
+                          <span> Description </span>
+                          <textarea value={ module.description } key={ 'moduleDescription' + index } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, description: e.target.value } : currentModule) ) }></textarea>
+                        </label>
+
+                        <label>
+                          <span> Outline </span>
+                          <input type="text" key={ 'moduleOutline' + index } value={ module.outline } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, outline: e.target.value } : currentModule) ) } />
+                        </label>
+
+                        <label>
+                          <span> Objectives </span>
+                          <div>
+                            {
+                              module.objectives && module.objectives.map(objective => {
+                                return <input type="text" key={ objective._id } onChange={ e => setModules( 
+                                  prev => prev.map( currentObjective => {
+                                    if(objective._id !== currentObjective._id) return currentObjective
+
+                                    return {
+                                      ...currentObjective, 
+                                      objectives: currentObjective.objectives?.map( currentObjective => {
+                                        if(objective._id !== currentObjective._id) return currentObjective
+
+                                        return { ...currentObjective, objective: e.target.value }
+                                      })
+                                    }
+                                  })
+                                ) } />
+                              })
+                            }
+                            <span onClick={ (e) => appendInput(e, 'objective', 'moduleObjectives') } className={ styles.addMore }> + </span>
+                          </div>
+                        </label>
+
+                        <label>
+                          <span> Topics </span>
+                          <div>
+                            {
+                              module.topics && module.topics.map( topic => {
+                                return <input type="text" key={ topic._id } onChange={ e => setModules( 
+                                  prev => prev.map( currentModule => {
+                                    if(module._id !== currentModule._id) return currentModule
+
+                                    return {
+                                      ...currentModule, 
+                                      topics: currentModule.topics?.map( currentTopic => {
+                                        if(topic._id !== currentTopic._id) return currentTopic
+
+                                        return { ...currentTopic, topic: e.target.value }
+                                      })
+                                    }
+                                  })
+                                ) } />
+                              })
+                            }
+                            <span onClick={ (e) => appendInput(e, 'topic', 'moduleTopics') } className={ styles.addMore }> + </span>
+                          </div>
+                        </label>
+
+                        <label>
+                          <span> Notes </span>
+                          <div>
+                            {
+                              module.notes && module.notes.map( note => {
+                                return <input type="text" key={ note._id } onChange={ e => setModules( 
+                                  prev => prev.map( currentModule => {
+                                    if(module._id !== currentModule._id) return currentModule
+
+                                    return {
+                                      ...currentModule, 
+                                      notes: currentModule.notes?.map( currentNote => {
+                                        if(note._id !== currentNote._id) return currentNote
+
+                                        return { ...currentNote, note: e.target.value }
+                                      })
+                                    }
+                                  })
+                                ) } />
+                              })
+                            }
+                            <span onClick={ (e) => appendInput(e, 'note', 'moduleNotes') } className={ styles.addMore }> + </span>
+                          </div>
+                        </label>
+
+                        <label>
+                          <span> Video Link </span>
+                          <input type="text" key={ 'videoLink' + module._id } value={ module.link } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, link: e.target.value } : currentModule) ) } />
+                        </label>
+                      </div>
+                      
+              })
+            }
+            <br />
+            <hr />
+            <br />
+            Add another module
+            <span onClick={ (e) => appendInput(e, '', 'modules') } className={ styles.addMore }> + </span>
+          </div>
+        </label>
+        <button> { currentCourse ? 'Edit course' : 'Add course' }  </button>
       </form>
   )
 }

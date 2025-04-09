@@ -27,7 +27,7 @@
   gap: 25px;
 }
 .addCourseForm label{
-  background-color: var(--l-p-color);
+  /* background-color: var(--l-p-color); */
   padding: 20px;
   display: flex;
   width: min(900px, 100%);
@@ -42,19 +42,27 @@
   display: block;
   line-height: 2rem;
   padding: 5px 10px;
-  border-radius: 5px;
+  border-radius: 3px;
   border: none;
   resize: vertical;
   width: 100% !important;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
 }
 .addCourseForm label > textarea{
   min-height: 100px;
   height: fit-content;
 }
-.addCourseForm > label > div{
+.addCourseForm label > div{
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
+}
+.addCourseForm :not(:scope > *) label > div{
+  background-color: red;
 }
 .addCourseForm > button{
   width: min(900px, 100%);
@@ -83,6 +91,8 @@
   background-color: var(--l-p-color);
   padding: 20px;
   list-style: none;
+  max-width: 900px;
+  margin-bottom: 20px;
 }
 .coursesSelector > span{
   background-color: var(--w-color);

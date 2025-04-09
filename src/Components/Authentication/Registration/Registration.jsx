@@ -1,6 +1,6 @@
 import icons from "../../../Icons/icons";
 import styles from './Registration.module.css'
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetAlert } from "../../../Hooks/Alerter/Alerter";
 import useAuth from './../../../Contexts/AuthenticationContext/AuthenticationContext'
@@ -35,6 +35,12 @@ export function toggleList(e, el){
 }
 
 export default function Registration(){
+  const setMsg = useSetAlert()
+  const navigate = useNavigate()
+  const { coursesList } = useCourses()
+  
+  const { registration } = useAuth()
+
   const educationLevels = useMemo(() => {
     const e = [
       { level: "No Formal Education" },
@@ -56,238 +62,184 @@ export default function Registration(){
   const [ programme, setProgramme] = useState('')
   const [ gender, setGender ] = useState('male')
   const [ address, setAddress ] = useState({ 
-                                            country: null,
-                                            region: null,
-                                            city: null,
-                                            address1: null,
-                                            address2: null
+                                            country: '',
+                                            region: '',
+                                            city: '',
+                                            address1: '',
+                                            address2: ''
                                           })
   const [ isPassVisible, setIsPassVisible ] = useState(false)
   const [ isCpassVisible, setIsCpassVisible ] = useState(false)
   const [ educationLevel, setEducationLevel] = useState('')
-  const firstname = useRef('')
-  const middlename = useRef('')
-  const surname = useRef('')
-  const birthDate = useRef('2000-01-01')
-  const idDocument = useRef('')
-  const passportPhoto = useRef('')
-  const phoneNumber = useRef('')
-  const email = useRef('')
-  const contact = useRef('')
-  const password = useRef('')
-  const cpassword = useRef('')
-  const setMsg = useSetAlert()
-  const navigate = useNavigate()
-  const coursesList = useMemo(() => {
-    const { coursesList } = useCourses()
-    return coursesList
-  }, [])
+  const [ firstname, setFirstname ] = useState('')
+  const [ middlename, setMiddlename ] = useState('')
+  const [ surname, setSurname ] = useState('')
+  const [ birthDate, setBirthDate ] = useState('2000-01-01')
+  const [ idDocument, setIdDocument ] = useState('')
+  const [ passportPhoto, setPassportPhoto ] = useState('')
+  const [ phoneNumber, setPhoneNumber ] = useState('')
+  const [ email, setEmail ] = useState('')
+  const [ contact, setContact ] = useState('')
+  const [ password, setPassword ] = useState('')
+  const [ cpassword, setCpassword ] = useState('')
   
-  const { registration } = useAuth()
-  
-  function ProgrammeLabel(){
-
-    return (
-      <label>
-        <span>Programme: *</span>
-        <ul className={ styles.programme }>
-          <span onClick={ e => toggleList(e, 'span')}> 
-            { !programme && 'Select programme' } 
-            { programme && capitalize(programme) }
-            </span>
-          <div>
-            {
-              coursesList.map((course, index) => {
-                return <li key={ course.course + index } onClick={ e => {
-                                                              setProgramme(course.course.trim()?.toLowerCase())
-                                                              toggleList(e, 'list')
-                                                              } }> 
-                          { capitalize(course.course) } 
-                        </li>
-              })
-            }
-          </div>
-        </ul>
-      </label>
-    )
-  }
-  function FirstnameLabel(){
-
-    return (
-      <label>
-        <span>First name: *</span>
-        <input type="text" ref={ firstname } required />
-      </label>
-    )
-  }
-  function MiddlenameLabel(){
-
-    return (
-      <label>
-        <span>Middle name: </span>
-        <input type="text" ref={ middlename } />
-      </label>
-
-    )
-  } 
-  function SurnameLabel(){
-
-    return (
-      <label>
-        <span>Surname: *</span>
-        <input type="text" ref={ surname } required />
-      </label>
-    )
-  }
-  function BirthDateLabel(){
-
-    return (
-      <label>
-        <span>Birth date: *</span>
-        <input type="date" ref={ birthDate } required  />
-      </label>
-    )
-  }
-  function GenderOptions(){
-
-    return (
-      <div className={ styles.gender }>
-        <span>Gender: *</span>
-        <label>
-          <input type="radio" name="gender" checked={ gender === 'male' } onChange={ (e) => setGender('male') } />
-          <span>Male</span>
-        </label>
-        <label>
-          <input type="radio" name="gender" checked={ gender === 'female' } onChange={ (e) => setGender('female') } />
-          <span>Female</span>
-        </label>
-      </div>
-    )
-  } 
-  function AddressSection(){
-
-    return (
-      <div className={ styles.address }>
-        <span>Address:</span>
-        <label>
-          <span>Country: *</span>
-          <input type="text" value={ address.country } onChange={ (e) => setAddress(p => ({ ...p, country: e.target.value.toLowerCase() })) } required />
-        </label>
-
-        <label>
-          <span>State/Region: *</span>
-          <input type="text" value={ address.region } onChange={ (e) => setAddress(p => ({ ...p, region: e.target.value.toLowerCase() })) } required />
-        </label>
-
-        <label>
-          <span>City: *</span>
-          <input type="text" value={ address.city } onChange={ (e) => setAddress(p => ({ ...p, city: e.target.value.toLowerCase() })) } required />
-        </label>
-
-        <label>
-          <span>Address Line 1: *</span>
-          <input type="text" value={ address.address1 } onChange={ (e) => setAddress(p => ({ ...p, address1: e.target.value.toLowerCase() })) } required />
-        </label>
-
-        <label>
-          <span>Address Line 2:</span>
-          <input type="text" value={ address.address2 } onChange={ (e) => setAddress(p => ({ ...p, address2: e.target.value?.toLowerCase() })) } />
-        </label>
-      </div>
-    )
-  }
-  function IdLabel(){
-
-    return (
-      <label>
-          <span>National ID / Passport Document:</span>
-          <input type="file" accept="image/*" className={ styles.uploadButton } ref={ idDocument } />
-      </label>
-
-    )
-  } 
-  function IdPhotoLabel(){
-
-    return (
-      <label>
-        <span>Passport Photo:</span>
-        <input type="file" accept="image/*" className={ styles.uploadButton } ref={ passportPhoto } />
-      </label>
-    )
-  } 
-  function PhoneNumberLabel(){
-
-    return (
-      <label>
-        <span>Contact number: </span>
-        <input type="number" ref={ phoneNumber } />
-      </label>  
-    )
-  }
-  function EmailLabel(){
-
-    return (
-      <label>
-        <span>Email: </span>
-        <input type="email" ref={ email } />
-      </label>
-    )
-  }
-  function HighestEducationLevelLabel(){
-
-    return (
-      <label >
-        <span>Highest Level of Education:</span>
-        <ul className={ styles.educationLevels }>
-          <span onClick={ e => toggleList(e, 'span') }> 
-            { educationLevel && capitalize(educationLevel) } 
-            { !educationLevel && 'Select your highest level of education' }
+  const ProgrammeLabel =
+    <label>
+      <span>Programme: *</span>
+      <ul className={ styles.programme }>
+        <span onClick={ e => toggleList(e, 'span')}> 
+          { !programme && 'Select programme' } 
+          { programme && capitalize(programme) }
           </span>
-          <div>
-            {
-              educationLevels.map((el, index) => {
-                return <li key={ el + index } onClick={ (e) => {
-                                                                  setEducationLevel(el.level.toLowerCase()) 
-                                                                  toggleList(e, 'child')
-                                                                } }>
-                          { el.level } 
-                        </li>
-              })
-            }
-          </div>
-        </ul>
-      </label>
-    )
-  }
-  function PasswordLabel(){
+        <div>
+          {
+            coursesList.map((course, index) => {
+              return <li key={ course.course + index } onClick={ e => {
+                                                            setProgramme(course.course.trim()?.toLowerCase())
+                                                            toggleList(e, 'list')
+                                                            } }> 
+                        { capitalize(course.course) } 
+                      </li>
+            })
+          }
+        </div>
+      </ul>
+    </label>
 
-    return (
+  const FirstnameLabel =
+    <label>
+      <span>First name: *</span>
+      <input type="text" key='firstname' value={ firstname } onChange={ e => setFirstname(e.target.value) } required />
+    </label>
+
+  const MiddlenameLabel =
+    <label>
+      <span>Middle name: </span>
+      <input type="text" key='middlename' value={ middlename } onChange={ e => setMiddlename(e.target.value) } />
+    </label>
+
+  const SurnameLabel =
+    <label>
+      <span>Surname: *</span>
+      <input type="text" key='surname' value={ surname } onChange={ e => setSurname(e.target.value) } required />
+    </label>
+
+  const BirthDateLabel =
+    <label>
+      <span>Birth date: *</span>
+      <input type="date" key='birthdate' value={ birthDate } onChange={ e => setBirthDate(e.target.value) } required  />
+    </label>
+
+  const GenderOptions =
+    <div className={ styles.gender }>
+      <span>Gender: *</span>
       <label>
-        <span>Password: </span>
-        <input type={ isPassVisible ? 'text' : 'password' } ref={ password } />
-        <span className={ styles.passwordIconBtn } onClick={ () => toggleIconVisibility('password') }> { !isPassVisible ? hideIcon : showIcon } </span>
+        <input type="radio" key='male' name="gender" checked={ gender === 'male' } onChange={ (e) => setGender('male') } />
+        <span>Male</span>
       </label>
-    )
-  }
-  function CpasswordLabel(){
-  
-    return (
       <label>
-        <span>Confirm password: </span>
-        <input type={ isCpassVisible ? 'text' : 'password' } ref={ cpassword } />
-        <span className={ styles.passwordIconBtn } onClick={ () => toggleIconVisibility('cpassword') }> { !isCpassVisible ? hideIcon : showIcon } </span>
+        <input type="radio" key='female' name="gender" checked={ gender === 'female' } onChange={ (e) => setGender('female') } />
+        <span>Female</span>
       </label>
-    )
-  }
-  function HoneyPot(){
-  
-    return (
-      <label className={ styles.contactLabel }>
-        <span>Contact: </span>
-        <input type="number" ref={ contact } autoComplete="off" />
+    </div>
+
+  const AddressSection =
+    <div className={ styles.address }>
+      <span>Address:</span>
+      <label>
+        <span>Country: *</span>
+        <input type="text" key='country' value={ address.country } onChange={ (e) => setAddress(p => ({ ...p, country: e.target.value.toLowerCase() })) } required />
       </label>
-    )
-  } 
+
+      <label>
+        <span>State/Region: *</span>
+        <input type="text" key='state' value={ address.region } onChange={ (e) => setAddress(p => ({ ...p, region: e.target.value.toLowerCase() })) } required />
+      </label>
+
+      <label>
+        <span>City: *</span>
+        <input type="text" key='city' value={ address.city } onChange={ (e) => setAddress(p => ({ ...p, city: e.target.value.toLowerCase() })) } required />
+      </label>
+
+      <label>
+        <span>Address Line 1: *</span>
+        <input type="text" key='address1' value={ address.address1 } onChange={ (e) => setAddress(p => ({ ...p, address1: e.target.value.toLowerCase() })) } required />
+      </label>
+
+      <label>
+        <span>Address Line 2:</span>
+        <input type="text" key='address2' value={ address.address2 } onChange={ (e) => setAddress(p => ({ ...p, address2: e.target.value?.toLowerCase() })) } />
+      </label>
+    </div>
+
+  const IdLabel =
+    <label>
+      <span>National ID / Passport Document:</span>
+      <input type="file" key='idDocument' accept="image/*" className={ styles.uploadButton } value={ idDocument }  onChange={ e => setIdDocument(e.target.files[0]) } />
+    </label>
+
+
+  const IdPhotoLabel =
+    <label>
+      <span>Passport Photo:</span>
+      <input type="file" key='passportphoto' accept="image/*" className={ styles.uploadButton } value={ passportPhoto } onChange={ e => setPassportPhoto(e.target.files[0]) } />
+    </label>
+
+  const PhoneNumberLabel =
+    <label>
+      <span>Contact number: </span>
+      <input type="number" key='phoneNumber' value={ phoneNumber } onChange={ e => setPhoneNumber(e.target.value) } />
+    </label>  
+
+  const EmailLabel =
+    <label>
+      <span>Email: </span>
+      <input type="email" key='email' value={ email } onChange={ e => setEmail(e.target.value) } />
+    </label>
+
+  const HighestEducationLevelLabel =
+    <label >
+      <span>Highest Level of Education:</span>
+      <ul className={ styles.educationLevels }>
+        <span onClick={ e => toggleList(e, 'span') }> 
+          { educationLevel && capitalize(educationLevel) } 
+          { !educationLevel && 'Select your highest level of education' }
+        </span>
+        <div>
+          {
+            educationLevels.map((el, index) => {
+              return <li key={ el + index } onClick={ (e) => {
+                                                                setEducationLevel(el.level.toLowerCase()) 
+                                                                toggleList(e, 'child')
+                                                              } }>
+                        { el.level } 
+                      </li>
+            })
+          }
+        </div>
+      </ul>
+    </label>
+
+  const PasswordLabel =
+    <label>
+      <span>Password: </span>
+      <input type={ isPassVisible ? 'text' : 'password' } key='password' value={ password } onChange={ e => setPassword(e.target.value) } />
+      <span className={ styles.passwordIconBtn } onClick={ () => toggleIconVisibility('password') }> { !isPassVisible ? hideIcon : showIcon } </span>
+    </label>
+
+  const CpasswordLabel =
+    <label>
+      <span>Confirm password: </span>
+      <input type={ isCpassVisible ? 'text' : 'password' } key='cpassword' value={ cpassword } onChange={ e => setCpassword(e.target.value) } />
+      <span className={ styles.passwordIconBtn } onClick={ () => toggleIconVisibility('cpassword') }> { !isCpassVisible ? hideIcon : showIcon } </span>
+    </label>
+
+  const HoneyPot =
+    <label className={ styles.contactLabel }>
+      <span>Contact: </span>
+      <input type="number" key='contact' value={ contact } onChange={ e => setContact(e.target.value) } autoComplete="off" />
+    </label>
+
 
 const handler = registration
 
@@ -305,19 +257,19 @@ async function handleFormSubmission(e){
 
   const credentials = { 
     programme, 
-    firstname: firstname.current.value, 
-    middlename: middlename.current.value, 
-    surname: surname.current.value, 
-    birthDate: birthDate.current.value, 
+    firstname, 
+    middlename, 
+    surname, 
+    birthDate, 
     address, 
-    idDocument: idDocument.current?.files[0], 
-    passportPhoto: passportPhoto.current?.files[0], 
-    phoneNumber: phoneNumber.current.value, 
-    email: email.current.value, 
+    idDocument, 
+    passportPhoto, 
+    phoneNumber, 
+    email, 
     educationLevel, 
-    contact: contact.current.value, 
-    password: password.current.value, 
-    cpassword: cpassword.current.value
+    contact, 
+    password, 
+    cpassword
   }
   
   try{
@@ -333,25 +285,25 @@ async function handleFormSubmission(e){
       <form onSubmit={ (e) => handleFormSubmission(e) } className={ styles.authForm }>
         <h3> Admission </h3>
         <div className={ styles.section }>
-          <ProgrammeLabel />
-          <FirstnameLabel />
-          <MiddlenameLabel />
-          <SurnameLabel />
-          <BirthDateLabel />
-          <GenderOptions />
+          { ProgrammeLabel }
+          { FirstnameLabel }
+          { MiddlenameLabel }
+          { SurnameLabel }
+          { BirthDateLabel }
+          { GenderOptions }
         </div>
         <div className={ styles.section } >
-          <IdPhotoLabel />
-          <IdLabel />
-          <AddressSection />
-          <HighestEducationLevelLabel />
+          { IdPhotoLabel }
+          { IdLabel }
+          { AddressSection }
+          { HighestEducationLevelLabel }
         </div>
         <div className={ styles.section } >
-          <PhoneNumberLabel />
-          <EmailLabel />
-          <PasswordLabel />
-          <CpasswordLabel />
-          <HoneyPot />
+          { PhoneNumberLabel }
+          { EmailLabel }
+          { PasswordLabel }
+          { CpasswordLabel }
+          { HoneyPot }
         </div>
         <button className={ styles.button }> Apply </button>
       </form>

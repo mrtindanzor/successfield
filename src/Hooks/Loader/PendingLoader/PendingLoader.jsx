@@ -1,32 +1,25 @@
-import { createContext, useContext, useState } from 'react'
+import usePendingLoader from '../../../Contexts/PendingLoader/PendingLoaderContext'
 import styles from './PendingLoader.module.css'
 
-const PendingLoaderContext = createContext()
+function Loader(){
 
-export function PendingLoaderProvider({ children }){
-    const [ isPendingLoader, setIsPendingLoader ] = useState(false)
-
-    return(
-        <PendingLoaderContext.Provider value={ { setIsPendingLoader, isPendingLoader } }>
-            { children }
-        </PendingLoaderContext.Provider>
+    return (
+        <div className={ styles.loader }>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     )
 }
 
-export function PendingLoader(){
+export default function PendingLoader(){
     const { isPendingLoader } = usePendingLoader()
     return (
         <>
             {
-                isPendingLoader && (<div className={ styles.loader }>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                    </div>)
+                isPendingLoader && <Loader />
             }
             
         </>
     )
 }
-
-export default function usePendingLoader(){ return useContext( PendingLoaderContext ) }

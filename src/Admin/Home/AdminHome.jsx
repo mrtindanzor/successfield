@@ -1,5 +1,5 @@
 // STYLES //
-import { PendingLoader } from '../../Hooks/Loader/PendingLoader/PendingLoader';
+import PendingLoader from '../../Hooks/Loader/PendingLoader/PendingLoader';
 import Aside from '../Components/Aside/Aside';
 import Details from '../Components/Details/Details';
 import Header from '../Components/Header/Header';

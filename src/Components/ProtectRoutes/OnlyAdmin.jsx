@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import useAuth from "../../Contexts/AuthenticationContext/AuthenticationContext";
 import { useNavigate } from "react-router-dom";
-import usePendingLoader from "../../Hooks/Loader/PendingLoader/PendingLoader";
+import usePendingLoader from "../../Contexts/PendingLoader/PendingLoaderContext";
 
 
 export default function OnlyAdmin({ children }){

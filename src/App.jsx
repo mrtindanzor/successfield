@@ -5,7 +5,7 @@ import router from "./routers";
 import { RouterProvider } from "react-router-dom";
 import { AlertMsgProvider } from "./Hooks/Alerter/Alerter";
 import { ServerProvider } from "./Contexts/serverContexts/baseServer";
-import { PendingLoaderProvider } from "./Hooks/Loader/PendingLoader/PendingLoader";
+import { PendingLoaderProvider } from "./Contexts/PendingLoader/PendingLoaderContext";
 
 function App() {
 
@@ -15,7 +15,7 @@ function App() {
         <AlertMsgProvider>
           <AuthenticationProvider>
             <CoursesProvider>
-                <RouterProvider router={router} />
+              <RouterProvider router={router} />
             </CoursesProvider>
           </AuthenticationProvider>
         </AlertMsgProvider>

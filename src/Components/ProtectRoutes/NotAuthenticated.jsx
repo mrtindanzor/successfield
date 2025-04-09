@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import useAuth from "./../../Contexts/AuthenticationContext/AuthenticationContext";
 import { useEffect } from "react";
-import usePendingLoader from "../../Hooks/Loader/PendingLoader/PendingLoader";
+import usePendingLoader from "../../Contexts/PendingLoader/PendingLoaderContext";
 
 
 export function NotAuthenticated({ children }){

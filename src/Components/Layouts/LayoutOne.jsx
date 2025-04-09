@@ -4,7 +4,7 @@ import Navbar, { MenuBtnsProvider } from "../Navbar/Navbar";
 import StarterLoader from "../../Hooks/Loader/StarterLoader/StarterLoader";
 import { Outlet } from "react-router-dom";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
-import { PendingLoader } from "../../Hooks/Loader/PendingLoader/PendingLoader";
+import PendingLoader from "../../Hooks/Loader/PendingLoader/PendingLoader";
 
 export default function LayoutOne(){
 
