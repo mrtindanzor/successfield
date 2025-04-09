@@ -1,7 +1,7 @@
 import usePendingLoader from '../../../Contexts/PendingLoader/PendingLoaderContext'
 import styles from './PendingLoader.module.css'
 
-function Loader(){
+export function PendingLoading(){
 
     return (
         <div className={ styles.loader }>
@@ -17,7 +17,7 @@ export default function PendingLoader(){
     return (
         <>
             {
-                isPendingLoader && <Loader />
+                isPendingLoader && <PendingLoading />
             }
             
         </>
