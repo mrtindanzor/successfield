@@ -1,14 +1,12 @@
 import { useEffect } from "react";
 import useAuth from "../../Contexts/AuthenticationContext/AuthenticationContext";
 import { useNavigate } from "react-router-dom";
-import usePendingLoader from "../../Contexts/PendingLoader/PendingLoaderContext";
+import { PendingLoading } from "../../Hooks/Loader/PendingLoader/PendingLoader";
 
 
 export default function OnlyAdmin({ children }){
   const { currentUser } = useAuth()
   const navigate = useNavigate()
-  const { setIsPendingLoader } = usePendingLoader()
-  setIsPendingLoader(true)
 
   useEffect(() => {
     if(currentUser && !currentUser.admin) {
@@ -18,9 +16,8 @@ export default function OnlyAdmin({ children }){
   }, [currentUser])
 
   if(currentUser && currentUser.admin){
-    setIsPendingLoader(false)
 
     return <> { children } </>
   }
-  return <></>
+  return <PendingLoading />
 }

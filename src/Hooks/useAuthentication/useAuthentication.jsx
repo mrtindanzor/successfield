@@ -153,7 +153,6 @@ export default function useAuthentication(){
           setCurrentUser(decodedUser)
           setIsLoggedIn(true)
           setAlert(res.msg)
-          setIsPendingLoader(true)
           setTimeout(() => {
             if(decodedUser.admin){
               navigate('/admin')  

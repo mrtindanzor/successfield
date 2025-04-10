@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Content = {
   title: 'Excel with Successfield!',
-  description: 'Get the expertise you need with our Executive Certificates and Doctrates. Enroll now and stay ahead!',
+  description: 'Get the expertise you need with our Executive Certificates and Doctorates. Enroll now and stay ahead!',
   action: 'Browse Courses'
 }
 

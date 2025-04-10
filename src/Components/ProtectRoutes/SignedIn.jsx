@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../Contexts/AuthenticationContext/AuthenticationContext";
 import { useEffect } from "react";
-import PendingLoader from './../../Hooks/Loader/PendingLoader/PendingLoader';
+import { PendingLoading } from './../../Hooks/Loader/PendingLoader/PendingLoader';
 
 
 export default function SignedIn({ children }){
@@ -15,6 +15,6 @@ export default function SignedIn({ children }){
   if(!initialFetch && !isLoggedIn) return <> { children } </>
 
   return(
-    <PendingLoader />
+    <PendingLoading />
   )
 }

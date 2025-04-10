@@ -1,13 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import useAuth from "./../../Contexts/AuthenticationContext/AuthenticationContext";
 import { useEffect } from "react";
-import usePendingLoader from "../../Contexts/PendingLoader/PendingLoaderContext";
+import { PendingLoading } from "../../Hooks/Loader/PendingLoader/PendingLoader";
 
 
 export function NotAuthenticated({ children }){
   const { isLoggedIn, initialFetch } = useAuth()
-  const { setIsPendingLoader } = usePendingLoader()
-  setIsPendingLoader(true)
   const navigate = useNavigate()
   
   useEffect(() => {
@@ -16,9 +14,8 @@ export function NotAuthenticated({ children }){
   }, [isLoggedIn, initialFetch])
 
   if(!initialFetch && isLoggedIn){
-    setIsPendingLoader(false)
     return <>{ children }</>
   }
   
-  return <></>
+  return <PendingLoading />
 }

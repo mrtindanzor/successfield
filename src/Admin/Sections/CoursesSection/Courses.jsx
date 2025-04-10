@@ -79,7 +79,7 @@ function handleCourseSubmit(e, setters){
   }
 }
 
-function CourseStructure({ currentCourse }){
+function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
   const [ course, setCourse] = useState(currentCourse && currentCourse.course || '')
   const [ courseCode, setCourseCode] = useState(currentCourse && currentCourse.courseCode || '')
   const [ overview, setOverview] = useState(currentCourse && currentCourse.overview || '')
@@ -174,53 +174,54 @@ function CourseStructure({ currentCourse }){
 
   return (
     <form className={ styles.addCourseForm } onSubmit={ (e) => { handleCourseSubmit(e, setters) }}>
+        <div className={ styles.deleteCourseBtn }></div>
         <label data-value='course'>
           <span>
             Course name: 
           </span>
-          <input type="text" value={ course } onChange={ e => setCourse(e.target.value) } required  />
+          <input disabled={ viewCourse } type="text" value={ course } onChange={ e => setCourse(e.target.value) } required  />
         </label>
 
         <label data-value='courseCode'>
           <span>
             Course code: 
           </span>
-          <input type="text" value={ courseCode } onChange={ e => setCourseCode(e.target.value) } required  />
+          <input disabled={ viewCourse } type="text" value={ courseCode } onChange={ e => setCourseCode(e.target.value) } required  />
         </label>
 
         <label data-value='overview'>
           <span>
             Course overview: 
           </span>
-          <textarea value={ overview } onChange={ e => setOverview(e.target.value) }></textarea>
+          <textarea value={ overview } disabled={ viewCourse } onChange={ e => setOverview(e.target.value) }></textarea>
         </label>
 
         <label data-value='fee'>
           <span>
             Course fee: 
           </span>
-          <input type="text" value={ fee } onChange={ e => setFee(e.target.value) } />
+          <input disabled={ viewCourse } type="text" value={ fee } onChange={ e => setFee(e.target.value) } />
         </label>
 
         <label data-value='certificate'>
           <span>
             Certification: 
           </span>
-          <input type="text" value={ certificate } onChange={ e => setCertificate(e.target.value) } required />
+          <input disabled={ viewCourse } type="text" value={ certificate } onChange={ e => setCertificate(e.target.value) } required />
         </label>
 
         <label data-value='availability'>
           <span>
             Availability: 
           </span>
-          <input type="text" value={ availability } onChange={ e => setAvailability(e.target.value) } />
+          <input disabled={ viewCourse } type="text" value={ availability } onChange={ e => setAvailability(e.target.value) } />
         </label>
 
         <label data-value='duration'>
           <span>
             Duration: 
           </span>
-          <input type="text" value={ duration } onChange={ e => setDuration(e.target.value) } />
+          <input disabled={ viewCourse } type="text" value={ duration } onChange={ e => setDuration(e.target.value) } />
         </label>
 
         <label data-value='objectives'>
@@ -230,7 +231,7 @@ function CourseStructure({ currentCourse }){
           <div>
             {
               objectives.map((objective, index) => {
-                return <input type="text" key={ objective._id } value={ objective.objective } onChange={ 
+                return <input disabled={ viewCourse } type="text" key={ objective._id } value={ objective.objective } onChange={ 
                   (e) => { 
                     e.preventDefault()
                     setObjectives( prev =>
@@ -241,7 +242,7 @@ function CourseStructure({ currentCourse }){
                 } />
               })
             }
-            <span onClick={ (e) => appendInput(e, 'objective', 'objectives') } className={ styles.addMore }> + </span>
+            { !viewCourse && <span onClick={ (e) => appendInput(e, 'objective', 'objectives') } className={ styles.addMore }> + </span> }
           </div>
         </label>
 
@@ -252,7 +253,7 @@ function CourseStructure({ currentCourse }){
           <div>
             {
               outlines.map((outline, index) => {
-                return <input type="text" key={ outline._id } value={ outline.outline } onChange={ 
+                return <input disabled={ viewCourse } type="text" key={ outline._id } value={ outline.outline } onChange={ 
                   (e) => { 
                     e.preventDefault()
                     setOutlines( prev =>
@@ -263,7 +264,7 @@ function CourseStructure({ currentCourse }){
                 }  />
               })
             }
-            <span onClick={ (e) => appendInput(e, 'outline', 'outlines') } className={ styles.addMore }> + </span>
+            { !viewCourse && <span onClick={ (e) => appendInput(e, 'outline', 'outlines') } className={ styles.addMore }> + </span> }
           </div>
         </label>
 
@@ -274,7 +275,7 @@ function CourseStructure({ currentCourse }){
           <div>
             {
               benefits.map((benefit, index) => {
-                return <input type="text" key={ benefit._id } value={ benefit.benefit } onChange={ 
+                return <input disabled={ viewCourse } type="text" key={ benefit._id } value={ benefit.benefit } onChange={ 
                   (e) => { 
                     e.preventDefault()
                     setBenefits( prev =>
@@ -285,7 +286,7 @@ function CourseStructure({ currentCourse }){
                 } />
               })
             }
-            <span onClick={ (e) => appendInput(e, 'benefit', 'benefits') } className={ styles.addMore }> + </span>
+            { !viewCourse && <span onClick={ (e) => appendInput(e, 'benefit', 'benefits') } className={ styles.addMore }> + </span> }
           </div>
         </label>
 
@@ -304,7 +305,7 @@ function CourseStructure({ currentCourse }){
 
                         <label>
                           <span> Title </span>
-                          <input type="text" key={ 'moduleTitle' + index } value={ module.title } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, title: e.target.value } : currentModule) ) } />
+                          <input disabled={ viewCourse } type="text" key={ 'moduleTitle' + index } value={ module.title } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, title: e.target.value } : currentModule) ) } />
                         </label>
 
                         <label>
@@ -314,7 +315,7 @@ function CourseStructure({ currentCourse }){
 
                         <label>
                           <span> Outline </span>
-                          <input type="text" key={ 'moduleOutline' + index } value={ module.outline } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, outline: e.target.value } : currentModule) ) } />
+                          <input disabled={ viewCourse } type="text" key={ 'moduleOutline' + index } value={ module.outline } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, outline: e.target.value } : currentModule) ) } />
                         </label>
 
                         <label>
@@ -322,7 +323,7 @@ function CourseStructure({ currentCourse }){
                           <div>
                             {
                               module.objectives && module.objectives.map(objective => {
-                                return <input type="text" key={ objective._id } onChange={ e => setModules( 
+                                return <input disabled={ viewCourse } type="text" key={ objective._id } onChange={ e => setModules( 
                                   prev => prev.map( currentObjective => {
                                     if(objective._id !== currentObjective._id) return currentObjective
 
@@ -338,7 +339,7 @@ function CourseStructure({ currentCourse }){
                                 ) } />
                               })
                             }
-                            <span onClick={ (e) => appendInput(e, 'objective', 'moduleObjectives') } className={ styles.addMore }> + </span>
+                            { !viewCourse && <span onClick={ (e) => appendInput(e, 'objective', 'moduleObjectives') } className={ styles.addMore }> + </span> }
                           </div>
                         </label>
 
@@ -347,7 +348,7 @@ function CourseStructure({ currentCourse }){
                           <div>
                             {
                               module.topics && module.topics.map( topic => {
-                                return <input type="text" key={ topic._id } onChange={ e => setModules( 
+                                return <input disabled={ viewCourse } type="text" key={ topic._id } onChange={ e => setModules( 
                                   prev => prev.map( currentModule => {
                                     if(module._id !== currentModule._id) return currentModule
 
@@ -363,7 +364,7 @@ function CourseStructure({ currentCourse }){
                                 ) } />
                               })
                             }
-                            <span onClick={ (e) => appendInput(e, 'topic', 'moduleTopics') } className={ styles.addMore }> + </span>
+                            { !viewCourse && <span onClick={ (e) => appendInput(e, 'topic', 'moduleTopics') } className={ styles.addMore }> + </span> }
                           </div>
                         </label>
 
@@ -372,7 +373,7 @@ function CourseStructure({ currentCourse }){
                           <div>
                             {
                               module.notes && module.notes.map( note => {
-                                return <input type="text" key={ note._id } onChange={ e => setModules( 
+                                return <input disabled={ viewCourse } type="text" key={ note._id } onChange={ e => setModules( 
                                   prev => prev.map( currentModule => {
                                     if(module._id !== currentModule._id) return currentModule
 
@@ -388,13 +389,13 @@ function CourseStructure({ currentCourse }){
                                 ) } />
                               })
                             }
-                            <span onClick={ (e) => appendInput(e, 'note', 'moduleNotes') } className={ styles.addMore }> + </span>
+                            { !viewCourse && <span onClick={ (e) => appendInput(e, 'note', 'moduleNotes') } className={ styles.addMore }> + </span> }
                           </div>
                         </label>
 
                         <label>
                           <span> Video Link </span>
-                          <input type="text" key={ 'videoLink' + module._id } value={ module.link } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, link: e.target.value } : currentModule) ) } />
+                          <input disabled={ viewCourse } type="text" key={ 'videoLink' + module._id } value={ module.link } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, link: e.target.value } : currentModule) ) } />
                         </label>
                       </div>
                       
@@ -403,8 +404,8 @@ function CourseStructure({ currentCourse }){
             <br />
             <hr />
             <br />
-            Add another module
-            <span onClick={ (e) => appendInput(e, '', 'modules') } className={ styles.addMore }> + </span>
+            { !viewCourse && 'Add another module' }
+            { !viewCourse && <span onClick={ (e) => appendInput(e, '', 'modules') } className={ styles.addMore }> + </span> }
           </div>
         </label>
         <button> { currentCourse ? 'Edit course' : 'Add course' }  </button>
@@ -453,10 +454,82 @@ function EditCourse(){
   )
 }
 
+function ViewCourses(){
+  const [ selectedCourse, setSelectedCourse ] = useState('')
+  const { getCourse, coursesList } = useCourses()
+  const [ currentCourse, setCurrentCourse ] = useState('')
+
+  useEffect(() => {
+    selectedCourse && setCurrentCourse(getCourse(selectedCourse))
+  }, [ selectedCourse ])
+
+  return (
+    <>
+      <ul className={ styles.coursesSelector }>
+        <label> Programme </label>
+        <span onClick={ e => toggleList(e, 'span') }>
+          { !selectedCourse && 'Select programme' }
+          { selectedCourse && selectedCourse }
+        </span>
+        <div>
+          {
+            coursesList.map((course, index) => {
+              return <li key={ Date.now() + '-' + index } onClick={ e => {
+                toggleList(e, 'list')
+                setSelectedCourse(course.course)
+              }
+            }> { course.course } </li>
+            })
+          }
+        </div>
+      </ul>
+      {
+        currentCourse && <CourseStructure currentCourse={ currentCourse } viewCourse />
+      }
+    </>
+  )
+}
+
+function DeleteCourse(){
+  const [ selectedCourse, setSelectedCourse ] = useState('')
+  const { getCourse, coursesList } = useCourses()
+  const [ currentCourse, setCurrentCourse ] = useState('')
+
+  useEffect(() => {
+    selectedCourse && setCurrentCourse(getCourse(selectedCourse))
+  }, [ selectedCourse ])
+
+  return (
+    <>
+      <ul className={ styles.coursesSelector }>
+        <label> Programme </label>
+        <span onClick={ e => toggleList(e, 'span') }>
+          { !selectedCourse && 'Select programme' }
+          { selectedCourse && selectedCourse }
+        </span>
+        <div>
+          {
+            coursesList.map((course, index) => {
+              return <li key={ Date.now() + '-' + index } onClick={ e => {
+                toggleList(e, 'list')
+                setSelectedCourse(course.course)
+              }
+            }> { course.course } </li>
+            })
+          }
+        </div>
+      </ul>
+      {
+        currentCourse && <CourseStructure currentCourse={ currentCourse } deleteCourse />
+      }
+    </>
+  )
+}
+
 export default function Courses(){
   const sections = [
     {
-      title: 'View Courses', section: <div></div>
+      title: 'View Courses', section: <DeleteCourse />
     },
     {
       title: 'Add a course', section: <AddCourse />
