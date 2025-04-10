@@ -59,6 +59,7 @@
 @media (max-width: 600px) {
   .slideShowContainer{
     flex-direction: column;
+    height: 50vh;
   }
   .slideShowContainer > span{
     color: var(--p-color);
