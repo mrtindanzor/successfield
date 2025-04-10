@@ -193,7 +193,7 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
           <span>
             Course overview: 
           </span>
-          <textarea value={ overview } disabled={ viewCourse } onChange={ e => setOverview(e.target.value) }></textarea>
+          <textarea disabled={ viewCourse }  value={ overview } onChange={ e => setOverview(e.target.value) }></textarea>
         </label>
 
         <label data-value='fee'>
@@ -310,7 +310,7 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
 
                         <label>
                           <span> Description </span>
-                          <textarea value={ module.description } key={ 'moduleDescription' + index } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, description: e.target.value } : currentModule) ) }></textarea>
+                          <textarea disabled={ viewCourse }  value={ module.description } key={ 'moduleDescription' + index } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, description: e.target.value } : currentModule) ) }></textarea>
                         </label>
 
                         <label>
@@ -408,7 +408,7 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
             { !viewCourse && <span onClick={ (e) => appendInput(e, '', 'modules') } className={ styles.addMore }> + </span> }
           </div>
         </label>
-        <button> { currentCourse ? 'Edit course' : 'Add course' }  </button>
+        { !viewCourse && <button> { currentCourse ? 'Edit course' : 'Add course' }  </button> }
       </form>
   )
 }
@@ -529,7 +529,7 @@ function DeleteCourse(){
 export default function Courses(){
   const sections = [
     {
-      title: 'View Courses', section: <DeleteCourse />
+      title: 'View Courses', section: <ViewCourses />
     },
     {
       title: 'Add a course', section: <AddCourse />
@@ -538,7 +538,7 @@ export default function Courses(){
       title: 'Edit a course', section: <EditCourse />
     },
     {
-      title: 'Delete a course', section: <div/>
+      title: 'Delete a course', section: <DeleteCourse />
     },
   ]
 
