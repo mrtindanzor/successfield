@@ -1,13 +1,11 @@
-import styles from './Login.module.css'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAuth from '../../../Contexts/AuthenticationContext/AuthenticationContext'
 import { useSetAlert } from '../../../Hooks/Alerter/Alerter'
-import icons from '../../../Icons/icons'
-import PendingLoader from '../../../Hooks/Loader/PendingLoader/PendingLoader'
+import { EyeOff, Eye } from 'lucide-react'
 
-const hideIcon = icons.eyeClose(styles.passwordIcon, 'Show')
-const showIcon = icons.eyeOpen(styles.passwordIcon, 'Hide')
+const hideIcon = <EyeOff />
+const showIcon = <Eye />
 
 
 export default function Login(){
@@ -19,17 +17,19 @@ export default function Login(){
   
   const credentials =  { email, password }
   const { login } = useAuth()
+  
+  const labelClasses = "relative flex items-center w-full gap-5"
+  const inputClasses = "w-full flex-1 border-1 py-1 px-3 border-gray-500 rounded"
+  const emailLabel = <label className={ labelClasses }>
+                          <span>Email: </span>
+                          <input type="email" className={ inputClasses } onChange={ (e) => setEmail(e.target.value) } value={ email } />
+                        </label>
 
-    const emailLabel = <label>
-                            <span>Email: </span>
-                            <input type="email" onChange={ (e) => setEmail(e.target.value) } value={ email } />
-                          </label>
-
-    const passwordLabel = <label>
-                            <span>Password: </span>
-                            <input type={ isPassVisible ? 'text' : 'password' } onChange={ (e) => setPassword(e.target.value) } value={ password } />
-                            <span className={styles.passwordIconBtn} onClick={ () => toggleIconVisibility('password') }> { !isPassVisible ? hideIcon : showIcon } </span>
-                          </label>
+  const passwordLabel = <label className={ labelClasses }>
+                          <span>Password: </span>
+                          <input type={ isPassVisible ? 'text' : 'password' } className={ inputClasses } onChange={ (e) => setPassword(e.target.value) } value={ password } />
+                          <span className=" absolute right-5 " onClick={ () => toggleIconVisibility('password') }> { !isPassVisible ? hideIcon : showIcon } </span>
+                        </label>
 
 const handler = login
 
@@ -52,11 +52,11 @@ async function handleFormSubmission(e){
 
   return (
     <>
-      <form onSubmit={ (e) => handleFormSubmission(e) } className={ styles.authForm }>
-        <h3> Sign in </h3>
+      <form onSubmit={ (e) => handleFormSubmission(e) } className=" relative top-20 grid gap-10 bg-white mx-auto w-[98%] max-w-[600px] rounded-xl p-10 ">
+        <h3 className=" text-4xl text-green-500 font-bold "> Sign in </h3>
         { emailLabel }
         { passwordLabel }
-        <button className={ styles.button }> Log in </button>
+        <button className=" bg-white border-2 border-green-400 text-green-400 w-fit ml-auto px-3 py-1 rounded-xl cursor-pointer "> Log in </button>
       </form>
     </>
   )

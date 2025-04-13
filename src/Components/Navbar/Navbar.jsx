@@ -136,7 +136,7 @@ export default function Navbar(){
   ]
   
   return (
-      <nav ref={ nav } className=" translate-x-[-100%] transition md:transition-none duration-500 ease-linear md:translate-[unset] bg-white z-999 fixed top-[3.5rem] left-0 md:hidden md:ml-[20%] h-[calc(100vh-3.5rem)] list-none md:h-auto w-[98vw] md:w-[200px] border-1 border-gray-200  ">
+      <nav ref={ nav } className=" translate-x-[-100%] transition md:transition-none duration-300 ease-linear md:translate-[unset] bg-white z-999 fixed top-[3.5rem] left-0 md:hidden md:ml-[20%] h-[calc(100vh-3.5rem)] list-none md:h-auto w-[98vw] md:w-[200px] border-1 border-gray-200  ">
         {
           MenuItems.map(( menu, index ) => {
             let path = "/" + menu.title.toLowerCase().split(' ').join('-')
@@ -150,7 +150,7 @@ export default function Navbar(){
                                 </span> 
                 }
                 {
-                  menu.list && <ul ref={ navList } className=" translate-x-[-100%-10px] md:translate-0 overflow-y-scroll transition md:transition-none duration-500 ease-linear fixed top-[51px] md:absolute bg-white py-3 md:p-0 z-1000 left-0 md:left-[calc(100%+2px)] md:top-0 w-[98vw]  md:w-[calc(100%+20px)] h-[calc(100vh-3.5rem)] md:h-[fit-content] md:hidden ">
+                  menu.list && <ul ref={ navList } className=" translate-x-[-100%-10px] md:translate-0 overflow-y-scroll transition md:transition-none duration-300 ease-linear fixed top-[51px] md:absolute bg-white py-3 md:p-0 z-1000 left-0 md:left-[calc(100%+2px)] md:top-0 w-[98vw]  md:w-[calc(100%+20px)] h-[calc(100vh-3.5rem)] md:h-[fit-content] md:hidden ">
                     <span className=" w-[100%] h-7 flex items-center md:hidden cursor-pointer text-xl py-5 bg-white border-b-1 border-b-gray-300 " onClick={ () => mobileMenuToggle('show-mainList') }>
                       <ChevronLeft />
                       { menu.title }

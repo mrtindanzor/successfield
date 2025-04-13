@@ -9,7 +9,7 @@ import PendingLoader from "../../Hooks/Loader/PendingLoader/PendingLoader";
 export default function LayoutOne(){
 
   return (
-    <div className="bg-gray-100 text-lg text-gray-600">
+    <div className="bg-gray-100 text-lg text-gray-600 min-h-[100vh] ">
       <ScrollToTop />
       <Alerter />
       <PendingLoader />
