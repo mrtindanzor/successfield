@@ -8,7 +8,8 @@ const LayoutOne = lazy(() => import("./Components/Layouts/LayoutOne"))
 const NotAuthenticated = lazy(() => import('./Components/ProtectRoutes/NotAuthenticated').then( module => ({ default: module.NotAuthenticated }) ))
 
 // OTHERS //
-const AuthenticationPage = lazy(() => import("./pages/AuthenticationPage/AuthenticationPage") )
+const Registration = lazy(() => import("./Components/Authentication/Registration/Registration") )
+const Login = lazy(() => import("./Components/Authentication/Login/Login") )
 const Course = lazy(() => import("./pages/Courses/Course/Course") )
 const CoursesOverview = lazy(() => import("./pages/Courses/CoursesOverview/CoursesOverview") )
 const Home = lazy(() => import("./pages/Home/Home") )
@@ -58,9 +59,15 @@ const router = createBrowserRouter(
                                                         </NotAuthenticated>
                                                       </Suspense>} />
                                                       
-      <Route path='users/:route' element={ <Suspense fallback={ <PendingLoading /> } >
+      <Route path='users/join' element={ <Suspense fallback={ <PendingLoading /> } >
                                               <SignedIn>
-                                                <AuthenticationPage />
+                                                <Registration />
+                                              </SignedIn>
+                                            </Suspense> } />
+                                                      
+      <Route path='users/students-area' element={ <Suspense fallback={ <PendingLoading /> } >
+                                              <SignedIn>
+                                                <Login />
                                               </SignedIn>
                                             </Suspense> } />
                                             

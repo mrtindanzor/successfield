@@ -2,7 +2,8 @@ import { createContext, useContext, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import useCourses from "./../../Contexts/CourseContext/CoursesContext";
 import { capitalize } from "./../../core";
-import { ChevronDown, ChevronLeft, ChevronRight, Menu, X } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, Menu, UserPlus, X } from "lucide-react";
+import useAuth from "../../Contexts/AuthenticationContext/AuthenticationContext";
 
 const MenuBtnsContext = createContext()
 export function MenuBtnsProvider({ children }){
@@ -108,6 +109,7 @@ export function DeskMenuButton(){
 
 export default function Navbar(){
   const { coursesList } = useCourses()
+  const { isLoggedIn } = useAuth()
   const { nav, navList, handleMenuHover, mobileMenuToggle } = useMenuBtns()
   
   const MenuItems = [
@@ -137,6 +139,12 @@ export default function Navbar(){
   
   return (
       <nav ref={ nav } className=" translate-x-[-100%] transition md:transition-none duration-300 ease-linear md:translate-[unset] bg-white z-999 fixed top-[3.5rem] left-0 md:hidden md:ml-[20%] h-[calc(100vh-3.5rem)] list-none md:h-auto w-[98vw] md:w-[200px] border-1 border-gray-200  ">
+        <li>
+          <Link to="/users/join" className=" md:hidden flex bg-red-500 p-3 items-center gap-2 text-white font-bold hover:bg-red-700 " onClick={ () => mobileMenuToggle('hide-all') }> 
+            <UserPlus />
+            Sign up
+           </Link>
+        </li>
         {
           MenuItems.map(( menu, index ) => {
             let path = "/" + menu.title.toLowerCase().split(' ').join('-')
