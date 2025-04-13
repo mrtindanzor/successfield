@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import styles from './HomeContent.module.css'
 
 export default function HomeContent(){
   const contents = useMemo(() =>  [
@@ -27,14 +26,14 @@ export default function HomeContent(){
 
 
   return (
-    <div className={ styles.contentsWrapper }>
+    <div className=" py-10 ">
       {
         contents.map( content => {
-          return (<div className={ styles.content }>
+          return (<div key={ content.title } className=" grid grid-cols-4 w-[100vw] gap-3 py-3 odd:*:first:bg-green-300 min-h-[50vh] odd:*:first:rounded-tl-lg odd:*:first:rounded-bl-lg even:*:first:bg-green-600 even:*:first:rounded-tr-lg even:*:first:rounded-br-lg odd:*:last:col-start-1 odd:*:last:col-end-4 odd:*:first:col-start-4 odd:*:first:col-end-5  even:*:last:col-start-2 even:*:last:col-end-5 ">
                     <div>
-                      <span> { content.title } </span>
+                      <span className=" flex texturina place-items-center p-5 text-white text-shadow-black h-100  "> { content.title } </span>
                     </div>
-                    <p> { content.content } </p>
+                    <p className=" px-3 flex items-center h-100 row-start-1 row-end-1 "> { content.content } </p>
                   </div>)
         })
       }

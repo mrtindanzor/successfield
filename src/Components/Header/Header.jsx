@@ -1,4 +1,3 @@
-import styles from "./Header.module.css";
 import AuthButtons from "./Auth/AuthButtons";
 import Logo from "./Logo/Logo";
 import { DeskMenuButton, MenuButton } from "../Navbar/Navbar";
@@ -6,7 +5,7 @@ import { DeskMenuButton, MenuButton } from "../Navbar/Navbar";
 export default function Header(){
 
   return (
-    <header className={ styles.header }>
+    <header className=" fixed px-3 bg-white z-9999 w-[100vw] gap-5 top-0 left-0 h-14 flex items-center border-b-1 border-b-gray-500 ">
       <MenuButton />
       <Logo />
       <DeskMenuButton />

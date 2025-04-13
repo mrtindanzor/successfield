@@ -1,3 +1,5 @@
+@import 'tailwindcss';
+
 @font-face {
   font-family: raleway;
   src: url('../assets/fonts/raleway/Raleway-Black.ttf');
@@ -47,26 +49,8 @@
   --si-size: 36px;
 }
 *{
-  margin: 0;
-  padding: 0;
-  font-family: raleway-m, verdana, geneva, arial;
-  color: black;
   box-sizing: border-box;
   user-select: none;
-  word-wrap: break-word;
-  hyphens: auto;
-}
-*:not(h1, h2, h3, h4, h5, h6){
-  font-size: var(--f-size);
-}
-h1{
-  font-size: var(--fo-size);
-}
-h2{
-  font-size: var(--t-size);
-}
-h3{
-  font-size: var(--s-size);
 }
 * ::-webkit-scrollbar{
   background-color: var(--b-color);
@@ -79,15 +63,28 @@ h3{
   border-left: 1px solid var(--b-color);
 }
 body{
-  min-width: 100vw;
-  min-height: 100vh;
   padding-top: 55px;
   overflow-x: hidden !important;
 }
-[aria-current='page'].active {
-  background-color: var(--s-color) !important;
+[aria-current='page'].active{
+  position: relative;
+  z-index: 0;
   color: var(--w-color) !important;
+}
+[aria-current='page'].active::after {
+  content: '';
+  padding: 4px;
+  z-index: -1;
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  background-color: var(--s-color) !important;
 }
 [aria-current='page'].active *{
   fill: var(--w-color) !important;
+}
+.texturina{
+  font-family: texturina;
 }

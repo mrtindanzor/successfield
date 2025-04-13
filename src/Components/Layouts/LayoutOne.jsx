@@ -9,7 +9,7 @@ import PendingLoader from "../../Hooks/Loader/PendingLoader/PendingLoader";
 export default function LayoutOne(){
 
   return (
-    <>
+    <div className="bg-gray-100 text-lg text-gray-600">
       <ScrollToTop />
       <Alerter />
       <PendingLoader />
@@ -19,6 +19,6 @@ export default function LayoutOne(){
         <Navbar />
       </MenuBtnsProvider>
       <Outlet />
-    </>
+    </div>
   )
 }

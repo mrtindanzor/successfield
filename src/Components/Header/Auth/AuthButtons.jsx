@@ -1,20 +1,16 @@
-import icons from "../../../Icons/icons.jsx";
-import styles from "./AuthButtons.module.css";
 import { NavLink, Link } from "react-router-dom";
 import useAuth from './../../../Contexts/AuthenticationContext/AuthenticationContext'
-const loginBtn = icons.login(styles.loginBtn, 'Log in' )
-const signUpBtn = icons.signUp(styles.signUpBtn, 'Sign up' )
-const userIcon = icons.userLine(styles.userIcon, 'My Profile')
+import { LogIn, UserPlus } from "lucide-react";
 
 function NotLoggedIn(){
   return (
-    <div className={ styles.authBtns }>
-      <NavLink to='/users/students-area' className={ styles.loginLink }>
-        { loginBtn }
+    <div className=" flex border-1 border-black ml-auto ">
+      <NavLink to='/users/students-area' className=" p-2 hover:bg-green-500 hover:text-white flex items-center gap-x-2 ">
+        <LogIn />
         Log in
       </NavLink>
-      <NavLink to='/users/join' className={ styles.signUpLink }>
-        { signUpBtn }
+      <NavLink to='/users/join' className=" bg-black hidden md:flex text-white p-2 hover:bg-green-500 items-center gap-x-2">
+        <UserPlus />
         Sign up
       </NavLink>
     </div>
@@ -24,8 +20,7 @@ function NotLoggedIn(){
 function MyProfile(){
 
   return (
-      <Link to='/dashboard/profile' className={ styles.profileTab }>
-        { userIcon }
+      <Link to='/dashboard/profile' className=" p-2 bg-black text-white ">
         Profile
       </Link>
   )

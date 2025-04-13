@@ -1,99 +1,78 @@
-import icons from "../../Icons/icons";
-import styles from "./Navbar.module.css";
 import { createContext, useContext, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
-import useAuth from "./../../Contexts/AuthenticationContext/AuthenticationContext";
 import useCourses from "./../../Contexts/CourseContext/CoursesContext";
 import { capitalize } from "./../../core";
-
-const arrowRight = icons.chevronRight(styles.arrowRight, 'More')
-const arrowLeft = icons.chevronLeft(styles.arrowLeft, 'Back')
-const arrowDown = icons.chevronDown(styles.arrowDown, 'More')
-const menuBtn = icons.menu(styles.menuBtn, 'Menu')
-const closeBtn = icons.close(styles.closeBtn, 'Close')
-const signUpBtn = icons.signUp(styles.signUpBtn, 'Sign Up' )
+import { ChevronDown, ChevronLeft, ChevronRight, Menu, X } from "lucide-react";
 
 const MenuBtnsContext = createContext()
 export function MenuBtnsProvider({ children }){
+  const nav = useRef()
+  const navList = useRef()
   const mobileCloseBtnRef = useRef()
   const mobileMenuBtnRef = useRef()
   const desktopMenuBtnRef = useRef()
-  const mobileNavRef = useRef()
-  const mobileMenuRef = useRef()
-  const mobileSubListRef = useRef()
-  const desktopNavRef = useRef()
-  const desktopMenuRef = useRef()
-  const desktopSubListRef = useRef()
-
-  function autoHideDesktopSubList (){
-    desktopSubListRef.current.style.display = 'none'
-  }
-  
-  function autoHideMainList(version = ''){
-    if(version === 'mobile') return mobileMenuToggle('hide-all')
-  
-    desktopNavRef.current.style.display = 'none'
-    desktopSubListRef.current.style.display = 'none'
-  }
 
   document.body.addEventListener('click', function(e){
-    const deskMenuButtonDisplay = getComputedStyle(desktopMenuBtnRef.current).display
-    if(deskMenuButtonDisplay !== 'none'){
-      mobileMenuToggle('hide-all')
-      if(e.target !== desktopMenuBtnRef.current && !desktopMenuBtnRef.current.contains(e.target) && e.target !== desktopNavRef.current && !desktopNavRef.current.contains(e.target)) {
-        desktopNavRef.current.style.display = 'none'
-        desktopSubListRef.current.style.display = 'none'
-      }
-      return
-    }
     
-    if(!mobileNavRef.current.contains(e.target) && e.target !== mobileNavRef.current && e.target !== mobileMenuBtnRef.current && !mobileMenuBtnRef.current.contains(e.target)){
-      mobileMenuRef.current.style.transform = 'translateX(0)'
-      mobileNavRef.current.style.transform = 'translateX(calc(-100% - 50px))'
-
-      if(mobileCloseBtnRef.current.style.display !== 'none'){
-        mobileCloseBtnRef.current.style.display = 'none'
-        mobileMenuBtnRef.current.style.display = 'block'
-      }
+    if(!nav.current.contains(e.target) && e.target !== desktopMenuBtnRef.current && !desktopMenuBtnRef.current.contains(e.target) && e.target !== mobileMenuBtnRef.current && !mobileMenuBtnRef.current.contains(e.target)){
+      mobileMenuToggle('hide-all')
     }
       
   })
   
   function mobileMenuToggle(option){
+    const body = document.body
+
     switch(option){
       case 'open':
-          mobileNavRef.current.style.transform = 'translateX(0)'
-          mobileMenuBtnRef.current.style.display = 'none'
-          mobileCloseBtnRef.current.style.display = 'block'
+          nav.current.classList.remove('translate-x-[-100%]')
+          nav.current.classList.remove('md:hidden')
+          mobileMenuBtnRef.current.classList.add('hidden')
+          mobileMenuBtnRef.current.classList.remove('flex')
+          mobileCloseBtnRef.current.classList.add('flex')
+          mobileCloseBtnRef.current.classList.remove('hidden')
+          body.classList.add('overflow-y-hidden')
+          body.classList.add('md:overflow-y-scroll')
         break
   
       case 'hide-all':
-          mobileMenuRef.current.style.transform = 'translateX(0)'
-          mobileCloseBtnRef.current.style.display = 'none'
-          mobileMenuBtnRef.current.style.display = 'block'
-          mobileNavRef.current.style.transform = 'translateX(calc(-100% - 50px))'
-          mobileNavRef.current.scrollTo({ top: 0, behavior: 'smooth'})
+          mobileMenuBtnRef.current.classList.add('flex')
+          mobileMenuBtnRef.current.classList.remove('hidden')
+          mobileCloseBtnRef.current.classList.add('hidden')
+          mobileCloseBtnRef.current.classList.remove('flex')
+          nav.current.classList.add('md:hidden')
+          nav.current.classList.add('translate-x-[-100%]')
+          navList.current.classList.add('translate-x-[-100%-10px]')
+          navList.current.classList.add('md:hidden')
+          navList.current.scrollTo({ top: 0, behavior: 'smooth'})
+          body.classList.remove('overflow-y-hidden')
+          body.classList.remove('md:overflow-y-auto')
         break
   
       case 'show-subList':
-          mobileMenuRef.current.style.transform = 'translateX(calc(-100% - 40px))'
-          mobileMenuBtnRef.current.style.display = 'none'
-          mobileCloseBtnRef.current.style.display = 'block'
+          navList.current.classList.remove('md:hidden')
+          navList.current.classList.remove('translate-x-[-100%-10px]')
+          navList.current.classList.add('md:translate-x-[1px]')
+          mobileCloseBtnRef.current.classList.add('flex')
+          mobileMenuBtnRef.current.classList.add('hidden')
+          mobileMenuBtnRef.current.classList.remove('flex')
+          mobileCloseBtnRef.current.classList.remove('hidden')
         break
   
       case 'show-mainList':
-          mobileMenuRef.current.style.transform = 'translateX(0)'
+          navList.current.classList.add('translate-x-[-100%-10px]')
+          navList.current.classList.add('md:hidden')
         break
     }
   }
   
   function handleMenuHover(option = 'main'){
-    if(option === 'main') desktopNavRef.current.style.display = 'flex'
-    if(option === 'sub') desktopSubListRef.current.style.display = 'flex'
+    if(option === 'main') nav.current.classList.remove('md:hidden')
+    if(option === 'sub') navList.current.classList.remove('md:hidden')
   }
 
   return (
-          <MenuBtnsContext.Provider value={ { mobileCloseBtnRef, mobileMenuBtnRef, desktopMenuBtnRef, mobileNavRef, mobileMenuRef, mobileSubListRef, desktopNavRef, desktopMenuRef, desktopSubListRef, mobileMenuToggle, handleMenuHover, autoHideDesktopSubList, autoHideMainList } }>
+          <MenuBtnsContext.Provider value={ { nav, navList, mobileCloseBtnRef, mobileMenuBtnRef, desktopMenuBtnRef, mobileMenuToggle, handleMenuHover } }>
             { children }
           </MenuBtnsContext.Provider>
     )
@@ -105,11 +84,11 @@ export function MenuButton(){
 
   return (
     <>
-      <div className={ styles.closeButton } ref={ mobileCloseBtnRef } onClick={ () => mobileMenuToggle('hide-all') }>
-            { closeBtn }
-        </div>
-      <div className={ styles.menuButton } ref={ mobileMenuBtnRef } onClick={() => mobileMenuToggle('open')}>
-        { menuBtn }
+      <div className=" w-10 h-10 text-red-600 hidden md:hidden border-1 border-black items-center justify-center cursor-pointer " ref={ mobileCloseBtnRef } onClick={ () => mobileMenuToggle('hide-all') }>
+        <X />
+      </div>
+      <div className=" w-10 h-10 text-black md:hidden flex items-center cursor-pointer " ref={ mobileMenuBtnRef } onClick={() => mobileMenuToggle('open')}>
+        <Menu />
       </div>
     </>
   )
@@ -120,14 +99,16 @@ export function DeskMenuButton(){
   const { desktopMenuBtnRef, handleMenuHover } = useMenuBtns()
 
   return (
-    <h3 className={ styles.deskMenuButton } ref={ desktopMenuBtnRef } onMouseOver={ () => handleMenuHover() }>Explore { arrowDown } </h3>
+    <h3 className=" justify-self-start md:flex items-center hidden " ref={ desktopMenuBtnRef } onMouseOver={ () => handleMenuHover() }>
+      Explore
+      <ChevronDown />
+    </h3>
   )
 }
 
 export default function Navbar(){
-  const { isLoggedIn } = useAuth()
   const { coursesList } = useCourses()
-  const { mobileNavRef, mobileMenuRef, mobileSubListRef, desktopNavRef, desktopMenuRef, desktopSubListRef, mobileMenuToggle, handleMenuHover, autoHideDesktopSubList, autoHideMainList } = useMenuBtns()
+  const { nav, navList, handleMenuHover, mobileMenuToggle } = useMenuBtns()
   
   const MenuItems = [
     {
@@ -155,69 +136,49 @@ export default function Navbar(){
   ]
   
   return (
-    <>
-      <nav className={ styles.mobileNav } ref={ mobileNavRef }>
+      <nav ref={ nav } className=" translate-x-[-100%] transition md:transition-none duration-500 ease-linear md:translate-[unset] bg-white z-999 fixed top-[3.5rem] left-0 md:hidden md:ml-[20%] h-[calc(100vh-3.5rem)] list-none md:h-auto w-[98vw] md:w-[200px] border-1 border-gray-200  ">
         {
-          !isLoggedIn && <NavLink to='/users/join' className={ styles.signUpLink } onClick={ () => autoHideMainList('mobile') } > { signUpBtn } Sign up</NavLink>
+          MenuItems.map(( menu, index ) => {
+            let path = "/" + menu.title.toLowerCase().split(' ').join('-')
+            if(menu.title.toLocaleLowerCase() === 'home') path=''
+            return (
+              <li key={ menu.title + index } className=" relative ">
+                { !menu.list && <Link to={ path } className=" block p-2 border-b-1 border-b-gray-100 hover:bg-green-400 hover:text-white w-[100%] " onClick={ () =>  mobileMenuToggle('hide-all') } > { capitalize( menu.title ) } </Link> }
+                { menu.list && <span className=" flex items-center justify-between cursor-pointer p-2 border-b-1 border-b-gray-100 hover:bg-green-400 hover:text-white w-[100%] " onMouseOver={ () => handleMenuHover('sub') } onClick={ () => mobileMenuToggle('show-subList') }>
+                                  { capitalize( menu.title ) }
+                                  <ChevronRight />
+                                </span> 
+                }
+                {
+                  menu.list && <ul ref={ navList } className=" translate-x-[-100%-10px] md:translate-0 overflow-y-scroll transition md:transition-none duration-500 ease-linear fixed top-[51px] md:absolute bg-white py-3 md:p-0 z-1000 left-0 md:left-[calc(100%+2px)] md:top-0 w-[98vw]  md:w-[calc(100%+20px)] h-[calc(100vh-3.5rem)] md:h-[fit-content] md:hidden ">
+                    <span className=" w-[100%] h-7 flex items-center md:hidden cursor-pointer text-xl py-5 bg-white border-b-1 border-b-gray-300 " onClick={ () => mobileMenuToggle('show-mainList') }>
+                      <ChevronLeft />
+                      { menu.title }
+                    </span>
+                                {
+                                  menu.list.map((list, listIndex) => {
+                                    path = "/" + menu.title.toLowerCase().split(' ').join('-') + "/" + list.course.toLowerCase().split(' ').join('-')
+                                    let classes = "block p-2 border-b-1 border-b-gray-100 hover:bg-green-400 hover:text-white w-[100%] "
+                                    if(listIndex > 2) classes += " md:hidden "
+
+                                    return (
+                                      <>
+                                        
+                                        <Link key={ list.course } to={path} className={ classes } onClick={ () =>  mobileMenuToggle('hide-all') }>
+                                      { capitalize( list.course ) }
+                                        </Link>
+
+                                        { listIndex === 3 && <Link to="/courses" className=" hidden md:block p-2 border-b-1 border-b-gray-100 hover:bg-green-400 hover:text-white w-[100%] "> View all courses </Link> }
+                                      </>
+                                    )
+                                  })
+                                }
+                                </ul>
+                }
+              </li>
+            )
+          })
         }
-        <ul className={ styles.menuList } ref={ mobileMenuRef }>
-          {
-            MenuItems.map((item, index) => {
-              let linkPage = item.title.toLocaleLowerCase().trim().split(' ').join('-')
-              if(item.title === 'Home') linkPage = ''
-              const list = item.list ?? ''
-              const subList = list && <ul className={ styles.subList } ref={ mobileSubListRef }>
-                                        <span className={ styles.subListBtn } onClick={ () => mobileMenuToggle('show-mainList') }> { arrowLeft }{ capitalize(item.title) } </span>
-                                        {
-                                          list.map((course, i) => {
-                                            const subListLink = course.course.toLowerCase().trim().split(' ').join('-')
-                                            return <li key={ i } className={ styles.subListItem } onClick={ () => autoHideMainList('mobile') } > <NavLink to={ 'courses/' + subListLink }> { capitalize(course.course) } </NavLink> </li>
-                                          })
-                                        }
-                                      </ul>
-              const newLink = list ? 
-                                <li key={ index }>
-                                  <span className={ styles.subListBtn } onClick={ () => mobileMenuToggle('show-subList') }> { capitalize(item.title) }{ arrowRight } </span>
-                                  { coursesList && subList }
-                                </li>
-                                :
-                                <li key={ index } className={ styles.menuItem } onClick={ () => autoHideMainList('mobile') } > <NavLink to={ '/' + linkPage }> { capitalize(item.title) } </NavLink> </li>
-
-              return newLink
-            })
-          }
-        </ul>
       </nav>
-      <nav className={ styles.desktopNav } ref={ desktopNavRef }>
-        <ul className={ styles.menuList } ref={ desktopMenuRef }>
-          {
-            MenuItems.map((item, index) => {
-              let linkPage = item.title.toLocaleLowerCase().trim().split(' ').join('-')
-              if(item.title === 'Home') linkPage = ''
-              const list = item.list ?? ''
-              const subList = list && <ul className={ styles.subList } ref={ desktopSubListRef }>
-                                        {
-                                          list.map((course, i) => {
-                                            if(i === 4) return <li key={ i } className={ styles.subListItem } onClick={ autoHideMainList }> <Link to='courses'> See more ... </Link> </li>
-                                            if(i > 4) return
-                                            const subListLink = course.course.toLowerCase().trim().split(' ').join('-')
-                                            return <li key={ i } className={ styles.subListItem }  onClick={ autoHideMainList }> <NavLink to={ 'courses/' + subListLink }> { capitalize(course.course) } </NavLink> </li>
-                                          })
-                                        }
-                                      </ul>
-              const newLink = list ? 
-                                <li key={ index } className={ styles.subListContainer }>
-                                  <span className={ styles.subListBtn } onMouseOver={ () => handleMenuHover('sub') }> { capitalize(item.title) }{ arrowRight } </span>
-                                  { subList }
-                                </li>
-                                :
-                                <li key={ index } className={ styles.menuItem }  onMouseOver={ autoHideDesktopSubList } onClick={ autoHideMainList }> <NavLink to={ '/' + linkPage }> { capitalize(item.title) } </NavLink> </li>
-
-              return newLink
-            })
-          }
-        </ul>
-      </nav>
-    </>
   )
 }
