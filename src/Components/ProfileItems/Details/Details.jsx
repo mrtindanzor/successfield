@@ -1,19 +1,16 @@
-// REACT //
-import { useEffect } from 'react';
-
-// STYLES //
-import styles from './Details.module.css';
-
 // OTHERS //
 import useProfileList from '../../../Contexts/ProfileContext/ListContext';
 
 export default function Details(){
-  const { activeMainList, activeSubList, mainListItems, setActiveSubList } = useProfileList()
+  const { activeMainList, activeSubList, mainListItems } = useProfileList()
+
+  let classes ="flex-1"
+  if(activeSubList === '') classes += ' hidden md:block'
 
   return (
     <>
       {
-        activeSubList && mainListItems[activeMainList].list ? <div className={ styles.detailsList }>
+        activeSubList && mainListItems[activeMainList].list ? <div className={ classes }>
                           { 
                             mainListItems[activeMainList].list[activeSubList].section
                           }

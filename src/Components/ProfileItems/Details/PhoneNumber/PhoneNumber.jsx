@@ -1,13 +1,17 @@
+import { useState } from 'react'
 import useAuth from '../../../../Contexts/AuthenticationContext/AuthenticationContext'
-import styles from './PhoneNumber.module.css'
 
 export default function PhoneNumber(){
   const { currentUser } = useAuth()
+  const [ phone, setPhone ] = useState( currentUser.phone )
 
   return (
-    <form className={ styles.form }>
-      <input type="tel" className={ styles.PhoneNumberBox } value={ currentUser.phone } />
-      <button className={ styles.submitButton }> Change phone number </button>
+    <form className=" grid gap-5 py-10 px-3 my-10 mx-auto w-[95%] max-w-[500px] md:px-10 bg-white rounded-xl *:*:first:font-bold *:*:last:border-1 *:*:last:p-1 *:*:last:rounded *:grid *:gap-3 ">
+      <label >
+        <span> Phone number: </span>
+        <input type="tel" value={ phone } onChange={ e => setPhone(e.target.value) } />
+      </label>
+      <button className=" bg-green-400 text-white w-fit py-2 px-3 rounded justify-self-center cursor-pointer hover:bg-green-600 "> Apply changes </button>
     </form>
   )
 }

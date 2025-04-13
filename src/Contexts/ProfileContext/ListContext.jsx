@@ -1,6 +1,4 @@
-import { createContext, useContext, useState, useRef } from "react";
-import icons from './../../Icons/icons'
-import styles from './ListContext.module.css'
+import { createContext, useContext, useState } from "react";
 import Name from "../../Components/ProfileItems/Details/Name/Name";
 import Email from "../../Components/ProfileItems/Details/Email/Email";
 import PhoneNumber from "../../Components/ProfileItems/Details/PhoneNumber/PhoneNumber";
@@ -41,11 +39,9 @@ export function ProfileListProvider({ children }){
 ]
   const [activeMainList, setActiveMainList] = useState('')
   const [activeSubList, setActiveSubList] = useState('')
-  const arrowRight = icons.arrowRight(styles.arrowRight, 'More')
-  const arrowLeft = icons.arrowLeft(styles.arrowRight, 'More')
 
   return (
-    <ProfileListContext.Provider value={ { activeMainList, activeSubList, setActiveMainList, setActiveSubList, mainListItems, arrowRight, arrowLeft } }>
+    <ProfileListContext.Provider value={ { activeMainList, activeSubList, setActiveMainList, setActiveSubList, mainListItems } }>
       { children }
     </ProfileListContext.Provider>
   )

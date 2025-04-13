@@ -1,38 +1,17 @@
 import { useState } from 'react'
-import styles from './ResetPassword.module.css'
 import useAuth from '../../../../../Contexts/AuthenticationContext/AuthenticationContext'
 
 export default function ResetPassword(){
   const { currentUser } = useAuth()
-  const [ verificationCode, setVerficationCode ] = useState('')
-  const [ verified, setVerified ] = useState(false)
-  const [ password, setPassword ] = useState('')
 
 
   return (
-    <form className={ styles.passwordReset }>
+    <form className=" grid gap-5 py-10 px-3 my-10 mx-auto w-[95%] max-w-[500px] md:px-10 bg-white rounded-xl *:*:first:font-bold *:*:last:border-1 *:*:last:p-1 *:*:last:rounded *:grid *:gap-3 ">
       <label>
         <span> Email: </span>
         <input type="email" value={ currentUser.email } readOnly />
       </label>
-      {   
-        verificationCode < 1 && (
-          <label className={ styles.verify }>
-            <span> Verification Code </span>
-            <input type="password" value={ verificationCode } onChange={ (e) => setVerficationCode(e.target.value) } /> 
-            <span> Get code </span>
-          </label>
-        ) 
-      }
-      {
-        verified && <>
-                      <label>
-                        <span> New password: </span>
-                        <input type="password" value={ password } onChange={ (e) => setPassword(e.target.value) } />
-                      </label>
-                      <button> Apply changes </button>
-                    </>
-      }
+      <button className=" bg-green-400 text-white w-fit py-2 px-3 rounded justify-self-center cursor-pointer hover:bg-green-600 "> Reset </button>
     </form>
   )
 }
