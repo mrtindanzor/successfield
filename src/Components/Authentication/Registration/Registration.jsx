@@ -1,14 +1,12 @@
-import icons from "../../../Icons/icons";
-import styles from './Registration.module.css'
 import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { useSetAlert } from "../../../Hooks/Alerter/Alerter";
 import useAuth from './../../../Contexts/AuthenticationContext/AuthenticationContext'
 import useCourses from './../../../Contexts/CourseContext/CoursesContext'
 import { capitalize } from "../../../core";
+import { Eye, EyeOff } from "lucide-react";
 
-const hideIcon = icons.eyeClose(styles.passwordIcon, 'Show')
-const showIcon = icons.eyeOpen(styles.passwordIcon, 'Hide')
+const hideIcon = <EyeOff />
+const showIcon = <Eye />
 
 export function toggleList(e, el){
   let list
@@ -36,11 +34,8 @@ export function toggleList(e, el){
 
 export default function Registration(){
   const setMsg = useSetAlert()
-  const navigate = useNavigate()
   const { coursesList } = useCourses()
-  
   const { registration } = useAuth()
-
   const educationLevels = useMemo(() => {
     const e = [
       { level: "No Formal Education" },
@@ -58,7 +53,6 @@ export default function Registration(){
     ];
     return e 
   },[])
-  
   const [ programme, setProgramme] = useState('')
   const [ gender, setGender ] = useState('male')
   const [ address, setAddress ] = useState({ 
@@ -86,7 +80,7 @@ export default function Registration(){
   const ProgrammeLabel =
     <label>
       <span>Programme: *</span>
-      <ul className={ styles.programme }>
+      <ul className="">
         <span onClick={ e => toggleList(e, 'span')}> 
           { !programme && 'Select programme' } 
           { programme && capitalize(programme) }
@@ -109,7 +103,7 @@ export default function Registration(){
   const FirstnameLabel =
     <label>
       <span>First name: *</span>
-      <input type="text" key='firstname' value={ firstname } onChange={ e => setFirstname(e.target.value) } required />
+      <input type="text" key='firstname' value={ firstname } onChange={ e => setFirstname(e.target.value) } />
     </label>
 
   const MiddlenameLabel =
@@ -121,17 +115,17 @@ export default function Registration(){
   const SurnameLabel =
     <label>
       <span>Surname: *</span>
-      <input type="text" key='surname' value={ surname } onChange={ e => setSurname(e.target.value) } required />
+      <input type="text" key='surname' value={ surname } onChange={ e => setSurname(e.target.value) } />
     </label>
 
   const BirthDateLabel =
     <label>
       <span>Birth date: *</span>
-      <input type="date" key='birthdate' value={ birthDate } onChange={ e => setBirthDate(e.target.value) } required  />
+      <input type="date" key='birthdate' value={ birthDate } onChange={ e => setBirthDate(e.target.value) }  />
     </label>
 
   const GenderOptions =
-    <div className={ styles.gender }>
+    <div className="">
       <span>Gender: *</span>
       <label>
         <input type="radio" key='male' name="gender" checked={ gender === 'male' } onChange={ (e) => setGender('male') } />
@@ -144,26 +138,26 @@ export default function Registration(){
     </div>
 
   const AddressSection =
-    <div className={ styles.address }>
+    <div className="">
       <span>Address:</span>
       <label>
         <span>Country: *</span>
-        <input type="text" key='country' value={ address.country } onChange={ (e) => setAddress(p => ({ ...p, country: e.target.value.toLowerCase() })) } required />
+        <input type="text" key='country' value={ address.country } onChange={ (e) => setAddress(p => ({ ...p, country: e.target.value.toLowerCase() })) } />
       </label>
 
       <label>
         <span>State/Region: *</span>
-        <input type="text" key='state' value={ address.region } onChange={ (e) => setAddress(p => ({ ...p, region: e.target.value.toLowerCase() })) } required />
+        <input type="text" key='state' value={ address.region } onChange={ (e) => setAddress(p => ({ ...p, region: e.target.value.toLowerCase() })) } />
       </label>
 
       <label>
         <span>City: *</span>
-        <input type="text" key='city' value={ address.city } onChange={ (e) => setAddress(p => ({ ...p, city: e.target.value.toLowerCase() })) } required />
+        <input type="text" key='city' value={ address.city } onChange={ (e) => setAddress(p => ({ ...p, city: e.target.value.toLowerCase() })) } />
       </label>
 
       <label>
         <span>Address Line 1: *</span>
-        <input type="text" key='address1' value={ address.address1 } onChange={ (e) => setAddress(p => ({ ...p, address1: e.target.value.toLowerCase() })) } required />
+        <input type="text" key='address1' value={ address.address1 } onChange={ (e) => setAddress(p => ({ ...p, address1: e.target.value.toLowerCase() })) } />
       </label>
 
       <label>
@@ -175,14 +169,14 @@ export default function Registration(){
   const IdLabel =
     <label>
       <span>National ID / Passport Document:</span>
-      <input type="file" key='idDocument' accept="image/*" className={ styles.uploadButton } value={ idDocument }  onChange={ e => setIdDocument(e.target.files[0]) } />
+      <input type="file" key='idDocument' accept="image/*" className="" value={ idDocument }  onChange={ e => setIdDocument(e.target.files[0]) } />
     </label>
 
 
   const IdPhotoLabel =
     <label>
       <span>Passport Photo:</span>
-      <input type="file" key='passportphoto' accept="image/*" className={ styles.uploadButton } value={ passportPhoto } onChange={ e => setPassportPhoto(e.target.files[0]) } />
+      <input type="file" key='passportphoto' accept="image/*" className="" value={ passportPhoto } onChange={ e => setPassportPhoto(e.target.files[0]) } />
     </label>
 
   const PhoneNumberLabel =
@@ -200,7 +194,7 @@ export default function Registration(){
   const HighestEducationLevelLabel =
     <label >
       <span>Highest Level of Education:</span>
-      <ul className={ styles.educationLevels }>
+      <ul className="">
         <span onClick={ e => toggleList(e, 'span') }> 
           { educationLevel && capitalize(educationLevel) } 
           { !educationLevel && 'Select your highest level of education' }
@@ -224,18 +218,18 @@ export default function Registration(){
     <label>
       <span>Password: </span>
       <input type={ isPassVisible ? 'text' : 'password' } key='password' value={ password } onChange={ e => setPassword(e.target.value) } />
-      <span className={ styles.passwordIconBtn } onClick={ () => toggleIconVisibility('password') }> { !isPassVisible ? hideIcon : showIcon } </span>
+      <span className="" onClick={ () => toggleIconVisibility('password') }> { !isPassVisible ? hideIcon : showIcon } </span>
     </label>
 
   const CpasswordLabel =
     <label>
       <span>Confirm password: </span>
       <input type={ isCpassVisible ? 'text' : 'password' } key='cpassword' value={ cpassword } onChange={ e => setCpassword(e.target.value) } />
-      <span className={ styles.passwordIconBtn } onClick={ () => toggleIconVisibility('cpassword') }> { !isCpassVisible ? hideIcon : showIcon } </span>
+      <span className="" onClick={ () => toggleIconVisibility('cpassword') }> { !isCpassVisible ? hideIcon : showIcon } </span>
     </label>
 
   const HoneyPot =
-    <label className={ styles.contactLabel }>
+    <label className="">
       <span>Contact: </span>
       <input type="number" key='contact' value={ contact } onChange={ e => setContact(e.target.value) } autoComplete="off" />
     </label>
@@ -282,9 +276,9 @@ async function handleFormSubmission(e){
 
   return (
     <>
-      <form onSubmit={ (e) => handleFormSubmission(e) } className={ styles.authForm }>
+      <form onSubmit={ (e) => handleFormSubmission(e) } className="">
         <h3> Admission </h3>
-        <div className={ styles.section }>
+        <div className="">
           { ProgrammeLabel }
           { FirstnameLabel }
           { MiddlenameLabel }
@@ -292,20 +286,20 @@ async function handleFormSubmission(e){
           { BirthDateLabel }
           { GenderOptions }
         </div>
-        <div className={ styles.section } >
+        <div className="" >
           { IdPhotoLabel }
           { IdLabel }
           { AddressSection }
           { HighestEducationLevelLabel }
         </div>
-        <div className={ styles.section } >
+        <div className="" >
           { PhoneNumberLabel }
           { EmailLabel }
           { PasswordLabel }
           { CpasswordLabel }
           { HoneyPot }
         </div>
-        <button className={ styles.button }> Apply </button>
+        <button className=""> Apply </button>
       </form>
     </>
   )

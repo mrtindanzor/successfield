@@ -153,7 +153,7 @@ export default function Navbar(){
             if(menu.title.toLocaleLowerCase() === 'home') path=''
             return (
               <li key={ menu.title + index } className=" relative ">
-                { !menu.list && <Link to={ path } className=" block p-2 border-b-1 border-b-gray-100 hover:bg-green-400 hover:text-white w-[100%] " onClick={ () =>  mobileMenuToggle('hide-all') } > { capitalize( menu.title ) } </Link> }
+                { !menu.list && <NavLink to={ path } className=" block p-2 border-b-1 border-b-gray-100 hover:bg-green-400 hover:text-white w-[100%] " onClick={ () =>  mobileMenuToggle('hide-all') } > { capitalize( menu.title ) } </NavLink> }
                 { menu.list && <span className=" flex items-center justify-between cursor-pointer p-2 border-b-1 border-b-gray-100 hover:bg-green-400 hover:text-white w-[100%] " onMouseOver={ () => handleMenuHover('sub') } onClick={ () => mobileMenuToggle('show-subList') }>
                                   { capitalize( menu.title ) }
                                   <ChevronRight />
@@ -174,9 +174,9 @@ export default function Navbar(){
                                     return (
                                       <>
                                         
-                                        <Link key={ list.course } to={path} className={ classes } onClick={ () =>  mobileMenuToggle('hide-all') }>
+                                        <NavLink key={ list.course } to={path} className={ classes } onClick={ () =>  mobileMenuToggle('hide-all') }>
                                       { capitalize( list.course ) }
-                                        </Link>
+                                        </NavLink>
 
                                         { listIndex === 3 && <Link to="/courses" className=" hidden md:block p-2 border-b-1 border-b-gray-100 hover:bg-green-400 hover:text-white w-[100%] "> View all courses </Link> }
                                       </>

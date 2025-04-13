@@ -4,6 +4,7 @@ import { lazy, Suspense } from 'react'
 
 // COMPONENTS //
 import { PendingLoading } from "./Hooks/Loader/PendingLoader/PendingLoader";
+import ErrorElement from "./Components/ErrorElement/ErrorElement";
 const LayoutOne = lazy(() => import("./Components/Layouts/LayoutOne"))
 const NotAuthenticated = lazy(() => import('./Components/ProtectRoutes/NotAuthenticated').then( module => ({ default: module.NotAuthenticated }) ))
 
@@ -31,11 +32,15 @@ const router = createBrowserRouter(
                                             <AdminHome />
                                           </OnlyAdmin> 
                                         </NotAuthenticated>
-                                      </Suspense> } />
+                                      </Suspense> }
+                                      errorElement={ <ErrorElement /> }
+                                       />
                                     
       <Route path='/' element={ <Suspense fallback={ <PendingLoading /> } >
                                   <LayoutOne />
-                                </Suspense> }>
+                                </Suspense> }
+                                errorElement={ <ErrorElement /> }
+                                >
                                 
       <Route index element={ <Suspense fallback={ <PendingLoading /> } >
                                 <Home />  
