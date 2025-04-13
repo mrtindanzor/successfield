@@ -51,6 +51,9 @@
 *{
   box-sizing: border-box;
   user-select: none;
+  word-break: normal;
+  word-wrap: break-word;
+  hyphens: auto !important;
 }
 * ::-webkit-scrollbar{
   background-color: var(--b-color);
