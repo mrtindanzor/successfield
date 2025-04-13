@@ -56,7 +56,7 @@ async function handleFormSubmission(e){
         <h3 className=" text-4xl text-green-500 font-bold "> Sign in </h3>
         { emailLabel }
         { passwordLabel }
-        <button className=" text-white border-2 bg-green-600 w-fit ml-auto px-5 py-1 font-bold hover:bg-green-800 rounded-xl cursor-pointer "> Log in </button>
+        <button className=" text-white border-2 bg-green-600 w-fit ml-auto px-5 py-1 font-bold hover:bg-green-800 rounded-lg cursor-pointer "> Log in </button>
       </form>
     </>
   )
