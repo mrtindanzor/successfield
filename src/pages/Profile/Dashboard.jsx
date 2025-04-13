@@ -5,11 +5,9 @@ import MainList from '../../Components/ProfileItems/MainList/MainList'
 import SubList from '../../Components/ProfileItems/SubList/SubList'
 import Details from '../../Components/ProfileItems/Details/Details'
 import { User } from 'lucide-react'
-import useProfileList from '../../Contexts/ProfileContext/ListContext'
 
 export default function Dashboard(){
   const { currentUser, userFullName } = useAuth()
-  const { activeMainList, activeSubList } = useProfileList()
 
   useEffect(() => {
     document.title = capitalize('Dashboard - ' + userFullName )

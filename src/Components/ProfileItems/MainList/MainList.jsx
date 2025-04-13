@@ -14,7 +14,7 @@ export default function MainList(){
 
   return (
     <>
-      { ( activeSubList || activeMainList) && <button onClick={ handleBackBtn } className=' bg-green-300 w-7 h-7 m-3 md:hidden '> <ChevronLeft  /> </button> }
+      { ( activeSubList || activeMainList) && <button onClick={ handleBackBtn } className=' bg-gray-400 flex justify-center p-1 items-center text-gray-800 cursor-pointer m-3 md:hidden rounded-tl-lg rounded-bl-lg '> <ChevronLeft className=' w-8 h-8 ' /> </button> }
       <ul className={ classes }>
       {
         mainListItems.map((item, index) => {
