@@ -26,14 +26,14 @@ export default function HomeContent(){
 
 
   return (
-    <div className=" py-10 ">
+    <div className=" py-10 flex flex-col gap-20 md:gap-3 ">
       {
         contents.map( content => {
-          return (<div key={ content.title } className=" grid grid-cols-4 w-[100vw] gap-3 py-3 odd:*:first:bg-green-300 min-h-[50vh] odd:*:first:rounded-tl-lg odd:*:first:rounded-bl-lg even:*:first:bg-green-600 even:*:first:rounded-tr-lg even:*:first:rounded-br-lg odd:*:last:col-start-1 odd:*:last:col-end-4 odd:*:first:col-start-4 odd:*:first:col-end-5  even:*:last:col-start-2 even:*:last:col-end-5 ">
+          return (<div key={ content.title } className=" flex flex-col md:grid md:grid-cols-4 w-[100vw]  gap-10 md:gap-3 py-3 odd:*:first:bg-green-300 md:min-h-[50vh] odd:*:first:rounded-tl-lg odd:*:first:rounded-bl-lg even:*:first:bg-green-600 even:*:first:rounded-tr-lg even:*:first:rounded-br-lg md:odd:*:last:col-start-1 md:odd:*:last:col-end-4 md:odd:*:first:col-start-4 md:odd:*:first:col-end-5 md:even:*:last:col-start-2 even:*:last:col-end-5 ">
                     <div>
-                      <span className=" flex texturina place-items-center p-5 text-white text-shadow-black h-100  "> { content.title } </span>
+                      <span className=" block md:flex texturina place-items-center p-5 text-white text-shadow-black w-fit md:w-full h-auto md:h-100  "> { content.title } </span>
                     </div>
-                    <p className=" px-3 flex items-center h-100 row-start-1 row-end-1 "> { content.content } </p>
+                    <p className=" px-3 flex items-center md:row-start-1 md:row-end-1 "> { content.content } </p>
                   </div>)
         })
       }
