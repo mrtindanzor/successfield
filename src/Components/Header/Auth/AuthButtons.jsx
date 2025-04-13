@@ -1,6 +1,6 @@
 import { NavLink, Link } from "react-router-dom";
 import useAuth from './../../../Contexts/AuthenticationContext/AuthenticationContext'
-import { LogIn, UserCircle, UserPlus } from "lucide-react";
+import { FileText, LogIn, UserCircle } from "lucide-react";
 
 function NotLoggedIn(){
   return (
@@ -9,10 +9,10 @@ function NotLoggedIn(){
         <LogIn />
         Log in
       </NavLink>
-      <NavLink to='/users/join' className=" bg-black hidden md:flex text-white p-2 hover:bg-green-500 items-center gap-x-2">
-        <UserPlus />
-        Sign up
-      </NavLink>
+      <Link to='/users/join' className=" bg-black hidden md:flex text-white p-2 hover:bg-green-500 items-center uppercase texturina gap-x-2">
+        <FileText />
+        Apply
+      </Link>
     </div>
   )
 }
