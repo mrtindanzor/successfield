@@ -1,5 +1,4 @@
 // STYLES //
-import PendingLoader from '../../Hooks/Loader/PendingLoader/PendingLoader';
 import Aside from '../Components/Aside/Aside';
 import Details from '../Components/Details/Details';
 import Header from '../Components/Header/Header';
@@ -12,7 +11,6 @@ export default function AdminHome(){
 
   return (
     <>
-      <PendingLoader />
       <h1 className={ styles.heading }> ADMIN DASHBOARD </h1>
       <NavigationProvider>
         <div className={ styles.layout }>
