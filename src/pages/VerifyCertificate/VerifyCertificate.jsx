@@ -1,6 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
-import styles from './VerifyCertificate.module.css'
-import { useCallback } from 'react'
+import { useRef, useState } from 'react'
 import useServerUri from '../../Contexts/serverContexts/baseServer'
 
 export default function VerifyCerificate(){
@@ -35,20 +33,20 @@ export default function VerifyCerificate(){
     }
   }
 
-  const resetDetailsAndInvalid = useCallback(() => {
+  const resetDetailsAndInvalid = () => {
     setDetails('')
     setInvalid(false)
-  })
+  }
 
   return (
    <>
-     <form onSubmit={ (e) => handleFormSubmit(e) } className={ styles.form } > 
-      <h1> Verify Certificate </h1>
-      <label className={ styles.searchLabel }>
-        <span>Certificate ID: </span>
-        <input type="text" ref={ certificateCodeRef } className={ styles.searchBox } onChange={ resetDetailsAndInvalid } />  
+     <form onSubmit={ (e) => handleFormSubmit(e) } className=" grid gap-10 bg-white w-[95%] max-w-[600px] mx-auto py-10 px-5 rounded-xl relative top-10 " > 
+      <h1 className=" text-4xl font-bold text-green-800 "> Verify Certificate </h1>
+      <label className=" grid gap-3 ">
+        <span className=" text-2xl font-semibold ">Certificate ID: </span>
+        <input type="text" ref={ certificateCodeRef } className=" py-2 px-4 uppercase border-1 rounded " onChange={ resetDetailsAndInvalid } />  
       </label>
-      <button className={ styles.submitButton }> Search </button>
+      <button className=" bg-green-600 py-2 px-4 text-white rounded cursor-pointer "> Search </button>
     </form>
     { details && <CertificateDetails studentDetails={ details } /> }
     { invalid && <InvalidCertificate certificateCode={ certificateCodeRef.current.value } /> }
@@ -62,7 +60,7 @@ function CertificateDetails( { studentDetails } ){
   const { name, studentNumber, certificateCode, programme, dateCompleted } = studentDetails
 
   return (
-    <div className={ styles.certificateDetails }>
+    <div className=" grid gap-10 bg-white w-[95%] max-w-[600px] mx-auto py-10 px-5 rounded-xl mt-30 relative bottom-10 *:*:uppercase *:*:last:text-gray-600">
       <div>
         <b>Name: </b>
         <span> { name } </span>
@@ -81,7 +79,7 @@ function CertificateDetails( { studentDetails } ){
       </div>
       <div>
         <b>Status:</b>
-        <span> VALID </span>
+        <span className=" !text-green-500 font-bold "> VALID </span>
       </div>
       <div>
         <b>Date Completed: </b>
@@ -94,11 +92,11 @@ function CertificateDetails( { studentDetails } ){
 function InvalidCertificate( { certificateCode } ){
 
   return (
-    <div className={ styles.invalidCertificate }>
-      <h2>Invalid Certificate ID: { certificateCode } </h2>
+    <div className=" grid gap-5 bg-white w-[95%] max-w-[600px] mx-auto py-10 px-5 rounded-xl mt-30 relative bottom-10 ">
+      <h2 className=" font-bold text-xl uppercase ">Invalid Certificate ID: <span className=" text-lg font-semibold "> { certificateCode }  </span></h2>
       <div>
         <b> Status: </b>
-        <span> INVALID </span>
+        <span className=" font-bold text-red-500 "> INVALID </span>
       </div>
     </div>
   )

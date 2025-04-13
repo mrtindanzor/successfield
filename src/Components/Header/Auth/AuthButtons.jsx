@@ -20,7 +20,7 @@ function NotLoggedIn(){
 function MyProfile(){
 
   return (
-      <Link to='/dashboard/profile' className=" p-2 bg-black text-white ">
+      <Link to='/dashboard/profile' className=" p-2 bg-black text-white ml-auto ">
         Profile
       </Link>
   )
