@@ -3,11 +3,10 @@ import { useSetAlert } from "../Alerter/Alerter";
 import useServerUri from "../../Contexts/serverContexts/baseServer";
 import { jwtDecode } from 'jwt-decode'
 import { capitalize } from "../../core";
-import usePendingLoader from "../Loader/PendingLoader/PendingLoader";
+import { redirect } from "react-router-dom";
 
 export default function useAuthentication(){
   const setAlert = useSetAlert()
-  const { setIsPendingLoader } = usePendingLoader()
   const stringPattern = /^[\w\s.,-]+$/
   const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -155,9 +154,9 @@ export default function useAuthentication(){
           setAlert(res.msg)
           setTimeout(() => {
             if(decodedUser.admin){
-              navigate('/admin')  
+              redirect('/admin')  
             } else{
-              navigate('/')
+              redirect('/')
             }
           }, 2000)
             break

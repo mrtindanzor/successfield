@@ -1,14 +1,7 @@
-import styles from "./StarterLoader.module.css";
 import useAuth from "./../../../Contexts/AuthenticationContext/AuthenticationContext";
-import icons from './../../../Icons/icons'
+import { PendingLoading } from "../PendingLoader/PendingLoader";
 
-const logo = icons.logo(styles.logo, 'SUCCESSFIELD COLLEGE')
-
-const loader = <div className={ styles.loader }>
-                  { logo }
-                  {/* <div className={ styles.one }></div> */}
-                  <span className={ styles.loadText } > Loading... </span>
-              </div>
+const loader = <PendingLoading />
 
 export default function StarterLoader(){
   const { initialFetch } = useAuth()
