@@ -52,11 +52,11 @@ async function handleFormSubmission(e){
 
   return (
     <>
-      <form onSubmit={ (e) => handleFormSubmission(e) } className=" relative top-20 grid gap-10 bg-white mx-auto w-[98%] max-w-[600px] rounded-xl p-10 ">
+      <form onSubmit={ (e) => handleFormSubmission(e) } className=" relative top-20 grid gap-10 bg-white mx-auto w-[98%] max-w-[600px] rounded-xl py-10 px-3 md:px-10 ">
         <h3 className=" text-4xl text-green-500 font-bold "> Sign in </h3>
         { emailLabel }
         { passwordLabel }
-        <button className=" bg-white border-2 border-green-400 text-green-400 w-fit ml-auto px-3 py-1 rounded-xl cursor-pointer "> Log in </button>
+        <button className=" text-white border-2 bg-green-400 w-fit ml-auto px-5 py-2 hover:bg-green-600 rounded-xl cursor-pointer "> Log in </button>
       </form>
     </>
   )
