@@ -60,6 +60,8 @@ export default function Registration(){
   const [ isPassVisible, setIsPassVisible ] = useState(false)
   const [ isCpassVisible, setIsCpassVisible ] = useState(false)
   const [ educationLevel, setEducationLevel] = useState('Select education level')
+  const [ idPicture, setIdPicture ] = useState('')
+  const [ userPicture, setUserPicture ] = useState('')
   const address = useRef('')
   const country = useRef('')
   const city = useRef('')
@@ -70,23 +72,26 @@ export default function Registration(){
   const middlename = useRef('')
   const surname = useRef('')
   const birthDate = useRef('2000-01-01')
-  const idDocument = useRef(null)
-  const passportPhoto = useRef(null)
   const phoneNumber = useRef('')
   const email = useRef('')
   const contact = useRef('')
   const password = useRef('')
   const cpassword = useRef('')
 
+
+  //tailwind ClassLists
   const labelClasses = "grid gap-3 w-full max-w-[100%] relative"
-  const inputClasses = "border-2 border-b-gray-600 py-1 px-2 overflow-hidden whitespace-nowrap block w-full max-w-full rounded cursor-text"
+  const inputClasses = "border-2 border-b-gray-600 py-1 px-2 overflow-hidden whitespace-nowrap block w-full max-w-full rounded"
   const selectorClasses = " grid bg-white *:p-1 text-sm *:hover:bg-green-600 *:cursor-pointer *:hover:text-white *:border-b-1 *:border-b-gray-400 "
+  const imageContainerClasses = "overflow-hidden"
+  const imageClasses = "w-[90%] aspect-square max-w-[250px] object-contain"
+  const uploadButtonClasses = " w-fit bg-white py-1 px-2 rounded before:w-[200px] max-w-fit before:h-[40px] overflow-hidden before:content-['☁️_upload'] cursor-pointer before:bg-green-400 before:text-gray-700 before:text-2xl uppercase before:flex before:items-center before:pl-1 before:rounded"
 
   const ProgrammeLabel =
     <label className={ labelClasses }>
       <span className="font-semibold text-gray-800">Programme: *</span>
       <div className="w-full overflow-hidden">
-        <input type="text" onClick={ () => setProgrammeVisible(p => !p) } onChange={ () => setProgrammeVisible(false) } value={ programme } readOnly className={ inputClasses + " capitalize" } />
+        <input type="text" onClick={ () => setProgrammeVisible(p => !p) } onChange={ () => setProgrammeVisible(false) } value={ programme } readOnly className={ inputClasses + " capitalize cursor-pointer hover:bg-green-400 hover:text-white" } />
         {
           programmesVisible && <ul className={ selectorClasses }>
                                   {
@@ -170,14 +175,28 @@ export default function Registration(){
   const IdLabel =
     <label className={ labelClasses }>
       <span>National ID / Passport Document:</span>
-      <input type="file" accept="image/*" className="" onChange={ e => e.target.files[0] ? idDocument.current = e.target.files[0] : null } />
+      <input type="file" accept="image/jpg/jpeg/png" className={ uploadButtonClasses } onChange={ e => readImage(e, setIdPicture) } />
+      {
+        idPicture && (
+          <div className={ imageContainerClasses } onClick={ e => e.preventDefault() }>
+            <img src={ idPicture } className={ imageClasses } alt="Id Document" />
+          </div>
+        )
+      }
     </label>
 
 
   const IdPhotoLabel =
     <label className={ labelClasses }>
       <span>Passport Photo:</span>
-      <input type="file" accept="image/*" className="" onChange={ e => e.target.files[0] ? passportPhoto.current = e.target.files[0] : null } />
+      <input type="file" accept="image/jpg/jpeg/png" className={ uploadButtonClasses } onChange={ e => readImage(e, setUserPicture) } />
+      {
+        userPicture && (
+          <div className={ imageContainerClasses } onClick={ e => e.preventDefault() }>
+            <img src={ userPicture } className={ imageClasses } alt="Passport photo" />
+          </div>
+        )
+      }
     </label>
 
   const PhoneNumberLabel =
@@ -196,7 +215,7 @@ export default function Registration(){
     <label >
       <span>Highest Level of Education:</span>
       <div className="">
-        <input type="text" onClick={ () => setEducationLevelsVisible(p => !p) } onChange={ () => setEducationLevelsVisible(false) } value={ educationLevel } readOnly className={ inputClasses + " capitalize" } />
+        <input type="text" onClick={ () => setEducationLevelsVisible(p => !p) } onChange={ () => setEducationLevelsVisible(false) } value={ educationLevel } readOnly className={ inputClasses + " capitalize cursor-pointer hover:bg-green-400 hover:text-white" } />
         {
           educationLevelsVisible && <ul className={ selectorClasses }>
                                       {
@@ -244,6 +263,27 @@ function toggleIconVisibility(object){
     }
 }
 
+function readImage(e, setter){
+  const allowedExts = ['jpg','png','jpeg']
+  const file = e.target.files[0]
+  if(!file){
+    setMsg("Choose a picture")
+    setter('')
+    return
+  }
+  const splitName = file.name.split('.')
+  const ext = splitName[splitName.length - 1].toLowerCase()
+  if(!allowedExts.includes(ext)){
+    e.target.value = ''
+    setter('')
+    return setMsg("File type not supported, choose a different image")
+  }
+
+  const image = new FileReader()
+  image.addEventListener('load', () => setter(image.result))
+  image.readAsDataURL(file)
+}
+
 async function handleFormSubmission(e){
   e.preventDefault()
 
@@ -274,7 +314,9 @@ async function handleFormSubmission(e){
 
   return (
     <>
-      <form onSubmit={ (e) => handleFormSubmission(e) } className="w-94vw max-w-[700px] mx-auto relative top-5 bg-white py-10 px-3 sm:px-5 grid gap-10 *:not-first:bg-gray-100 *:not-first:py-5 *:not-first:px-3 *:not-first:rounded *:not-first:grid *:not-first:gap-7">
+      <form onSubmit={ (e) => handleFormSubmission(e) }
+         className="w-94vw max-w-[95vw] md:max-w-[700px] mx-auto relative top-5 bg-white py-10 px-3 sm:px-5 grid gap-10 *:not-first:bg-gray-100 *:not-first:py-5 *:not-first:px-3 *:not-first:rounded *:not-first:grid *:not-first:gap-7 rounded-xl"
+         >
         <h3 className="text-3xl font-bold"> Start Your Admission Application </h3>
         <div className="">
           { ProgrammeLabel }
@@ -297,7 +339,7 @@ async function handleFormSubmission(e){
           { CpasswordLabel }
           { HoneyPot }
         </div>
-        <button className="!py-2 !px-3"> Apply </button>
+        <button className="!py-2 !px-3 !bg-green-600 !text-white cursor-pointer"> Submit Application </button>
       </form>
     </>
   )
