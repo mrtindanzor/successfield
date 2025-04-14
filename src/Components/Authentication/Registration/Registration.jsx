@@ -80,12 +80,12 @@ export default function Registration(){
 
 
   //tailwind ClassLists
-  const labelClasses = "grid gap-3 w-full max-w-[100%] relative"
-  const inputClasses = "border-2 border-b-gray-600 py-1 px-2 overflow-hidden whitespace-nowrap block w-full max-w-full rounded"
+  const labelClasses = "grid gap-3 w-[100%] mx-auto object-contain relative"
+  const inputClasses = "border-2 border-b-gray-600 py-1 px-2 overflow-hidden whitespace-nowrap block w-[100%] rounded"
   const selectorClasses = " grid bg-white *:p-1 text-sm *:hover:bg-green-600 *:cursor-pointer *:hover:text-white *:border-b-1 *:border-b-gray-400 "
-  const imageContainerClasses = "overflow-hidden"
-  const imageClasses = "w-[90%] aspect-square max-w-[250px] object-contain"
-  const uploadButtonClasses = " w-fit bg-white py-1 px-2 rounded before:w-[200px] max-w-fit before:h-[40px] overflow-hidden before:content-['☁️_upload'] cursor-pointer before:bg-green-400 before:text-gray-700 before:text-2xl uppercase before:flex before:items-center before:pl-1 before:rounded"
+  const imageContainerClasses = "!w-[calc(100%-1.5rem)] overflow-hidden"
+  const imageClasses = "aspect-square max-w-[250px] object-contain"
+  const uploadButtonClasses = " w-[100%] py-1 px-2 rounded before:w-[200px] before:h-[40px] before:content-['☁️_upload'] cursor-pointer before:bg-green-400 before:text-gray-700 before:text-2xl uppercase before:flex before:items-center before:pl-1 before:rounded"
 
   const ProgrammeLabel =
     <label className={ labelClasses }>
@@ -144,7 +144,8 @@ export default function Registration(){
     </div>
 
   const AddressSection =
-    <div className="">
+    <div className="
+    !w-[calc(100%-1.5rem)]">
       <span className="font-semibold">Address:</span>
       <label className={ labelClasses }>
         <span>Country: *</span>
@@ -214,7 +215,7 @@ export default function Registration(){
   const HighestEducationLevelLabel =
     <label >
       <span>Highest Level of Education:</span>
-      <div className="">
+      <div className="!w-[calc(100%-1.5rem)]">
         <input type="text" onClick={ () => setEducationLevelsVisible(p => !p) } onChange={ () => setEducationLevelsVisible(false) } value={ educationLevel } readOnly className={ inputClasses + " capitalize cursor-pointer hover:bg-green-400 hover:text-white" } />
         {
           educationLevelsVisible && <ul className={ selectorClasses }>
@@ -318,7 +319,7 @@ async function handleFormSubmission(e){
          className="w-94vw max-w-[95vw] md:max-w-[700px] mx-auto relative top-5 bg-white py-10 px-3 sm:px-5 grid gap-10 *:not-first:bg-gray-100 *:not-first:py-5 *:not-first:px-3 *:not-first:rounded *:not-first:grid *:not-first:gap-7 rounded-xl"
          >
         <h3 className="text-3xl font-bold"> Start Your Admission Application </h3>
-        <div className="">
+        <div className="w-[calc(100%-1.5rem)] mx-auto">
           { ProgrammeLabel }
           { FirstnameLabel }
           { MiddlenameLabel }
@@ -326,13 +327,13 @@ async function handleFormSubmission(e){
           { BirthDateLabel }
           { GenderOptions }
         </div>
-        <div className="" >
+        <div className="w-[calc(100%-1.5rem)] mx-auto" >
           { IdPhotoLabel }
           { IdLabel }
           { AddressSection }
           { HighestEducationLevelLabel }
         </div>
-        <div className="" >
+        <div className="w-[calc(100%-1.5rem)] mx-auto" >
           { PhoneNumberLabel }
           { EmailLabel }
           { PasswordLabel }
