@@ -52,8 +52,8 @@ export default function SlideShowSection(){
         }
         <div className=" absolute bg-white max-w-[95%] z-7 py-2 px-3 bottom-2 left-[50%] translate-x-[-50%] flex items-center gap-1 border-1 border-gray-400 rounded ">
           {
-            images.map((image, index ) => {
-              return <span className="flex items-center w-2 h-2 md:w-4 md:h-4 bg-white cursor-pointer " onClick={ () => restartInterval(index) }>
+            images.map((_, index ) => {
+              return <span key={ index + _ } className="flex items-center w-2 h-2 md:w-4 md:h-4 bg-white cursor-pointer " onClick={ () => restartInterval(index) }>
                         { index === activeSlide ? <CircleDot /> : <Circle /> }
                       </span>
             })

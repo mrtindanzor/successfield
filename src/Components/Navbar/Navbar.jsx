@@ -1,94 +1,76 @@
-import { createContext, useContext, useRef } from "react";
+import { createContext, useContext, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import useCourses from "./../../Contexts/CourseContext/CoursesContext";
 import { capitalize } from "./../../core";
-import { ChevronDown, ChevronLeft, ChevronRight, FileText, Menu, UserPlus, X } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, FileText, Menu, X } from "lucide-react";
 import useAuth from "../../Contexts/AuthenticationContext/AuthenticationContext";
 
-const MenuBtnsContext = createContext()
-export function MenuBtnsProvider({ children }){
-  const nav = useRef()
-  const navList = useRef()
-  const mobileCloseBtnRef = useRef()
-  const mobileMenuBtnRef = useRef()
-  const desktopMenuBtnRef = useRef()
+export function mobileMenuToggle(option){
+  const body = document.body
+  const navList = document.querySelector('.sub-nav')
+  const nav = document.querySelector('nav')
+  const mobileNavToggleOpen = document.querySelector('.mobile-open-btn')
+  const mobileNavToggleClose = document.querySelector('.mobile-close-btn')
 
-  document.body.addEventListener('click', function(e){
-    
-    if(!nav.current.contains(e.target) && e.target !== desktopMenuBtnRef.current && !desktopMenuBtnRef.current.contains(e.target) && e.target !== mobileMenuBtnRef.current && !mobileMenuBtnRef.current.contains(e.target)){
-      mobileMenuToggle('hide-all')
-    }
-      
-  })
-  
-  function mobileMenuToggle(option){
-    const body = document.body
+  switch(option){
+    case 'open':
+        nav.classList.remove('translate-x-[-100%]')
+        nav.classList.remove('md:hidden')
+        mobileNavToggleOpen.classList.add('hidden')
+        mobileNavToggleOpen.classList.remove('flex')
+        mobileNavToggleClose.classList.add('flex')
+        mobileNavToggleClose.classList.remove('hidden')
+        body.classList.add('overflow-y-hidden')
+        body.classList.add('md:overflow-y-scroll')
+      break
 
-    switch(option){
-      case 'open':
-          nav.current.classList.remove('translate-x-[-100%]')
-          nav.current.classList.remove('md:hidden')
-          mobileMenuBtnRef.current.classList.add('hidden')
-          mobileMenuBtnRef.current.classList.remove('flex')
-          mobileCloseBtnRef.current.classList.add('flex')
-          mobileCloseBtnRef.current.classList.remove('hidden')
-          body.classList.add('overflow-y-hidden')
-          body.classList.add('md:overflow-y-scroll')
-        break
-  
-      case 'hide-all':
-          mobileMenuBtnRef.current.classList.add('flex')
-          mobileMenuBtnRef.current.classList.remove('hidden')
-          mobileCloseBtnRef.current.classList.add('hidden')
-          mobileCloseBtnRef.current.classList.remove('flex')
-          nav.current.classList.add('md:hidden')
-          nav.current.classList.add('translate-x-[-100%]')
-          navList.current.classList.add('translate-x-[-100%-10px]')
-          navList.current.classList.add('md:hidden')
-          navList.current.scrollTo({ top: 0, behavior: 'smooth'})
-          body.classList.remove('overflow-y-hidden')
-          body.classList.remove('md:overflow-y-auto')
-        break
-  
-      case 'show-subList':
-          navList.current.classList.remove('md:hidden')
-          navList.current.classList.remove('translate-x-[-100%-10px]')
-          navList.current.classList.add('md:translate-x-[1px]')
-          mobileCloseBtnRef.current.classList.add('flex')
-          mobileMenuBtnRef.current.classList.add('hidden')
-          mobileMenuBtnRef.current.classList.remove('flex')
-          mobileCloseBtnRef.current.classList.remove('hidden')
-        break
-  
-      case 'show-mainList':
-          navList.current.classList.add('translate-x-[-100%-10px]')
-          navList.current.classList.add('md:hidden')
-        break
-    }
+    case 'hide-all':
+        mobileNavToggleOpen.classList.add('flex')
+        mobileNavToggleOpen.classList.remove('hidden')
+        mobileNavToggleClose.classList.add('hidden')
+        mobileNavToggleClose.classList.remove('flex')
+        nav.classList.add('md:hidden')
+        nav.classList.add('translate-x-[-100%]')
+        navList.classList.add('translate-x-[-100%-10px]')
+        navList.classList.add('md:hidden')
+        navList.scrollTo({ top: 0, behavior: 'smooth'})
+        body.classList.remove('overflow-y-hidden')
+        body.classList.remove('md:overflow-y-auto')
+      break
+
+    case 'show-subList':
+        navList.classList.remove('md:hidden')
+        navList.classList.remove('translate-x-[-100%-10px]')
+        navList.classList.add('md:translate-x-[1px]')
+        mobileNavToggleClose.classList.add('flex')
+        mobileNavToggleOpen.classList.add('hidden')
+        mobileNavToggleOpen.classList.remove('flex')
+        mobileNavToggleClose.classList.remove('hidden')
+      break
+
+    case 'show-mainList':
+        navList.classList.add('translate-x-[-100%-10px]')
+        navList.classList.add('md:hidden')
+      break
   }
-  
-  function handleMenuHover(option = 'main'){
-    if(option === 'main') nav.current.classList.remove('md:hidden')
-    if(option === 'sub') navList.current.classList.remove('md:hidden')
-  }
-
-  return (
-          <MenuBtnsContext.Provider value={ { nav, navList, mobileCloseBtnRef, mobileMenuBtnRef, desktopMenuBtnRef, mobileMenuToggle, handleMenuHover } }>
-            { children }
-          </MenuBtnsContext.Provider>
-    )
 }
-export function useMenuBtns(){ return useContext(MenuBtnsContext) }
+
+export function handleMenuHover(option = 'main'){
+  const navList = document.querySelector('.sub-nav')
+  const nav = document.querySelector('nav')
+
+  if(option === 'main') nav.classList.remove('md:hidden')
+  if(option === 'sub') navList.classList.remove('md:hidden')
+}
 
 export function MenuButton(){
-  const { mobileCloseBtnRef, mobileMenuBtnRef, mobileMenuToggle } = useMenuBtns()
 
   return (
     <>
-      <div className=" w-10 h-10 text-red-600 hidden md:hidden border-1 border-black items-center justify-center cursor-pointer " ref={ mobileCloseBtnRef } onClick={ () => mobileMenuToggle('hide-all') }>
+      <div className=" mobile-close-btn w-10 h-10 text-red-600 hidden md:hidden border-1 border-black items-center justify-center cursor-pointer " onClick={ () => mobileMenuToggle('hide-all') }>
         <X />
       </div>
-      <div className=" w-10 h-10 text-black md:hidden flex items-center cursor-pointer " ref={ mobileMenuBtnRef } onClick={() => mobileMenuToggle('open')}>
+      <div className=" mobile-open-btn w-10 h-10 text-black md:hidden flex items-center cursor-pointer  " onClick={() => mobileMenuToggle('open')}>
         <Menu />
       </div>
     </>
@@ -97,10 +79,9 @@ export function MenuButton(){
 
 
 export function DeskMenuButton(){
-  const { desktopMenuBtnRef, handleMenuHover } = useMenuBtns()
 
   return (
-    <h3 className=" justify-self-start md:flex items-center hidden " ref={ desktopMenuBtnRef } onMouseOver={ () => handleMenuHover() }>
+    <h3 className=" desktop-nav-btn justify-self-start md:flex items-center hidden " onMouseOver={ () => handleMenuHover() }>
       Explore
       <ChevronDown />
     </h3>
@@ -110,7 +91,6 @@ export function DeskMenuButton(){
 export default function Navbar(){
   const { coursesList } = useCourses()
   const { isLoggedIn } = useAuth()
-  const { nav, navList, handleMenuHover, mobileMenuToggle } = useMenuBtns()
   
   const MenuItems = [
     {
@@ -136,9 +116,22 @@ export default function Navbar(){
       title: 'Contact us'
     }
   ]
+
+  useEffect(() => {
+    document.body.addEventListener('click', function(e){
+      const desktopNavToggle = document.querySelector('.desktop-nav-btn')
+      const mobileNavToggleOpen = document.querySelector('.mobile-open-btn')
+      const nav = document.querySelector('nav')
+      if(!nav.contains(e.target) && e.target !== desktopNavToggle && !desktopNavToggle.contains(e.target) && e.target !== mobileNavToggleOpen && !mobileNavToggleOpen.contains(e.target)){
+        mobileMenuToggle('hide-all')
+      }
+        
+    })
+
+  }, [])
   
   return (
-      <nav ref={ nav } className=" translate-x-[-100%] transition md:transition-none duration-300 ease-linear md:translate-[unset] bg-white z-999 fixed top-[3.5rem] left-0 md:hidden md:ml-[20%] h-[calc(100vh-3.5rem)] list-none md:h-auto w-[98vw] md:w-[200px] border-1 border-gray-200  ">
+      <nav className=" translate-x-[-100%] transition md:transition-none duration-300 ease-linear md:translate-[unset] bg-white z-999 fixed top-[3.5rem] left-0 md:hidden md:ml-[20%] h-[calc(100vh-3.5rem)] list-none md:h-auto w-[98vw] md:w-[200px] border-1 border-gray-200  ">
         { 
           !isLoggedIn && <li>
             <Link to="/users/join" className=" md:hidden flex bg-red-500 p-3 uppercase items-center gap-2 text-white font-bold hover:bg-red-700 " onClick={ () => mobileMenuToggle('hide-all') }> 
@@ -160,7 +153,7 @@ export default function Navbar(){
                                 </span> 
                 }
                 {
-                  menu.list && <ul ref={ navList } className=" translate-x-[-100%-10px] md:translate-0 overflow-y-scroll transition md:transition-none duration-300 ease-linear fixed top-[51px] md:absolute bg-white py-3 md:p-0 z-1000 left-0 md:left-[calc(100%+2px)] md:top-0 w-[98vw]  md:w-[calc(100%+20px)] h-[calc(100vh-3.5rem)] md:h-[fit-content] md:hidden ">
+                  menu.list && <ul className=" sub-nav translate-x-[-100%-10px] md:translate-0 overflow-y-scroll transition md:transition-none duration-300 ease-linear fixed top-[51px] md:absolute bg-white py-3 md:p-0 z-1000 left-0 md:left-[calc(100%+2px)] md:top-0 w-[98vw]  md:w-[calc(100%+20px)] h-[calc(100vh-3.5rem)] md:h-[fit-content] md:hidden ">
                     <span className=" w-[100%] h-7 flex items-center md:hidden cursor-pointer text-xl py-5 bg-white border-b-1 border-b-gray-300 " onClick={ () => mobileMenuToggle('show-mainList') }>
                       <ChevronLeft />
                       { menu.title }

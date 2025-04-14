@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import useCourses from "./../../../Contexts/CourseContext/CoursesContext";
 import CourseCard from "../../../Components/CourseCard/CourseCard";
@@ -16,10 +16,8 @@ function SubListItem({ list, content, mapped }){
   return (
     list ? <ul className={ classes }>
             {
-              list.map(function(element, index){
-                const key = Object.keys(element)[0]
-                const id = Object.keys(element)[1]
-                return <li key={ element[id] + index} className=" border-b-1 border-b-gray-300 py-2 "> { element[key] } </li>
+              list.map((element, index) => {
+                return <li key={ element + index } className=" border-b-1 border-b-gray-300 py-2 "> { element } </li>
               })
             }
           </ul>
@@ -32,13 +30,23 @@ function SubListItem({ list, content, mapped }){
 
 function ModuleList({ list }){
 
-  list.sort((x, y) => x.index - y.index)
+  const newList = []
+  for(const item in list){
+    const obj = {
+      _id: list[item]._id,
+      index: list[item].index,
+      title: list[item].title
+    }
+    const isInList = newList.find(alist => alist.title === list[item].title)
+    if(!isInList) newList.push(obj)
+  }
+  
 
   return (
     <ul className=" p-5 flex-col hidden ">
       {
-        list.map(function( module ){
-          return <li key={ module.index } className=" py-2 leading-relaxed border-b-1 border-b-gray-300 "> <span className=" inline-flex items-center justify-center p-2 object-contain border-2 border-grey-400 rounded-[50%] w-10 h-10 "> { module.index } </span> { module.title } </li>
+        newList.map( module => {
+          return <li key={ module._id } className=" py-2 leading-relaxed border-b-1 border-b-gray-300 "> <span className=" inline-flex items-center justify-center p-2 object-contain border-2 border-grey-400 rounded-[50%] w-10 h-10 "> { module.index } </span> { module.title } </li>
         })
       }
     </ul>
@@ -50,12 +58,35 @@ function ModuleList({ list }){
 export default function Course(){
   const [currentCourse, setCurrentCourse] = useState(null)
   const { getCourse, coursesList } = useCourses()
+  const [ modules, setModules ] = useState([])
+  const [ benefits, setBenefits ] = useState([])
+  const [ outlines, setOutlines ] = useState([])
+  const [ objectives, setObjectives ] = useState([])
   let { course } = useParams()
   course = formatUrl(course)
   const listContainerRef = useRef()
 
+  useEffect(() => {
+    const searhCourse = getCourse(course, "course")
+    setCurrentCourse(searhCourse)
+  },[course, coursesList])
+
+  useEffect(() => {
+    currentCourse && activeSubList('')
+  }, [currentCourse])
+
+  useEffect(() => {
+    if(currentCourse){
+      const code = currentCourse.courseCode
+      setModules(getCourse(code, 'modules'))
+      setBenefits(getCourse(code, 'benefits'))
+      setOutlines(getCourse(code, 'outlines'))
+      setObjectives(getCourse(code, 'objectives'))
+    }
+  }, [currentCourse])
 
   function activeSubList(e = ''){
+    listContainerRef.current = document.querySelector('.course-list-container')
     const spans = listContainerRef.current.querySelectorAll('div > span')
     const subLists = spans[0].parentElement.nextElementSibling.querySelectorAll('ul')
     const contentLists = spans[0].parentElement.nextElementSibling.querySelectorAll('p')
@@ -74,7 +105,6 @@ export default function Course(){
         if(index === 0) span.classList.remove('bg-green-200')
       })
   
-
       return
     }
 
@@ -96,28 +126,26 @@ export default function Course(){
   }
 
   function ShowList({ currentCourse }){
-    const list = [
-      {
-        title: 'Outlines',
-        list: currentCourse.outlines
-      },
-      {
-        title: 'Benefits',
-        list: currentCourse.benefits
-      },
-      {
-        title: 'Objectives',
-        list: currentCourse.objectives
-      },
-      {
-        title: 'Modules',
-        modules: currentCourse.modules
-      },
-      {
-        title: 'Certificate',
-        content: currentCourse.certificate
-      }
-  ]
+    const list = [{
+                      title: 'Outlines',
+                      list: outlines
+                    },
+                    {
+                      title: 'Benefits',
+                      list: benefits
+                    },
+                    {
+                      title: 'Objectives',
+                      list: objectives
+                    },
+                    {
+                      title: 'Modules',
+                      modules: modules
+                    },
+                    {
+                      title: 'Certificate',
+                      content: currentCourse.certificate
+                  }]
   
     return (
       <>
@@ -134,16 +162,16 @@ export default function Course(){
           {
             list.map(( currentList, i) => {
               if(currentList.list){
-                const mkey = Object.values(currentList.list[i])[0]
+                const mkey = Math.random() * Math.random() + Math.random() / Math.random() + Date.now()
                 return <SubListItem key={ mkey } list={ currentList.list } mapped />
               } 
               else if(currentList.modules){
-                return <ModuleList list={ currentList.modules } />
+                return <ModuleList key={ i * 7 * Math.random() + Math.random() } list={ currentList.modules } />
               }
                 else {
                   return (
                     <div className=" pt-6 px-5 ">
-                      <SubListItem key={ currentList.title } mapped content={ currentList.content } />
+                      <SubListItem key={ i * 7 * Math.random() + Math.random() / 8 } mapped content={ currentList.content } />
                     </div>
                   )
                 }
@@ -154,37 +182,33 @@ export default function Course(){
     )
   }
 
-  useEffect(() => {
-    const searhCourse = getCourse(course)
-    setCurrentCourse(searhCourse)
-  },[course, coursesList])
 
-  useEffect(() => {
-    currentCourse && activeSubList('')
-  }, [currentCourse])
 
   return (
     <>
-      { !currentCourse && <PendingLoading /> }
-      { currentCourse && <h1 className=" texturina text-3xl text-green-800 text-center px-10 py-20 uppercase "> { currentCourse.course } </h1> }
-      { currentCourse &&  <CourseCard title={ currentCourse.course } /> }
-      { currentCourse && <div className=" px-5 py-10  ">
-                            <SubListItem content={ currentCourse.overview } />
-                          </div> }
-                          
-      <hr />
+      {
+        benefits ? <>
+          { currentCourse && <h1 className=" texturina text-3xl text-green-800 text-center px-10 py-20 uppercase "> { currentCourse.course } </h1> }
+          { currentCourse &&  <CourseCard title={ currentCourse.course } /> }
+          { currentCourse && <div className=" px-5 py-10  ">
+                                <SubListItem content={ currentCourse.overview } />
+                              </div> }
+                              
+          <hr />
 
-      { currentCourse && <div className=" grid gap-3 px-7 py-1 ">
-                            <span className=" font-semibold "> Fee: </span>
-                            <SubListItem content={ currentCourse.fee } />
-                          </div> }
-      
-        { currentCourse && currentCourse.modules.length > 0 ? <Link to={ '' + currentCourse.modules.sort((x, y) => x.index - y.index)[0].index } className=" px-6 py-2 rounded-tl-md rounded top-tr-md bg-green-600 hover:bg-green-700 text-white ml-3 mt-8 block w-fit "> Start Course </Link> : null }
-      <hr />
+          { currentCourse && <div className=" grid gap-3 px-7 py-1 ">
+                                <span className=" font-semibold "> Fee: </span>
+                                <SubListItem content={ currentCourse.fee } />
+                              </div> }
+          
+            { currentCourse && modules?.length > 0 ? <Link to={ '' + modules.sort((x, y) => x.index - y.index)[0].index } className=" px-6 py-2 rounded-tl-md rounded top-tr-md bg-green-600 hover:bg-green-700 text-white ml-3 mt-8 block w-fit "> Start Course </Link> : null }
+          <hr />
 
-      <div className=" block " ref={ listContainerRef }>
-        { currentCourse && <ShowList currentCourse={ currentCourse } /> }
-      </div>
+          <div className=" block course-list-container">
+            { currentCourse && <ShowList currentCourse={ currentCourse } /> }
+          </div>
+        </> : <PendingLoading />
+      }
     </>
   )
 }

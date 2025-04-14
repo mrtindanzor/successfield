@@ -5,6 +5,11 @@ import { jwtDecode } from 'jwt-decode'
 export default function useCourse(){
   const [Courses, setCourses] = useState([])
   const [coursesList, setCoursesList] = useState([])
+  const [ modules, setModules ] = useState([])
+  const [ benefits, setBenefits ] = useState([])
+  const [ objecives, setObjecives ] = useState([])
+  const [ outlines, setOutlines ] = useState([])
+  
   const serverUri = useServerUri()
 
   useEffect(() =>{
@@ -20,21 +25,50 @@ export default function useCourse(){
     const response = await fetch(uri, { method, headers})
     if(!response.ok) return setCourses([])
     const res = await response.json()
-    let c = [jwtDecode(res.courses)]
-    c = Object.values(c[0])
-    c = c.filter((course, i) => c.length !== i + 1)
-    updateCoursesList(c)
-    return setCourses(c)
+    let c = [jwtDecode(res.mix)]
+    const courses = c[0].courses
+    const m = c[0].modules
+    const b = c[0].benefits
+    const out = c[0].outlines
+    const obj = c[0].objectives
+    updateCoursesList(courses)
+    setModules(m)
+    setBenefits(b)
+    setOutlines(out)
+    setObjecives(obj)
+    return setCourses(courses)
   }
 
-  function getCourse(searchCourse){
-    const course =  Courses.find(course => course.course === searchCourse)
-    return course
-  }
+  function getCourse(searchCourse, place){
+    let data = ''
+    switch(place){
+      case 'course':
+        data = Courses.find(course => course.course === searchCourse)
+        break
 
-  function getModule(searchCourse){
-    const course =  Courses.find(course => course.course === searchCourse)
-    return course.modules
+      case 'modules':
+        data = modules.filter(module => module.courseCode === searchCourse)
+        break
+
+      case "benefits":
+        data = benefits.find(benefit => benefit.courseCode === searchCourse)
+        data = data.benefits
+        data = [ ...Object.values(data) ]
+        break
+        
+      case "outlines":
+        data = outlines.find(outline => outline.courseCode === searchCourse)
+        data = data.outlines
+        data = [ ...Object.values(data) ]        
+          break
+          
+        case "objectives":
+          data = objecives.find(objective => objective.courseCode === searchCourse)
+          data = data.objectives
+          data = [ ...Object.values(data) ]
+            break
+    }
+    return data
   }
 
   function updateCoursesList(allCourses){
@@ -45,5 +79,5 @@ export default function useCourse(){
     setCoursesList([...filtered])
   }
 
-  return  { coursesList, getCourse, getModule }
+  return  { coursesList, getCourse }
 }

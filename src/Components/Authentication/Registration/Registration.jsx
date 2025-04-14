@@ -1,12 +1,12 @@
-import { useState, useMemo } from "react";
+import { useState, useRef, useMemo } from "react";
 import { useSetAlert } from "../../../Hooks/Alerter/Alerter";
 import useAuth from './../../../Contexts/AuthenticationContext/AuthenticationContext'
 import useCourses from './../../../Contexts/CourseContext/CoursesContext'
 import { capitalize } from "../../../core";
 import { Eye, EyeOff } from "lucide-react";
 
-const hideIcon = <EyeOff />
-const showIcon = <Eye />
+const hideIcon = <EyeOff className="absolute right-2 bottom-2" />
+const showIcon = <Eye className="absolute right-2 bottom-2" />
 
 export function toggleList(e, el){
   let list
@@ -53,185 +53,183 @@ export default function Registration(){
     ];
     return e 
   },[])
-  const [ programme, setProgramme] = useState('')
+  const [ programmesVisible, setProgrammeVisible ] = useState(false)
+  const [ educationLevelsVisible, setEducationLevelsVisible ] = useState(false)
+  const [ programme, setProgramme] = useState('Select programme')
   const [ gender, setGender ] = useState('male')
-  const [ address, setAddress ] = useState({ 
-                                            country: '',
-                                            region: '',
-                                            city: '',
-                                            address1: '',
-                                            address2: ''
-                                          })
   const [ isPassVisible, setIsPassVisible ] = useState(false)
   const [ isCpassVisible, setIsCpassVisible ] = useState(false)
-  const [ educationLevel, setEducationLevel] = useState('')
-  const [ firstname, setFirstname ] = useState('')
-  const [ middlename, setMiddlename ] = useState('')
-  const [ surname, setSurname ] = useState('')
-  const [ birthDate, setBirthDate ] = useState('2000-01-01')
-  const [ idDocument, setIdDocument ] = useState('')
-  const [ passportPhoto, setPassportPhoto ] = useState('')
-  const [ phoneNumber, setPhoneNumber ] = useState('')
-  const [ email, setEmail ] = useState('')
-  const [ contact, setContact ] = useState('')
-  const [ password, setPassword ] = useState('')
-  const [ cpassword, setCpassword ] = useState('')
-  
+  const [ educationLevel, setEducationLevel] = useState('Select education level')
+  const address = useRef('')
+  const country = useRef('')
+  const city = useRef('')
+  const region = useRef('')
+  const address1 = useRef('')
+  const address2 = useRef('')
+  const firstname = useRef('')
+  const middlename = useRef('')
+  const surname = useRef('')
+  const birthDate = useRef('2000-01-01')
+  const idDocument = useRef(null)
+  const passportPhoto = useRef(null)
+  const phoneNumber = useRef('')
+  const email = useRef('')
+  const contact = useRef('')
+  const password = useRef('')
+  const cpassword = useRef('')
+
+  const labelClasses = "grid gap-3 w-full max-w-[100%] relative"
+  const inputClasses = "border-2 border-b-gray-600 py-1 px-2 overflow-hidden whitespace-nowrap block w-full max-w-full rounded cursor-text"
+  const selectorClasses = " grid bg-white *:p-1 text-sm *:hover:bg-green-600 *:cursor-pointer *:hover:text-white *:border-b-1 *:border-b-gray-400 "
+
   const ProgrammeLabel =
-    <label>
-      <span>Programme: *</span>
-      <ul className="">
-        <span onClick={ e => toggleList(e, 'span')}> 
-          { !programme && 'Select programme' } 
-          { programme && capitalize(programme) }
-          </span>
-        <div>
-          {
-            coursesList.map((course, index) => {
-              return <li key={ course.course + index } onClick={ e => {
-                                                            setProgramme(course.course.trim()?.toLowerCase())
-                                                            toggleList(e, 'list')
-                                                            } }> 
-                        { capitalize(course.course) } 
-                      </li>
-            })
-          }
-        </div>
-      </ul>
+    <label className={ labelClasses }>
+      <span className="font-semibold text-gray-800">Programme: *</span>
+      <div className="w-full overflow-hidden">
+        <input type="text" onClick={ () => setProgrammeVisible(p => !p) } onChange={ () => setProgrammeVisible(false) } value={ programme } readOnly className={ inputClasses + " capitalize" } />
+        {
+          programmesVisible && <ul className={ selectorClasses }>
+                                  {
+                                  coursesList.map((course, index) => {
+                                  return <li key={ course.course + index } onClick={ () => setProgramme(course.course) }> 
+                                  { capitalize(course.course) } 
+                                  </li>
+                                        })
+                                  }
+                                </ul>
+        }
+      </div>
     </label>
 
   const FirstnameLabel =
-    <label>
+    <label className={ labelClasses }>
       <span>First name: *</span>
-      <input type="text" key='firstname' value={ firstname } onChange={ e => setFirstname(e.target.value) } />
+      <input type="text" className={ inputClasses } onChange={ e => firstname.current = e.target.value } />
     </label>
 
   const MiddlenameLabel =
-    <label>
+    <label className={ labelClasses }>
       <span>Middle name: </span>
-      <input type="text" key='middlename' value={ middlename } onChange={ e => setMiddlename(e.target.value) } />
+      <input type="text" className={ inputClasses } onChange={ e => middlename.current = e.target.value } />
     </label>
 
   const SurnameLabel =
-    <label>
+    <label className={ labelClasses }>
       <span>Surname: *</span>
-      <input type="text" key='surname' value={ surname } onChange={ e => setSurname(e.target.value) } />
+      <input type="text" className={ inputClasses } onChange={ e => surname.current = e.target.value } />
     </label>
 
   const BirthDateLabel =
-    <label>
+    <label className={ labelClasses }>
       <span>Birth date: *</span>
-      <input type="date" key='birthdate' value={ birthDate } onChange={ e => setBirthDate(e.target.value) }  />
+      <input type="date" className={ inputClasses } onChange={ e => birthDate.current = e.target.value }  />
     </label>
 
   const GenderOptions =
-    <div className="">
+    <div className={ labelClasses } >
       <span>Gender: *</span>
       <label>
-        <input type="radio" key='male' name="gender" checked={ gender === 'male' } onChange={ (e) => setGender('male') } />
+        <input type="radio" name="gender" checked={ gender === 'male' } onChange={ (e) => setGender('male') } />
         <span>Male</span>
       </label>
       <label>
-        <input type="radio" key='female' name="gender" checked={ gender === 'female' } onChange={ (e) => setGender('female') } />
+        <input type="radio" name="gender" checked={ gender === 'female' } onChange={ (e) => setGender('female') } />
         <span>Female</span>
       </label>
     </div>
 
   const AddressSection =
     <div className="">
-      <span>Address:</span>
-      <label>
+      <span className="font-semibold">Address:</span>
+      <label className={ labelClasses }>
         <span>Country: *</span>
-        <input type="text" key='country' value={ address.country } onChange={ (e) => setAddress(p => ({ ...p, country: e.target.value.toLowerCase() })) } />
+        <input type="text" className={ inputClasses } onChange={ (e) => country.current = e.target.value } />
       </label>
 
-      <label>
+      <label className={ labelClasses }>
         <span>State/Region: *</span>
-        <input type="text" key='state' value={ address.region } onChange={ (e) => setAddress(p => ({ ...p, region: e.target.value.toLowerCase() })) } />
+        <input type="text" className={ inputClasses } onChange={ (e) => region.current = e.target.value } />
       </label>
 
-      <label>
+      <label className={ labelClasses }>
         <span>City: *</span>
-        <input type="text" key='city' value={ address.city } onChange={ (e) => setAddress(p => ({ ...p, city: e.target.value.toLowerCase() })) } />
+        <input type="text" className={ inputClasses } onChange={ (e) => city.current = e.target.value } />
       </label>
 
-      <label>
+      <label className={ labelClasses }>
         <span>Address Line 1: *</span>
-        <input type="text" key='address1' value={ address.address1 } onChange={ (e) => setAddress(p => ({ ...p, address1: e.target.value.toLowerCase() })) } />
+        <input type="text" className={ inputClasses } onChange={ (e) => address1.current = e.target.value } />
       </label>
 
-      <label>
+      <label className={ labelClasses }>
         <span>Address Line 2:</span>
-        <input type="text" key='address2' value={ address.address2 } onChange={ (e) => setAddress(p => ({ ...p, address2: e.target.value?.toLowerCase() })) } />
+        <input type="text" className={ inputClasses } onChange={ (e) => address2.current = e.target.value } />
       </label>
     </div>
 
   const IdLabel =
-    <label>
+    <label className={ labelClasses }>
       <span>National ID / Passport Document:</span>
-      <input type="file" key='idDocument' accept="image/*" className="" value={ idDocument }  onChange={ e => setIdDocument(e.target.files[0]) } />
+      <input type="file" accept="image/*" className="" onChange={ e => e.target.files[0] ? idDocument.current = e.target.files[0] : null } />
     </label>
 
 
   const IdPhotoLabel =
-    <label>
+    <label className={ labelClasses }>
       <span>Passport Photo:</span>
-      <input type="file" key='passportphoto' accept="image/*" className="" value={ passportPhoto } onChange={ e => setPassportPhoto(e.target.files[0]) } />
+      <input type="file" accept="image/*" className="" onChange={ e => e.target.files[0] ? passportPhoto.current = e.target.files[0] : null } />
     </label>
 
   const PhoneNumberLabel =
-    <label>
+    <label className={ labelClasses }>
       <span>Contact number: </span>
-      <input type="number" key='phoneNumber' value={ phoneNumber } onChange={ e => setPhoneNumber(e.target.value) } />
+      <input type="number" className={ inputClasses } onChange={ e => phoneNumber.current = e.target.value } />
     </label>  
 
   const EmailLabel =
-    <label>
+    <label className={ labelClasses }>
       <span>Email: </span>
-      <input type="email" key='email' value={ email } onChange={ e => setEmail(e.target.value) } />
+      <input type="email" className={ inputClasses } onChange={ e => email.current = e.target.value } />
     </label>
 
   const HighestEducationLevelLabel =
     <label >
       <span>Highest Level of Education:</span>
-      <ul className="">
-        <span onClick={ e => toggleList(e, 'span') }> 
-          { educationLevel && capitalize(educationLevel) } 
-          { !educationLevel && 'Select your highest level of education' }
-        </span>
-        <div>
-          {
-            educationLevels.map((el, index) => {
-              return <li key={ el + index } onClick={ (e) => {
-                                                                setEducationLevel(el.level.toLowerCase()) 
-                                                                toggleList(e, 'child')
-                                                              } }>
-                        { el.level } 
-                      </li>
-            })
-          }
-        </div>
-      </ul>
+      <div className="">
+        <input type="text" onClick={ () => setEducationLevelsVisible(p => !p) } onChange={ () => setEducationLevelsVisible(false) } value={ educationLevel } readOnly className={ inputClasses + " capitalize" } />
+        {
+          educationLevelsVisible && <ul className={ selectorClasses }>
+                                      {
+                                        educationLevels.map((el, index) => {
+                                          return <li key={ el.level + index } onClick={ () => setEducationLevel(el.level) }>
+                                                    { el.level } 
+                                                  </li>
+                                        })
+                                      }
+                                    </ul>
+        }
+        
+      </div>
     </label>
 
   const PasswordLabel =
-    <label>
+    <label className={ labelClasses }>
       <span>Password: </span>
-      <input type={ isPassVisible ? 'text' : 'password' } key='password' value={ password } onChange={ e => setPassword(e.target.value) } />
-      <span className="" onClick={ () => toggleIconVisibility('password') }> { !isPassVisible ? hideIcon : showIcon } </span>
+      <input type={ isPassVisible ? 'text' : 'password' } className={ inputClasses } onChange={ e => password.current = e.target.value } />
+      <span className="absolute right-2 bottom-0" onClick={ () => toggleIconVisibility('password') }> { !isPassVisible ? hideIcon : showIcon } </span>
     </label>
 
   const CpasswordLabel =
-    <label>
+    <label className={ labelClasses }>
       <span>Confirm password: </span>
-      <input type={ isCpassVisible ? 'text' : 'password' } key='cpassword' value={ cpassword } onChange={ e => setCpassword(e.target.value) } />
-      <span className="" onClick={ () => toggleIconVisibility('cpassword') }> { !isCpassVisible ? hideIcon : showIcon } </span>
+      <input type={ isCpassVisible ? 'text' : 'password' } className={ inputClasses } onChange={ e => cpassword.current = e.target.value } />
+      <span className="absolute right-2 bottom-0" onClick={ () => toggleIconVisibility('cpassword') }> { !isCpassVisible ? hideIcon : showIcon } </span>
     </label>
 
   const HoneyPot =
-    <label className="">
+    <label className="hidden">
       <span>Contact: </span>
-      <input type="number" key='contact' value={ contact } onChange={ e => setContact(e.target.value) } autoComplete="off" />
+      <input type="number" onChange={ e => contact.current = e.target.value } autoComplete="off" />
     </label>
 
 
@@ -267,7 +265,7 @@ async function handleFormSubmission(e){
   }
   
   try{
-    const res = await handler(credentials, navigate)
+    const res = await handler(credentials)
     if(res && res.msg) setMsg(res.msg)
     } catch(err) {
   setMsg(err.message)
@@ -276,8 +274,8 @@ async function handleFormSubmission(e){
 
   return (
     <>
-      <form onSubmit={ (e) => handleFormSubmission(e) } className="">
-        <h3> Admission </h3>
+      <form onSubmit={ (e) => handleFormSubmission(e) } className="w-94vw max-w-[700px] mx-auto relative top-5 bg-white py-10 px-3 sm:px-5 grid gap-10 *:not-first:bg-gray-100 *:not-first:py-5 *:not-first:px-3 *:not-first:rounded *:not-first:grid *:not-first:gap-7">
+        <h3 className="text-3xl font-bold"> Start Your Admission Application </h3>
         <div className="">
           { ProgrammeLabel }
           { FirstnameLabel }
@@ -299,7 +297,7 @@ async function handleFormSubmission(e){
           { CpasswordLabel }
           { HoneyPot }
         </div>
-        <button className=""> Apply </button>
+        <button className="!py-2 !px-3"> Apply </button>
       </form>
     </>
   )
