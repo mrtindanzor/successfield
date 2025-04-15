@@ -5,7 +5,7 @@ import usePendingLoader from '../../../../Contexts/PendingLoaderContext/PendingL
 import { useSetAlert } from '../../../../Hooks/Alerter/Alerter'
 
 export default function Email(){
-  const { currentUser, setCurrentUser } = useAuth()
+  const { currentUser, setCurrentUser, setToken } = useAuth()
   const { setIsPendingLoading } = usePendingLoader()
   const setMsg = useSetAlert()
   const serverUri = useServerUri()
@@ -15,19 +15,22 @@ export default function Email(){
 
     setIsPendingLoading(true)
 
-    const options = { method: 'POST', 
+    const options = { 
+      method: 'POST', 
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: currentUser.email, newEmail: email })
     }
+    
     fetch( serverUri + 'users/changeEmail', options )
       .then( res => res.json())
       .then( data => {
-        
-        switch(data.status){
-          case 201:
-            setCurrentUser( user => ({ ...user, email }) )
-            break
+
+        if(data.status){
+          setCurrentUser( user => ({ ...user, email }) )
+          setToken(data.token)
         }
+
         const errorMessage = 'An error occured'
         setMsg(data.msg || errorMessage)
         setIsPendingLoading(false)

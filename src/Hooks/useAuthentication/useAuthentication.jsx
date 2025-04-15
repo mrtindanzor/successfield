@@ -192,7 +192,7 @@ export default function useAuthentication(){
     
   }
 
-  return { isLoggedIn, initialFetch, registration, login, logout, currentUser, setCurrentUser, userFullName
+  return { isLoggedIn, initialFetch, registration, login, logout, setToken, currentUser, setCurrentUser, userFullName
     , userPhoto }
 }
 
