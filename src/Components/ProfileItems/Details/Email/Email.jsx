@@ -1,20 +1,24 @@
 import { useState } from 'react'
 import useAuth from '../../../../Contexts/AuthenticationContext/AuthenticationContext'
 import useServerUri from '../../../../Contexts/serverContexts/baseServer'
+import usePendingLoader from '../../../../Contexts/PendingLoaderContext/PendingLoaderContext'
 import { useSetAlert } from '../../../../Hooks/Alerter/Alerter'
 
 export default function Email(){
   const { currentUser, setCurrentUser } = useAuth()
+  const { setIsPendingLoading } = usePendingLoader()
   const setMsg = useSetAlert()
   const serverUri = useServerUri()
   const [ email, setEmail ] = useState( currentUser.email )
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    setIsPendingLoading(true)
+
     const options = { method: 'POST', 
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: currentUser.email, newEmail: email })
     }
-
     fetch( serverUri + 'users/changeEmail', options )
       .then( res => res.json())
       .then( data => {
@@ -24,7 +28,9 @@ export default function Email(){
             setCurrentUser( user => ({ ...user, email }) )
             break
         }
-        setMsg(data.msg)
+        const errorMessage = 'An error occured'
+        setMsg(data.msg || errorMessage)
+        setIsPendingLoading(false)
       })
 
   }

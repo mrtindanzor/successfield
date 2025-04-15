@@ -1,10 +1,12 @@
 import useServerUri from '../../../../Contexts/serverContexts/baseServer'
 import { useSetAlert } from '../../../../Hooks/Alerter/Alerter'
+import usePendingLoader from '../../../../Contexts/PendingLoaderContext/PendingLoaderContext'
 import useAuth from './../../../../Contexts/AuthenticationContext/AuthenticationContext'
 import { useState } from 'react'
 
 export default function Name(){
   const { currentUser, setCurrentUser } = useAuth()
+  const { setIsPendingLoading } = usePendingLoader()
   const setMsg = useSetAlert()
   const serverUri = useServerUri()
   const [ firstname, setFirstname ] = useState(currentUser.firstname)
@@ -12,6 +14,9 @@ export default function Name(){
   const [ surname, setSurname ] = useState(currentUser.surname)
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    setIsPendingLoading(true)
+
     const options = { method: 'POST', 
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: currentUser.email, firstname, middlename, surname })
@@ -26,7 +31,9 @@ export default function Name(){
             setCurrentUser( user => ({ ...user, firstname, middlename, surname }) )
               break
         }
-        setMsg(data.msg)
+        const errorMessage = 'An error occured'
+        setMsg(data.msg || errorMessage)
+        setIsPendingLoading(false)
       })
 
   }

@@ -21,7 +21,7 @@ export default function Dashboard(){
     <> 
       <div className=" flex flex-col md:flex-row text-center md:text-left items-center gap-5 p-4 bg-green-300 ">
         {
-          !userPhoto ? <User className={ photoClasses } /> : <img src={ userPhoto } className={ photoClasses } />
+          !userPhoto ? <User className={ photoClasses } /> : <img loading='lazy' src={ userPhoto } className={ photoClasses } />
         }
         <div className=' grid gap-3 '>
           <b className=' text-white texturina text-shadow-black-1 text-3xl '> { userFullName } </b>

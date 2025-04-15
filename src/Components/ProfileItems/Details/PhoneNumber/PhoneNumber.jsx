@@ -2,14 +2,19 @@ import { useState } from 'react'
 import useAuth from '../../../../Contexts/AuthenticationContext/AuthenticationContext'
 import { useSetAlert } from '../../../../Hooks/Alerter/Alerter'
 import useServerUri from '../../../../Contexts/serverContexts/baseServer'
+import usePendingLoader from '../../../../Contexts/PendingLoaderContext/PendingLoaderContext'
 
 export default function PhoneNumber(){
+  const { setIsPendingLoading } = usePendingLoader()
   const { currentUser, setCurrentUser } = useAuth()
   const setMsg = useSetAlert()
   const serverUri = useServerUri()
   const [ phone, setPhone ] = useState( currentUser.phone )
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    setIsPendingLoading(true)
+
     const options = { method: 'POST', 
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: currentUser.email, phoneNumber: phone })
@@ -24,7 +29,9 @@ export default function PhoneNumber(){
             setCurrentUser( user => ({ ...user, phone }) )
               break
         }
-        setMsg(data.msg)
+        const errorMessage = 'An error occured'
+        setMsg(data.msg || errorMessage)
+        setIsPendingLoading(false)
       })
 
   }

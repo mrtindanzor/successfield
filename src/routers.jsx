@@ -28,10 +28,10 @@ const router = createBrowserRouter(
                                           </OnlyAdmin> 
                                         </NotAuthenticated> }
 
-                                      /*errorElement={ <ErrorElement /> } */
+                                      errorElement={ <ErrorElement /> }
                                        />
                                     
-      <Route path='/' element={ <LayoutOne /> } /*errorElement={ <ErrorElement /> }*/ >
+      <Route path='/' element={ <LayoutOne /> } errorElement={ <ErrorElement /> } >
                                 
         <Route index element={ <Home /> } />
                                 

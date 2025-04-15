@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import useAuth from '../../../../../Contexts/AuthenticationContext/AuthenticationContext'
+import usePendingLoader from '../../../../../Contexts/PendingLoaderContext/PendingLoaderContext'
 import useServerUri from '../../../../../Contexts/serverContexts/baseServer'
 import { useSetAlert } from '../../../../../Hooks/Alerter/Alerter'
 
 export default function ChangePassword(){
+  const { setIsPendingLoading } = usePendingLoader()
   const [ oldPassword, setOldPassword ] = useState('')
   const [ password, setPassword ] = useState('')
   const [ cpassword, setCpassword ] = useState('')
@@ -12,6 +14,9 @@ export default function ChangePassword(){
   const setMsg = useSetAlert()
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    setIsPendingLoading(true)
+
     const options = { method: 'POST', 
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: currentUser.email, oldPassword, newPassword: password, confirmNewPassword: cpassword })
@@ -20,7 +25,9 @@ export default function ChangePassword(){
     fetch( serverUri + 'users/changePassword', options )
       .then( res => res.json())
       .then( data => {
-        setMsg(data.msg)
+        const errorMessage = 'An error occured'
+        setMsg(data.msg || errorMessage)
+        setIsPendingLoading(false)
       })
 
   }
