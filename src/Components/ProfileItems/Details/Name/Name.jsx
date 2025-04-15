@@ -43,18 +43,18 @@ export default function Name(){
       <i>Name may only be changed once. For any subsequent changes, contact support.</i>
       <label >
         <span>Firstname: </span>
-        <input type="text" onChange={ (e) => setFirstname(e.target.value) } value={ firstname } />
+        <input type="text" onChange={ (e) => setFirstname(e.target.value) } value={ firstname } readOnly={ currentUser.namechanged && !currentUser.admin } />
       </label>
       <label >
         <span>Middlename: </span>
-        <input type="text" onChange={ (e) => setMiddlename(e.target.value) } value={ middlename } />
+        <input type="text" onChange={ (e) => setMiddlename(e.target.value) } value={ middlename } readOnly={ currentUser.namechanged && !currentUser.admin } />
       </label>
       <label >
         <span>Surname: </span>
-        <input type="text" onChange={ (e) => setSurname(e.target.value) } value={ surname } />
+        <input type="text" onChange={ (e) => setSurname(e.target.value) } value={ surname } readOnly={ currentUser.namechanged && !currentUser.admin } />
       </label>
       {
-        !currentUser.nameChanged && <button className=" bg-green-400 text-white w-fit py-2 px-3 rounded justify-self-center cursor-pointer hover:bg-green-600 "> Apply changes </button>
+        !currentUser.namechanged || currentUser.admin && <button className=" bg-green-400 text-white w-fit py-2 px-3 rounded justify-self-center cursor-pointer hover:bg-green-600 "> Apply changes </button>
       }
     </form>
   )
