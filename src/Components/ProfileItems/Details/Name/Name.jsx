@@ -1,14 +1,38 @@
+import useServerUri from '../../../../Contexts/serverContexts/baseServer'
+import { useSetAlert } from '../../../../Hooks/Alerter/Alerter'
 import useAuth from './../../../../Contexts/AuthenticationContext/AuthenticationContext'
 import { useState } from 'react'
 
 export default function Name(){
-  const { currentUser } = useAuth()
+  const { currentUser, setCurrentUser } = useAuth()
+  const setMsg = useSetAlert()
+  const serverUri = useServerUri()
   const [ firstname, setFirstname ] = useState(currentUser.firstname)
   const [ middlename, setMiddlename ] = useState(currentUser.middlename)
   const [ surname, setSurname ] = useState(currentUser.surname)
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const options = { method: 'POST', 
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: currentUser.email, firstname, middlename, surname })
+    }
+
+    fetch( serverUri + 'users/changeName', options )
+      .then( res => res.json())
+      .then( data => {
+        
+        switch(data.status){
+          case 201:
+            setCurrentUser( user => ({ ...user, firstname, middlename, surname }) )
+              break
+        }
+        setMsg(data.msg)
+      })
+
+  }
 
   return (
-    <form className=" grid gap-5 py-10 px-3 my-10 mx-auto w-[95%] max-w-[500px] md:px-10 bg-white rounded-xl *:*:first:font-bold *:*:last:border-1 *:*:last:p-1 *:*:last:rounded *:not-first:grid *:not-first:gap-3 " >
+    <form onSubmit={ e => handleSubmit(e) } className=" grid gap-5 py-10 px-3 my-10 mx-auto w-[95%] max-w-[500px] md:px-10 bg-white rounded-xl *:*:first:font-bold *:*:last:border-1 *:*:last:p-1 *:*:last:rounded *:not-first:grid *:not-first:gap-3 " >
       <i>Name may only be changed once. For any subsequent changes, contact support.</i>
       <label >
         <span>Firstname: </span>

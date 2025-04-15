@@ -9,11 +9,12 @@ export default function useAuthentication(){
   const setAlert = useSetAlert()
   const stringPattern = /^[\w\s.,-]+$/
   const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [token, setToken] = useState(null)
-  const [currentUser, setCurrentUser] = useState(null)
-  const [userFullName, setUserFullName] = useState(null)
-  const [initialFetch, setInitialFetch] = useState(true)
+  const [ isLoggedIn, setIsLoggedIn ] = useState(false)
+  const [ token, setToken ] = useState(null)
+  const [ currentUser, setCurrentUser ] = useState(null)
+  const [ userPhoto, setUserPhoto ] = useState(null)
+  const [ userFullName, setUserFullName ] = useState(null)
+  const [ initialFetch, setInitialFetch ] = useState(true)
   const fetchesRef = useRef(0)
   const autoFetchTokenRef = useRef()
   const serverUri = useServerUri()
@@ -30,6 +31,13 @@ export default function useAuthentication(){
   }
   
   useEffect(() => { 
+       isLoggedIn && (fetch(serverUri + 'users/user', { headers, method: 'POST', body: JSON.stringify({ email: currentUser.email }) }) 
+        .then( response => response.json() )
+        .then(data => setUserPhoto(data.pic))
+        .catch(err => null))
+  }, [isLoggedIn])
+
+  useEffect(() => {
     currentUser && setUserFullName(capitalize(currentUser.firstname + (currentUser.middlename && ' ' + currentUser.middlename ) + ' ' + currentUser.surname) )
   }, [currentUser])
 
@@ -72,7 +80,7 @@ export default function useAuthentication(){
 
     if(contact !== '') return { msg: 'Unable to complete registration at this time' }
     console.log(credentials)
-    if(!programme) return { msg: 'Select a programme' }
+    if(!programme || programme.trim().toLowerCase() === 'select a programme') return { msg: 'Select a programme' }
     if(!firstname) return { msg: 'Enter your firstname' }
     if(firstname.length < 3) return { msg: 'Firstname too short' }
     if(!stringPattern.test(firstname)) return { msg: 'Firstname contains invalid characters' }
@@ -82,8 +90,8 @@ export default function useAuthentication(){
     if(surname.length < 3) return { msg: 'Surname too short' }
     if(!stringPattern.test(surname)) return { msg: 'Surname contains invalid characters' }
     if(!address) return { msg: 'Fill your address' }
-    if(!idDocument) return { msg: 'Select an identification document to continue' }
-    if(!passportPhoto) return { msg: 'Add a passport picture' }
+    if(!idDocument) return { msg: 'Select an identification document' }
+    if(!passportPhoto) return { msg: 'Add a passport photo' }
     if(!phoneNumber) return { msg: 'Enter a valid phone number' }
     if(!email) return { msg: 'Enter your email address' }
     if(!emailPattern.test(email)) return { msg: 'Email address contains invalid characters' }
@@ -93,34 +101,15 @@ export default function useAuthentication(){
 
 
     const uri = serverUri + 'users/register'
-    const details = {
-      programme,
-      firstname,
-      middlename,
-      surname,
-      birthDate,
-      address,
-      idDocument,
-      passportPhoto,
-      phoneNumber,
-      email,
-      educationLevel,
-      contact,
-      password,
-      cpassword
-    }
-    const formData = new FormData()
-    for(const key in details){
-      formData.append(key, details[key])
-    }
-
-    const options = { method: 'PUT', body: formData }
+    const body = JSON.stringify(credentials)
+    const options = { method: 'PUT', headers, body }
 
     try{
       const response = await fetch(uri, options)
       if(!response.ok) return { msg: 'An error occured'} 
       const res = await response.json()
       setAlert(res.msg)
+      return
       if(res.status === 201) setTimeout(() => navigate('/users/students-area'), 5000)
     } 
       catch(err){
@@ -203,6 +192,7 @@ export default function useAuthentication(){
     
   }
 
-  return { isLoggedIn, initialFetch, registration, login, logout, currentUser, userFullName }
+  return { isLoggedIn, initialFetch, registration, login, logout, currentUser, setCurrentUser, userFullName
+    , userPhoto }
 }
 

@@ -25,17 +25,8 @@ export function ProfileListProvider({ children }){
         { subList: 'Change password',
           section: <ChangePassword />
          },
-        { subList: 'Reset password',
-          section: <ResetPassword />
-         },
       ]
-    },
-    {
-      title: 'My Courses',
-    },
-    {
-      title: 'My Certificates',
-    },
+    }
 ]
   const [activeMainList, setActiveMainList] = useState('')
   const [activeSubList, setActiveSubList] = useState('')

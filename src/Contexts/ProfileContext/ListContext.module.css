@@ -1,8 +1,0 @@
-.arrowRight{
-  width: 20px;
-  height: 20px;
-
-}
-.arrowRight:hover{
-  fill: var(--w-color);
-}

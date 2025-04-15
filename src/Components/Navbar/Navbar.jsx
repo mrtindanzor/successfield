@@ -153,8 +153,8 @@ export default function Navbar(){
                                 </span> 
                 }
                 {
-                  menu.list && <ul className=" sub-nav translate-x-[-100%-10px] md:translate-0 overflow-y-scroll transition md:transition-none duration-300 ease-linear fixed top-[51px] md:absolute bg-white py-3 md:p-0 z-1000 left-0 md:left-[calc(100%+2px)] md:top-0 w-[98vw]  md:w-[calc(100%+20px)] h-[calc(100vh-3.5rem)] md:h-[fit-content] md:hidden ">
-                    <span className=" w-[100%] h-7 flex items-center md:hidden cursor-pointer text-xl py-5 bg-white border-b-1 border-b-gray-300 " onClick={ () => mobileMenuToggle('show-mainList') }>
+                  menu.list && <ul key={ Math.random() + Math.random() * Math.random() } className=" sub-nav translate-x-[-100%-10px] md:translate-0 overflow-y-scroll transition md:transition-none duration-300 ease-linear fixed top-[51px] md:absolute bg-white py-3 md:p-0 z-1000 left-0 md:left-[calc(100%+2px)] md:top-0 w-[98vw]  md:w-[calc(100%+20px)] h-[calc(100vh-3.5rem)] md:h-[fit-content] md:hidden ">
+                    <span key={ Math.random() + Math.random() * Math.random() + Math.random() } className=" w-[100%] h-7 flex items-center md:hidden cursor-pointer text-xl py-5 bg-white border-b-1 border-b-gray-300 " onClick={ () => mobileMenuToggle('show-mainList') }>
                       <ChevronLeft />
                       { menu.title }
                     </span>
@@ -171,7 +171,7 @@ export default function Navbar(){
                                       { capitalize( list.course ) }
                                         </NavLink>
 
-                                        { listIndex === 3 && <Link to="/courses" className=" hidden md:block p-2 border-b-1 border-b-gray-100 hover:bg-green-400 hover:text-white w-[100%] "> View all courses </Link> }
+                                        { listIndex === 3 && <Link key={ 'see more' + index } to="/courses" className=" hidden md:block p-2 border-b-1 border-b-gray-100 hover:bg-green-400 hover:text-white w-[100%] "> View all courses </Link> }
                                       </>
                                     )
                                   })

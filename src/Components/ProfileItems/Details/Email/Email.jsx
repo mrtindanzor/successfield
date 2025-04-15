@@ -1,12 +1,36 @@
 import { useState } from 'react'
 import useAuth from '../../../../Contexts/AuthenticationContext/AuthenticationContext'
+import useServerUri from '../../../../Contexts/serverContexts/baseServer'
+import { useSetAlert } from '../../../../Hooks/Alerter/Alerter'
 
 export default function Email(){
-  const { currentUser } = useAuth()
+  const { currentUser, setCurrentUser } = useAuth()
+  const setMsg = useSetAlert()
+  const serverUri = useServerUri()
   const [ email, setEmail ] = useState( currentUser.email )
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const options = { method: 'POST', 
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: currentUser.email, newEmail: email })
+    }
+
+    fetch( serverUri + 'users/changeEmail', options )
+      .then( res => res.json())
+      .then( data => {
+        
+        switch(data.status){
+          case 201:
+            setCurrentUser( user => ({ ...user, email }) )
+            break
+        }
+        setMsg(data.msg)
+      })
+
+  }
 
   return (
-    <form className=" grid gap-5 py-10 px-3 my-10 mx-auto w-[95%] max-w-[500px] md:px-10 bg-white rounded-xl *:*:first:font-bold *:*:last:border-1 *:*:last:p-1 *:*:last:rounded *:grid *:gap-3 ">
+    <form onSubmit={ e => handleSubmit(e) } className=" grid gap-5 py-10 px-3 my-10 mx-auto w-[95%] max-w-[500px] md:px-10 bg-white rounded-xl *:*:first:font-bold *:*:last:border-1 *:*:last:p-1 *:*:last:rounded *:grid *:gap-3 ">
       <label >
         <span> Email address: </span>
         <input type="email" value={ email } onChange={ e => setEmail(e.target.value) } />

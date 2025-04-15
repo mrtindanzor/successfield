@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo } from "react";
+import { useNavigate } from 'react-router-dom'
 import { useSetAlert } from "../../../Hooks/Alerter/Alerter";
 import useAuth from './../../../Contexts/AuthenticationContext/AuthenticationContext'
 import useCourses from './../../../Contexts/CourseContext/CoursesContext'
@@ -34,6 +35,7 @@ export function toggleList(e, el){
 
 export default function Registration(){
   const setMsg = useSetAlert()
+  const navigate = useNavigate()
   const { coursesList } = useCourses()
   const { registration } = useAuth()
   const educationLevels = useMemo(() => {
@@ -109,19 +111,19 @@ export default function Registration(){
   const FirstnameLabel =
     <label className={ labelClasses }>
       <span>First name: *</span>
-      <input type="text" className={ inputClasses } onChange={ e => firstname.current = e.target.value } />
+      <input type="text" autoComplete="off"  className={ inputClasses } onChange={ e => firstname.current = e.target.value } />
     </label>
 
   const MiddlenameLabel =
     <label className={ labelClasses }>
       <span>Middle name: </span>
-      <input type="text" className={ inputClasses } onChange={ e => middlename.current = e.target.value } />
+      <input type="text" autoComplete="off"  className={ inputClasses } onChange={ e => middlename.current = e.target.value } />
     </label>
 
   const SurnameLabel =
     <label className={ labelClasses }>
       <span>Surname: *</span>
-      <input type="text" className={ inputClasses } onChange={ e => surname.current = e.target.value } />
+      <input type="text" autoComplete="off"  className={ inputClasses } onChange={ e => surname.current = e.target.value } />
     </label>
 
   const BirthDateLabel =
@@ -145,31 +147,31 @@ export default function Registration(){
 
   const AddressSection =
     <div className="
-    !w-[calc(100%-1.5rem)]">
+    !w-[calc(100%-1.5rem)] grid gap-3">
       <span className="font-semibold">Address:</span>
       <label className={ labelClasses }>
         <span>Country: *</span>
-        <input type="text" className={ inputClasses } onChange={ (e) => country.current = e.target.value } />
+        <input type="text" autoComplete="off" className={ inputClasses } onChange={ (e) => country.current = e.target.value } />
       </label>
 
       <label className={ labelClasses }>
         <span>State/Region: *</span>
-        <input type="text" className={ inputClasses } onChange={ (e) => region.current = e.target.value } />
+        <input type="text" autoComplete="off" className={ inputClasses } onChange={ (e) => region.current = e.target.value } />
       </label>
 
       <label className={ labelClasses }>
         <span>City: *</span>
-        <input type="text" className={ inputClasses } onChange={ (e) => city.current = e.target.value } />
+        <input type="text" autoComplete="off" className={ inputClasses } onChange={ (e) => city.current = e.target.value } />
       </label>
 
       <label className={ labelClasses }>
         <span>Address Line 1: *</span>
-        <input type="text" className={ inputClasses } onChange={ (e) => address1.current = e.target.value } />
+        <input type="text" autoComplete="off" className={ inputClasses } onChange={ (e) => address1.current = e.target.value } />
       </label>
 
       <label className={ labelClasses }>
         <span>Address Line 2:</span>
-        <input type="text" className={ inputClasses } onChange={ (e) => address2.current = e.target.value } />
+        <input type="text" className={ inputClasses } onChange={ (e) => address2.current = e.target.value } autoComplete="off"  />
       </label>
     </div>
 
@@ -203,13 +205,13 @@ export default function Registration(){
   const PhoneNumberLabel =
     <label className={ labelClasses }>
       <span>Contact number: </span>
-      <input type="number" className={ inputClasses } onChange={ e => phoneNumber.current = e.target.value } />
+      <input type="number" autoComplete="off" className={ inputClasses } onChange={ e => phoneNumber.current = e.target.value } />
     </label>  
 
   const EmailLabel =
     <label className={ labelClasses }>
       <span>Email: </span>
-      <input type="email" className={ inputClasses } onChange={ e => email.current = e.target.value } />
+      <input type="email" autoComplete="off" className={ inputClasses } onChange={ e => email.current = e.target.value } />
     </label>
 
   const HighestEducationLevelLabel =
@@ -235,14 +237,14 @@ export default function Registration(){
   const PasswordLabel =
     <label className={ labelClasses }>
       <span>Password: </span>
-      <input type={ isPassVisible ? 'text' : 'password' } className={ inputClasses } onChange={ e => password.current = e.target.value } />
+      <input type={ isPassVisible ? 'text' : 'password' } autoComplete="off" className={ inputClasses } onChange={ e => password.current = e.target.value } />
       <span className="absolute right-2 bottom-0" onClick={ () => toggleIconVisibility('password') }> { !isPassVisible ? hideIcon : showIcon } </span>
     </label>
 
   const CpasswordLabel =
     <label className={ labelClasses }>
       <span>Confirm password: </span>
-      <input type={ isCpassVisible ? 'text' : 'password' } className={ inputClasses } onChange={ e => cpassword.current = e.target.value } />
+      <input type={ isCpassVisible ? 'text' : 'password' } className={ inputClasses } autoComplete="off"  onChange={ e => cpassword.current = e.target.value } />
       <span className="absolute right-2 bottom-0" onClick={ () => toggleIconVisibility('cpassword') }> { !isCpassVisible ? hideIcon : showIcon } </span>
     </label>
 
@@ -288,25 +290,34 @@ function readImage(e, setter){
 async function handleFormSubmission(e){
   e.preventDefault()
 
+  if(programme.trim().toLowerCase() === 'select programme') return setMsg('Select a programme')
+  if(educationLevel.trim().toLowerCase() === 'select education level') return setMsg('Select highest education level')
+
   const credentials = { 
     programme, 
-    firstname, 
-    middlename, 
-    surname, 
-    birthDate, 
-    address, 
-    idDocument, 
-    passportPhoto, 
-    phoneNumber, 
-    email, 
+    firstname: firstname.current, 
+    middlename: middlename.current, 
+    surname: surname.current, 
+    birthDate: birthDate.current, 
+    address: {
+      country: country.current,
+      region: region.current,
+      city: city.current,
+      address1: address1.current,
+      address2: address2.current
+    }, 
+    idDocument: idPicture, 
+    passportPhoto: userPicture, 
+    phoneNumber: phoneNumber.current, 
+    email: email.current, 
     educationLevel, 
-    contact, 
-    password, 
-    cpassword
+    contact: contact.current, 
+    password: password.current, 
+    cpassword: cpassword.current
   }
-  
+
   try{
-    const res = await handler(credentials)
+    const res = await handler(credentials, navigate)
     if(res && res.msg) setMsg(res.msg)
     } catch(err) {
   setMsg(err.message)
@@ -316,7 +327,7 @@ async function handleFormSubmission(e){
   return (
     <>
       <form onSubmit={ (e) => handleFormSubmission(e) }
-         className="w-94vw max-w-[95vw] md:max-w-[700px] mx-auto relative top-5 bg-white py-10 px-3 sm:px-5 grid gap-10 *:not-first:bg-gray-100 *:not-first:py-5 *:not-first:px-3 *:not-first:rounded *:not-first:grid *:not-first:gap-7 rounded-xl"
+         className="w-94vw max-w-[95vw] md:max-w-[700px] mx-auto relative top-5 bg-white py-10 px-1 sm:px-5 grid gap-10 *:not-first:bg-gray-100 *:not-first:py-5 *:not-first:px-3 *:not-first:rounded *:not-first:grid *:not-first:gap-7 rounded-xl"
          >
         <h3 className="text-3xl font-bold"> Start Your Admission Application </h3>
         <div className="w-[calc(100%-1.5rem)] mx-auto">
