@@ -8,6 +8,15 @@ import styles from './Courses.module.css';
 import useCourses from './../../../Contexts/CourseContext/CoursesContext';
 import { toggleList } from './../../../Components/Authentication/Registration/Registration'
 
+//tailwind classes
+const formClasses = 'grid gap-5 *:bg-gray-200 *:grid *:gap-3 *:p-2 *:max-w-[95vw] *:md:max-w-[750px] *:rounded *:*:first:font-bold *:*:text-lg'
+const inputClasses = 'py-2 px-3 border-2 border-gray-600 rounded-lg'
+const subInputsClasses = "grid gap-5"
+const appendButtonClasses = "w-fit px-4 py-2 text-3xl cursor-pointer text-white rounded bg-gray-950 ml-auto block"
+const courseContainerClasses = "grid gap-3 max-w-[95vw] md:max-w-[750px] mb-3"
+const courseSelectorClasses = 'p-2 cursor-pointer hover:bg-gray-300 rounded font-semibold text-lg border-1 border-gray-900 '
+const coursesDropdownClasses = 'bg-gray-100 *:p-2 *:border-b-1 *:border-b-gray-500 *:hover:bg-green-300 font-normal '
+
 function handleCourseSubmit(e, setters){
   const { setCourse, setCourseCode, setOverview, setFee, setCertificate, setAvailability, setDuration, setObjectives, setBenefits, setOutlines, setFormComplete } = setters
   e.preventDefault()
@@ -79,6 +88,42 @@ function handleCourseSubmit(e, setters){
   }
 }
 
+function setCore(selectedCourse,currentCourse, track, setCurrentCourse, setTrack, getCourse){
+  if(track === 1){
+    setCurrentCourse(getCourse(selectedCourse, 'course'))
+    setTrack(2)
+  }
+
+  if(track > 1){
+    switch(track){
+      case 2:
+        setCurrentCourse( c => ({...c, ...currentCourse }))
+        setTrack(3)
+          break
+
+      case 3:
+        setCurrentCourse( c => ({...c, outlines: [...getCourse(currentCourse.courseCode, 'outlines')] }))
+        setTrack(4)
+          break
+
+      case 4:
+        setCurrentCourse( c => ({...c, benefits: [...getCourse(currentCourse.courseCode, 'benefits')] }))
+        setTrack(5)
+          break
+
+      case 5:
+        setCurrentCourse( c => ({...c, objectives: [...getCourse(currentCourse.courseCode, 'objectives')] }))
+        setTrack(6)
+          break
+
+      case 6:
+        setCurrentCourse( c => ({...c, modules: [...getCourse(currentCourse.courseCode, 'modules')] }))
+        setTrack(7)
+          break
+    }
+  }
+}
+
 function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
   const [ course, setCourse] = useState(currentCourse && currentCourse.course || '')
   const [ courseCode, setCourseCode] = useState(currentCourse && currentCourse.courseCode || '')
@@ -90,9 +135,10 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
   const [ objectives, setObjectives] = useState(currentCourse && currentCourse.objectives || [])
   const [ benefits, setBenefits] = useState(currentCourse && currentCourse.benefits || [])
   const [ outlines, setOutlines] = useState(currentCourse && currentCourse.outlines || [])
-  const [ modules, setModules] = useState(currentCourse && currentCourse.modules || [])
   const [ formComplete, setFormComplete] = useState(false)
   const setters = { setCourse, setCourseCode, setOverview, setFee, setCertificate, setAvailability, setDuration, setObjectives, setBenefits, setOutlines, setFormComplete }
+
+
 
   useEffect(() => {
     if(!currentCourse) return
@@ -106,7 +152,6 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
     setObjectives(currentCourse.objectives)
     setBenefits(currentCourse.benefits)
     setOutlines(currentCourse.outlines)
-    console.log(currentCourse)
   },[currentCourse])
 
   useEffect(() => {
@@ -120,7 +165,7 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
 
   function appendInput(e, type, object){
     e.preventDefault()
-    let item = { _id: Date.now(), [type]: '' }
+    let item = ''
 
     switch(object){
       case 'objectives':
@@ -134,59 +179,24 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
       case 'benefits':
         setBenefits( prev => [...prev, item] )
           break
-
-      case 'modules':
-        item = { 
-          _id: Date.now(),
-          index: modules.length + 1,
-          title: '',
-          outline: '',
-          objectives: [{ objective: '' }],
-          topics: [{ topic: '' }],
-          notes: [{ note: '' }]
-        }
-        setModules( prev => [ ...prev, item ] )
-          break
-
-      case 'moduleObjectives':
-        setModules( prev => prev.map( module => {
-          const objs = module.objectives
-          return { ...module, objectives: [ ...objs, item ] }
-        } ))
-        break
-        
-      case 'moduleTopics':
-        setModules( prev => prev.map( module => {
-          const tpcs = module.topics
-          return { ...module, topics: [ ...tpcs, item ] }
-        } ))
-          break
-        
-      case 'moduleNotes':
-        setModules( prev => prev.map( module => {
-          const nts = module.notes
-          return { ...module, notes: [ ...nts, item ] }
-        } ))
-          break
     }
 
   }
 
   return (
-    <form className={ styles.addCourseForm } onSubmit={ (e) => { handleCourseSubmit(e, setters) }}>
-        <div className={ styles.deleteCourseBtn }></div>
+    <form className={ formClasses } onSubmit={ (e) => { handleCourseSubmit(e, setters) }}>
         <label data-value='course'>
           <span>
             Course name: 
           </span>
-          <input disabled={ viewCourse } type="text" value={ course } onChange={ e => setCourse(e.target.value) } required  />
+          <input className={ inputClasses } disabled={ viewCourse } type="text" value={ course } onChange={ e => setCourse(e.target.value) } required  />
         </label>
 
         <label data-value='courseCode'>
           <span>
             Course code: 
           </span>
-          <input disabled={ viewCourse } type="text" value={ courseCode } onChange={ e => setCourseCode(e.target.value) } required  />
+          <input className={ inputClasses } disabled={ viewCourse } type="text" value={ courseCode } onChange={ e => setCourseCode(e.target.value) } required  />
         </label>
 
         <label data-value='overview'>
@@ -200,49 +210,46 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
           <span>
             Course fee: 
           </span>
-          <input disabled={ viewCourse } type="text" value={ fee } onChange={ e => setFee(e.target.value) } />
+          <input className={ inputClasses } disabled={ viewCourse } type="text" value={ fee } onChange={ e => setFee(e.target.value) } />
         </label>
 
         <label data-value='certificate'>
           <span>
             Certification: 
           </span>
-          <input disabled={ viewCourse } type="text" value={ certificate } onChange={ e => setCertificate(e.target.value) } required />
+          <input className={ inputClasses } disabled={ viewCourse } type="text" value={ certificate } onChange={ e => setCertificate(e.target.value) } required />
         </label>
 
         <label data-value='availability'>
           <span>
             Availability: 
           </span>
-          <input disabled={ viewCourse } type="text" value={ availability } onChange={ e => setAvailability(e.target.value) } />
+          <input className={ inputClasses } disabled={ viewCourse } type="text" value={ availability } onChange={ e => setAvailability(e.target.value) } />
         </label>
 
         <label data-value='duration'>
           <span>
             Duration: 
           </span>
-          <input disabled={ viewCourse } type="text" value={ duration } onChange={ e => setDuration(e.target.value) } />
+          <input className={ inputClasses } disabled={ viewCourse } type="text" value={ duration } onChange={ e => setDuration(e.target.value) } />
         </label>
 
         <label data-value='objectives'>
           <span>
             Objectives:
           </span>
-          <div>
+          <div className={ subInputsClasses } >
             {
               objectives.map((objective, index) => {
-                return <input disabled={ viewCourse } type="text" key={ objective._id } value={ objective.objective } onChange={ 
+                const uKey = Math.random() / Math.random() + Math.random() * Math.random() * ( index + 1 )
+                return <input className={ inputClasses } disabled={ viewCourse } type="text" key={ uKey } value={ objective } onChange={ 
                   (e) => { 
                     e.preventDefault()
-                    setObjectives( prev =>
-                    prev.map((objective, i) =>
-                     i === index ? { ...objective, objective: e.target.value } : objective
-                    )
-                  ) }
+                    setObjectives( prev => prev.map((objective, i) => index === i ? e.target.value : objective ) ) }
                 } />
               })
             }
-            { !viewCourse && <span onClick={ (e) => appendInput(e, 'objective', 'objectives') } className={ styles.addMore }> + </span> }
+            { !viewCourse && <span onClick={ (e) => appendInput(e, 'objective', 'objectives') } className={ appendButtonClasses }> + </span> }
           </div>
         </label>
 
@@ -250,21 +257,18 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
           <span>
             Outlines:
           </span>
-          <div>
+          <div className={ subInputsClasses } >
             {
               outlines.map((outline, index) => {
-                return <input disabled={ viewCourse } type="text" key={ outline._id } value={ outline.outline } onChange={ 
+                const uKey = Math.random() * Math.random() + Math.random() / Math.random() * ( index + 1 )
+                return <input className={ inputClasses } disabled={ viewCourse } type="text" key={ uKey } value={ outline } onChange={ 
                   (e) => { 
                     e.preventDefault()
-                    setOutlines( prev =>
-                    prev.map((outline, i) =>
-                     i === index ? { ...outline, outline: e.target.value } : outline
-                    )
-                  ) }
+                    setOutlines( prev => prev.map((outline, i) => index === i ? e.target.value : outline ) ) }
                 }  />
               })
             }
-            { !viewCourse && <span onClick={ (e) => appendInput(e, 'outline', 'outlines') } className={ styles.addMore }> + </span> }
+            { !viewCourse && <span onClick={ (e) => appendInput(e, 'outline', 'outlines') } className={ appendButtonClasses }> + </span> }
           </div>
         </label>
 
@@ -272,149 +276,28 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
           <span>
             Benefits:
           </span>
-          <div>
+          <div className={ subInputsClasses } >
             {
               benefits.map((benefit, index) => {
-                return <input disabled={ viewCourse } type="text" key={ benefit._id } value={ benefit.benefit } onChange={ 
+                const uKey = Math.random() * Math.random() + Math.random() * Math.random() * ( index + 1 )
+
+                return <input className={ inputClasses } disabled={ viewCourse } type="text" key={ uKey } value={ benefit } onChange={ 
                   (e) => { 
                     e.preventDefault()
-                    setBenefits( prev =>
-                    prev.map((benefit, i) =>
-                     i === index ? { ...benefit, benefit: e.target.value } : benefit
-                    )
-                  ) }
+                    setBenefits( prev => prev.map((benefit, i) => index === i ? e.target.value : benefit ) ) }
                 } />
               })
             }
-            { !viewCourse && <span onClick={ (e) => appendInput(e, 'benefit', 'benefits') } className={ styles.addMore }> + </span> }
+            { !viewCourse && <span onClick={ (e) => appendInput(e, 'benefit', 'benefits') } className={ appendButtonClasses }> + </span> }
           </div>
         </label>
 
-        <label data-value='modules'>
-          <span>
-            Modules:
-          </span>
-          <div>
-            {
-              modules.map((module, index) => {
-                return <div>
-                        <br />
-                        <hr />
-                        <br />
-                        <span> Module { module.index } </span>
-
-                        <label>
-                          <span> Title </span>
-                          <input disabled={ viewCourse } type="text" key={ 'moduleTitle' + index } value={ module.title } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, title: e.target.value } : currentModule) ) } />
-                        </label>
-
-                        <label>
-                          <span> Description </span>
-                          <textarea disabled={ viewCourse }  value={ module.description } key={ 'moduleDescription' + index } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, description: e.target.value } : currentModule) ) }></textarea>
-                        </label>
-
-                        <label>
-                          <span> Outline </span>
-                          <input disabled={ viewCourse } type="text" key={ 'moduleOutline' + index } value={ module.outline } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, outline: e.target.value } : currentModule) ) } />
-                        </label>
-
-                        <label>
-                          <span> Objectives </span>
-                          <div>
-                            {
-                              module.objectives && module.objectives.map(objective => {
-                                return <input disabled={ viewCourse } type="text" key={ objective._id } onChange={ e => setModules( 
-                                  prev => prev.map( currentObjective => {
-                                    if(objective._id !== currentObjective._id) return currentObjective
-
-                                    return {
-                                      ...currentObjective, 
-                                      objectives: currentObjective.objectives?.map( currentObjective => {
-                                        if(objective._id !== currentObjective._id) return currentObjective
-
-                                        return { ...currentObjective, objective: e.target.value }
-                                      })
-                                    }
-                                  })
-                                ) } />
-                              })
-                            }
-                            { !viewCourse && <span onClick={ (e) => appendInput(e, 'objective', 'moduleObjectives') } className={ styles.addMore }> + </span> }
-                          </div>
-                        </label>
-
-                        <label>
-                          <span> Topics </span>
-                          <div>
-                            {
-                              module.topics && module.topics.map( topic => {
-                                return <input disabled={ viewCourse } type="text" key={ topic._id } onChange={ e => setModules( 
-                                  prev => prev.map( currentModule => {
-                                    if(module._id !== currentModule._id) return currentModule
-
-                                    return {
-                                      ...currentModule, 
-                                      topics: currentModule.topics?.map( currentTopic => {
-                                        if(topic._id !== currentTopic._id) return currentTopic
-
-                                        return { ...currentTopic, topic: e.target.value }
-                                      })
-                                    }
-                                  })
-                                ) } />
-                              })
-                            }
-                            { !viewCourse && <span onClick={ (e) => appendInput(e, 'topic', 'moduleTopics') } className={ styles.addMore }> + </span> }
-                          </div>
-                        </label>
-
-                        <label>
-                          <span> Notes </span>
-                          <div>
-                            {
-                              module.notes && module.notes.map( note => {
-                                return <input disabled={ viewCourse } type="text" key={ note._id } onChange={ e => setModules( 
-                                  prev => prev.map( currentModule => {
-                                    if(module._id !== currentModule._id) return currentModule
-
-                                    return {
-                                      ...currentModule, 
-                                      notes: currentModule.notes?.map( currentNote => {
-                                        if(note._id !== currentNote._id) return currentNote
-
-                                        return { ...currentNote, note: e.target.value }
-                                      })
-                                    }
-                                  })
-                                ) } />
-                              })
-                            }
-                            { !viewCourse && <span onClick={ (e) => appendInput(e, 'note', 'moduleNotes') } className={ styles.addMore }> + </span> }
-                          </div>
-                        </label>
-
-                        <label>
-                          <span> Video Link </span>
-                          <input disabled={ viewCourse } type="text" key={ 'videoLink' + module._id } value={ module.link } onChange={ e => setModules( prev => prev.map(currentModule => module._id === currentModule._id ? { ...currentModule, link: e.target.value } : currentModule) ) } />
-                        </label>
-                      </div>
-                      
-              })
-            }
-            <br />
-            <hr />
-            <br />
-            { !viewCourse && 'Add another module' }
-            { !viewCourse && <span onClick={ (e) => appendInput(e, '', 'modules') } className={ styles.addMore }> + </span> }
-          </div>
-        </label>
         { !viewCourse && <button> { currentCourse ? 'Edit course' : 'Add course' }  </button> }
       </form>
   )
 }
 
 function AddCourse(){
-
   return <CourseStructure />
 }
 
@@ -422,33 +305,39 @@ function EditCourse(){
   const [ selectedCourse, setSelectedCourse ] = useState('')
   const { getCourse, coursesList } = useCourses()
   const [ currentCourse, setCurrentCourse ] = useState('')
+  const [ track, setTrack ] = useState(0)
+  const [ courseVisible, setCoursesVisible ] = useState(false)
 
   useEffect(() => {
-    selectedCourse && setCurrentCourse(getCourse(selectedCourse))
-  }, [ selectedCourse ])
+    setCore(selectedCourse,currentCourse, track, setCurrentCourse, setTrack, getCourse)
+  }, [ track ])
 
   return (
     <>
-      <ul className={ styles.coursesSelector }>
+      <ul className={ courseContainerClasses }>
         <label> Programme </label>
-        <span onClick={ e => toggleList(e, 'span') }>
+        <span className={ courseSelectorClasses } onClick={ () => setCoursesVisible(c => !c) }>
           { !selectedCourse && 'Select programme' }
           { selectedCourse && selectedCourse }
         </span>
-        <div>
-          {
-            coursesList.map((course, index) => {
-              return <li key={ Date.now() + '-' + index } onClick={ e => {
-                toggleList(e, 'list')
-                setSelectedCourse(course.course)
-              }
-            }> { course.course } </li>
-            })
-          }
-        </div>
+        {
+          courseVisible && <div className={ coursesDropdownClasses }>
+            {
+              coursesList.map((course, index) => {
+                return <li key={ Date.now() + '-' + index } onClick={ e => {
+                  toggleList(e, 'list')
+                  setSelectedCourse(course.course)
+                  setCoursesVisible(false)
+                  setTrack(1)
+                }
+              }> { course.course } </li>
+              })
+            }
+          </div>
+        }
       </ul>
       {
-        currentCourse && <CourseStructure currentCourse={ currentCourse } />
+        currentCourse && track === 7 && <CourseStructure currentCourse={ currentCourse } />
       }
     </>
   )
@@ -458,33 +347,39 @@ function ViewCourses(){
   const [ selectedCourse, setSelectedCourse ] = useState('')
   const { getCourse, coursesList } = useCourses()
   const [ currentCourse, setCurrentCourse ] = useState('')
+  const [ track, setTrack ] = useState(0)
+  const [ courseVisible, setCoursesVisible ] = useState(false)
 
   useEffect(() => {
-    selectedCourse && setCurrentCourse(getCourse(selectedCourse))
-  }, [ selectedCourse ])
+    setCore(selectedCourse,currentCourse, track, setCurrentCourse, setTrack, getCourse)
+  }, [ track ])
 
   return (
     <>
-      <ul className={ styles.coursesSelector }>
+      <ul className={ courseContainerClasses }>
         <label> Programme </label>
-        <span onClick={ e => toggleList(e, 'span') }>
+        <span className={ courseSelectorClasses } onClick={ () => setCoursesVisible(c => !c) }>
           { !selectedCourse && 'Select programme' }
           { selectedCourse && selectedCourse }
         </span>
-        <div>
+        {
+          courseVisible && <div className={ coursesDropdownClasses }>
           {
             coursesList.map((course, index) => {
               return <li key={ Date.now() + '-' + index } onClick={ e => {
                 toggleList(e, 'list')
                 setSelectedCourse(course.course)
+                setCoursesVisible(false)
+                setTrack(1)
               }
             }> { course.course } </li>
             })
           }
         </div>
+        }
       </ul>
       {
-        currentCourse && <CourseStructure currentCourse={ currentCourse } viewCourse />
+        currentCourse && track === 7 && <CourseStructure currentCourse={ currentCourse } viewCourse />
       }
     </>
   )
@@ -501,13 +396,13 @@ function DeleteCourse(){
 
   return (
     <>
-      <ul className={ styles.coursesSelector }>
+      <ul className={ courseContainerClasses }>
         <label> Programme </label>
-        <span onClick={ e => toggleList(e, 'span') }>
+        <span className={ courseSelectorClasses } onClick={ e => toggleList(e, 'span') }>
           { !selectedCourse && 'Select programme' }
           { selectedCourse && selectedCourse }
         </span>
-        <div>
+        <div className={ coursesDropdownClasses }>
           {
             coursesList.map((course, index) => {
               return <li key={ Date.now() + '-' + index } onClick={ e => {

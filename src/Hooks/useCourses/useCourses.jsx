@@ -44,6 +44,7 @@ export default function useCourse(){
     switch(place){
       case 'course':
         data = Courses.find(course => course.course === searchCourse)
+        console.log(Courses)
         break
 
       case 'modules':
