@@ -1,94 +1,24 @@
 // REACT //
 import { useEffect, useState } from 'react';
 
-// STYLES //
-import styles from './Courses.module.css';
-
 // OTHERS //
 import useCourses from './../../../Contexts/CourseContext/CoursesContext';
 import { toggleList } from './../../../Components/Authentication/Registration/Registration'
+import { useSetAlert } from '../../../Hooks/Alerter/Alerter';
+import usePendingLoader from '../../../Contexts/PendingLoaderContext/PendingLoaderContext';
+import useServerUri from '../../../Contexts/serverContexts/baseServer';
 
 //tailwind classes
-const formClasses = 'grid gap-5 *:bg-gray-200 *:grid *:gap-3 *:p-2 *:max-w-[95vw] *:md:max-w-[750px] *:rounded *:*:first:font-bold *:*:text-lg'
+const formClasses = 'grid w-fit gap-5 bg-gray-200 my-10  px-2 sm:px-5 md:10 rounded-lg py-10 *:grid *:gap-3 *:p-2 *:w-[95vw] mx-auto *:md:max-w-[1024px] *:rounded *:*:first:font-bold *:*:text-lg'
 const inputClasses = 'py-2 px-3 border-2 border-gray-600 rounded-lg'
 const subInputsClasses = "grid gap-5"
 const appendButtonClasses = "w-fit px-4 py-2 text-3xl cursor-pointer text-white rounded bg-gray-950 ml-auto block"
-const courseContainerClasses = "grid gap-3 max-w-[95vw] md:max-w-[750px] mb-3"
+const courseContainerClasses = "grid gap-3 w-[95vw] mx-auto border-t-8 border-t-gray-700 pt-5 *:first:font-bold *:first:text-3xl mt-5 md:max-w-[1024px] mb-3"
 const courseSelectorClasses = 'p-2 cursor-pointer hover:bg-gray-300 rounded font-semibold text-lg border-1 border-gray-900 '
 const coursesDropdownClasses = 'bg-gray-100 *:p-2 *:border-b-1 *:border-b-gray-500 *:hover:bg-green-300 font-normal '
+const courseSubmitButtonClasses = "w-[90%] !max-w-[200px] font-bold text-2xl h-fit block px-4 py-2 bg-gray-900 ml-auto cursor-pointer mt-5 hover:bg-gray-500 text-white rounded"
 
-function handleCourseSubmit(e, setters){
-  const { setCourse, setCourseCode, setOverview, setFee, setCertificate, setAvailability, setDuration, setObjectives, setBenefits, setOutlines, setFormComplete } = setters
-  e.preventDefault()
-  const formEl = e.target
-  
-  const allLabels = formEl.querySelectorAll('label')
-
-  for(const label of allLabels){
-    const currentLabel = label.dataset.value
-    
-    function getInputs(attribute, all = ''){
-      if(!all){
-        const textArea = label.querySelector('textarea')
-        if(!textArea) return label.querySelector('input').value?.trim().toLowerCase()
-        return textArea.value?.trim().toLowerCase()
-      }
-
-      let arr = []
-      const inputs = label.querySelectorAll('input')
-      for(const input of inputs){
-        const value = input.value?.trim().toLowerCase()
-        arr.push ({ [attribute] : value })
-      }
-      return arr
-    }
-
-    switch(currentLabel){
-      case 'course':
-          setCourse(getInputs('course'))
-        break
-
-      case 'courseCode':
-          setCourseCode(getInputs('courseCode'))
-        break
-
-      case 'overview':
-          setOverview(getInputs('overview'))
-        break
-
-      case 'fee':
-          setFee(getInputs('fee'))
-        break
-
-      case 'certificate':
-          setCertificate(getInputs('certificate'))
-        break
-
-      case 'availability':
-          setAvailability(getInputs('availability'))
-        break
-
-      case 'duration':
-          setDuration(getInputs('duration'))
-        break
-
-      case 'objectives':
-          setObjectives(getInputs('objective', true))
-        break
-
-      case 'outlines':
-          setOutlines(getInputs('outline', true))
-        break
-
-      case 'benefits':
-          setBenefits(getInputs('benefit', true))
-        break
-    }
-    setFormComplete(true)
-  }
-}
-
-function setCore(selectedCourse,currentCourse, track, setCurrentCourse, setTrack, getCourse){
+function setCore(selectedCourse, currentCourse, track, setCurrentCourse, setTrack, getCourse){
   if(track === 1){
     setCurrentCourse(getCourse(selectedCourse, 'course'))
     setTrack(2)
@@ -124,7 +54,10 @@ function setCore(selectedCourse,currentCourse, track, setCurrentCourse, setTrack
   }
 }
 
-function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
+function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, viewCourse, deleteCourse, operation }){
+  const setMsg = useSetAlert()
+  const { setRefreshCourses } = useCourses()
+  const { setIsPendingLoading } = usePendingLoader()
   const [ course, setCourse] = useState(currentCourse && currentCourse.course || '')
   const [ courseCode, setCourseCode] = useState(currentCourse && currentCourse.courseCode || '')
   const [ overview, setOverview] = useState(currentCourse && currentCourse.overview || '')
@@ -135,33 +68,78 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
   const [ objectives, setObjectives] = useState(currentCourse && currentCourse.objectives || [])
   const [ benefits, setBenefits] = useState(currentCourse && currentCourse.benefits || [])
   const [ outlines, setOutlines] = useState(currentCourse && currentCourse.outlines || [])
-  const [ formComplete, setFormComplete] = useState(false)
-  const setters = { setCourse, setCourseCode, setOverview, setFee, setCertificate, setAvailability, setDuration, setObjectives, setBenefits, setOutlines, setFormComplete }
+  const [ previousCourseCode, setPreviousCourseCode ] = useState('')
+  
+  function reset(){
+    setCourse('')
+    setCourseCode('')
+    setOverview('')
+    setFee('')
+    setCertificate('')
+    setAvailability('')
+    setDuration('')
+    setObjectives([])
+    setBenefits([])
+    setOutlines([])
+    setPreviousCourseCode ('')
+  }
 
+  const uri = useServerUri() + 'courses'
+  const details = {
+                    course,
+                    courseCode,
+                    previousCourseCode,
+                    overview,
+                    fee,
+                    certificate,
+                    availability,
+                    duration,
+                    objectives,
+                    benefits,
+                    outlines,
+                    operation
+                  }
 
+  async function handleCourseOperation(e){
+    e.preventDefault()
+    
+    setIsPendingLoading(true)
+    try {
+      const headers = new Headers()
+      headers.append('Content-Type', 'application/json')
+      const method = "PATCH"
+      const body = JSON.stringify(details)
+      const options = { 
+        headers,
+        method,
+        body
+       }
 
-  useEffect(() => {
-    if(!currentCourse) return
-    setCourse(currentCourse.course)
-    setCourseCode(currentCourse.courseCode)
-    setOverview(currentCourse.overview)
-    setFee(currentCourse.fee)
-    setCertificate(currentCourse.certificate)
-    setAvailability(currentCourse.availability)
-    setDuration(currentCourse.duration)
-    setObjectives(currentCourse.objectives)
-    setBenefits(currentCourse.benefits)
-    setOutlines(currentCourse.outlines)
-  },[currentCourse])
-
-  useEffect(() => {
-    if(formComplete){
-      const fullCourse = {
-        course, courseCode, overview, certificate, fee, availability, duration, benefits, objectives, outlines
+      const response = await fetch(uri, options)
+      const res = await response.json()
+      setMsg(res.msg)
+      if(res.status === 201){
+        setRefreshCourses(true)
+        if(operation === 'add'){
+          reset()
+        }
+          else {
+            setCurrentCourse('')
+            setSelectedCourse('')
+          }
       }
-
-    }
-  }, [formComplete])
+    } 
+      catch (err) {
+        setMsg(err.msg)
+      }
+        finally{
+          setIsPendingLoading(false)
+        }
+  }
+                  
+  useEffect(() => {
+    if(operation !== 'add') setPreviousCourseCode(currentCourse.courseCode)
+  },[])
 
   function appendInput(e, type, object){
     e.preventDefault()
@@ -184,7 +162,7 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
   }
 
   return (
-    <form className={ formClasses } onSubmit={ (e) => { handleCourseSubmit(e, setters) }}>
+    <form className={ formClasses } onSubmit={ e => handleCourseOperation(e) }>
         <label data-value='course'>
           <span>
             Course name: 
@@ -261,7 +239,7 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
           <div className={ subInputsClasses } >
             {
               objectives.map((objective, index) => {
-                const uKey = Math.random() / Math.random() + Math.random() * Math.random() * ( index + 1 )
+                const uKey = index
                 if(viewCourse) return <textarea className={ inputClasses } disabled key={ uKey } value={ objective } onChange={ 
                   (e) => { 
                     e.preventDefault()
@@ -285,7 +263,7 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
           <div className={ subInputsClasses } >
             {
               outlines.map((outline, index) => {
-                const uKey = Math.random() * Math.random() + Math.random() / Math.random() * ( index + 1 )
+                const uKey = index
                 if(viewCourse) return <textarea className={ inputClasses } disabled key={ uKey } value={ outline } onChange={ 
                   (e) => { 
                     e.preventDefault()
@@ -309,7 +287,7 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
           <div className={ subInputsClasses } >
             {
               benefits.map((benefit, index) => {
-                const uKey = Math.random() * Math.random() + Math.random() * Math.random() * ( index + 1 )
+                const uKey = index
                 if(viewCourse) return <textarea className={ inputClasses } disabled key={ uKey } value={ benefit } onChange={ 
                   (e) => { 
                     e.preventDefault()
@@ -325,13 +303,13 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
           </div>
         </label>
 
-        { !viewCourse && <button> { currentCourse ? 'Edit course' : 'Add course' }  </button> }
+        { !viewCourse && <button className={ courseSubmitButtonClasses }> { currentCourse ? 'Edit course' : 'Add course' }  </button> }
       </form>
   )
 }
 
 function AddCourse(){
-  return <CourseStructure />
+  return <CourseStructure operation={ 'add' } />
 }
 
 function EditCourse(){
@@ -370,7 +348,7 @@ function EditCourse(){
         }
       </ul>
       {
-        currentCourse && track === 7 && <CourseStructure currentCourse={ currentCourse } />
+        currentCourse && track === 7 && <CourseStructure currentCourse={ currentCourse } setCurrentCourse={ setCurrentCourse } setSelectedCourse={ setSelectedCourse } operation={ 'edit' } />
       }
     </>
   )
@@ -448,7 +426,7 @@ function DeleteCourse(){
         </div>
       </ul>
       {
-        currentCourse && <CourseStructure currentCourse={ currentCourse } deleteCourse />
+        currentCourse && <CourseStructure currentCourse={ currentCourse } setSelectedCourse={ setSelectedCourse } operation={ 'delete' } deleteCourse />
       }
     </>
   )
@@ -478,17 +456,20 @@ export default function Courses(){
   }, [currentSection])
    
   return (
-    <div className={ styles.coursesTab }> 
-      <ul className={ styles.tabSection }>
+    <div className="w-[97vw] mx-auto pt-4"> 
+      <ul className="w-[98vw] grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 mx-auto">
         {
           sections.map((section, index) => {
-            return <li key={ section.title } className={ styles.sectionTitle } onClick={ () => setCurrentSection(index) }> { section.title } </li>
+            return <li key={ section.title } className={`text-white bg-green-400 rounded cursor-pointer font-semibold text-xl py-1 px-3 ${ currentSection === index ? '!bg-green-700' : '' }`} onClick={ () => setCurrentSection(index) }> { section.title } </li>
           })
         }
       </ul>
-      {
+      <div className=''>
+        {
         activeSection
       }
+      </div>
+      
     </div>
   )
 }

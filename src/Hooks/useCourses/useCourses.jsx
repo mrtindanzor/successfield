@@ -9,12 +9,22 @@ export default function useCourse(){
   const [ benefits, setBenefits ] = useState([])
   const [ objecives, setObjecives ] = useState([])
   const [ outlines, setOutlines ] = useState([])
+  const [ refreshCourses, setRefreshCourses ] = useState(false)
   
   const serverUri = useServerUri()
 
-  useEffect(() =>{
+  useEffect(() => {
     fetchCourses()
-  }, [])
+  },[])
+
+  useEffect(() =>{
+    if(refreshCourses){
+      fetchCourses()
+        .then(res => {
+          setRefreshCourses(false)
+        })
+    }
+  }, [refreshCourses])
 
 
   async function fetchCourses(){
@@ -44,7 +54,6 @@ export default function useCourse(){
     switch(place){
       case 'course':
         data = Courses.find(course => course.course === searchCourse)
-        console.log(Courses)
         break
 
       case 'modules':
@@ -80,5 +89,5 @@ export default function useCourse(){
     setCoursesList([...filtered])
   }
 
-  return  { coursesList, getCourse }
+  return  { coursesList, getCourse, setRefreshCourses }
 }
