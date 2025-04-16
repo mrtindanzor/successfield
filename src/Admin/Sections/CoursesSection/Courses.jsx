@@ -189,7 +189,11 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
           <span>
             Course name: 
           </span>
-          <input className={ inputClasses } disabled={ viewCourse } type="text" value={ course } onChange={ e => setCourse(e.target.value) } required  />
+          {
+            viewCourse ? 
+            <textarea className={ inputClasses } disabled value={ course } ></textarea>
+            : <input className={ inputClasses } type="text" value={ course } onChange={ e => setCourse(e.target.value) } required  />
+          }
         </label>
 
         <label data-value='courseCode'>
@@ -203,35 +207,51 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
           <span>
             Course overview: 
           </span>
-          <textarea disabled={ viewCourse }  value={ overview } onChange={ e => setOverview(e.target.value) }></textarea>
+          <textarea className={ inputClasses } disabled={ viewCourse }  value={ overview } onChange={ e => setOverview(e.target.value) }></textarea>
         </label>
 
         <label data-value='fee'>
           <span>
             Course fee: 
           </span>
-          <input className={ inputClasses } disabled={ viewCourse } type="text" value={ fee } onChange={ e => setFee(e.target.value) } />
+          {
+            viewCourse ? 
+            <textarea className={ inputClasses } disabled value={ fee } ></textarea>
+            : <input className={ inputClasses } type="text" value={ fee } onChange={ e => setFee(e.target.value) } required  />
+          }
         </label>
 
         <label data-value='certificate'>
           <span>
             Certification: 
           </span>
-          <input className={ inputClasses } disabled={ viewCourse } type="text" value={ certificate } onChange={ e => setCertificate(e.target.value) } required />
+          {
+            viewCourse ? 
+            <textarea className={ inputClasses } disabled value={ certificate } ></textarea>
+            : <input className={ inputClasses } type="text" value={ certificate } onChange={ e => setCertificate(e.target.value) } required  />
+          }
         </label>
 
         <label data-value='availability'>
           <span>
             Availability: 
           </span>
-          <input className={ inputClasses } disabled={ viewCourse } type="text" value={ availability } onChange={ e => setAvailability(e.target.value) } />
+          {
+            viewCourse ? 
+            <textarea className={ inputClasses } disabled value={ availability } ></textarea>
+            : <input className={ inputClasses } type="text" value={ availability } onChange={ e => setAvailability(e.target.value) } required  />
+          }
         </label>
 
         <label data-value='duration'>
           <span>
             Duration: 
           </span>
-          <input className={ inputClasses } disabled={ viewCourse } type="text" value={ duration } onChange={ e => setDuration(e.target.value) } />
+          {
+            viewCourse ? 
+            <textarea className={ inputClasses } disabled value={ course } ></textarea>
+            : <input className={ inputClasses } type="text" value={ duration } onChange={ e => setDuration(e.target.value) } required  />
+          }
         </label>
 
         <label data-value='objectives'>
@@ -242,7 +262,12 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
             {
               objectives.map((objective, index) => {
                 const uKey = Math.random() / Math.random() + Math.random() * Math.random() * ( index + 1 )
-                return <input className={ inputClasses } disabled={ viewCourse } type="text" key={ uKey } value={ objective } onChange={ 
+                if(viewCourse) return <textarea className={ inputClasses } disabled key={ uKey } value={ objective } onChange={ 
+                  (e) => { 
+                    e.preventDefault()
+                    setObjectives( prev => prev.map((objective, i) => index === i ? e.target.value : objective ) ) }
+                } ></textarea>
+                return <input className={ inputClasses } type="text" key={ uKey } value={ objective } onChange={ 
                   (e) => { 
                     e.preventDefault()
                     setObjectives( prev => prev.map((objective, i) => index === i ? e.target.value : objective ) ) }
@@ -261,7 +286,12 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
             {
               outlines.map((outline, index) => {
                 const uKey = Math.random() * Math.random() + Math.random() / Math.random() * ( index + 1 )
-                return <input className={ inputClasses } disabled={ viewCourse } type="text" key={ uKey } value={ outline } onChange={ 
+                if(viewCourse) return <textarea className={ inputClasses } disabled key={ uKey } value={ outline } onChange={ 
+                  (e) => { 
+                    e.preventDefault()
+                    setOutlines( prev => prev.map((outline, i) => index === i ? e.target.value : outline ) ) }
+                } ></textarea>
+                return <input className={ inputClasses } type="text" key={ uKey } value={ outline } onChange={ 
                   (e) => { 
                     e.preventDefault()
                     setOutlines( prev => prev.map((outline, i) => index === i ? e.target.value : outline ) ) }
@@ -280,8 +310,11 @@ function CourseStructure({ currentCourse, viewCourse, deleteCourse }){
             {
               benefits.map((benefit, index) => {
                 const uKey = Math.random() * Math.random() + Math.random() * Math.random() * ( index + 1 )
-
-                return <input className={ inputClasses } disabled={ viewCourse } type="text" key={ uKey } value={ benefit } onChange={ 
+                if(viewCourse) return <textarea className={ inputClasses } disabled key={ uKey } value={ benefit } onChange={ 
+                  (e) => { 
+                    e.preventDefault()
+                    setBenefits( prev => prev.map((benefit, i) => index === i ? e.target.value : benefit ) ) } } ></textarea>
+                return <input className={ inputClasses } type="text" key={ uKey } value={ benefit } onChange={ 
                   (e) => { 
                     e.preventDefault()
                     setBenefits( prev => prev.map((benefit, i) => index === i ? e.target.value : benefit ) ) }
