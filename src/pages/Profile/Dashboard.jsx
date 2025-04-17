@@ -6,6 +6,14 @@ import SubList from '../../Components/ProfileItems/SubList/SubList'
 import Details from '../../Components/ProfileItems/Details/Details'
 import { PendingLoading } from './../../Hooks/Loader/PendingLoader/PendingLoader'
 import { User } from 'lucide-react'
+import { Link } from 'react-router-dom'
+
+function AdminPanel(){
+
+  return (
+    <Link to='/admin' className='block py-1 px-4 rounded w-fit text-gray-800 bg-green-500 mx-auto md:mx-unset transition-border duration-300 ease-in hover:text-white hover:rounded-xl border-2 text-xl font-semibold ' > Admin Panel </Link>
+  )
+}
 
 export default function Dashboard(){
   const { currentUser, userFullName, userPhoto  } = useAuth()
@@ -26,6 +34,7 @@ export default function Dashboard(){
         <div className=' grid gap-3 '>
           <b className=' text-white texturina text-shadow-black-1 text-3xl '> { userFullName } </b>
           <span className=" uppercase text-base font-bold "> <span>Student ID: </span>{ currentUser.studentNumber } </span>
+          { currentUser.admin && <AdminPanel />  }
         </div>
       </div>
       <div className=" md:flex ">

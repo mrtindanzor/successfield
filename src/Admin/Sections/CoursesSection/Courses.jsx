@@ -1,5 +1,5 @@
 // REACT //
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 
 // OTHERS //
 import useCourses from './../../../Contexts/CourseContext/CoursesContext';
@@ -7,16 +7,138 @@ import { toggleList } from './../../../Components/Authentication/Registration/Re
 import { useSetAlert } from '../../../Hooks/Alerter/Alerter';
 import usePendingLoader from '../../../Contexts/PendingLoaderContext/PendingLoaderContext';
 import useServerUri from '../../../Contexts/serverContexts/baseServer';
+import { ArrowBigLeftDash, ChevronDown } from 'lucide-react';
 
-//tailwind classes
-const formClasses = 'grid w-fit gap-5 bg-gray-200 my-10  px-2 sm:px-5 md:10 rounded-lg py-10 *:grid *:gap-3 *:p-2 *:w-[95vw] mx-auto *:md:max-w-[1024px] *:rounded *:*:first:font-bold *:*:text-lg'
-const inputClasses = 'py-2 px-3 border-2 border-gray-600 rounded-lg'
+//tailwind classes for courses components
+const formClasses = 'grid w-fit z-0 gap-5 relative bg-gray-200 my-10  px-2 sm:px-5 md:10 rounded-lg py-10 *:grid *:gap-3 *:p-2 *:w-[95vw] mx-auto *:md:max-w-[1024px] *:rounded *:*:first:font-bold *:*:text-lg'
+const inputClasses = 'py-2 px-3 border-2 border-gray-600 rounded-lg block w-full'
 const subInputsClasses = "grid gap-5"
 const appendButtonClasses = "w-fit px-4 py-2 text-3xl cursor-pointer text-white rounded bg-gray-950 ml-auto block"
 const courseContainerClasses = "grid gap-3 w-[95vw] mx-auto border-t-8 border-t-gray-700 pt-5 *:first:font-bold *:first:text-3xl mt-5 md:max-w-[1024px] mb-3"
 const courseSelectorClasses = 'p-2 cursor-pointer hover:bg-gray-300 rounded font-semibold text-lg border-1 border-gray-900 '
 const coursesDropdownClasses = 'bg-gray-100 *:p-2 *:border-b-1 *:border-b-gray-500 *:hover:bg-green-300 font-normal '
 const courseSubmitButtonClasses = "w-[90%] !max-w-[200px] font-bold text-2xl h-fit block px-4 py-2 bg-gray-900 ml-auto cursor-pointer mt-5 hover:bg-gray-500 text-white rounded"
+
+const labelClasses = "grid gap-2 *:first:uppercase *:first:font-bold"
+
+export function Modules(){
+  const sections = [
+    {
+      title: 'Add', section: <AddModule />
+    },
+    {
+      title: 'Edit', section: <EditModule />
+    }
+  ]
+
+  const [ currentSection, setCurrentSection ] = useState(0)
+  const [ activeSection, setActiveSection ] = useState(sections[0].section)
+  
+  useEffect(() => {
+    setActiveSection(sections[currentSection].section)
+  }, [currentSection])
+   
+  return (
+    <div className="w-[97vw] mx-auto pt-4"> 
+      <ul className="w-[98vw] grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 mx-auto">
+        {
+          sections.map((section, index) => {
+            return <li key={ section.title } className={`text-white bg-green-400 rounded cursor-pointer font-semibold text-xl py-1 px-3 ${ currentSection === index ? '!bg-green-700' : '' }`} onClick={ () => setCurrentSection(index) }> { section.title } </li>
+          })
+        }
+      </ul>
+      <div className=''>
+        {
+        activeSection
+      }
+      </div>
+      
+    </div>
+  )
+}
+
+export default function Courses(){
+  const sections = [
+    {
+      title: 'View', section: <ViewCourses />
+    },
+    {
+      title: 'Add', section: <AddCourse />
+    },
+    {
+      title: 'Edit', section: <EditCourse />
+    },
+    {
+      title: 'Modules', section: <Modules />
+    }
+  ]
+
+  const [ currentSection, setCurrentSection ] = useState(0)
+  const [ activeSection, setActiveSection ] = useState(sections[0].section)
+  
+  useEffect(() => {
+    setActiveSection(sections[currentSection].section)
+  }, [currentSection])
+   
+  return (
+    <div className="w-[97vw] mx-auto pt-4"> 
+      <ul className="w-[98vw] grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 mx-auto">
+        {
+          sections.map((section, index) => {
+            return <li key={ section.title } className={`text-white bg-green-400 rounded cursor-pointer font-semibold text-xl py-1 px-3 ${ currentSection === index ? '!bg-green-700' : '' }`} onClick={ () => setCurrentSection(index) }> { section.title } </li>
+          })
+        }
+      </ul>
+      <div className=''>
+        {
+        activeSection
+      }
+      </div>
+      
+    </div>
+  )
+}
+
+function moduleReducer(state, action){
+
+  switch(action.type){
+    case 'object':
+      return state.map( (module, mIndex) => {
+        if(mIndex !== action.index) return module
+        return {
+          ...module,
+          [action.arr]: [...(module[action.arr] || []), '']
+        }
+      })
+    break
+
+    case 'objectFill':
+      return state.map( (module, mIndex) => {
+        if(mIndex !== action.index) return module
+        return {
+          ...module,
+
+          [action.arrs]: [...(module[action.arrs] || [])].map((t, tIndex) => {
+            if(tIndex !== action.arrIndex) return t
+            return action.value
+          })
+        }
+      })
+    break
+
+
+    case 'oneItem':
+      return state.map((module, mIndex) => {
+        if(mIndex !== action.index) return module
+        return {
+          ...module,
+          [action.item]: action.value
+        }
+      })
+    break
+
+  }
+}
 
 function setCore(selectedCourse, currentCourse, track, setCurrentCourse, setTrack, getCourse){
   if(track === 1){
@@ -45,13 +167,49 @@ function setCore(selectedCourse, currentCourse, track, setCurrentCourse, setTrac
         setCurrentCourse( c => ({...c, objectives: [...getCourse(currentCourse.courseCode, 'objectives')] }))
         setTrack(6)
           break
-
-      case 6:
-        setCurrentCourse( c => ({...c, modules: [...getCourse(currentCourse.courseCode, 'modules')] }))
-        setTrack(7)
-          break
     }
   }
+}
+
+function toggleModuleList(e){
+  e.target.parentElement.classList.toggle('*:not-first:hidden')
+}
+
+function fetchCurrentModule(courseCode, getCourse){
+  const m = getCourse(courseCode, 'modules')
+  return m
+}
+
+function AddMoreField({ arr, index, dispatch  }){
+  return  <span onClick={ e => dispatch({ type: 'object', arr, index }) } className={ appendButtonClasses }> + </span> 
+}
+
+function ModuleStructure({ currentModule, viewModules }){
+  const [ modules, modulesDispatch ] = useReducer(moduleReducer, currentModule)
+ 
+  return (
+    <form className={ formClasses }>
+      {
+        modules && modules.map((module, index) => {
+          return (<div className='p2 grid pt-10 relative *:not-first:hidden'>
+            <span className="flex items-center relative justify-between py-1 px-2 bg-gray-950 text-white text-xl rounded hover:bg-gray-800 before:content-[''] before:absolute before:inset-0 before:z-1" onClick={ e => toggleModuleList(e) }>
+              <span>
+              Module: { index + 1 }
+              </span>
+              <ChevronDown className='w-8 h-8' />
+            </span>
+            <ModuleList arrs='courseCode' title='Course code' index={ index } object={ module } modulesDispatch={ modulesDispatch } />
+            <ModuleList arrs='title' title='Title' modulesDispatch={ modulesDispatch } object={ module } index={ index }  />
+            <ModuleList arrs='outline' title='outline' modulesDispatch={ modulesDispatch } object={ module } index={ index }  />
+            <ModuleList arrs='link' title='Video link' modulesDispatch={ modulesDispatch } object={ module } index={ index }  />
+            <ModuleSublist arrs='topics' mainArrs={ module } modulesDispatch={ modulesDispatch } index={ index } /> 
+            <ModuleSublist arrs='notes' mainArrs={ module } modulesDispatch={ modulesDispatch } index={ index } /> 
+            <ModuleSublist arrs='objectives' mainArrs={ module } modulesDispatch={ modulesDispatch } index={ index } />
+          </div>)
+        })
+      }
+    </form>
+  )
 }
 
 function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, viewCourse, deleteCourse, operation }){
@@ -252,7 +410,7 @@ function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, 
                 } />
               })
             }
-            { !viewCourse && <span onClick={ (e) => appendInput(e, 'objective', 'objectives') } className={ appendButtonClasses }> + </span> }
+            { !viewCourse && <AddMoreField setter={ setObjectives } type='array' /> }
           </div>
         </label>
 
@@ -276,7 +434,7 @@ function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, 
                 }  />
               })
             }
-            { !viewCourse && <span onClick={ (e) => appendInput(e, 'outline', 'outlines') } className={ appendButtonClasses }> + </span> }
+            { !viewCourse && <AddMoreField setter={ setOutlines } type='array' /> }
           </div>
         </label>
 
@@ -299,7 +457,7 @@ function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, 
                 } />
               })
             }
-            { !viewCourse && <span onClick={ (e) => appendInput(e, 'benefit', 'benefits') } className={ appendButtonClasses }> + </span> }
+            { !viewCourse && <AddMoreField setter={ setBenefits } type='array' /> }
           </div>
         </label>
 
@@ -314,10 +472,9 @@ function AddCourse(){
 
 function EditCourse(){
   const [ selectedCourse, setSelectedCourse ] = useState('')
-  const { getCourse, coursesList } = useCourses()
+  const { getCourse } = useCourses()
   const [ currentCourse, setCurrentCourse ] = useState('')
   const [ track, setTrack ] = useState(0)
-  const [ courseVisible, setCoursesVisible ] = useState(false)
 
   useEffect(() => {
     setCore(selectedCourse,currentCourse, track, setCurrentCourse, setTrack, getCourse)
@@ -325,30 +482,9 @@ function EditCourse(){
 
   return (
     <>
-      <ul className={ courseContainerClasses }>
-        <label> Programme </label>
-        <span className={ courseSelectorClasses } onClick={ () => setCoursesVisible(c => !c) }>
-          { !selectedCourse && 'Select programme' }
-          { selectedCourse && selectedCourse }
-        </span>
-        {
-          courseVisible && <div className={ coursesDropdownClasses }>
-            {
-              coursesList.map((course, index) => {
-                return <li key={ Date.now() + '-' + index } onClick={ e => {
-                  toggleList(e, 'list')
-                  setSelectedCourse(course.course)
-                  setCoursesVisible(false)
-                  setTrack(1)
-                }
-              }> { course.course } </li>
-              })
-            }
-          </div>
-        }
-      </ul>
+      <CourseSeletor selectedCourse={ selectedCourse } setTrack={ setTrack } setSelectedCourse={ setSelectedCourse }  />
       {
-        currentCourse && track === 7 && <CourseStructure currentCourse={ currentCourse } setCurrentCourse={ setCurrentCourse } setSelectedCourse={ setSelectedCourse } operation={ 'edit' } />
+        currentCourse && track === 6 && <CourseStructure currentCourse={ currentCourse } setCurrentCourse={ setCurrentCourse } setSelectedCourse={ setSelectedCourse } operation={ 'edit' } />
       }
     </>
   )
@@ -356,10 +492,9 @@ function EditCourse(){
 
 function ViewCourses(){
   const [ selectedCourse, setSelectedCourse ] = useState('')
-  const { getCourse, coursesList } = useCourses()
+  const { getCourse } = useCourses()
   const [ currentCourse, setCurrentCourse ] = useState('')
   const [ track, setTrack ] = useState(0)
-  const [ courseVisible, setCoursesVisible ] = useState(false)
 
   useEffect(() => {
     setCore(selectedCourse,currentCourse, track, setCurrentCourse, setTrack, getCourse)
@@ -367,7 +502,88 @@ function ViewCourses(){
 
   return (
     <>
-      <ul className={ courseContainerClasses }>
+      <CourseSeletor selectedCourse={ selectedCourse } setTrack={ setTrack } setSelectedCourse={ setSelectedCourse }  />
+      {
+        currentCourse && track === 6 && <CourseStructure currentCourse={ currentCourse } viewCourse />
+      }
+    </>
+  )
+}
+
+function AddModule(){
+  return <ModuleStructure />
+}
+
+function EditModule(){
+  const [ selectedCourse, setSelectedCourse ] = useState('')
+  const { getCourse } = useCourses()
+  const [ currentCourse, setCurrentCourse ] = useState('')
+  const [ currentModule, setCurrentModule ] = useState([])
+  const [ track, setTrack ] = useState(0)
+
+  useEffect(() => {
+    if(track === 1) {
+      setCurrentCourse(getCourse(selectedCourse, 'course'))
+      setTrack(2)
+    }
+    if(track === 2){
+      setCurrentModule(fetchCurrentModule(currentCourse.courseCode, getCourse))
+      setTrack(3)
+    }
+
+  }, [ track ])
+
+  return (
+    <>
+      <CourseSeletor selectedCourse={ selectedCourse } setTrack={ setTrack } setSelectedCourse={ setSelectedCourse }  />
+      {
+        currentModule && track === 3 && <ModuleStructure 
+                                          currentModule={ currentModule }
+                                          setSelectedCourse={ setSelectedCourse } />
+      }
+    </>
+  )
+}
+
+function ModuleList({ arrs, object, title, modulesDispatch, index }){
+  
+  return(
+    <label className={ labelClasses }>
+    <span className={ " " }> { title } </span>
+    <textarea key={ index } className={ inputClasses } value={ object[arrs] }
+      onChange={ e =>  modulesDispatch({ type: 'oneItem', index, item: arrs, value: e.target.value  }) }  ></textarea>
+    </label>
+  )
+}
+
+function ModuleSublist({mainArrs, arrs, index, modulesDispatch }){
+
+  return(
+    <div className={ labelClasses }>
+    <span>{ arrs }</span>
+    {
+      mainArrs[arrs] && mainArrs[arrs].map((arr, arrIndex) => {
+        return (
+            <label className={ '' } key={ arrIndex }>
+              <textarea className={ inputClasses }
+                onChange={ e => modulesDispatch({ type: 'objectFill', index, arrs, arrIndex, value: e.target.value  }) }  ></textarea>
+            </label>
+        )
+      })
+    }
+    <AddMoreField dispatch={ modulesDispatch } index={ index } type='object' arr={ arrs } />
+  </div>
+  )
+}
+
+function CourseSeletor({ selectedCourse, setSelectedCourse, setTrack }){
+  const { coursesList } = useCourses()
+  const [ courseVisible, setCoursesVisible ] = useState(false)
+
+
+
+  return(
+    <ul className={ courseContainerClasses }>
         <label> Programme </label>
         <span className={ courseSelectorClasses } onClick={ () => setCoursesVisible(c => !c) }>
           { !selectedCourse && 'Select programme' }
@@ -378,7 +594,6 @@ function ViewCourses(){
           {
             coursesList.map((course, index) => {
               return <li key={ Date.now() + '-' + index } onClick={ e => {
-                toggleList(e, 'list')
                 setSelectedCourse(course.course)
                 setCoursesVisible(false)
                 setTrack(1)
@@ -389,87 +604,5 @@ function ViewCourses(){
         </div>
         }
       </ul>
-      {
-        currentCourse && track === 7 && <CourseStructure currentCourse={ currentCourse } viewCourse />
-      }
-    </>
-  )
-}
-
-function DeleteCourse(){
-  const [ selectedCourse, setSelectedCourse ] = useState('')
-  const { getCourse, coursesList } = useCourses()
-  const [ currentCourse, setCurrentCourse ] = useState('')
-
-  useEffect(() => {
-    selectedCourse && setCurrentCourse(getCourse(selectedCourse))
-  }, [ selectedCourse ])
-
-  return (
-    <>
-      <ul className={ courseContainerClasses }>
-        <label> Programme </label>
-        <span className={ courseSelectorClasses } onClick={ e => toggleList(e, 'span') }>
-          { !selectedCourse && 'Select programme' }
-          { selectedCourse && selectedCourse }
-        </span>
-        <div className={ coursesDropdownClasses }>
-          {
-            coursesList.map((course, index) => {
-              return <li key={ Date.now() + '-' + index } onClick={ e => {
-                toggleList(e, 'list')
-                setSelectedCourse(course.course)
-              }
-            }> { course.course } </li>
-            })
-          }
-        </div>
-      </ul>
-      {
-        currentCourse && <CourseStructure currentCourse={ currentCourse } setSelectedCourse={ setSelectedCourse } operation={ 'delete' } deleteCourse />
-      }
-    </>
-  )
-}
-
-export default function Courses(){
-  const sections = [
-    {
-      title: 'View Courses', section: <ViewCourses />
-    },
-    {
-      title: 'Add a course', section: <AddCourse />
-    },
-    {
-      title: 'Edit a course', section: <EditCourse />
-    },
-    {
-      title: 'Delete a course', section: <DeleteCourse />
-    },
-  ]
-
-  const [ currentSection, setCurrentSection ] = useState(0)
-  const [ activeSection, setActiveSection ] = useState(sections[0].section)
-  
-  useEffect(() => {
-    setActiveSection(sections[currentSection].section)
-  }, [currentSection])
-   
-  return (
-    <div className="w-[97vw] mx-auto pt-4"> 
-      <ul className="w-[98vw] grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 mx-auto">
-        {
-          sections.map((section, index) => {
-            return <li key={ section.title } className={`text-white bg-green-400 rounded cursor-pointer font-semibold text-xl py-1 px-3 ${ currentSection === index ? '!bg-green-700' : '' }`} onClick={ () => setCurrentSection(index) }> { section.title } </li>
-          })
-        }
-      </ul>
-      <div className=''>
-        {
-        activeSection
-      }
-      </div>
-      
-    </div>
   )
 }
