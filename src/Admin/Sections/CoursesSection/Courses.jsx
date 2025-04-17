@@ -8,16 +8,17 @@ import { useSetAlert } from '../../../Hooks/Alerter/Alerter';
 import usePendingLoader from '../../../Contexts/PendingLoaderContext/PendingLoaderContext';
 import useServerUri from '../../../Contexts/serverContexts/baseServer';
 import { ArrowBigLeftDash, ChevronDown } from 'lucide-react';
+import { useMemo } from 'react';
 
 //tailwind classes for courses components
 const formClasses = 'grid w-fit z-0 gap-5 relative bg-gray-200 my-10  px-2 sm:px-5 md:10 rounded-lg py-10 *:grid *:gap-3 *:p-2 *:w-[95vw] mx-auto *:md:max-w-[1024px] *:rounded *:*:first:font-bold *:*:text-lg'
 const inputClasses = 'py-2 px-3 border-2 border-gray-600 rounded-lg block w-full'
 const subInputsClasses = "grid gap-5"
-const appendButtonClasses = "w-fit px-4 py-2 text-3xl cursor-pointer text-white rounded bg-gray-950 ml-auto block"
+const appendButtonClasses = "!w-fit px-4 py-2 text-3xl cursor-pointer text-white rounded bg-gray-950 ml-auto block"
 const courseContainerClasses = "grid gap-3 w-[95vw] mx-auto border-t-8 border-t-gray-700 pt-5 *:first:font-bold *:first:text-3xl mt-5 md:max-w-[1024px] mb-3"
 const courseSelectorClasses = 'p-2 cursor-pointer hover:bg-gray-300 rounded font-semibold text-lg border-1 border-gray-900 '
 const coursesDropdownClasses = 'bg-gray-100 *:p-2 *:border-b-1 *:border-b-gray-500 *:hover:bg-green-300 font-normal '
-const courseSubmitButtonClasses = "w-[90%] !max-w-[200px] font-bold text-2xl h-fit block px-4 py-2 bg-gray-900 ml-auto cursor-pointer mt-5 hover:bg-gray-500 text-white rounded"
+const submitButtonClasses = "w-[90%] !max-w-[200px] font-bold text-2xl h-fit block px-4 py-2 bg-gray-900 ml-auto cursor-pointer mt-5 hover:bg-gray-500 text-white rounded"
 
 const labelClasses = "grid gap-2 *:first:uppercase *:first:font-bold"
 
@@ -100,43 +101,43 @@ export default function Courses(){
 }
 
 function moduleReducer(state, action){
-
   switch(action.type){
-    case 'object':
+    case 'addMore':
       return state.map( (module, mIndex) => {
-        if(mIndex !== action.index) return module
+        if(action.index !== mIndex) return module
         return {
           ...module,
-          [action.arr]: [...(module[action.arr] || []), '']
+          [action.position]: [...(module[action.position] || []), '']
         }
       })
-    break
 
-    case 'objectFill':
+    case 'sublistInput':
       return state.map( (module, mIndex) => {
         if(mIndex !== action.index) return module
         return {
           ...module,
 
-          [action.arrs]: [...(module[action.arrs] || [])].map((t, tIndex) => {
+          [action.position]: [...(module[action.position] || [])].map((t, tIndex) => {
             if(tIndex !== action.arrIndex) return t
             return action.value
           })
         }
       })
-    break
 
-
-    case 'oneItem':
+    case 'mainListInput':
       return state.map((module, mIndex) => {
         if(mIndex !== action.index) return module
         return {
           ...module,
-          [action.item]: action.value
+          [action.position]: action.value
         }
       })
-    break
 
+    case 'addEmptyModule':
+      return [...state, action.emptyModule]
+      
+    case 'newModule':
+      return action.emptyModule
   }
 }
 
@@ -180,39 +181,93 @@ function fetchCurrentModule(courseCode, getCourse){
   return m
 }
 
-function AddMoreField({ arr, index, dispatch  }){
-  return  <span onClick={ e => dispatch({ type: 'object', arr, index }) } className={ appendButtonClasses }> + </span> 
+function AddMoreField({ position, type, index, dispatch, reverse, emptyModule  }){
+  return  <span onClick={ e => dispatch({ type, emptyModule, position, index }) } className={ reverse ? appendButtonClasses + ' !ml-[4px] !mr-auto' : appendButtonClasses }> + </span> 
 }
 
-function ModuleStructure({ currentModule, viewModules }){
-  const [ modules, modulesDispatch ] = useReducer(moduleReducer, currentModule)
+function ModuleStructure({ currentModule, operation }){
+  const emptyModule = useMemo( () => [
+    {
+      courseCode: '',
+      title: '',
+      outline: '',
+      link: '',
+      topics: [''],
+      notes: [''],
+      objectives: ['']
+    }
+  ], [])
+  const [ modules, modulesDispatch ] = useReducer(moduleReducer, currentModule || [])
+  const serverUri = useServerUri()
+  const setMsg = useSetAlert()
+  const { setIsPendingLoading } = usePendingLoader()
+
+  useEffect(() => {
+    if(operation === 'add') modulesDispatch({ type: 'newModule' , emptyModule })
+  }, [])
+
+  async function handleModulesSubmit(e){
+    e.preventDefault()
+    
+    setIsPendingLoading(true)
+    const uri = serverUri + 'modules'
+    const headers = new Headers()
+    headers.append('Content-Type', 'application/json')
+    const method = 'PATCH'
+    const body = JSON.stringify({ modules, operation })
+    const options = {
+      headers,
+      method,
+      body
+    }
+    
+    try {
+      const response = await fetch(uri, options)
+      if(!response.ok) throw Error('Something went wrong, try again')
+      const res = await response.json()
+      setMsg(res.msg)
+    } 
+      catch (err) {
+      setMsg(err.message)
+    } 
+      finally{
+        setIsPendingLoading(false)
+        if(operation === 'add') modulesDispatch({ type: 'reset', currentModule })
+      }
+  }
  
   return (
-    <form className={ formClasses }>
+    <form className={ formClasses } onSubmit={ handleModulesSubmit }>
       {
         modules && modules.map((module, index) => {
-          return (<div className='p2 grid pt-10 relative *:not-first:hidden'>
+          return (
+          <div className='p2 grid pt-10 relative *:not-first:hidden' key={ index }>
             <span className="flex items-center relative justify-between py-1 px-2 bg-gray-950 text-white text-xl rounded hover:bg-gray-800 before:content-[''] before:absolute before:inset-0 before:z-1" onClick={ e => toggleModuleList(e) }>
               <span>
               Module: { index + 1 }
               </span>
               <ChevronDown className='w-8 h-8' />
             </span>
-            <ModuleList arrs='courseCode' title='Course code' index={ index } object={ module } modulesDispatch={ modulesDispatch } />
-            <ModuleList arrs='title' title='Title' modulesDispatch={ modulesDispatch } object={ module } index={ index }  />
-            <ModuleList arrs='outline' title='outline' modulesDispatch={ modulesDispatch } object={ module } index={ index }  />
-            <ModuleList arrs='link' title='Video link' modulesDispatch={ modulesDispatch } object={ module } index={ index }  />
-            <ModuleSublist arrs='topics' mainArrs={ module } modulesDispatch={ modulesDispatch } index={ index } /> 
-            <ModuleSublist arrs='notes' mainArrs={ module } modulesDispatch={ modulesDispatch } index={ index } /> 
-            <ModuleSublist arrs='objectives' mainArrs={ module } modulesDispatch={ modulesDispatch } index={ index } />
-          </div>)
+            <ModuleList position='courseCode' title='Course code' index={ index } module={ module } modulesDispatch={ modulesDispatch } />
+            <ModuleList position='title' title='Title' modulesDispatch={ modulesDispatch } module={ module } index={ index }  />
+            <ModuleList position='outline' title='outline' modulesDispatch={ modulesDispatch } module={ module } index={ index }  />
+            <ModuleList position='link' title='Video link' modulesDispatch={ modulesDispatch } module={ module } index={ index }  />
+            <ModuleSublist position='topics' module={ module } modulesDispatch={ modulesDispatch } index={ index } /> 
+            <ModuleSublist position='notes' module={ module } modulesDispatch={ modulesDispatch } index={ index } /> 
+            <ModuleSublist position='objectives' module={ module } modulesDispatch={ modulesDispatch } index={ index } />
+          </div>
+          )
         })
       }
+      <hr />
+      <span className='font-semibold text-xl'>Add new module</span>
+      <AddMoreField dispatch={ modulesDispatch } reverse type='addEmptyModule' emptyModule={ emptyModule } />
+      <button className={ submitButtonClasses }> Apply Changes </button>
     </form>
   )
 }
 
-function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, viewCourse, deleteCourse, operation }){
+function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, viewCourse, operation }){
   const setMsg = useSetAlert()
   const { setRefreshCourses } = useCourses()
   const { setIsPendingLoading } = usePendingLoader()
@@ -461,7 +516,7 @@ function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, 
           </div>
         </label>
 
-        { !viewCourse && <button className={ courseSubmitButtonClasses }> { currentCourse ? 'Edit course' : 'Add course' }  </button> }
+        { !viewCourse && <button className={ submitButtonClasses }> { currentCourse ? 'Edit course' : 'Add course' }  </button> }
       </form>
   )
 }
@@ -511,7 +566,8 @@ function ViewCourses(){
 }
 
 function AddModule(){
-  return <ModuleStructure />
+
+  return <ModuleStructure operation='add' />
 }
 
 function EditModule(){
@@ -539,39 +595,39 @@ function EditModule(){
       {
         currentModule && track === 3 && <ModuleStructure 
                                           currentModule={ currentModule }
-                                          setSelectedCourse={ setSelectedCourse } />
+                                          operation='edit' />
       }
     </>
   )
 }
 
-function ModuleList({ arrs, object, title, modulesDispatch, index }){
+function ModuleList({ module, position, title, modulesDispatch, index }){
   
   return(
     <label className={ labelClasses }>
-    <span className={ " " }> { title } </span>
-    <textarea key={ index } className={ inputClasses } value={ object[arrs] }
-      onChange={ e =>  modulesDispatch({ type: 'oneItem', index, item: arrs, value: e.target.value  }) }  ></textarea>
+    <span> { title } </span>
+    <textarea className={ inputClasses } value={ module[position] }
+      onChange={ e =>  modulesDispatch({ type: 'mainListInput', index, position, value: e.target.value  }) }  ></textarea>
     </label>
   )
 }
 
-function ModuleSublist({mainArrs, arrs, index, modulesDispatch }){
+function ModuleSublist({module, position, index, modulesDispatch }){
 
   return(
     <div className={ labelClasses }>
-    <span>{ arrs }</span>
+    <span>{ position }</span>
     {
-      mainArrs[arrs] && mainArrs[arrs].map((arr, arrIndex) => {
+      module[position] && module[position].map((arr, arrIndex) => {
         return (
-            <label className={ '' } key={ arrIndex }>
-              <textarea className={ inputClasses }
-                onChange={ e => modulesDispatch({ type: 'objectFill', index, arrs, arrIndex, value: e.target.value  }) }  ></textarea>
+            <label key={ arrIndex }>
+              <textarea className={ inputClasses } value={ arr }
+                onChange={ e => modulesDispatch({ type: 'sublistInput', index, position, arrIndex, value: e.target.value  }) }  ></textarea>
             </label>
         )
       })
     }
-    <AddMoreField dispatch={ modulesDispatch } index={ index } type='object' arr={ arrs } />
+    <AddMoreField dispatch={ modulesDispatch } index={ index } type='addMore' position={ position } />
   </div>
   )
 }
