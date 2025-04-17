@@ -197,6 +197,7 @@ function ModuleStructure({ currentModule, operation }){
       objectives: ['']
     }
   ], [])
+  const { setRefreshCourses } = useCourses()
   const [ modules, modulesDispatch ] = useReducer(moduleReducer, currentModule || [])
   const serverUri = useServerUri()
   const setMsg = useSetAlert()
@@ -226,6 +227,7 @@ function ModuleStructure({ currentModule, operation }){
       if(!response.ok) throw Error('Something went wrong, try again')
       const res = await response.json()
       setMsg(res.msg)
+      setRefreshCourses
     } 
       catch (err) {
       setMsg(err.message)
