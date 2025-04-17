@@ -1,6 +1,16 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { createContext } from "react";
 import Courses from "../../Sections/CoursesSection/Courses";
+
+function navReducer(state, action){
+  switch(action.type){
+    case 'switch_tab':
+      return action.navItems[action.index].section
+
+    default:
+      return state
+  }
+}
 
 
 const NavigationContext = createContext()
@@ -13,15 +23,11 @@ export function NavigationProvider({ children }){
     { title: 'Partners', section: <div></div> },
     { title: 'Students', section: <div></div> },
   ]
-  const [ currentTab, setCurrentTab ] = useState(0)
-  const [ tabDetails, setTabDetails ] = useState(NavItems[0].section)
-
-  useEffect(() => {
-    setTabDetails(NavItems[currentTab].section)
-  }, [currentTab])
+  const [ currentTab, currentTabDispatch ] = useReducer(navReducer, NavItems[0].section)
+  const [ navToggle, setNavToggle ] = useState(false)
 
   return (
-    <NavigationContext.Provider value={ { NavItems, currentTab, tabDetails, setCurrentTab } }>
+    <NavigationContext.Provider value={ { NavItems, currentTab, currentTabDispatch, navToggle, setNavToggle } }>
       { children }
     </NavigationContext.Provider>
   )

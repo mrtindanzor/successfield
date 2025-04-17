@@ -1,7 +1,7 @@
 import useAdminNavigation from '../../Contexts/NavigationContext/NavigationContext'
 
 export default function Details(){
-  const { tabDetails } = useAdminNavigation()
+  const { currentTab } = useAdminNavigation()
 
-  return tabDetails
+  return currentTab
 }

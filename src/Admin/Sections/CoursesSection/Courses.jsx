@@ -11,15 +11,16 @@ import { ArrowBigLeftDash, ChevronDown, Info } from 'lucide-react';
 import { useMemo } from 'react';
 
 //tailwind classes for courses components
-const formClasses = 'grid w-fit z-0 gap-5 relative bg-gray-200 my-10  px-2 sm:px-5 md:10 rounded-lg py-10 *:grid *:gap-3 *:p-2 *:w-[95vw] mx-auto *:md:max-w-[1024px] *:rounded *:*:first:font-bold *:*:text-lg'
+const formClasses = 'grid z-0 gap-5 relative bg-gray-200 my-10  px-2 sm:px-5 md:10 rounded-lg py-10 *:grid *:gap-3 *:p-2 *:w-[calc(100%-10px)] md:*:w-[calc(100%-20px)] mx-auto *:rounded *:*:first:font-bold *:*:text-lg'
 const inputClasses = 'py-2 px-3 border-2 border-gray-600 rounded-lg block w-full'
 const subInputsClasses = "grid gap-5"
 const appendButtonClasses = "!w-fit px-4 py-2 text-3xl cursor-pointer text-white rounded bg-gray-950 ml-auto block"
-const courseContainerClasses = "grid gap-3 w-[95vw] mx-auto border-t-8 border-t-gray-700 pt-5 *:first:font-bold *:first:text-3xl mt-5 md:max-w-[1024px] mb-3"
+const courseContainerClasses = "grid gap-3 w-[100%-10px] mx-auto border-t-8 border-t-gray-700 pt-5 *:first:font-bold *:first:text-3xl mt-5 mb-3"
 const courseSelectorClasses = 'p-2 cursor-pointer hover:bg-gray-300 rounded font-semibold text-lg border-1 border-gray-900 '
 const coursesDropdownClasses = 'bg-gray-100 *:p-2 *:border-b-1 *:border-b-gray-500 *:hover:bg-green-300 font-normal '
 const submitButtonClasses = "w-[90%] !max-w-[200px] font-bold text-2xl h-fit block px-4 py-2 bg-gray-900 ml-auto cursor-pointer mt-5 hover:bg-gray-500 text-white rounded"
 const labelClasses = "grid gap-2 *:first:uppercase *:first:font-bold"
+const courseOperations = "*:w-[calc(100%-10px)] sm:*:w-[calc(100%-30px)] *:mx-auto :*max-w-[750px]"
 
 const ACTIONS = {
   MODULE: { 
@@ -51,15 +52,15 @@ export function Modules(){
   }, [currentSection])
    
   return (
-    <div className="w-[97vw] mx-auto pt-4"> 
-      <ul className="w-[98vw] grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 mx-auto">
+    <div > 
+      <ul className="w-full grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 mx-auto">
         {
           sections.map((section, index) => {
             return <li key={ section.title } className={`text-white bg-green-400 rounded cursor-pointer font-semibold text-xl py-1 px-3 ${ currentSection === index ? '!bg-green-700' : '' }`} onClick={ () => setCurrentSection(index) }> { section.title } </li>
           })
         }
       </ul>
-      <div className=''>
+      <div>
         {
         activeSection
       }
@@ -72,13 +73,13 @@ export function Modules(){
 export default function Courses(){
   const sections = [
     {
-      title: 'View', section: <ViewCourses />
+      title: 'View courses', section: <ViewCourses />
     },
     {
-      title: 'Add', section: <AddCourse />
+      title: 'Add courses', section: <AddCourse />
     },
     {
-      title: 'Edit', section: <EditCourse />
+      title: 'Edit courses', section: <EditCourse />
     },
     {
       title: 'Modules', section: <Modules />
@@ -93,15 +94,15 @@ export default function Courses(){
   }, [currentSection])
    
   return (
-    <div className="w-[97vw] mx-auto pt-4"> 
-      <ul className="w-[98vw] grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 mx-auto">
+    <div className="grid gap-4 pt-8 sm:grid-cols-[auto_1fr] h-[calc(100vh-70px)] overflow-hidden *:last:!overflow-y-scroll"> 
+      <ul className="grid !h-fit pl-2 gap-3 sm:w-fit min-w-[100px] pr-5">
         {
           sections.map((section, index) => {
-            return <li key={ section.title } className={`text-white bg-green-400 rounded cursor-pointer font-semibold text-xl py-1 px-3 ${ currentSection === index ? '!bg-green-700' : '' }`} onClick={ () => setCurrentSection(index) }> { section.title } </li>
+            return <li key={ section.title } className={`text-white bg-gray-400 rounded cursor-pointer font-semibold text-xl py-1 px-3 ${ currentSection === index ? '!bg-gray-700' : '' }`} onClick={ () => setCurrentSection(index) }> { section.title } </li>
           })
         }
       </ul>
-      <div className=''>
+      <div className={ courseOperations }>
         {
         activeSection
       }
@@ -555,7 +556,14 @@ function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, 
 }
 
 function AddCourse(){
-  return <CourseStructure operation={ 'add' } />
+  return (
+    <div>
+      <h2 className='font-bold text-2xl uppercase'> Add a new programme </h2>
+      <hr />
+      <CourseStructure operation={ 'add' } />
+    </div>
+  )
+  
 }
 
 function EditCourse(){
@@ -569,12 +577,12 @@ function EditCourse(){
   }, [ track ])
 
   return (
-    <>
+    <div className={  '' }>
       <CourseSeletor selectedCourse={ selectedCourse } setTrack={ setTrack } setSelectedCourse={ setSelectedCourse }  />
       {
         currentCourse && track === 6 && <CourseStructure currentCourse={ currentCourse } setCurrentCourse={ setCurrentCourse } setSelectedCourse={ setSelectedCourse } operation={ 'edit' } />
       }
-    </>
+    </div>
   )
 }
 
@@ -589,12 +597,12 @@ function ViewCourses(){
   }, [ track ])
 
   return (
-    <>
+    <div className={  '' }>
       <CourseSeletor selectedCourse={ selectedCourse } setTrack={ setTrack } setSelectedCourse={ setSelectedCourse }  />
       {
         currentCourse && track === 6 && <CourseStructure currentCourse={ currentCourse } viewCourse />
       }
-    </>
+    </div>
   )
 }
 

@@ -66,7 +66,6 @@
   border-left: 1px solid var(--b-color);
 }
 body{
-  padding-top: 55px;
   overflow-x: hidden !important;
 }
 [aria-current='page'].active{
