@@ -7,7 +7,7 @@ import { toggleList } from './../../../Components/Authentication/Registration/Re
 import { useSetAlert } from '../../../Hooks/Alerter/Alerter';
 import usePendingLoader from '../../../Contexts/PendingLoaderContext/PendingLoaderContext';
 import useServerUri from '../../../Contexts/serverContexts/baseServer';
-import { ArrowBigLeftDash, ChevronDown } from 'lucide-react';
+import { ArrowBigLeftDash, ChevronDown, Info } from 'lucide-react';
 import { useMemo } from 'react';
 
 //tailwind classes for courses components
@@ -19,8 +19,19 @@ const courseContainerClasses = "grid gap-3 w-[95vw] mx-auto border-t-8 border-t-
 const courseSelectorClasses = 'p-2 cursor-pointer hover:bg-gray-300 rounded font-semibold text-lg border-1 border-gray-900 '
 const coursesDropdownClasses = 'bg-gray-100 *:p-2 *:border-b-1 *:border-b-gray-500 *:hover:bg-green-300 font-normal '
 const submitButtonClasses = "w-[90%] !max-w-[200px] font-bold text-2xl h-fit block px-4 py-2 bg-gray-900 ml-auto cursor-pointer mt-5 hover:bg-gray-500 text-white rounded"
-
 const labelClasses = "grid gap-2 *:first:uppercase *:first:font-bold"
+
+const ACTIONS = {
+  MODULE: { 
+    ADD_INPUT: 'add_input',
+    ADD_NEW_MODULE: 'add_new_module',
+    FILL_MAIN_INPUT: 'fill_main_input',
+    FILL_SUB_INPUT: 'fill_sub_input',
+    RESET_ERRORS: 'reset_errors',
+    START_NEW_MODULE: 'start_new_module',
+    FETCH_ERRORS: 'fetch_errors'
+  }
+}
 
 export function Modules(){
   const sections = [
@@ -102,7 +113,7 @@ export default function Courses(){
 
 function moduleReducer(state, action){
   switch(action.type){
-    case 'addMore':
+    case ACTIONS.MODULE.ADD_INPUT:
       return state.map( (module, mIndex) => {
         if(action.index !== mIndex) return module
         return {
@@ -111,7 +122,7 @@ function moduleReducer(state, action){
         }
       })
 
-    case 'sublistInput':
+    case ACTIONS.MODULE.FILL_SUB_INPUT:
       return state.map( (module, mIndex) => {
         if(mIndex !== action.index) return module
         return {
@@ -124,7 +135,7 @@ function moduleReducer(state, action){
         }
       })
 
-    case 'mainListInput':
+    case ACTIONS.MODULE.FILL_MAIN_INPUT:
       return state.map((module, mIndex) => {
         if(mIndex !== action.index) return module
         return {
@@ -133,10 +144,21 @@ function moduleReducer(state, action){
         }
       })
 
-    case 'addEmptyModule':
+    case ACTIONS.MODULE.RESET_ERRORS:
+      return state.map(module => {
+        return {
+          ...module,
+          error: ''
+        }
+      })
+
+    case ACTIONS.MODULE.FETCH_ERRORS:
+      return action.modules
+
+    case ACTIONS.MODULE.ADD_NEW_MODULE:
       return [...state, action.emptyModule]
       
-    case 'newModule':
+    case ACTIONS.MODULE.START_NEW_MODULE:
       return action.emptyModule
   }
 }
@@ -186,9 +208,13 @@ function AddMoreField({ position, type, index, dispatch, reverse, emptyModule  }
 }
 
 function ModuleStructure({ currentModule, operation }){
+  const courseCode = currentModule && currentModule[0] && currentModule[0].courseCode
+  const { setRefreshCourses } = useCourses()
+  const [ modules, modulesDispatch ] = useReducer(moduleReducer, currentModule || [])
+
   const emptyModule = useMemo( () => [
     {
-      courseCode: '',
+      courseCode: courseCode || '',
       title: '',
       outline: '',
       link: '',
@@ -196,21 +222,20 @@ function ModuleStructure({ currentModule, operation }){
       notes: [''],
       objectives: ['']
     }
-  ], [])
-  const { setRefreshCourses } = useCourses()
-  const [ modules, modulesDispatch ] = useReducer(moduleReducer, currentModule || [])
+  ], [modules])
   const serverUri = useServerUri()
   const setMsg = useSetAlert()
   const { setIsPendingLoading } = usePendingLoader()
 
   useEffect(() => {
-    if(operation === 'add') modulesDispatch({ type: 'newModule' , emptyModule })
+    if(operation === 'add') modulesDispatch({ type: ACTIONS.MODULE.START_NEW_MODULE , emptyModule })
   }, [])
 
   async function handleModulesSubmit(e){
     e.preventDefault()
     
     setIsPendingLoading(true)
+    modulesDispatch({ type: ACTIONS.MODULE.RESET_ERRORS })
     const uri = serverUri + 'modules'
     const headers = new Headers()
     headers.append('Content-Type', 'application/json')
@@ -227,6 +252,9 @@ function ModuleStructure({ currentModule, operation }){
       if(!response.ok) throw Error('Something went wrong, try again')
       const res = await response.json()
       setMsg(res.msg)
+      if(operation === 'add' && res.status === 201 ) modulesDispatch({ type: ACTIONS.MODULE.START_NEW_MODULE, emptyModule })
+      console.log(res)
+      if(res.failed && res.failed.length > 0) modulesDispatch({ type: ACTIONS.MODULE.FETCH_ERRORS, modules: res.failed })
       setRefreshCourses
     } 
       catch (err) {
@@ -234,7 +262,7 @@ function ModuleStructure({ currentModule, operation }){
     } 
       finally{
         setIsPendingLoading(false)
-        if(operation === 'add') modulesDispatch({ type: 'reset', currentModule })
+        
       }
   }
  
@@ -244,26 +272,29 @@ function ModuleStructure({ currentModule, operation }){
         modules && modules.map((module, index) => {
           return (
           <div className='p2 grid pt-10 relative *:not-first:hidden' key={ index }>
-            <span className="flex items-center relative justify-between py-1 px-2 bg-gray-950 text-white text-xl rounded hover:bg-gray-800 before:content-[''] before:absolute before:inset-0 before:z-1" onClick={ e => toggleModuleList(e) }>
+            <span className="flex items-center relative justify-between py-1 px-2 bg-gray-950 text-white text-2xl rounded hover:bg-gray-800 before:content-[''] before:absolute before:inset-0 before:z-1" onClick={ e => toggleModuleList(e) }>
               <span>
               Module: { index + 1 }
               </span>
               <ChevronDown className='w-8 h-8' />
             </span>
-            <ModuleList position='courseCode' title='Course code' index={ index } module={ module } modulesDispatch={ modulesDispatch } />
-            <ModuleList position='title' title='Title' modulesDispatch={ modulesDispatch } module={ module } index={ index }  />
-            <ModuleList position='outline' title='outline' modulesDispatch={ modulesDispatch } module={ module } index={ index }  />
-            <ModuleList position='link' title='Video link' modulesDispatch={ modulesDispatch } module={ module } index={ index }  />
-            <ModuleSublist position='topics' module={ module } modulesDispatch={ modulesDispatch } index={ index } /> 
-            <ModuleSublist position='notes' module={ module } modulesDispatch={ modulesDispatch } index={ index } /> 
-            <ModuleSublist position='objectives' module={ module } modulesDispatch={ modulesDispatch } index={ index } />
+            {
+              module.error && <span className="text-red-500 font-bold text-2xl uppercase flex items-center gap-1"> <Info /> { module.error } </span>
+            }
+            <ModuleList position='courseCode' title='Course code' { ...{ index, operation, module, modulesDispatch } } />
+            <ModuleList position='title' title='Title'  { ...{ index, operation, module, modulesDispatch } }  />
+            <ModuleList position='outline' title='outline'  { ...{ index, operation, module, modulesDispatch } }  />
+            <ModuleList position='link' title='Video link'  { ...{ index, operation, module, modulesDispatch } }  />
+            <ModuleSublist position='topics' { ...{ index, operation, module, modulesDispatch } } /> 
+            <ModuleSublist position='notes' { ...{ index, operation, module, modulesDispatch } } /> 
+            <ModuleSublist position='objectives' { ...{ index, operation, module, modulesDispatch } } />
           </div>
           )
         })
       }
       <hr />
       <span className='font-semibold text-xl'>Add new module</span>
-      <AddMoreField dispatch={ modulesDispatch } reverse type='addEmptyModule' emptyModule={ emptyModule } />
+      <AddMoreField dispatch={ modulesDispatch } reverse type={ ACTIONS.MODULE.ADD_NEW_MODULE } emptyModule={ emptyModule } />
       <button className={ submitButtonClasses }> Apply Changes </button>
     </form>
   )
@@ -609,7 +640,7 @@ function ModuleList({ module, position, title, modulesDispatch, index }){
     <label className={ labelClasses }>
     <span> { title } </span>
     <textarea className={ inputClasses } value={ module[position] }
-      onChange={ e =>  modulesDispatch({ type: 'mainListInput', index, position, value: e.target.value  }) }  ></textarea>
+      onChange={ e =>  modulesDispatch({ type: ACTIONS.MODULE.FILL_MAIN_INPUT, index, position, value: e.target.value  }) }  ></textarea>
     </label>
   )
 }
@@ -624,12 +655,12 @@ function ModuleSublist({module, position, index, modulesDispatch }){
         return (
             <label key={ arrIndex }>
               <textarea className={ inputClasses } value={ arr }
-                onChange={ e => modulesDispatch({ type: 'sublistInput', index, position, arrIndex, value: e.target.value  }) }  ></textarea>
+                onChange={ e => modulesDispatch({ type: ACTIONS.MODULE.FILL_SUB_INPUT, index, position, arrIndex, value: e.target.value  }) }  ></textarea>
             </label>
         )
       })
     }
-    <AddMoreField dispatch={ modulesDispatch } index={ index } type='addMore' position={ position } />
+    <AddMoreField dispatch={ modulesDispatch } index={ index } type={ ACTIONS.MODULE.ADD_INPUT } position={ position } />
   </div>
   )
 }
