@@ -1,6 +1,7 @@
 import { useContext, useEffect, useReducer, useState } from "react";
 import { createContext } from "react";
 import Courses from "../../Sections/CoursesSection/Courses";
+import Certificates from "../../Sections/certificateSection/certificates";
 
 function navReducer(state, action){
   switch(action.type){
@@ -19,7 +20,7 @@ export function NavigationProvider({ children }){
   const NavItems = [
     { title: 'Courses', section: <Courses /> },
     { title: 'Registration Center', section: <div></div> },
-    { title: 'Certificates', section: <div></div> },
+    { title: 'Certificates', section: <Certificates /> },
     { title: 'Partners', section: <div></div> },
     { title: 'Students', section: <div></div> },
   ]
