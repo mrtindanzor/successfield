@@ -13,7 +13,7 @@ import { useMemo } from 'react';
 //tailwind classes for courses components
 const formClasses = 'grid z-0 gap-5 relative bg-gray-200 my-10  px-2 sm:px-5 md:10 rounded-lg py-10 *:grid *:gap-3 *:p-2 *:w-[calc(100%-10px)] md:*:w-[calc(100%-20px)] mx-auto *:rounded *:*:first:font-bold *:*:text-lg'
 const inputClasses = 'py-2 px-3 border-2 border-gray-600 rounded-lg block w-full'
-const subInputsClasses = "grid gap-5"
+const courseInputTitleClasses = "uppercase text-xl after:content-[':']"
 const appendButtonClasses = "!w-fit px-4 py-2 text-3xl cursor-pointer text-white rounded bg-gray-950 ml-auto block"
 const courseContainerClasses = "grid gap-3 w-[100%-10px] mx-auto border-t-8 border-t-gray-700 pt-5 *:first:font-bold *:first:text-3xl mt-5 mb-3"
 const courseSelectorClasses = 'p-2 cursor-pointer hover:bg-gray-300 rounded font-semibold text-lg border-1 border-gray-900 '
@@ -21,6 +21,7 @@ const coursesDropdownClasses = 'bg-gray-100 *:p-2 *:border-b-1 *:border-b-gray-5
 const submitButtonClasses = "w-[90%] !max-w-[200px] font-bold text-2xl h-fit block px-4 py-2 bg-gray-900 ml-auto cursor-pointer mt-5 hover:bg-gray-500 text-white rounded"
 const labelClasses = "grid gap-2 *:first:uppercase *:first:font-bold"
 const courseOperations = "*:w-[calc(100%-10px)] sm:*:w-[calc(100%-30px)] *:mx-auto :*max-w-[750px]"
+
 
 const ACTIONS = {
   MODULE: { 
@@ -31,6 +32,13 @@ const ACTIONS = {
     RESET_ERRORS: 'reset_errors',
     START_NEW_MODULE: 'start_new_module',
     FETCH_ERRORS: 'fetch_errors'
+  },
+  COURSE: {
+    RESET_FORM: 'reset_form',
+    ADD_INPUT: 'add_input_field',
+    FILL_MAIN_INPUT: 'fill_input',
+    FILL_SUB_INPUT: 'fill_sub_input',
+    SET_PREVIOUS_COURSE_CODE: 'set_previous_course_code'
   }
 }
 
@@ -110,6 +118,45 @@ export default function Courses(){
       
     </div>
   )
+}
+
+function coursesReducer(state, action){
+
+  switch(action.type){
+
+    case ACTIONS.COURSE.FILL_MAIN_INPUT:
+      return {
+        ...state,
+        [action.position]: action.value
+      }
+
+    case ACTIONS.COURSE.FILL_SUB_INPUT:
+      return {
+        ...state,
+        [action.position]: state[action.position].map(( item, itemIndex ) => {
+          if(itemIndex !== action.index) return item
+          return action.value
+        })
+      }
+
+    case ACTIONS.COURSE.SET_PREVIOUS_COURSE_CODE:
+      return {
+        ...state,
+        previousCourseCode: action.value
+      }
+
+    case ACTIONS.COURSE.RESET_FORM:
+      return action.emptyCourse
+
+    case ACTIONS.COURSE.ADD_INPUT:
+      return {
+        ...state,
+        [action.position]: [ ...state[action.position], '' ]
+      }
+
+    default:
+      return state
+  }
 }
 
 function moduleReducer(state, action){
@@ -204,8 +251,13 @@ function fetchCurrentModule(courseCode, getCourse){
   return m
 }
 
-function AddMoreField({ position, type, index, dispatch, reverse, emptyModule  }){
-  return  <span onClick={ e => dispatch({ type, emptyModule, position, index }) } className={ reverse ? appendButtonClasses + ' !ml-[4px] !mr-auto' : appendButtonClasses }> + </span> 
+function AddMoreField({ position, type, index, dispatch, reverse, emptyModule, viewCourse  }){
+  
+  return  <span 
+    onClick={ e => {
+      e.preventDefault()
+      dispatch({ type, emptyModule, position, index })
+    } } className={ (reverse ? appendButtonClasses + ' !ml-[4px] !mr-auto' : appendButtonClasses) + ( viewCourse && ' hidden') }> + </span> 
 }
 
 function ModuleStructure({ currentModule, operation }){
@@ -305,47 +357,22 @@ function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, 
   const setMsg = useSetAlert()
   const { setRefreshCourses } = useCourses()
   const { setIsPendingLoading } = usePendingLoader()
-  const [ course, setCourse] = useState(currentCourse && currentCourse.course || '')
-  const [ courseCode, setCourseCode] = useState(currentCourse && currentCourse.courseCode || '')
-  const [ overview, setOverview] = useState(currentCourse && currentCourse.overview || '')
-  const [ fee, setFee] = useState(currentCourse && currentCourse.fee || '')
-  const [ certificate, setCertificate] = useState(currentCourse && currentCourse.certificate || '')
-  const [ availability, setAvailability] = useState(currentCourse && currentCourse.availability || '')
-  const [ duration, setDuration] = useState(currentCourse && currentCourse.duration || '')
-  const [ objectives, setObjectives] = useState(currentCourse && currentCourse.objectives || [])
-  const [ benefits, setBenefits] = useState(currentCourse && currentCourse.benefits || [])
-  const [ outlines, setOutlines] = useState(currentCourse && currentCourse.outlines || [])
-  const [ previousCourseCode, setPreviousCourseCode ] = useState('')
-  
-  function reset(){
-    setCourse('')
-    setCourseCode('')
-    setOverview('')
-    setFee('')
-    setCertificate('')
-    setAvailability('')
-    setDuration('')
-    setObjectives([])
-    setBenefits([])
-    setOutlines([])
-    setPreviousCourseCode ('')
-  }
+  const emptyCourse = useMemo(() => ({
+    course: '',
+    courseCode: '',
+    overview: '',
+    fee: '',
+    certificate: '',
+    availability: '',
+    duration: '',
+    objectives: [''],
+    benefits: [''],
+    outlines: [''],
+    previousCourseCode: ''
+  }), [])
 
+  const [ course, courseDispatch ] = useReducer(coursesReducer, currentCourse || emptyCourse)
   const uri = useServerUri() + 'courses'
-  const details = {
-                    course,
-                    courseCode,
-                    previousCourseCode,
-                    overview,
-                    fee,
-                    certificate,
-                    availability,
-                    duration,
-                    objectives,
-                    benefits,
-                    outlines,
-                    operation
-                  }
 
   async function handleCourseOperation(e){
     e.preventDefault()
@@ -355,7 +382,7 @@ function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, 
       const headers = new Headers()
       headers.append('Content-Type', 'application/json')
       const method = "PATCH"
-      const body = JSON.stringify(details)
+      const body = JSON.stringify(course)
       const options = { 
         headers,
         method,
@@ -368,7 +395,7 @@ function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, 
       if(res.status === 201){
         setRefreshCourses(true)
         if(operation === 'add'){
-          reset()
+          courseDispatch({ type: ACTIONS.COURSE.RESET_FORM, emptyCourse })
         }
           else {
             setCurrentCourse('')
@@ -385,170 +412,21 @@ function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, 
   }
                   
   useEffect(() => {
-    if(operation !== 'add') setPreviousCourseCode(currentCourse.courseCode)
+    if(operation !== 'add') courseDispatch({ type: ACTIONS.COURSE.SET_PREVIOUS_COURSE_CODE, value: currentCourse.courseCode })
   },[])
 
-  function appendInput(e, type, object){
-    e.preventDefault()
-    let item = ''
-
-    switch(object){
-      case 'objectives':
-        setObjectives( prev => [...prev, item] )
-          break
-      
-      case 'outlines':
-        setOutlines( prev => [...prev, item] )
-          break
-
-      case 'benefits':
-        setBenefits( prev => [...prev, item] )
-          break
-    }
-
-  }
-
   return (
-    <form className={ formClasses } onSubmit={ e => handleCourseOperation(e) }>
-        <label data-value='course'>
-          <span>
-            Course name: 
-          </span>
-          {
-            viewCourse ? 
-            <textarea className={ inputClasses } disabled value={ course } ></textarea>
-            : <input className={ inputClasses } type="text" value={ course } onChange={ e => setCourse(e.target.value) } required  />
-          }
-        </label>
-
-        <label data-value='courseCode'>
-          <span>
-            Course code: 
-          </span>
-          <input className={ inputClasses } disabled={ viewCourse } type="text" value={ courseCode } onChange={ e => setCourseCode(e.target.value) } required  />
-        </label>
-
-        <label data-value='overview'>
-          <span>
-            Course overview: 
-          </span>
-          <textarea className={ inputClasses } disabled={ viewCourse }  value={ overview } onChange={ e => setOverview(e.target.value) }></textarea>
-        </label>
-
-        <label data-value='fee'>
-          <span>
-            Course fee: 
-          </span>
-          {
-            viewCourse ? 
-            <textarea className={ inputClasses } disabled value={ fee } ></textarea>
-            : <input className={ inputClasses } type="text" value={ fee } onChange={ e => setFee(e.target.value) } required  />
-          }
-        </label>
-
-        <label data-value='certificate'>
-          <span>
-            Certification: 
-          </span>
-          {
-            viewCourse ? 
-            <textarea className={ inputClasses } disabled value={ certificate } ></textarea>
-            : <input className={ inputClasses } type="text" value={ certificate } onChange={ e => setCertificate(e.target.value) } required  />
-          }
-        </label>
-
-        <label data-value='availability'>
-          <span>
-            Availability: 
-          </span>
-          {
-            viewCourse ? 
-            <textarea className={ inputClasses } disabled value={ availability } ></textarea>
-            : <input className={ inputClasses } type="text" value={ availability } onChange={ e => setAvailability(e.target.value) } required  />
-          }
-        </label>
-
-        <label data-value='duration'>
-          <span>
-            Duration: 
-          </span>
-          {
-            viewCourse ? 
-            <textarea className={ inputClasses } disabled value={ course } ></textarea>
-            : <input className={ inputClasses } type="text" value={ duration } onChange={ e => setDuration(e.target.value) } required  />
-          }
-        </label>
-
-        <label data-value='objectives'>
-          <span>
-            Objectives:
-          </span>
-          <div className={ subInputsClasses } >
-            {
-              objectives.map((objective, index) => {
-                const uKey = index
-                if(viewCourse) return <textarea className={ inputClasses } disabled key={ uKey } value={ objective } onChange={ 
-                  (e) => { 
-                    e.preventDefault()
-                    setObjectives( prev => prev.map((objective, i) => index === i ? e.target.value : objective ) ) }
-                } ></textarea>
-                return <input className={ inputClasses } type="text" key={ uKey } value={ objective } onChange={ 
-                  (e) => { 
-                    e.preventDefault()
-                    setObjectives( prev => prev.map((objective, i) => index === i ? e.target.value : objective ) ) }
-                } />
-              })
-            }
-            { !viewCourse && <AddMoreField setter={ setObjectives } type='array' /> }
-          </div>
-        </label>
-
-        <label data-value='outlines'>
-          <span>
-            Outlines:
-          </span>
-          <div className={ subInputsClasses } >
-            {
-              outlines.map((outline, index) => {
-                const uKey = index
-                if(viewCourse) return <textarea className={ inputClasses } disabled key={ uKey } value={ outline } onChange={ 
-                  (e) => { 
-                    e.preventDefault()
-                    setOutlines( prev => prev.map((outline, i) => index === i ? e.target.value : outline ) ) }
-                } ></textarea>
-                return <input className={ inputClasses } type="text" key={ uKey } value={ outline } onChange={ 
-                  (e) => { 
-                    e.preventDefault()
-                    setOutlines( prev => prev.map((outline, i) => index === i ? e.target.value : outline ) ) }
-                }  />
-              })
-            }
-            { !viewCourse && <AddMoreField setter={ setOutlines } type='array' /> }
-          </div>
-        </label>
-
-        <label data-value='benefits'>
-          <span>
-            Benefits:
-          </span>
-          <div className={ subInputsClasses } >
-            {
-              benefits.map((benefit, index) => {
-                const uKey = index
-                if(viewCourse) return <textarea className={ inputClasses } disabled key={ uKey } value={ benefit } onChange={ 
-                  (e) => { 
-                    e.preventDefault()
-                    setBenefits( prev => prev.map((benefit, i) => index === i ? e.target.value : benefit ) ) } } ></textarea>
-                return <input className={ inputClasses } type="text" key={ uKey } value={ benefit } onChange={ 
-                  (e) => { 
-                    e.preventDefault()
-                    setBenefits( prev => prev.map((benefit, i) => index === i ? e.target.value : benefit ) ) }
-                } />
-              })
-            }
-            { !viewCourse && <AddMoreField setter={ setBenefits } type='array' /> }
-          </div>
-        </label>
+    <form className={ formClasses } onSubmit={ handleCourseOperation }>
+        <CourseList { ...{ title: 'course name', viewCourse, value: course.course, courseDispatch, position: 'course' } } />
+        <CourseList { ...{ title: 'course code', viewCourse, value: course.courseCode, courseDispatch, position: 'courseCode' } } />
+        <CourseList { ...{ title: 'course overview', viewCourse, value: course.overview, courseDispatch, position: 'overview' } } />
+        <CourseList { ...{ title: 'course fee', viewCourse, value: course.fee, courseDispatch, position: 'fee' } } />
+        <CourseList { ...{ title: 'certification', viewCourse, value: course.courseCode, courseDispatch, position: 'certificate' } } />
+        <CourseList { ...{ title: 'course availability', viewCourse, value: course.availability, courseDispatch, position: 'availability' } } />
+        <CourseList { ...{ title: 'course duration', viewCourse, value: course.duration, courseDispatch, position: 'duration' } } />
+        <CourseSubList { ...{  course, title: 'objectives', viewCourse, courseDispatch, position: 'objectives' } } />
+        <CourseSubList { ...{  course, title: 'outlines', viewCourse, courseDispatch, position: 'outlines' } } />
+        <CourseSubList { ...{  course, title: 'benefits', viewCourse, courseDispatch, position: 'benefits' } } />
 
         { !viewCourse && <button className={ submitButtonClasses }> { currentCourse ? 'Edit course' : 'Add course' }  </button> }
       </form>
@@ -701,5 +579,30 @@ function CourseSeletor({ selectedCourse, setSelectedCourse, setTrack }){
         </div>
         }
       </ul>
+  )
+}
+
+function CourseList({ title, viewCourse, value, courseDispatch, position }){
+
+  return(
+    <label>
+      <span className={ courseInputTitleClasses }> { title } </span>
+      <input className={ inputClasses } disabled={ viewCourse } type="text" value={ value } onChange={ e => courseDispatch({ type: ACTIONS.COURSE.FILL_MAIN_INPUT, position, value: e.target.value }) }  />
+    </label>
+  )
+}
+
+function CourseSubList({  course, title, viewCourse, courseDispatch, position }){
+
+  return(
+    <label>
+      <span className={ courseInputTitleClasses }> { title } </span>
+      {
+        course[position].length > 0 && course[position].map((currentItem, index) => {
+          return <textarea className={ inputClasses } disabled={ viewCourse } value={ currentItem } onChange={ e => courseDispatch({ type: ACTIONS.COURSE.FILL_SUB_INPUT, position, index, value: e.target.value }) }  ></textarea>
+        }) 
+      }
+      <AddMoreField { ...{ position, type: ACTIONS.COURSE.ADD_INPUT, dispatch: courseDispatch, viewCourse  } } />
+    </label>
   )
 }
