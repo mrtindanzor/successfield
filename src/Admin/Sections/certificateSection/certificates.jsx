@@ -2,21 +2,27 @@ import { useMemo, useReducer, useState } from "react"
 import useServerUri from "../../../Contexts/serverContexts/baseServer"
 import usePendingLoader from "../../../Contexts/PendingLoaderContext/PendingLoaderContext"
 import { useSetAlert } from "../../../Hooks/Alerter/Alerter"
+import { Info } from "lucide-react"
+import useCourses from "../../../Contexts/CourseContext/CoursesContext"
 
 
 const mainContainerClasses = "grid sm:grid-cols-[auto_1fr] pt-[10px]"
-const navigationClasses = 'grid px-2 py-3 *:bg-gray-950 *:text-white'
-const certificateFormClasses = 'grid p-2 w-full'
-const textFielClasses = ''
-const searchCertificateClasses = ''
-const submitButtonClasses = ''
-const addNewButtonClasses = ''
-const currentTabClasses = ''
+const navigationClasses = 'grid gap-3 px-2 py-3 *:bg-gray-800 *:hover:bg-gray-950 *:font-bold *:cursor-pointer *:text-white h-fit *:px-4 *:py-2 *:rounded '
+const certificateFormClasses = 'grid px-2 py-3 w-[calc(100%-10px)] mx-auto gap-5 sm:max-w-[750px] bg-gray-100 rounded'
+const textFieldClasses = 'grid gap-2 w-full *:block *:first:font-bold *:first:uppercase *:first:text-xl *:first:after:content-[":"] *:last:border-2 *:last:border-gray-500 *:last:p-2 *:last:rounded'
+const searchCertificateClasses = 'grid gap-5 w-full max-w-[750px] mx-auto px-2 py-5 bg-gray-100 *:block *:!w-[calc(100%-10px)] *:first:uppercase *:first:font-bold *:first:text-xl *:last:uppercase'
+const searchInputClasses = 'border-3 border-gray-500 rounded py-2 px-4'
+const submitButtonClasses = 'block p-2 bg-gray-800 text-white rounded font-bold text-xl cursor-pointer hover:bg-gray-950'
+const addNewButtonClasses = 'px-4 py-2 cursor-pointer block bg-gray-600 w-fit rounded uppercase text-white font-bold'
+const currentTabClasses = 'w-[calc(100%-10px)] sm:w-[calc(100%-20px)] grid gap-2 pt-2'
+const errorsClasses = " flex gap-2 items-center uppercase text-lg text-red-500 font-bold"
+const courseCodeSelectorClasses = "*:first:uppercase *:first:font-bold *:first:text-white *:first:bg-gray-800 *:first:block *:first:p-2 *:first:rounded *:first:hover:bg-gray-950 *:first:cursor-pointer *:last:*:p-2  *:last:bg-white  *:last:p-2 *:last:*:border-b-1  *:last:*:capitalize  *:last:*:hover:bg-gray-200"
 
 const ACTIONS = {
   FILL_INPUT: 'fill_input',
   ADD_NEW_CERTIFICATE: 'add_new_certificate',
-  RESET_CERTIFICATES: 'reset_certificates'
+  RESET_CERTIFICATES: 'reset_certificates',
+  CHOOSE_COURSE_CODE: 'select_course_code'
 }
 
 function currentTabReducer(state, action){
@@ -25,13 +31,15 @@ function currentTabReducer(state, action){
 }
 
 function certificatesReducer(state, action){
+  
   switch(action.type){
     case ACTIONS.FILL_INPUT:
       return state.map((certificate, index) => {
         if(index !== action.index) return certificate
         return {
           ...certificate,
-          [action.position]: action.value
+          [action.position]: action.value,
+          reason: null
         }
       })
 
@@ -43,6 +51,15 @@ function certificatesReducer(state, action){
 
     case ACTIONS.FAILED_CERTIFICATES:
       return action.failed
+
+    case ACTIONS.CHOOSE_COURSE_CODE:
+      return state.map((certificate, index) => {
+        if(index !== action.index) return certificate
+        return {
+          ...certificate,
+          courseCode: action.courseCode
+        }
+      })
   }
 }
 
@@ -78,7 +95,7 @@ function AddCertificate(){
 }
 
 function EditCertificate(){
-  const [ currentCertificate, setCurrentCertificate ] = useState([])
+  const [ currentCertificate, setCurrentCertificate ] = useState()
   const [ studentNumber, setStudentNumber ] = useState(null)
   const serverUri = useServerUri()
   const { setIsPendingLoading } = usePendingLoader()
@@ -109,6 +126,7 @@ function EditCertificate(){
         break
         
         default:
+          setCurrentCertificate(null)
           setMsg(res.msg)
       }
     }
@@ -123,11 +141,9 @@ function EditCertificate(){
   return (
     <>
       <form className={ searchCertificateClasses } onSubmit={ findStudent }>
-        <label>
-          <span> Student number </span>
-          <input onChange={ e => setStudentNumber(e.target.value.trim().toLowerCase()) }  />
-          <button className={ submitButtonClasses } > find certificates </button>
-        </label>
+        <span> Student number </span>
+        <input className={ searchInputClasses } onChange={ e => setStudentNumber(e.target.value.trim().toLowerCase()) }  />
+        <button className={ submitButtonClasses } > find certificate </button>
       </form>
       {
         currentCertificate && <CertificateStructure {...{ currentCertificate, operation: 'edit' }} />
@@ -139,6 +155,7 @@ function EditCertificate(){
 function CertificateStructure({ currentCertificate, operation }){
   const serverUri = useServerUri()
   const setMsg = useSetAlert()
+  const { coursesList } = useCourses()
   const { setIsPendingLoading } = usePendingLoader()
   const emptyCertificate = useMemo(() => [
     {
@@ -167,10 +184,16 @@ function CertificateStructure({ currentCertificate, operation }){
     try{
       const response = await fetch(uri, options)
       if(!response.ok) throw Error('Something went wrong')
-      const res = await res.json()
+      const res = await response.json()
       setMsg(res.msg)
-      if(res.status !== 201){
-        certificatesDispatch({ type: ACTIONS.FAILED_CERTIFICATES, failed: res.failed })
+      
+      switch(res.status){
+        case 201:
+          certificatesDispatch({ type: ACTIONS.RESET_CERTIFICATES, emptyCertificate })
+        break
+
+        default:
+          certificatesDispatch({ type: ACTIONS.FAILED_CERTIFICATES, failed: res.failed })
       }
     }
       catch(err){
@@ -186,25 +209,58 @@ function CertificateStructure({ currentCertificate, operation }){
     <form className={ certificateFormClasses } onSubmit={ handleCertificateSubmit }>
       {
         certificates && certificates.map((certificate, index) =>{
+          const { certificateCode, courseCode, studentNumber, dateCompleted, reason } = certificate
           return(<>
-            <TextField { ...{ index, certificatesDispatch, postion: "courseCode", value: certificate.courseCode, title: 'Course code' } } />
-            <TextField { ...{ index, certificatesDispatch, postion: "studentNumber", value: certificate.studentNumber, title: 'Student number' } } />
-            <TextField { ...{ index, certificatesDispatch, postion: "dateCompleted", value: certificate.dateCompleted, title: 'Date of completion' } } />
+            {
+              reason && <div className={ errorsClasses }> <Info /> { reason } </div>
+            }
+            <TextField { ...{ value: courseCode, title: 'Course code' } } disabled />
+            <CourseCodeSelector  { ...{ certificatesDispatch, coursesList, index } } />
+            {
+              certificateCode && <TextField { ...{ index, certificatesDispatch, position: "certificateCode", value: certificateCode, title: 'Certicate ID' } } disabled />
+            }
+            <TextField { ...{ index, certificatesDispatch, position: "studentNumber", value: studentNumber, title: 'Student number' } } />
+            <TextField { ...{ index, certificatesDispatch, position: "dateCompleted", value: dateCompleted, title: 'Date of completion' } } />
+            <br />
+            <hr />
+            <br />
           </>)
         })
       }
-      <span className={ addNewButtonClasses } onClick={ () => certificatesDispatch({ type: ACTIONS.ADD_NEW_CERTIFICATE }) }> New </span>
+      {
+        operation !== 'edit' && <span className={ addNewButtonClasses } onClick={ () => certificatesDispatch({ type: ACTIONS.ADD_NEW_CERTIFICATE, emptyCertificate }) }> New </span>
+      }
       <button className={ submitButtonClasses } > Save </button>
     </form>
   )
 }
 
-function TextField({ title, position, certificatesDispatch, value, index }){
-
+function TextField({ title, position, disabled, certificatesDispatch, value, index }){
+  
   return (
-    <label>
-      <span className={ textFielClasses }> { title } </span>
-      <input value={ value } onChange={ () => certificatesDispatch({ type: ACTIONS.FILL_INPUT, position, index }) } />
+    <label className={ textFieldClasses }>
+      <span> { title } </span>
+      <input value={ value } disabled={ disabled } onChange={ e => certificatesDispatch({ type: ACTIONS.FILL_INPUT, position, index, value: e.target.value }) } />
+    </label>
+  )
+}
+
+function CourseCodeSelector({ certificatesDispatch, coursesList, index }){
+  const [ isVisible, setIsVisible ] = useState(false)
+
+  return(
+    <label className={ courseCodeSelectorClasses }>
+      <span onClick={ () => setIsVisible(v => !v) }> Select course code </span>
+      <ul className={ isVisible ? "grid"  : 'hidden' }>
+        {
+          coursesList && coursesList.map((course, courseIndex) => {
+            return <li key={ courseIndex } onClick={ () => {
+              setIsVisible(v => !v)
+              certificatesDispatch({ type: ACTIONS.CHOOSE_COURSE_CODE, index, courseCode: course.courseCode  })
+            } }> { course.course } </li>
+          })
+        }
+      </ul>
     </label>
   )
 }

@@ -17,6 +17,10 @@ export default function useCourse(){
     fetchCourses()
   },[])
 
+  useEffect(() => {
+    console.log(coursesList)
+  }, [coursesList])
+
   useEffect(() =>{
     if(refreshCourses){
       fetchCourses()
@@ -84,7 +88,7 @@ export default function useCourse(){
   function updateCoursesList(allCourses){
     const filtered = []
     allCourses.map((course) => {
-      filtered.push({ course: course.course})
+      filtered.push({ course: course.course, courseCode: course.courseCode})
     })
     setCoursesList([...filtered])
   }

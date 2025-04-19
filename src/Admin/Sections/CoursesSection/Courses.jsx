@@ -94,7 +94,7 @@ export default function Courses(){
   }, [currentSection])
    
   return (
-    <div className="grid gap-4 pt-8 sm:grid-cols-[auto_1fr] h-[calc(100vh-70px)] overflow-hidden *:last:!overflow-y-scroll"> 
+    <div className="grid gap-4 pt-8 sm:grid-cols-[auto_1fr] sm:h-[calc(100vh-70px)] sm:overflow-hidden *:last:!overflow-y-scroll"> 
       <ul className="grid !h-fit pl-2 gap-3 sm:w-fit min-w-[100px] pr-5">
         {
           sections.map((section, index) => {

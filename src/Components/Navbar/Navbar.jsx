@@ -16,19 +16,15 @@ export function mobileMenuToggle(option){
     case 'open':
         nav.classList.remove('translate-x-[-100%]')
         nav.classList.remove('md:hidden')
-        mobileNavToggleOpen.classList.add('hidden')
-        mobileNavToggleOpen.classList.remove('flex')
-        mobileNavToggleClose.classList.add('flex')
-        mobileNavToggleClose.classList.remove('hidden')
+        mobileNavToggleOpen.classList.add('!hidden')
+        mobileNavToggleClose.classList.remove('!hidden')
         body.classList.add('overflow-y-hidden')
         body.classList.add('md:overflow-y-scroll')
       break
 
     case 'hide-all':
-        mobileNavToggleOpen.classList.add('flex')
-        mobileNavToggleOpen.classList.remove('hidden')
-        mobileNavToggleClose.classList.add('hidden')
-        mobileNavToggleClose.classList.remove('flex')
+        mobileNavToggleOpen.classList.remove('!hidden')
+        mobileNavToggleClose.classList.add('!hidden')
         nav.classList.add('md:hidden')
         nav.classList.add('translate-x-[-100%]')
         navList.classList.add('translate-x-[-100%-10px]')
@@ -64,14 +60,15 @@ export function handleMenuHover(option = 'main'){
 }
 
 export function MenuButton(){
+  const toggleWrapperClasses="*:w-10 *:h-10 text-white flex *:p-1 cursor-pointer *:flex md:hidden *:items-center *:justify-center *:rounded"
+  const toggleOpenClasses = "mobile-open-btn bg-black"
+  const toggleCloseClasses="mobile-close-btn bg-red-600 !hidden"
 
   return (
     <>
-      <div className=" mobile-close-btn w-10 h-10 text-red-600 hidden md:hidden border-1 border-black items-center justify-center cursor-pointer " onClick={ () => mobileMenuToggle('hide-all') }>
-        <X />
-      </div>
-      <div className=" mobile-open-btn w-10 h-10 text-black md:hidden flex items-center cursor-pointer  " onClick={() => mobileMenuToggle('open')}>
-        <Menu />
+      <div className={ toggleWrapperClasses }>
+        <X  className={ toggleCloseClasses } onClick={ () => mobileMenuToggle('hide-all') }/>
+        <Menu  className={ toggleOpenClasses } onClick={() => mobileMenuToggle('open')}/>
       </div>
     </>
   )
