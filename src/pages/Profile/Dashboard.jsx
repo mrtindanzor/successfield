@@ -17,7 +17,7 @@ function AdminPanel(){
 
 export default function Dashboard(){
   const { currentUser, userFullName, userPhoto  } = useAuth()
-  const photoClasses = " h-20 w-20 object-cover object-center-top text-gray-700 border-2 rounded-full "
+  const photoClasses = " h-20 w-20 object-cover object-center-top text-white border-2 rounded-full "
 
   useEffect(() => {
     if(userFullName) document.title = capitalize('Dashboard - ' + userFullName )
@@ -27,13 +27,13 @@ export default function Dashboard(){
   
   return (
     <> 
-      <div className=" flex flex-col md:flex-row text-center md:text-left items-center gap-5 p-4 bg-green-300 ">
+      <div className=" flex flex-col md:flex-row text-center sticky top-[55px] border-b-1 border-b-white md:text-left items-center gap-5 p-4 bg-gray-800 ">
         {
           !userPhoto ? <User className={ photoClasses } /> : <img loading='lazy' src={ userPhoto } className={ photoClasses } />
         }
         <div className=' grid gap-3 '>
           <b className=' text-white texturina text-shadow-black-1 text-3xl '> { userFullName } </b>
-          <span className=" uppercase text-base font-bold "> <span>Student ID: </span>{ currentUser.studentNumber } </span>
+          <span className=" uppercase text-base text-gray-300 font-bold "> <span>Student ID: </span>{ currentUser.studentNumber } </span>
           { currentUser.admin && <AdminPanel />  }
         </div>
       </div>

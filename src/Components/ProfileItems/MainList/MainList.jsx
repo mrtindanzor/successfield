@@ -9,7 +9,7 @@ export default function MainList(){
     return setActiveMainList('')
   }
   
-  let classes ="bg-white md:bg-gray-100 mt-[1px] md:min-h-100 md:max-w-[fit-content]"
+  let classes ="bg-white md:bg-gray-800 mt-[1px] md:min-h-100 md:max-w-[fit-content]"
   if(activeMainList) classes += ' hidden md:block '
 
   return (
@@ -18,7 +18,7 @@ export default function MainList(){
       <ul className={ classes }>
       {
         mainListItems.map((item, index) => {
-          return <li key={ index } className={`flex gap-3 justify-between items-center hover:bg-green-600 cursor-pointer hover:text-white w-full  p-2 border-b-1 border-b-gray-300 md:border-b-white ${ index == activeMainList ? 'bg-green-300' : '' } `} onClick={ (e) => {
+          return <li key={ index } className={`flex gap-3 justify-between items-center hover:bg-gray-950 cursor-pointer md:text-white w-full  p-2 border-b-1 border-b-gray-300 md:border-b-white ${ index == activeMainList ? 'md:bg-gray-950' : '' } `} onClick={ (e) => {
             setActiveSubList('')
             setActiveMainList( String(index) ) 
           } }>
