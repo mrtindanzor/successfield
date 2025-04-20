@@ -80,7 +80,6 @@ export default function useAuthentication(){
     } = credentials
 
     if(contact !== '') return { msg: 'Unable to complete registration at this time', status: 403 }
-    console.log(credentials)
     if(!programme) return { msg: 'Select a programme', status: 403 }
     if(!educationLevel) return { msg: 'Select your highest level of education', status: 403 }
     if(!firstname) return { msg: 'Enter your first name', status: 403 }
@@ -106,6 +105,10 @@ export default function useAuthentication(){
     const uri = serverUri + 'users/register'
     const body = new FormData()
     for(const key in credentials){
+      if( key === 'address' ){
+        body.append(key, JSON.stringify(credentials[key]))
+        continue
+      }
       body.append(key, credentials[key])
     }
     const options = {

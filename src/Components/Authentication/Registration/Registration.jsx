@@ -55,7 +55,7 @@ export default function Registration(){
     birthDate: '2000-01-01',
     address: {
       country: '',
-      region: '',
+      state: '',
       city: '',
       address1: '',
       address2: ''
@@ -156,7 +156,7 @@ async function handleFormSubmission(e){
           <TextField { ...{ title: 'Passport photo', type: ACTIONS.FILL_MAIN_INPUT, readImage, file: true, position: 'userImage', dispatchUser } } />
           <TextField { ...{ title: 'id photo', type: ACTIONS.FILL_MAIN_INPUT, readImage, file: true, position: 'nationalId', dispatchUser } } />
           <TextField { ...{ title: 'country', type: ACTIONS.FILL_ADDRESS, value: user.address.country, position: 'country', dispatchUser } } />
-          <TextField { ...{ title: 'region / state', type: ACTIONS.FILL_ADDRESS, value: user.address.region, position: 'region', dispatchUser } } />
+          <TextField { ...{ title: 'region / state', type: ACTIONS.FILL_ADDRESS, value: user.address.state, position: 'state', dispatchUser } } />
           <TextField { ...{ title: 'city', type: ACTIONS.FILL_ADDRESS, value: user.address.city, position: 'city', dispatchUser } } />
           <TextField { ...{ title: 'address1', type: ACTIONS.FILL_ADDRESS, value: user.address.address1, position: 'address1', dispatchUser } } />
           <TextField { ...{ title: 'address2', type: ACTIONS.FILL_ADDRESS, value: user.address.address2, position: 'address2', dispatchUser } } />
