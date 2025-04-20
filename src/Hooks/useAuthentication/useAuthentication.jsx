@@ -60,7 +60,7 @@ export default function useAuthentication(){
 
 
 
-  async function registration(credentials, setSubmitted){
+  async function registration(credentials){
     let {
       programme,
       firstname,
@@ -79,28 +79,28 @@ export default function useAuthentication(){
       cpassword
     } = credentials
 
-    if(contact !== '') return { msg: 'Unable to complete registration at this time' }
+    if(contact !== '') return { msg: 'Unable to complete registration at this time', status: 403 }
     console.log(credentials)
-    if(!programme) return { msg: 'Select a programme' }
-    if(!educationLevel) return { msg: 'Select your highest level of education' }
-    if(!firstname) return { msg: 'Enter your first name' }
-    if(firstname.length < 3) return { msg: 'First name too short' }
-    if(!stringPattern.test(firstname)) return { msg: 'First name contains invalid characters' }
-    if(middlename && middlename.length < 2) return { msg: 'Middle name too short' }
-    if(middlename && !stringPattern.test(middlename)) return { msg: 'middle name contains invalid characters' }
-    if(!surname) return { msg: 'Enter your surname' }
-    if(surname.length < 3) return { msg: 'Surname too short' }
-    if(!stringPattern.test(surname)) return { msg: 'Surname contains invalid characters' }
-    if(!gender) return { msg: 'Select your gender' }
-    if(!address) return { msg: 'Fill your address' }
-    if(!nationalId) return { msg: 'Select an identification document' }
-    if(!userImage) return { msg: 'Add a passport photo' }
-    if(!phoneNumber) return { msg: 'Enter a valid phone number' }
-    if(!email) return { msg: 'Enter your email address' }
-    if(!emailPattern.test(email)) return { msg: 'Email address contains invalid characters' }
-    if(!password) return { msg: 'Enter a password' }
-    if(password.length < 8) return { msg: 'Password must not be less than 8 characters' }
-    if(password !== cpassword) return { msg: 'Passwords do not match' }
+    if(!programme) return { msg: 'Select a programme', status: 403 }
+    if(!educationLevel) return { msg: 'Select your highest level of education', status: 403 }
+    if(!firstname) return { msg: 'Enter your first name', status: 403 }
+    if(firstname.length < 3) return { msg: 'First name too short', status: 403 }
+    if(!stringPattern.test(firstname)) return { msg: 'First name contains invalid characters', status: 403 }
+    if(middlename && middlename.length < 2) return { msg: 'Middle name too short', status: 403 }
+    if(middlename && !stringPattern.test(middlename)) return { msg: 'middle name contains invalid characters', status: 403 }
+    if(!surname) return { msg: 'Enter your surname', status: 403 }
+    if(surname.length < 3) return { msg: 'Surname too short', status: 403 }
+    if(!stringPattern.test(surname)) return { msg: 'Surname contains invalid characters', status: 403 }
+    if(!gender) return { msg: 'Select your gender', status: 403 }
+    if(!address) return { msg: 'Fill your address', status: 403 }
+    if(!nationalId) return { msg: 'Select an identification document', status: 403 }
+    if(!userImage) return { msg: 'Add a passport photo', status: 403 }
+    if(!phoneNumber) return { msg: 'Enter a valid phone number', status: 403 }
+    if(!email) return { msg: 'Enter your email address', status: 403 }
+    if(!emailPattern.test(email)) return { msg: 'Email address contains invalid characters', status: 403 }
+    if(!password) return { msg: 'Enter a password', status: 403 }
+    if(password.length < 8) return { msg: 'Password must not be less than 8 characters', status: 403 }
+    if(password !== cpassword) return { msg: 'Passwords do not match', status: 403 }
 
 
     const uri = serverUri + 'users/register'
@@ -117,11 +117,10 @@ export default function useAuthentication(){
       const response = await fetch(uri, options)
       if(!response.ok) return { msg: 'An error occured'} 
       const res = await response.json()
-      setAlert(res.msg)
-      if(res.status !== 201) setSubmitted(false)
+      return res
     } 
       catch(err){
-        setAlert(err.message)
+        return { msg: err.message, status: 403 }
     }
 
   }

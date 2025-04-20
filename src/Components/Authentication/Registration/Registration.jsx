@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSetAlert } from "../../../Hooks/Alerter/Alerter";
 import useAuth from './../../../Contexts/AuthenticationContext/AuthenticationContext'
 import useCourses from './../../../Contexts/CourseContext/CoursesContext'
-import { capitalize } from "../../../core";
+import usePendingLoader from './../../../Contexts/PendingLoaderContext/PendingLoaderContext'
 import { Eye, EyeOff, ChevronDown } from "lucide-react";
 
 const ACTIONS = {
@@ -76,6 +76,7 @@ export default function Registration(){
   const setMsg = useSetAlert()
   const navigate = useNavigate()
   const { coursesList } = useCourses()
+  const { setIsPendingLoading } = usePendingLoader()
   const { registration } = useAuth()
   const educationLevels = useMemo(() => {
     const e = [
@@ -123,14 +124,12 @@ function readImage(e, setter){
 async function handleFormSubmission(e){
   e.preventDefault()
 
+  setIsPendingLoading(true)
   setSubmitted(true)
-  try{
-    const res = await handler(user, setSubmitted)
-    if(res && res.msg) setMsg(res.msg)
-    if(!res.status) setSubmitted(false)
-    } catch(err) {
-    setMsg(err.message)
-  }
+  const res = await handler(user)
+  setMsg(res.msg)
+  if(res.status !== 201) setSubmitted(false)
+  if(res) setIsPendingLoading(false)
 }
 
   return (
