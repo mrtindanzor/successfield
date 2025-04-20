@@ -60,16 +60,17 @@ export default function useAuthentication(){
 
 
 
-  async function registration(credentials, navigate){
+  async function registration(credentials, setSubmitted){
     let {
       programme,
       firstname,
       middlename,
       surname,
       birthDate,
+      gender,
       address,
-      idDocument,
-      passportPhoto,
+      nationalId,
+      userImage,
       phoneNumber,
       email,
       educationLevel,
@@ -80,18 +81,20 @@ export default function useAuthentication(){
 
     if(contact !== '') return { msg: 'Unable to complete registration at this time' }
     console.log(credentials)
-    if(!programme || programme.trim().toLowerCase() === 'select a programme') return { msg: 'Select a programme' }
-    if(!firstname) return { msg: 'Enter your firstname' }
-    if(firstname.length < 3) return { msg: 'Firstname too short' }
-    if(!stringPattern.test(firstname)) return { msg: 'Firstname contains invalid characters' }
-    if(middlename && middlename.length < 2) return { msg: 'Middlename too short' }
-    if(middlename && !stringPattern.test(middlename)) return { msg: 'middlename contains invalid characters' }
+    if(!programme) return { msg: 'Select a programme' }
+    if(!educationLevel) return { msg: 'Select your highest level of education' }
+    if(!firstname) return { msg: 'Enter your first name' }
+    if(firstname.length < 3) return { msg: 'First name too short' }
+    if(!stringPattern.test(firstname)) return { msg: 'First name contains invalid characters' }
+    if(middlename && middlename.length < 2) return { msg: 'Middle name too short' }
+    if(middlename && !stringPattern.test(middlename)) return { msg: 'middle name contains invalid characters' }
     if(!surname) return { msg: 'Enter your surname' }
     if(surname.length < 3) return { msg: 'Surname too short' }
     if(!stringPattern.test(surname)) return { msg: 'Surname contains invalid characters' }
+    if(!gender) return { msg: 'Select your gender' }
     if(!address) return { msg: 'Fill your address' }
-    if(!idDocument) return { msg: 'Select an identification document' }
-    if(!passportPhoto) return { msg: 'Add a passport photo' }
+    if(!nationalId) return { msg: 'Select an identification document' }
+    if(!userImage) return { msg: 'Add a passport photo' }
     if(!phoneNumber) return { msg: 'Enter a valid phone number' }
     if(!email) return { msg: 'Enter your email address' }
     if(!emailPattern.test(email)) return { msg: 'Email address contains invalid characters' }
@@ -101,19 +104,24 @@ export default function useAuthentication(){
 
 
     const uri = serverUri + 'users/register'
-    const body = JSON.stringify(credentials)
-    const options = { method: 'PUT', headers, body }
+    const body = new FormData()
+    for(const key in credentials){
+      body.append(key, credentials[key])
+    }
+    const options = {
+      method: 'PUT',
+      body
+    }
 
     try{
       const response = await fetch(uri, options)
       if(!response.ok) return { msg: 'An error occured'} 
       const res = await response.json()
       setAlert(res.msg)
-      return
-      if(res.status === 201) setTimeout(() => navigate('/users/students-area'), 5000)
+      if(res.status !== 201) setSubmitted(false)
     } 
       catch(err){
-        setAlert(err.msg)
+        setAlert(err.message)
     }
 
   }

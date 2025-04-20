@@ -1,14 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
 import useServerUri from "../../Contexts/serverContexts/baseServer";
 import { jwtDecode } from 'jwt-decode'
 
+const ACTIONS = {
+  ADD_COURSES: 'fetch_courses'
+}
+
+function coursesReducer(state, action){
+  
+  switch (action.type) {
+    case ACTIONS.ADD_COURSES:
+      return action.courses
+  
+    default:
+      return state
+  }
+}
+
 export default function useCourse(){
-  const [Courses, setCourses] = useState([])
+  const [ COURSES, coursesDispatch ] = useReducer(coursesReducer, {})
   const [coursesList, setCoursesList] = useState([])
-  const [ modules, setModules ] = useState([])
-  const [ benefits, setBenefits ] = useState([])
-  const [ objecives, setObjecives ] = useState([])
-  const [ outlines, setOutlines ] = useState([])
   const [ refreshCourses, setRefreshCourses ] = useState(false)
   
   const serverUri = useServerUri()
@@ -16,10 +27,6 @@ export default function useCourse(){
   useEffect(() => {
     fetchCourses()
   },[])
-
-  useEffect(() => {
-    console.log(coursesList)
-  }, [coursesList])
 
   useEffect(() =>{
     if(refreshCourses){
@@ -30,58 +37,46 @@ export default function useCourse(){
     }
   }, [refreshCourses])
 
-
   async function fetchCourses(){
     const uri = serverUri + 'courses'
     const headers = new Headers()
     headers.append('Content-Type', 'application/json')
     const method = 'POST'
     const response = await fetch(uri, { method, headers})
-    if(!response.ok) return setCourses([])
+    if(!response.ok) return coursesDispatch({ type: 'failed' })
     const res = await response.json()
     let c = [jwtDecode(res.mix)]
     const courses = c[0].courses
-    const m = c[0].modules
-    const b = c[0].benefits
-    const out = c[0].outlines
-    const obj = c[0].objectives
+    coursesDispatch({ type: ACTIONS.ADD_COURSES, courses: c[0] })
     updateCoursesList(courses)
-    setModules(m)
-    setBenefits(b)
-    setOutlines(out)
-    setObjecives(obj)
-    return setCourses(courses)
   }
 
   function getCourse(searchCourse, place){
+    
     let data = ''
     switch(place){
       case 'course':
-        data = Courses.find(course => course.course === searchCourse)
+        data = COURSES.courses.find(course => course.course === searchCourse)
         break
 
       case 'modules':
-        data = modules.filter(module => module.courseCode === searchCourse)
+        
+        data = COURSES.modules.filter(module => module.courseCode === searchCourse)
         break
 
       case "benefits":
-        data = benefits.find(benefit => benefit.courseCode === searchCourse)
-        data = data.benefits
-        data = [ ...Object.values(data) ]
+        data = COURSES.benefits.find(benefit => benefit.courseCode === searchCourse).benefits
         break
         
       case "outlines":
-        data = outlines.find(outline => outline.courseCode === searchCourse)
-        data = data.outlines
-        data = [ ...Object.values(data) ]        
+        data = COURSES.outlines.find(outline => outline.courseCode === searchCourse).outlines   
           break
           
-        case "objectives":
-          data = objecives.find(objective => objective.courseCode === searchCourse)
-          data = data.objectives
-          data = [ ...Object.values(data) ]
-            break
+      case "objectives":
+        data = COURSES.objectives.find(objective => objective.courseCode === searchCourse).objectives
+          break
     }
+    
     return data
   }
 

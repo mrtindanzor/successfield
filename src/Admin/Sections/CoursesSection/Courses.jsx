@@ -3,7 +3,6 @@ import { useEffect, useReducer, useState } from 'react';
 
 // OTHERS //
 import useCourses from './../../../Contexts/CourseContext/CoursesContext';
-import { toggleList } from './../../../Components/Authentication/Registration/Registration'
 import { useSetAlert } from '../../../Hooks/Alerter/Alerter';
 import usePendingLoader from '../../../Contexts/PendingLoaderContext/PendingLoaderContext';
 import useServerUri from '../../../Contexts/serverContexts/baseServer';
