@@ -3,7 +3,6 @@ import { useSetAlert } from "../Alerter/Alerter";
 import useServerUri from "../../Contexts/serverContexts/baseServer";
 import { jwtDecode } from 'jwt-decode'
 import { capitalize } from "../../core";
-import { redirect } from "react-router-dom";
 
 export default function useAuthentication(){
   const setAlert = useSetAlert()
@@ -12,6 +11,7 @@ export default function useAuthentication(){
   const [ isLoggedIn, setIsLoggedIn ] = useState(false)
   const [ token, setToken ] = useState(null)
   const [ currentUser, setCurrentUser ] = useState(null)
+  const [ certificates, setCertificates ] = useState(null)
   const [ userPhoto, setUserPhoto ] = useState(null)
   const [ userFullName, setUserFullName ] = useState(null)
   const [ initialFetch, setInitialFetch ] = useState(true)
@@ -22,23 +22,26 @@ export default function useAuthentication(){
   const headers = useMemo(() => {
     const h = new Headers()
     h.append('Content-Type', 'application/json')
+    if(token) h.append('Authorization', `Bearer ${token}`)
     return h
-  },[])
+  },[token])
 
   const autoFetchToken = () => {
     autoFetchTokenRef.current = setInterval(refreshToken, 14 * 60 * 1000)
     fetchesRef.current = 1
   }
   
-  useEffect(() => { 
-       isLoggedIn && (fetch(serverUri + 'users/user', { headers, method: 'POST', body: JSON.stringify({ email: currentUser.email }) }) 
-        .then( response => response.json() )
-        .then(data => setUserPhoto(data.pic))
-        .catch(err => null))
+  useEffect(() => {
+    isLoggedIn && (fetch(serverUri + 'users/user', { headers, method: 'POST', body: JSON.stringify({ email: currentUser.email }) }) 
+    .then( response => response.json() )
+    .then(data => setUserPhoto(data.pic))
+    .catch(err => null))
   }, [isLoggedIn])
 
   useEffect(() => {
     currentUser && setUserFullName(capitalize(currentUser.firstname + (currentUser.middlename && ' ' + currentUser.middlename ) + ' ' + currentUser.surname) )
+
+    if(currentUser) getCertificates()
   }, [currentUser])
 
   useEffect(() => {
@@ -57,8 +60,6 @@ export default function useAuthentication(){
       }
     }
   },[isLoggedIn])
-
-
 
   async function registration(credentials){
     let {
@@ -196,7 +197,40 @@ export default function useAuthentication(){
     
   }
 
-  return { isLoggedIn, initialFetch, registration, login, logout, setToken, currentUser, setCurrentUser, userFullName
-    , userPhoto }
+  async function getCertificates(){
+    const uri = serverUri + 'certificate'
+    const method = 'PATCH'
+    const body = JSON.stringify({ studentNumber: currentUser.studentNumber, operation: 'findCertificate' })
+    
+    const options = {
+      method, 
+      headers,
+      body
+    }
+
+    try {
+      const response = await fetch(uri, options)
+      if(!response) setCertificates(null)
+      const res = await response.json()
+      if(res.findCertificates.length > 0) return setCertificates(res.findCertificates)
+      setCertificates(null)
+    } catch (err) {
+      setCertificates(null)
+    }
+  }
+
+  return { 
+    isLoggedIn, 
+    initialFetch, 
+    registration, 
+    login, 
+    logout, 
+    setToken,
+    certificates,
+    currentUser, 
+    setCurrentUser, 
+    userFullName,
+    token, 
+    userPhoto }
 }
 
