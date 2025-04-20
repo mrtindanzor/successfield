@@ -8,7 +8,8 @@ import { Eye, EyeOff, ChevronDown } from "lucide-react";
 
 const ACTIONS = {
   FILL_MAIN_INPUT: 'fill_main_input',
-  FILL_ADDRESS: 'fill_address'
+  FILL_ADDRESS: 'fill_address',
+  RESET_FORM: 'reset_form'
 }
 
 const formClasses = "w-94vw max-w-[95vw] md:max-w-[950px] mx-auto relative top-5 py-10 grid gap-10 *:not-first:bg-gray-200 *:not-first:py-5 *:not-first:px-3 *:not-first:rounded *:not-first:grid *:not-first:gap-7 rounded-xl *:not-first:not-last:w-full *:not-first:not-last:mx-auto"
@@ -38,6 +39,9 @@ function userReducer(state, action){
         ...state,
         address: { ...state.address, [action.position]: action.value }
       }
+
+    case ACTIONS.RESET_FORM:
+      return action.emptyUser
   
     default:
       return state
@@ -129,6 +133,13 @@ async function handleFormSubmission(e){
   const res = await handler(user)
   setMsg(res.msg)
   if(res.status !== 201) setSubmitted(false)
+  if(res.status === 201){
+    userDispatch({ type: ACTIONS.RESET_FORM, emptyUser })
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
   if(res) setIsPendingLoading(false)
 }
 
