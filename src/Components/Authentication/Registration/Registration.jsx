@@ -135,7 +135,7 @@ async function handleFormSubmission(e){
   setIsPendingLoading(false)
   if(res.status !== 201) setSubmitted(false)
   if(res.status === 201){
-    userDispatch({ type: ACTIONS.RESET_FORM, emptyUser })
+    dispatchUser({ type: ACTIONS.RESET_FORM, emptyUser })
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
