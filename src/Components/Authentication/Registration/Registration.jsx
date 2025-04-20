@@ -132,6 +132,7 @@ async function handleFormSubmission(e){
   setSubmitted(true)
   const res = await handler(user)
   setMsg(res.msg)
+  setIsPendingLoading(false)
   if(res.status !== 201) setSubmitted(false)
   if(res.status === 201){
     userDispatch({ type: ACTIONS.RESET_FORM, emptyUser })
@@ -140,7 +141,6 @@ async function handleFormSubmission(e){
       behavior: 'smooth'
     })
   }
-  if(res) setIsPendingLoading(false)
 }
 
   return (
