@@ -27,7 +27,7 @@ export default function Dashboard(){
   
   return (
     <> 
-      <div className=" flex flex-col md:flex-row text-center sticky top-[55px] border-b-1 border-b-white md:text-left items-center gap-5 p-4 bg-gray-800 ">
+      <div className=" flex flex-col md:flex-row text-center border-b-1 border-b-white md:text-left items-center gap-5 p-4 bg-gray-800 ">
         {
           !userPhoto ? <User className={ photoClasses } /> : <img loading='lazy' src={ userPhoto } className={ photoClasses } />
         }
