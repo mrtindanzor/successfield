@@ -102,7 +102,7 @@ export default function Course(){
           
             { currentCourse && 
               currentCourse.modules?.length > 0 ? 
-              <Link to={ '' + createHyphenUrl(currentCourse.modules.sort((x, y) => x.index - y.index)[0].title) } 
+              <Link to={ 'module' } 
               className=" px-6 py-2 rounded-tl-md rounded top-tr-md bg-green-600 hover:bg-green-700 text-white ml-3 mt-8 block w-fit "> Start Course </Link> : null }
 
           <hr />
