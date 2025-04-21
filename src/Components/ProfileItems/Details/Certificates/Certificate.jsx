@@ -2,7 +2,7 @@
 
 export default function Certificate({ certificate }) {
   return (
-    <div className="border-4 border-gray-950 rounded-lg p-8 bg-gray-100 shadow-2xl w-[95%] max-w-3xl mx-auto my-5 text-center space-y-6">
+    <div className="border-4 border-gray-950 dark:border-gray-400 rounded-lg p-8 dark:bg-gray-900 bg-gray-100 shadow-2xl w-[95%] max-w-3xl mx-auto my-5 text-center space-y-6">
   <h1 className="text-4xl font-extrabold text-gray-800 dark:text-white uppercase">
     Certificate of Achievement
   </h1>
