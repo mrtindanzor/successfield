@@ -1,0 +1,12 @@
+.container h2{
+  font-size: xx-large;
+  font-weight: bolder;
+  text-decoration: underline;
+  text-underline-offset: 10px;
+  margin-bottom: 10px;
+}
+
+.container h3{
+  font-size: larger;
+  font-weight: bold;
+}

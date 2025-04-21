@@ -23,6 +23,10 @@ export function formatUrl(url){
   return newUrl
 }
 
+export function createHyphenUrl(url){
+  return url.toLowerCase().trim().split(' ').join('-')
+}
+
 export function getBaseUrl(url){
   let splitUrl = url.split('/').splice(0,3)
   return splitUrl.join('/')

@@ -88,5 +88,10 @@ export default function useCourse(){
     setCoursesList([...filtered])
   }
 
-  return  { coursesList, getCourse, setRefreshCourses }
+  function getModule(courseCode, title){
+    let module = COURSES.modules.find(module => module.courseCode === courseCode && module.title === title)
+    return module
+  }
+
+  return  { coursesList, getCourse, getModule, setRefreshCourses }
 }
