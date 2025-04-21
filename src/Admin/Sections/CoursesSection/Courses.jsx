@@ -195,7 +195,7 @@ function moduleReducer(state, action){
       return state.map(module => {
         return {
           ...module,
-          error: ''
+          reason: ''
         }
       })
 
@@ -331,7 +331,7 @@ function ModuleStructure({ currentModule, operation }){
               <ChevronDown className='w-8 h-8' />
             </span>
             {
-              module.error && <span className="text-red-500 font-bold text-2xl uppercase flex items-center gap-1"> <Info /> { module.error } </span>
+              module.reason && <span className="text-red-500 font-bold text-2xl uppercase flex items-center gap-1"> <Info /> { module.reason } </span>
             }
             <ModuleList position='courseCode' title='Course code' { ...{ index, operation, module, modulesDispatch } } />
             <ModuleList position='title' title='Title'  { ...{ index, operation, module, modulesDispatch } }  />
@@ -420,7 +420,7 @@ function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, 
         <CourseList { ...{ title: 'course code', viewCourse, value: course.courseCode, courseDispatch, position: 'courseCode' } } />
         <CourseList { ...{ title: 'course overview', viewCourse, value: course.overview, courseDispatch, position: 'overview' } } />
         <CourseList { ...{ title: 'course fee', viewCourse, value: course.fee, courseDispatch, position: 'fee' } } />
-        <CourseList { ...{ title: 'certification', viewCourse, value: course.courseCode, courseDispatch, position: 'certificate' } } />
+        <CourseList { ...{ title: 'certification', viewCourse, value: course.certificate, courseDispatch, position: 'certificate' } } />
         <CourseList { ...{ title: 'course availability', viewCourse, value: course.availability, courseDispatch, position: 'availability' } } />
         <CourseList { ...{ title: 'course duration', viewCourse, value: course.duration, courseDispatch, position: 'duration' } } />
         <CourseSubList { ...{  course, title: 'objectives', viewCourse, courseDispatch, position: 'objectives' } } />
