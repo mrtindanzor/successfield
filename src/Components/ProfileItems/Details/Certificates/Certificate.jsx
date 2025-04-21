@@ -2,14 +2,14 @@
 
 export default function Certificate({ certificate }) {
   return (
-    <div className="border-4 border-yellow-500 rounded-lg p-8 bg-gradient-to-br from-white to-gray-100 dark:from-gray-800 dark:to-gray-900 shadow-2xl w-[90%] max-w-3xl mx-auto my-5 text-center space-y-6">
+    <div className="border-4 border-gray-950 rounded-lg p-8 bg-gray-100 shadow-2xl w-[95%] max-w-3xl mx-auto my-5 text-center space-y-6">
   <h1 className="text-4xl font-extrabold text-gray-800 dark:text-white uppercase">
     Certificate of Achievement
   </h1>
 
   <p className="text-lg text-gray-700 dark:text-gray-300">This is proudly presented to</p>
 
-  <h2 className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{certificate.name}</h2>
+  <h2 className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 capitalize">{certificate.name}</h2>
 
   <p className="text-lg text-gray-700 dark:text-gray-300">
     for successfully completing the programme:
