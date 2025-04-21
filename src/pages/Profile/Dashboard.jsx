@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useReducer, useMemo, useState, useCallback } from 'react'
 import useAuth from '../../Contexts/AuthenticationContext/AuthenticationContext'
 import { capitalize } from '../../core'
 import MainList from '../../Components/ProfileItems/MainList/MainList'
@@ -6,7 +6,24 @@ import SubList from '../../Components/ProfileItems/SubList/SubList'
 import Details from '../../Components/ProfileItems/Details/Details'
 import { PendingLoading } from './../../Hooks/Loader/PendingLoader/PendingLoader'
 import { User } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
+import Name from "../../Components/ProfileItems/Details/Name/Name";
+import Email from "../../Components/ProfileItems/Details/Email/Email";
+import PhoneNumber from "../../Components/ProfileItems/Details/PhoneNumber/PhoneNumber";
+import ChangePassword from "../../Components/ProfileItems/Details/Password/ChangePassword/ChangePassword";
+import Certificate from "../../Components/ProfileItems/Details/Certificates/Certificate";
+
+const ACTIONS = {
+  SET_CURRENT_MAIN_LIST: 'set_current_main_list',
+  SET_CURRENT_SUB_LIST: 'set_current_sub_list',
+  SET_ACTIVE_DETAILS: 'set_active_details', 
+  BACK_TO_SUB_LIST: 'back_to_sub_list',
+  BACK_TO_MAIN_LIST: 'back_to_main_list',
+  BACK_TO_DASHBOARD: 'back_to_dashboard',
+  GET_MAIN_LIST: 'get_main_list',
+  GET_SUB_LIST: 'get_sub_list',
+  GET_DETAILS: 'get_details'
+}
 
 function AdminPanel(){
 
@@ -18,6 +35,81 @@ function AdminPanel(){
 export default function Dashboard(){
   const { currentUser, userFullName, userPhoto  } = useAuth()
   const photoClasses = " h-20 w-20 object-cover object-center-top text-white border-2 rounded-full "
+  const { certificates } = useAuth()
+  const mainListItems = useMemo(() => {
+    const m = [
+                {
+                  title: 'Account Information',
+                  list: [
+                          { subList: 'Name',
+                            section: <Name />
+                          },
+                          { subList: 'Email',
+                            section: <Email />
+                          },
+                          { subList: 'Phone number', 
+                            section: <PhoneNumber />
+                          },
+                          { subList: 'Change password',
+                            section: <ChangePassword />
+                          },
+                        ],
+                  },
+                  {
+                    title: 'My Certifcates',
+                    list: certificates?.length ? certificates.map((certificate) => {
+                      return {
+                        subList: certificate.programme,
+                        section: <Certificate key={ certificate._id } { ...{ certificate } } />
+                      }
+                    }) : [],
+                    message: !certificates ? 'You do not have any certificates' : null
+                  }
+              ]
+
+  return m
+  }, [certificates])
+  const [currentLocation, setCurrentLocation] = useSearchParams()
+  const dispatchNavigationManager = useCallback((action) => {
+    let m = String(currentLocation.get('m') ?? '')
+    let s = String(currentLocation.get('s') ?? '')
+    let d = String(currentLocation.get('d') ?? '')
+      switch (action.type) {
+        case ACTIONS.SET_CURRENT_MAIN_LIST:
+          setCurrentLocation({ m: action.index.toString() })
+        break
+      
+        case ACTIONS.SET_CURRENT_SUB_LIST:
+          setCurrentLocation({ m, s: action.index.toString() })
+        break;
+    
+        case ACTIONS.SET_ACTIVE_DETAILS: 
+        setCurrentLocation({ m, s, d: action.index.toString() })
+        break
+    
+        case ACTIONS.BACK_TO_SUB_LIST:
+          setCurrentLocation({ m, s })
+        break
+    
+        case ACTIONS.BACK_TO_MAIN_LIST:
+          setCurrentLocation({ m })
+        break
+    
+        case ACTIONS.BACK_TO_DASHBOARD:
+          setCurrentLocation({})
+        break
+
+        case ACTIONS.GET_MAIN_LIST:
+          return m
+
+        case ACTIONS.GET_SUB_LIST:
+          return s
+        
+        case ACTIONS.GET_DETAILS:
+          return d
+      }
+  }, [currentLocation])
+  const listProps = useMemo(() => ({ ACTIONS, currentLocation, dispatchNavigationManager, mainListItems }), [certificates, currentLocation])
 
   useEffect(() => {
     if(userFullName) document.title = capitalize('Dashboard - ' + userFullName )
@@ -38,9 +130,9 @@ export default function Dashboard(){
         </div>
       </div>
       <div className=" md:flex ">
-        <MainList />
-        <SubList />
-        <Details />
+        <MainList { ...{ ...listProps } } />
+        <SubList { ...{ ...listProps } } />
+        <Details { ...{ ...listProps } } />
       </div>
     </>
   )

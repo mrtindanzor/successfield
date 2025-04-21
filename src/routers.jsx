@@ -14,7 +14,6 @@ import Course from './pages/Courses/Course/Course';
 import Module from './pages/Courses/Module/Module';
 import Registration from "./Components/Authentication/Registration/Registration";
 import SignedIn from './Components/ProtectRoutes/SignedIn';
-import { ProfileListProvider } from './Contexts/ProfileContext/ListContext';
 import Dashboard from './pages/Profile/Dashboard';
 import NotFound from './pages/NotFound/NotFound';
 import Login from './Components/Authentication/Login/Login';
@@ -54,9 +53,7 @@ const router = createBrowserRouter(
                                                     </SignedIn> } />
                                               
         <Route path='dashboard/profile' element={ <NotAuthenticated> 
-                                                    <ProfileListProvider>
                                                       <Dashboard />
-                                                    </ProfileListProvider> 
                                                   </NotAuthenticated> } />
 
         <Route path='*' element={ <NotFound /> } />
