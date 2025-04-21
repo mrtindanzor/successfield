@@ -24,7 +24,7 @@ export default function Module(){
   const { getCourse, coursesList} = useCourses()
 
   const navigatePage = useCallback((action) => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'auto' })
     const modulesLength = modules.length - 1
     let currentIndex = Number(currentPage.get('m') ?? 0)
 
