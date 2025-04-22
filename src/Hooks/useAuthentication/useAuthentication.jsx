@@ -41,7 +41,8 @@ export default function useAuthentication(){
   useEffect(() => {
     currentUser && setUserFullName(capitalize(currentUser.firstname + (currentUser.middlename && ' ' + currentUser.middlename ) + ' ' + currentUser.surname) )
 
-    if(currentUser) getCertificates()
+    if(currentUser && !certificates) getCertificates()
+      console.log(currentUser)
   }, [currentUser])
 
   useEffect(() => {

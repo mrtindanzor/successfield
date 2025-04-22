@@ -18,26 +18,35 @@ export default function OnlyAuthorizedForModule({ children }) {
     }
     return c
   }, [course, coursesList])
-  const { checkIfStudentIsAuthorizedForCourse } = useAuth()
+  const { checkIfStudentIsAuthorizedForCourse, currentUser, setCurrentUser } = useAuth()
   const [ authorized, setAuthorized ] = useState(null)
   const setMsg = useSetAlert()
   const navigate = useNavigate()
 
   useEffect(() => {
     if(courseCode){
-      checkIfStudentIsAuthorizedForCourse(courseCode)
+      if(currentUser.courses?.includes(courseCode)) setAuthorized({ status: 200 })
+      
+      if(!currentUser.courses?.includes(courseCode)){
+        checkIfStudentIsAuthorizedForCourse(courseCode)
         .then( res => {
           if(res.status === 401){
             console.log(res)
             setMsg(res.msg || 'Error authorizing you try again later')
-            navigate('/users/students')
+            navigate('/users/students-area')
           }
-          if(res.status === 200) setAuthorized(res)
+          if(res.status === 200){
+            setAuthorized(res)
+            setCurrentUser( user => ({
+              ...user,
+              courses: [ ...(user.courses || []), courseCode]
+            }))
+          }
         } )
+      }
+      
     }
   }, [courseCode])
-
-  return <></>
   
   if(authorized && authorized.status === 200) return <> { children } </>
 
