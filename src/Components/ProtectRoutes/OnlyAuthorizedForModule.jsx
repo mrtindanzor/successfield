@@ -25,7 +25,7 @@ export default function OnlyAuthorizedForModule({ children }) {
 
   useEffect(() => {
     if(courseCode){
-      checkIfStudentIsAuthorizedForCourse()
+      checkIfStudentIsAuthorizedForCourse(courseCode)
         .then( res => {
           if(res.status === 401){
             console.log(res)
