@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import useCourses from "./../../Contexts/CourseContext/CoursesContext";
 import { capitalize } from "./../../core";
@@ -100,18 +100,18 @@ export default function Navbar(){
     {
       title: 'Verify Certificate'
     },
-    {
-      title: 'Accreditation'
-    },
-    {
-      title: 'Training Partners'
-    },
-    {
-      title: 'About us'
-    },
-    {
-      title: 'Contact us'
-    }
+    // {
+    //   title: 'Accreditation'
+    // },
+    // {
+    //   title: 'Training Partners'
+    // },
+    // {
+    //   title: 'About us'
+    // },
+    // {
+    //   title: 'Contact us'
+    // }
   ]
 
   useEffect(() => {
@@ -168,7 +168,8 @@ export default function Navbar(){
                                       { capitalize( list.course ) }
                                         </NavLink>
 
-                                        { listIndex === 3 && <Link key={ 'see more' + index } to="/courses" className=" hidden md:block p-2 border-b-1 border-b-gray-100 hover:bg-green-400 hover:text-white w-[100%] "> View all courses </Link> }
+                                        { listIndex === 3 && <Link key={ 'see more' + index } to="/courses" className=" hidden md:block p-2 border-b-1 border-b-gray-100 hover:bg-green-400 hover:text-white w-[100%] " 
+                                         onClick={ () =>  mobileMenuToggle('hide-all') }> View all courses </Link> }
                                       </>
                                     )
                                   })

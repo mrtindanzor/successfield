@@ -219,8 +219,23 @@ export default function useAuthentication(){
     }
   }
 
+  async function checkIfStudentIsAuthorizedForCourse(code){
+    try {
+      let courseCode = code.toLowerCase().trim()
+      const uri = serverUri + 'users/module'
+      const body = JSON.stringify({ courseCode })
+      const response = await fetch(uri, { headers, method: 'POST', body })
+      if(!response) throw Error('Error authorizing you, try again in a moment')
+      const res = await response.json()
+      return res
+    } catch (err) {
+      return ({ msg: err.message, status: 401 })
+    }
+  }
+
   return { 
     isLoggedIn, 
+    checkIfStudentIsAuthorizedForCourse,
     initialFetch, 
     registration, 
     login, 

@@ -17,6 +17,7 @@ import SignedIn from './Components/ProtectRoutes/SignedIn';
 import Dashboard from './pages/Profile/Dashboard';
 import NotFound from './pages/NotFound/NotFound';
 import Login from './Components/Authentication/Login/Login';
+import OnlyAuthorizedForModule from "./Components/ProtectRoutes/OnlyAuthorizedForModule";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -41,8 +42,10 @@ const router = createBrowserRouter(
         <Route path='courses/:course' element={ <Course /> } />
                                                 
         <Route path='courses/:course/:module' element={ <NotAuthenticated> 
+                                                          <OnlyAuthorizedForModule>
                                                             <Module /> 
-                                                          </NotAuthenticated> } />
+                                                          </OnlyAuthorizedForModule>
+                                                        </NotAuthenticated> } />
                                                         
         <Route path='users/join' element={ <SignedIn>
                                               <Registration />

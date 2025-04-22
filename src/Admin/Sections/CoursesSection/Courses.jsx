@@ -437,7 +437,7 @@ function AddCourse(){
     <div>
       <h2 className='font-bold text-2xl uppercase'> Add a new programme </h2>
       <hr />
-      <CourseStructure operation={ 'add' } />
+      <CourseStructure { ...{ operation: 'add' } } />
     </div>
   )
   
@@ -455,9 +455,9 @@ function EditCourse(){
 
   return (
     <div className={  '' }>
-      <CourseSeletor selectedCourse={ selectedCourse } setTrack={ setTrack } setSelectedCourse={ setSelectedCourse }  />
+      <CourseSeletor { ...{ selectedCourse, setTrack, setSelectedCourse } }  />
       {
-        currentCourse && track === 6 && <CourseStructure currentCourse={ currentCourse } setCurrentCourse={ setCurrentCourse } setSelectedCourse={ setSelectedCourse } operation={ 'edit' } />
+        currentCourse && track === 6 && <CourseStructure { ...{ currentCourse, setCurrentCourse, setSelectedCourse, operation: 'edit' } } />
       }
     </div>
   )
@@ -485,7 +485,7 @@ function ViewCourses(){
 
 function AddModule(){
 
-  return <ModuleStructure operation='add' />
+  return <ModuleStructure { ...{ operation: 'add' } } />
 }
 
 function EditModule(){
@@ -512,8 +512,7 @@ function EditModule(){
       <CourseSeletor selectedCourse={ selectedCourse } setTrack={ setTrack } setSelectedCourse={ setSelectedCourse }  />
       {
         currentModule && track === 3 && <ModuleStructure 
-                                          currentModule={ currentModule }
-                                          operation='edit' />
+                                          { ...{ currentModule, operation: 'edit' } } />
       }
     </>
   )
