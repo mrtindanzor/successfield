@@ -3,13 +3,13 @@ import { Link, useParams } from "react-router-dom";
 import useCourses from "./../../../Contexts/CourseContext/CoursesContext";
 import usePendingLoader from "./../../../Contexts/PendingLoaderContext/PendingLoaderContext";
 import CourseCard from "../../../Components/CourseCard/CourseCard";
-import { formatUrl, createHyphenUrl } from "../../../core";
+import { formatUrl } from "../../../core";
 import { PendingLoading } from './../../../Hooks/Loader/PendingLoader/PendingLoader';
 
 
 function SubListItem({ list, content, mapped, index, currentTabIndex }){
-  let classes = `p-5 flex-col ${ currentTabIndex === index ? "flex" : "hidden" }`
-  let contentClasses = `leading-relaxed ${ currentTabIndex === index ? "flex" : "hidden" }` 
+  let classes = `p-5 flex-col capitalize ${ currentTabIndex === index ? "flex" : "hidden" }`
+  let contentClasses = `leading-relaxed capitalize ${ currentTabIndex === index ? "flex" : "hidden" }` 
 
   return (
     list ? <ul className={ classes } key={ Date.now() * Math.random() }>
@@ -39,7 +39,7 @@ function ModuleList({ list, currentTabIndex, index }){
     if(!isInList) newList.push(obj)
   }
 
-  const listClasses = `p-5 flex-col ${  currentTabIndex === index ? "flex" : "hidden" }`
+  const listClasses = `p-5 flex-col capitalize ${  currentTabIndex === index ? "flex" : "hidden" }`
   
 
   return (
@@ -89,7 +89,7 @@ export default function Course(){
 
           { currentCourse &&  <CourseCard title={ currentCourse.course } /> }
 
-          { currentCourse && <div className=" px-5 py-10  ">
+          { currentCourse && <div className=" px-5 py-10 leading-relaxed ">
                                 <SubListItem content={ currentCourse.overview } />
                               </div> }
                               

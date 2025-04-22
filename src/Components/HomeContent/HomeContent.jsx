@@ -29,11 +29,11 @@ export default function HomeContent(){
     <div className=" py-10 flex flex-col gap-20 md:gap-3 ">
       {
         contents.map( content => {
-          return (<div key={ content.title } className=" flex flex-col md:grid md:grid-cols-4 w-[100vw]  gap-10 md:gap-3 py-3 odd:*:first:bg-green-300 md:min-h-[50vh] odd:*:first:rounded-tl-lg odd:*:first:rounded-bl-lg even:*:first:bg-green-600 even:*:first:rounded-tr-lg even:*:first:rounded-br-lg md:odd:*:last:col-start-1 md:odd:*:last:col-end-4 md:odd:*:first:col-start-4 md:odd:*:first:col-end-5 md:even:*:last:col-start-2 even:*:last:col-end-5 ">
+          return (<div key={ content.title } className="grid gap-8 pb-[100px]">
                     <div>
-                      <span className=" block md:flex texturina place-items-center p-5 text-white text-shadow-black w-fit md:w-full h-auto md:h-100  "> { content.title } </span>
+                      <span className="block bg-gray-900 text-gray-100 text-3xl mx-auto texturina w-[90%] text-center px-5 py-5 rounded  "> { content.title } </span>
                     </div>
-                    <p className=" px-3 flex items-center md:row-start-1 md:row-end-1 "> { content.content } </p>
+                    <p className=" px-3 flex items-center w-[90%] mx-auto "> { content.content } </p>
                   </div>)
         })
       }

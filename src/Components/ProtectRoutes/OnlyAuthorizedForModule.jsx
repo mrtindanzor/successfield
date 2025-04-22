@@ -39,7 +39,7 @@ export default function OnlyAuthorizedForModule({ children }) {
             setAuthorized(res)
             setCurrentUser( user => ({
               ...user,
-              courses: [ ...(user.courses || []), courseCode]
+              courses: Array.from(new Set([ ...(user.courses || []), courseCode]))
             }))
           }
         } )

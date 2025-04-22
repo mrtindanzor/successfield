@@ -153,11 +153,12 @@ export default function useAuthentication(){
           setCurrentUser(decodedUser)
           setIsLoggedIn(true)
           setAlert(res.msg)
-          setTimeout(() => navigate('/', { replace: true }), 3000)
-            break
+          navigate('/', { replace: true })
+        break
         
         default: 
-          return setAlert(res.msg)
+          setAlert(res.msg)
+        break
       }
     }
       catch(err){
