@@ -11,11 +11,10 @@ export default function OnlyAuthorizedForModule({ children }) {
   const { getCourse, coursesList } = useCourses()
   let courseCode = useMemo(() => {
     let c 
-    if(coursesList){
+    if(coursesList.length > 0){
       c = formatUrl(course)
       const code = getCourse(c, 'course')
-      console.log(code)
-      c = code.courseCode
+      c = code.courseCode.toLowerCase()
     }
     return c
   }, [course, coursesList])
@@ -29,8 +28,9 @@ export default function OnlyAuthorizedForModule({ children }) {
       checkIfStudentIsAuthorizedForCourse()
         .then( res => {
           if(res.status === 401){
+            console.log(res)
             setMsg(res.msg || 'Error authorizing you try again later')
-            navigate('/users/studentsJ')
+            navigate('/users/students')
           }
           if(res.status === 200) setAuthorized(res)
         } )

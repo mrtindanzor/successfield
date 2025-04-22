@@ -381,7 +381,7 @@ function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, 
       const headers = new Headers()
       headers.append('Content-Type', 'application/json')
       const method = "PATCH"
-      const body = JSON.stringify(course)
+      const body = JSON.stringify({ ...course, operation })
       const options = { 
         headers,
         method,
