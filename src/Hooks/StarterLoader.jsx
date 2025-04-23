@@ -1,5 +1,5 @@
-import useAuth from "./../../../Contexts/AuthenticationContext/AuthenticationContext";
-import { PendingLoading } from "../PendingLoader/PendingLoader";
+import useAuth from "../Contexts/AuthenticationContext";
+import { PendingLoading } from "./PendingLoader/";
 
 const loader = <PendingLoading />
 

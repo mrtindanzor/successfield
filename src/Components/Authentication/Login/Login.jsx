@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import useAuth from '../../../Contexts/AuthenticationContext/AuthenticationContext'
-import { useSetAlert } from '../../../Hooks/Alerter/Alerter'
+import useAuth from '../../../Contexts/AuthenticationContext'
+import { useSetAlert } from '../../../Hooks/Alerter'
 import { EyeOff, Eye } from 'lucide-react'
 
 const hideIcon = <EyeOff />

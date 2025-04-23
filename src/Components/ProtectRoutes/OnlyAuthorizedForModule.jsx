@@ -1,10 +1,10 @@
 import { useEffect , useMemo, useState } from "react"
-import useAuth from "../../Contexts/AuthenticationContext/AuthenticationContext"
-import { useSetAlert } from "../../Hooks/Alerter/Alerter"
-import { PendingLoading } from "../../Hooks/Loader/PendingLoader/PendingLoader"
+import useAuth from "../../Contexts/AuthenticationContext"
+import { useSetAlert } from "../../Hooks/Alerter"
+import { PendingLoading } from "../../Hooks/PendingLoader"
 import { useNavigate, useParams } from "react-router-dom"
 import { formatUrl } from "../../core"
-import useCourses from "../../Contexts/CourseContext/CoursesContext"
+import useCourses from "../../Contexts/CoursesContext"
 
 export default function OnlyAuthorizedForModule({ children }) {
   let { course } = useParams()

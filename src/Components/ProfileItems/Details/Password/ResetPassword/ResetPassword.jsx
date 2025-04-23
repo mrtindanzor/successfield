@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import useAuth from '../../../../../Contexts/AuthenticationContext/AuthenticationContext'
+import useAuth from '../../../../../Contexts/AuthenticationContext'
 
 export default function ResetPassword(){
   const { currentUser } = useAuth()

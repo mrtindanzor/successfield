@@ -1,6 +1,6 @@
-import CourseCard from "../../../Components/CourseCard/CourseCard";
+import CourseCard from "../../../Components/CourseCard";
 import styles from "./CoursesOverview.module.css";
-import useCourses from "./../../../Contexts/CourseContext/CoursesContext";
+import useCourses from "./../../../Contexts/CoursesContext";
 import { useMemo } from "react";
 
 export default function CoursesOverview(){

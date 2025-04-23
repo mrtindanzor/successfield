@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react'
-import { PendingLoading } from './../../Hooks/Loader/PendingLoader/PendingLoader'
+import { PendingLoading } from '../Hooks/PendingLoader'
 
 const PendingLoaderContext = createContext()
 

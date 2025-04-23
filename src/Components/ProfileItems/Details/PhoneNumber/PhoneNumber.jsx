@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import useAuth from '../../../../Contexts/AuthenticationContext/AuthenticationContext'
-import { useSetAlert } from '../../../../Hooks/Alerter/Alerter'
-import useServerUri from '../../../../Contexts/serverContexts/baseServer'
-import usePendingLoader from '../../../../Contexts/PendingLoaderContext/PendingLoaderContext'
+import useAuth from '../../../../Contexts/AuthenticationContext'
+import { useSetAlert } from '../../../../Hooks/Alerter'
+import useServerUri from '../../../../Contexts/baseServer'
+import usePendingLoader from '../../../../Contexts/PendingLoaderContext'
 
 export default function PhoneNumber(){
   const { setIsPendingLoading } = usePendingLoader()

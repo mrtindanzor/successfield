@@ -1,10 +1,6 @@
 import { useEffect } from "react"
-import useAdminNavigation from "../../Contexts/NavigationContext/NavigationContext"
 
-
-
-export default function Navbar() {
-  const { NavItems, currentTabDispatch, navToggle, setNavToggle } = useAdminNavigation()
+export default function Navbar({ NavLinks, navToggle, setNavToggle, setCurrentPage }) {
 
   useEffect(() => {
     if(navToggle) return
@@ -21,12 +17,12 @@ export default function Navbar() {
   return (
     <ul className={ navClasses }>
       {
-        NavItems.map((currentNav, navIndex) => {
-          return <li key={ navIndex } 
+        NavLinks.map((currentLink, linkIndex) => {
+          return <li key={ linkIndex } 
           onClick={ () => {
-            currentTabDispatch({ type: 'switch_tab', navItems: NavItems, index: navIndex})
+            setCurrentPage({ m: `${linkIndex}` })
             setNavToggle(c => !c)
-          } }> { currentNav.title } </li>
+          } }> { currentLink.title } </li>
         })
       }
     </ul>

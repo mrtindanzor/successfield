@@ -1,9 +1,9 @@
 import { useState, useReducer, useMemo } from "react";
 import { useNavigate } from 'react-router-dom'
-import { useSetAlert } from "../../../Hooks/Alerter/Alerter";
-import useAuth from './../../../Contexts/AuthenticationContext/AuthenticationContext'
-import useCourses from './../../../Contexts/CourseContext/CoursesContext'
-import usePendingLoader from './../../../Contexts/PendingLoaderContext/PendingLoaderContext'
+import { useSetAlert } from "../../../Hooks/Alerter";
+import useAuth from './../../../Contexts/AuthenticationContext'
+import useCourses from './../../../Contexts/CoursesContext'
+import usePendingLoader from './../../../Contexts/PendingLoaderContext'
 import { Eye, EyeOff, ChevronDown } from "lucide-react";
 
 const ACTIONS = {

@@ -1,5 +1,5 @@
 import { NavLink, Link } from "react-router-dom";
-import useAuth from './../../../Contexts/AuthenticationContext/AuthenticationContext'
+import useAuth from './../../../Contexts/AuthenticationContext'
 import { FileText, LogIn, UserCircle } from "lucide-react";
 
 function NotLoggedIn(){

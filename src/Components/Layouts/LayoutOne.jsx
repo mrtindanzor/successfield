@@ -1,10 +1,10 @@
-import Alerter from "../../Hooks/Alerter/Alerter";
+import Alerter from "../../Hooks/Alerter";
 import Header from "../Header/Header";
-import Navbar from "../Navbar/Navbar";
-import StarterLoader from "../../Hooks/Loader/StarterLoader/StarterLoader";
+import Navbar from "../Navbar";
+import StarterLoader from "../../Hooks/StarterLoader";
 import { Outlet } from "react-router-dom";
-import ScrollToTop from "../ScrollToTop/ScrollToTop";
-import { PendingLoader } from './../../Contexts/PendingLoaderContext/PendingLoaderContext'
+import ScrollToTop from "../ScrollToTop";
+import { PendingLoader } from './../../Contexts/PendingLoaderContext'
 
 export default function LayoutOne(){
 

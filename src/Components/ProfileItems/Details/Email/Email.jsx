@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import useAuth from '../../../../Contexts/AuthenticationContext/AuthenticationContext'
-import useServerUri from '../../../../Contexts/serverContexts/baseServer'
-import usePendingLoader from '../../../../Contexts/PendingLoaderContext/PendingLoaderContext'
-import { useSetAlert } from '../../../../Hooks/Alerter/Alerter'
+import useAuth from '../../../../Contexts/AuthenticationContext'
+import useServerUri from '../../../../Contexts/baseServer'
+import usePendingLoader from '../../../../Contexts/PendingLoaderContext'
+import { useSetAlert } from '../../../../Hooks/Alerter'
 
 export default function Email(){
   const { currentUser, setCurrentUser, setToken } = useAuth()

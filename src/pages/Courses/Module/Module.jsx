@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
-import useCourses from './../../../Contexts/CourseContext/CoursesContext'
-import { PendingLoading } from './../../../Hooks/Loader/PendingLoader/PendingLoader'
+import useCourses from './../../../Contexts/CoursesContext'
+import { PendingLoading } from './../../../Hooks/PendingLoader'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { formatUrl } from '../../../core'
 import formatNotesToJSX from '../../../Components/AutoFormatNotes'

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useSetAlert } from "../Alerter/Alerter";
-import useServerUri from "../../Contexts/serverContexts/baseServer";
+import { useSetAlert } from "./Alerter";
+import useServerUri from "../Contexts/baseServer";
 import { jwtDecode } from 'jwt-decode'
-import { capitalize } from "../../core";
+import { capitalize } from "../core";
 
 export default function useAuthentication(){
   const setAlert = useSetAlert()
@@ -42,7 +42,6 @@ export default function useAuthentication(){
     currentUser && setUserFullName(capitalize(currentUser.firstname + (currentUser.middlename && ' ' + currentUser.middlename ) + ' ' + currentUser.surname) )
 
     if(currentUser && !certificates) getCertificates()
-      console.log(currentUser)
   }, [currentUser])
 
   useEffect(() => {

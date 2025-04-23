@@ -1,9 +1,9 @@
 import { useMemo, useReducer, useState } from "react"
-import useServerUri from "../../../Contexts/serverContexts/baseServer"
-import usePendingLoader from "../../../Contexts/PendingLoaderContext/PendingLoaderContext"
-import { useSetAlert } from "../../../Hooks/Alerter/Alerter"
+import useServerUri from "../../Contexts/baseServer"
+import usePendingLoader from "../../Contexts/PendingLoaderContext"
+import { useSetAlert } from "../../Hooks/Alerter"
 import { Info } from "lucide-react"
-import useCourses from "../../../Contexts/CourseContext/CoursesContext"
+import useCourses from "../../Contexts/CoursesContext"
 
 
 const mainContainerClasses = "grid sm:grid-cols-[auto_1fr] pt-[10px]"

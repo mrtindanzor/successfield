@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react"
-import useCourse from "../../Hooks/useCourses/useCourses"
+import useCourse from "../Hooks/useCourses"
 
 const CoursesContext = createContext()
 

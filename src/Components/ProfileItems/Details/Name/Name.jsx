@@ -1,7 +1,7 @@
-import useServerUri from '../../../../Contexts/serverContexts/baseServer'
-import { useSetAlert } from '../../../../Hooks/Alerter/Alerter'
-import usePendingLoader from '../../../../Contexts/PendingLoaderContext/PendingLoaderContext'
-import useAuth from './../../../../Contexts/AuthenticationContext/AuthenticationContext'
+import useServerUri from '../../../../Contexts/baseServer'
+import { useSetAlert } from '../../../../Hooks/Alerter'
+import usePendingLoader from '../../../../Contexts/PendingLoaderContext'
+import useAuth from './../../../../Contexts/AuthenticationContext'
 import { useState } from 'react'
 
 export default function Name(){

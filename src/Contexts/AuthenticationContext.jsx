@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react"
-import useAuthentication from "../../Hooks/useAuthentication/useAuthentication"
+import useAuthentication from "../Hooks/useAuthentication"
 
 const AuthContext = createContext()
 

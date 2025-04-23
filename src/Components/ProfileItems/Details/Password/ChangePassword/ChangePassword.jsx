@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import useAuth from '../../../../../Contexts/AuthenticationContext/AuthenticationContext'
-import usePendingLoader from '../../../../../Contexts/PendingLoaderContext/PendingLoaderContext'
-import useServerUri from '../../../../../Contexts/serverContexts/baseServer'
-import { useSetAlert } from '../../../../../Hooks/Alerter/Alerter'
+import useAuth from '../../../../../Contexts/AuthenticationContext'
+import usePendingLoader from '../../../../../Contexts/PendingLoaderContext'
+import useServerUri from '../../../../../Contexts/baseServer'
+import { useSetAlert } from '../../../../../Hooks/Alerter'
 
 export default function ChangePassword(){
   const { setIsPendingLoading } = usePendingLoader()

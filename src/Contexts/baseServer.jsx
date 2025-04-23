@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { getBaseUrl } from "../../core";
+import { getBaseUrl } from "../core";
 
 
 const ServerContext = createContext()

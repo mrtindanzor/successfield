@@ -1,5 +1,5 @@
 import { useEffect, useState, useReducer } from "react";
-import useServerUri from "../../Contexts/serverContexts/baseServer";
+import useServerUri from "../Contexts/baseServer";
 import { jwtDecode } from 'jwt-decode'
 
 const ACTIONS = {
