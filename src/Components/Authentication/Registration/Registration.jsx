@@ -152,16 +152,16 @@ async function handleFormSubmission(e){
          >
         <h3 className="text-3xl font-bold"> Start Your Admission Application </h3>
         <div>
-          <TextField { ...{ title: 'Programme', value: user.programme } } disabled />
-          <Selector { ...{ dispatch: dispatchUser, db: coursesList, position: 'course', reducerPosition: 'programme', title: 'programme' } } />
-          <TextField { ...{ title: 'Highest level of Education', value: user.educationLevel } } disabled />
-          <Selector { ...{ dispatch: dispatchUser, db: educationLevels, position: 'level', reducerPosition: 'educationLevel', title: 'your educational level' } } />
           <TextField { ...{ title: 'First name', type: ACTIONS.FILL_MAIN_INPUT, value: user.firstname, position: 'firstname', dispatchUser } } />
           <TextField { ...{ title: 'Middle name', type: ACTIONS.FILL_MAIN_INPUT, value: user.middlename, position: 'middlename', dispatchUser } } />
           <TextField { ...{ title: 'Surname', type: ACTIONS.FILL_MAIN_INPUT, value: user.surname, position: 'surname', dispatchUser } } />
           <TextField { ...{ title: 'Birth date', type: ACTIONS.FILL_MAIN_INPUT, value: user.birthDate, date: true, position: 'birthDate', dispatchUser } } />
           <TextField { ...{ title: 'Gender', value: user.gender } } disabled />
           <Selector { ...{ dispatch: dispatchUser, db: genders, position: 'gender', reducerPosition: 'gender', title: 'gender' } } />
+          <TextField { ...{ title: 'Programme', value: user.programme } } disabled />
+          <Selector { ...{ dispatch: dispatchUser, db: coursesList, position: 'course', reducerPosition: 'programme', title: 'programme' } } />
+          <TextField { ...{ title: 'Highest level of Education', value: user.educationLevel } } disabled />
+          <Selector { ...{ dispatch: dispatchUser, db: educationLevels, position: 'level', reducerPosition: 'educationLevel', title: 'your educational level' } } />
         </div>
         <div >
           <TextField { ...{ title: 'Passport photo', type: ACTIONS.FILL_MAIN_INPUT, readImage, file: true, position: 'userImage', dispatchUser } } />
