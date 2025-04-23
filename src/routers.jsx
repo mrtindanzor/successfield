@@ -1,30 +1,36 @@
 // MODULES //
 import { Route, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
+import { lazy, Suspense } from 'react'
 
 // COMPONENTS //
-import ErrorElement from "./Components/ErrorElement/ErrorElement";
+import ErrorElement from "./Components/ErrorElement";
 import { NotAuthenticated } from './Components/ProtectRoutes/NotAuthenticated';
 import OnlyAdmin from './Components/ProtectRoutes/OnlyAdmin';
-import AdminHome from './Admin/Home/AdminHome';
 import LayoutOne from './Components/Layouts/LayoutOne';
-import Home from './pages/Home/Home';
-import VerifyCerificate from './pages/VerifyCertificate/VerifyCertificate';
+import Home from './pages/Home';
+import VerifyCerificate from './pages/VerifyCertificate';
 import CoursesOverview from './pages/Courses/CoursesOverview/CoursesOverview';
-import Course from './pages/Courses/Course/Course';
+import Course from './pages/courses/course';
 import Module from './pages/Courses/Module/Module';
 import Registration from "./Components/Authentication/Registration/Registration";
 import SignedIn from './Components/ProtectRoutes/SignedIn';
-import Dashboard from './pages/Profile/Dashboard';
-import NotFound from './pages/NotFound/NotFound';
+import Dashboard from './pages/dashboard';
+import NotFound from './pages/NotFound';
 import Login from './Components/Authentication/Login/Login';
 import OnlyAuthorizedForModule from "./Components/ProtectRoutes/OnlyAuthorizedForModule";
+import { PendingLoader } from "./Contexts/PendingLoaderContext";
+
+//lazy components
+const AdminHome = lazy(() => import('./Admin/Home/AdminHome'))
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route >
       <Route path="/admin" element={ <NotAuthenticated>
                                           <OnlyAdmin>
-                                            <AdminHome />
+                                            <Suspense fallback={ <PendingLoader /> }>
+                                              <AdminHome />
+                                            </Suspense>
                                           </OnlyAdmin> 
                                         </NotAuthenticated> }
 

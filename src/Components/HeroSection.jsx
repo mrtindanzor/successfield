@@ -1,4 +1,4 @@
-import background from "./../../assets/images/hero.webp";
+import background from "./../assets/images/hero.webp";
 import { Link } from "react-router-dom";
 
 const Content = {

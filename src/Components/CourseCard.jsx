@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { capitalize, createAcronym } from "../../core";
+import { capitalize, createAcronym } from "../core";
 
 export default function CourseCard({ pic = '', title, overview }){
   const courseLink = title.toLowerCase().trim().split(' ').join('-')

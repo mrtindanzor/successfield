@@ -1,6 +1,6 @@
 import AuthButtons from "./Auth/AuthButtons";
 import LogoElement from "./Logo/Logo";
-import { DeskMenuButton, MenuButton } from "../Navbar/Navbar";
+import { DeskMenuButton, MenuButton } from "../Navbar";
 
 export default function Header(){
 

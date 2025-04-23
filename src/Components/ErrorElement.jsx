@@ -1,5 +1,5 @@
 import { useRouteError, Link } from "react-router-dom";
-import { capitalize } from "../../core";
+import { capitalize } from "../core";
 
 
 export default function ErrorElement(){
