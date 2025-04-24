@@ -225,12 +225,12 @@ function AddMoreField({ position, type, index, dispatch, reverse, emptyModule, v
     } } className={ (reverse ? appendButtonClasses + ' !ml-[4px] !mr-auto' : appendButtonClasses) + ( viewCourse && ' hidden') }> + </span> 
 }
 
-function ModuleStructure({ currentModule, operation }){
+function ModuleStructure({ currentModules, operation }){
   const courseCode = useMemo(() => {
-    return currentModule && currentModule[0] && currentModule[0].courseCode
-  }, [ currentModule ])
+    return currentModules && currentModules[0] && currentModules[0].courseCode
+  }, [ currentModules ])
   const { setRefreshCourses } = useCourses()
-  const [ modules, modulesDispatch ] = useReducer(moduleReducer, currentModule || [])
+  const [ modules, modulesDispatch ] = useReducer(moduleReducer, currentModules || [])
 
   const emptyModule = useMemo( () => [
     {
@@ -448,10 +448,10 @@ function EditModule(){
       setCurrentCourse( getCourse(selectedCourse) )
     }
     if(currentCourse){
-      setCurrentModules( currentCourse.modules || [] )
+      setCurrentModules( currentCourse.modules )
     }
 
-  }, [ currentCourse ])
+  }, [ currentCourse, selectedCourse ])
 
   return (
     <>

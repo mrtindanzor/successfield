@@ -21,10 +21,7 @@ export default function useCourse(){
   const [ COURSES, coursesDispatch ] = useReducer(coursesReducer, {})
   const [coursesList, setCoursesList] = useState([])
   const [ refreshCourses, setRefreshCourses ] = useState(false)
-  
   const serverUri = useServerUri()
-
-  useEffect(() => console.log(COURSES), [COURSES])
   
   useEffect(() => {
     fetchCourses()
