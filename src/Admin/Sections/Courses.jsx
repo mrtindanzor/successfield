@@ -416,22 +416,22 @@ function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, 
 
 return console.log(course)
 
-  return (
-    <form className={ formClasses } onSubmit={ handleCourseOperation }>
-        <CourseList { ...{ title: 'course name', viewCourse, value: course.course, courseDispatch, position: 'course' } } />
-        <CourseList { ...{ title: 'course code', viewCourse, value: course.courseCode, courseDispatch, position: 'courseCode' } } />
-        <CourseList { ...{ title: 'course overview', viewCourse, value: course.overview, courseDispatch, position: 'overview' } } />
-        <CourseList { ...{ title: 'course fee', viewCourse, value: course.fee, courseDispatch, position: 'fee' } } />
-        <CourseList { ...{ title: 'certification', viewCourse, value: course.certificate, courseDispatch, position: 'certificate' } } />
-        <CourseList { ...{ title: 'course availability', viewCourse, value: course.availability, courseDispatch, position: 'availability' } } />
-        <CourseList { ...{ title: 'course duration', viewCourse, value: course.duration, courseDispatch, position: 'duration' } } />
-        <CourseSubList { ...{  course, title: 'objectives', viewCourse, courseDispatch, position: 'objectives' } } />
-        <CourseSubList { ...{  course, title: 'outlines', viewCourse, courseDispatch, position: 'outlines' } } />
-        <CourseSubList { ...{  course, title: 'benefits', viewCourse, courseDispatch, position: 'benefits' } } />
+  // return (
+  //   <form className={ formClasses } onSubmit={ handleCourseOperation }>
+  //       <CourseList { ...{ title: 'course name', viewCourse, value: course.course, courseDispatch, position: 'course' } } />
+  //       <CourseList { ...{ title: 'course code', viewCourse, value: course.courseCode, courseDispatch, position: 'courseCode' } } />
+  //       <CourseList { ...{ title: 'course overview', viewCourse, value: course.overview, courseDispatch, position: 'overview' } } />
+  //       <CourseList { ...{ title: 'course fee', viewCourse, value: course.fee, courseDispatch, position: 'fee' } } />
+  //       <CourseList { ...{ title: 'certification', viewCourse, value: course.certificate, courseDispatch, position: 'certificate' } } />
+  //       <CourseList { ...{ title: 'course availability', viewCourse, value: course.availability, courseDispatch, position: 'availability' } } />
+  //       <CourseList { ...{ title: 'course duration', viewCourse, value: course.duration, courseDispatch, position: 'duration' } } />
+  //       <CourseSubList { ...{  course, title: 'objectives', viewCourse, courseDispatch, position: 'objectives' } } />
+  //       <CourseSubList { ...{  course, title: 'outlines', viewCourse, courseDispatch, position: 'outlines' } } />
+  //       <CourseSubList { ...{  course, title: 'benefits', viewCourse, courseDispatch, position: 'benefits' } } />
 
-        { !viewCourse && <button className={ submitButtonClasses }> { currentCourse ? 'Edit course' : 'Add course' }  </button> }
-      </form>
-  )
+  //       { !viewCourse && <button className={ submitButtonClasses }> { currentCourse ? 'Edit course' : 'Add course' }  </button> }
+  //     </form>
+  // )
 }
 
 function AddCourse(){
