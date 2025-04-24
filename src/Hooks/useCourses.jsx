@@ -23,7 +23,7 @@ export default function useCourse(){
   const [ refreshCourses, setRefreshCourses ] = useState(false)
   
   const serverUri = useServerUri()
-
+  console.log(COURSES)
   useEffect(() => {
     fetchCourses()
   },[])

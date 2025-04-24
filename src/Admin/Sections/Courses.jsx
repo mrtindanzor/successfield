@@ -591,12 +591,12 @@ function CourseList({ title, viewCourse, value, courseDispatch, position }){
 }
 
 function CourseSubList({  course, title, viewCourse, courseDispatch, position }){
-
+  console.log(course, position)
   return(
     <label>
       <span className={ courseInputTitleClasses }> { title } </span>
       {
-        course[position].length > 0 && course[position].map((currentItem, index) => {
+        course && course[position] && course[position].map((currentItem, index) => {
           return <textarea className={ inputClasses } disabled={ viewCourse } value={ currentItem } onChange={ e => courseDispatch({ type: ACTIONS.COURSE.FILL_SUB_INPUT, position, index, value: e.target.value }) }  ></textarea>
         }) 
       }
