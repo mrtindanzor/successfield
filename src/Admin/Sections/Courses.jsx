@@ -80,9 +80,6 @@ export function Modules(){
 export default function Courses(){
   const sections = [
     {
-      title: 'View courses', section: <ViewCourses />
-    },
-    {
       title: 'Add courses', section: <AddCourse />
     },
     {
@@ -210,37 +207,6 @@ function moduleReducer(state, action){
   }
 }
 
-function setCore(selectedCourse, currentCourse, track, setCurrentCourse, setTrack, getCourse){
-  if(track === 1){
-    setCurrentCourse(getCourse(selectedCourse, 'course'))
-    setTrack(2)
-  }
-
-  if(track > 1){
-    switch(track){
-      case 2:
-        setCurrentCourse( c => ({...c, ...currentCourse }))
-        setTrack(3)
-          break
-
-      case 3:
-        setCurrentCourse( c => ({...c, outlines: [...getCourse(currentCourse.courseCode, 'outlines')] }))
-        setTrack(4)
-          break
-
-      case 4:
-        setCurrentCourse( c => ({...c, benefits: [...getCourse(currentCourse.courseCode, 'benefits')] }))
-        setTrack(5)
-          break
-
-      case 5:
-        setCurrentCourse( c => ({...c, objectives: [...getCourse(currentCourse.courseCode, 'objectives')] }))
-        setTrack(6)
-          break
-    }
-  }
-}
-
 function toggleModuleList(e){
   e.target.parentElement.classList.toggle('*:not-first:hidden')
 }
@@ -260,7 +226,9 @@ function AddMoreField({ position, type, index, dispatch, reverse, emptyModule, v
 }
 
 function ModuleStructure({ currentModule, operation }){
-  const courseCode = currentModule && currentModule[0] && currentModule[0].courseCode
+  const courseCode = useMemo(() => {
+    return currentModule && currentModule[0] && currentModule[0].courseCode
+  }, [ currentModule ])
   const { setRefreshCourses } = useCourses()
   const [ modules, modulesDispatch ] = useReducer(moduleReducer, currentModule || [])
 
@@ -352,7 +320,7 @@ function ModuleStructure({ currentModule, operation }){
   )
 }
 
-function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, viewCourse, operation }){
+function CourseStructure({ currentCourse, setSelectedCourse, setCurrentCourse, operation }){
   const setMsg = useSetAlert()
   const { setRefreshCourses } = useCourses()
   const { setIsPendingLoading } = usePendingLoader()
@@ -414,24 +382,22 @@ function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, 
     if(operation !== 'add') courseDispatch({ type: ACTIONS.COURSE.SET_PREVIOUS_COURSE_CODE, value: currentCourse.courseCode })
   },[])
 
-return console.log(course)
+  return (
+    <form className={ formClasses } onSubmit={ handleCourseOperation }>
+        <CourseList { ...{ title: 'course name', value: course.course, courseDispatch, position: 'course' } } />
+        <CourseList { ...{ title: 'course code', value: course.courseCode, courseDispatch, position: 'courseCode' } } />
+        <CourseList { ...{ title: 'course overview', value: course.overview, courseDispatch, position: 'overview' } } />
+        <CourseList { ...{ title: 'course fee', value: course.fee, courseDispatch, position: 'fee' } } />
+        <CourseList { ...{ title: 'certification', value: course.certificate, courseDispatch, position: 'certificate' } } />
+        <CourseList { ...{ title: 'course availability', value: course.availability, courseDispatch, position: 'availability' } } />
+        <CourseList { ...{ title: 'course duration', value: course.duration, courseDispatch, position: 'duration' } } />
+        <CourseSubList { ...{  course, title: 'objectives', courseDispatch, position: 'objectives' } } />
+        <CourseSubList { ...{  course, title: 'outlines', courseDispatch, position: 'outlines' } } />
+        <CourseSubList { ...{  course, title: 'benefits', courseDispatch, position: 'benefits' } } />
 
-  // return (
-  //   <form className={ formClasses } onSubmit={ handleCourseOperation }>
-  //       <CourseList { ...{ title: 'course name', viewCourse, value: course.course, courseDispatch, position: 'course' } } />
-  //       <CourseList { ...{ title: 'course code', viewCourse, value: course.courseCode, courseDispatch, position: 'courseCode' } } />
-  //       <CourseList { ...{ title: 'course overview', viewCourse, value: course.overview, courseDispatch, position: 'overview' } } />
-  //       <CourseList { ...{ title: 'course fee', viewCourse, value: course.fee, courseDispatch, position: 'fee' } } />
-  //       <CourseList { ...{ title: 'certification', viewCourse, value: course.certificate, courseDispatch, position: 'certificate' } } />
-  //       <CourseList { ...{ title: 'course availability', viewCourse, value: course.availability, courseDispatch, position: 'availability' } } />
-  //       <CourseList { ...{ title: 'course duration', viewCourse, value: course.duration, courseDispatch, position: 'duration' } } />
-  //       <CourseSubList { ...{  course, title: 'objectives', viewCourse, courseDispatch, position: 'objectives' } } />
-  //       <CourseSubList { ...{  course, title: 'outlines', viewCourse, courseDispatch, position: 'outlines' } } />
-  //       <CourseSubList { ...{  course, title: 'benefits', viewCourse, courseDispatch, position: 'benefits' } } />
-
-  //       { !viewCourse && <button className={ submitButtonClasses }> { currentCourse ? 'Edit course' : 'Add course' }  </button> }
-  //     </form>
-  // )
+        { <button className={ submitButtonClasses }> { currentCourse ? 'Edit course' : 'Add course' }  </button> }
+      </form>
+  )
 }
 
 function AddCourse(){
@@ -449,37 +415,18 @@ function EditCourse(){
   const [ selectedCourse, setSelectedCourse ] = useState('')
   const { getCourse } = useCourses()
   const [ currentCourse, setCurrentCourse ] = useState('')
-  const [ track, setTrack ] = useState(0)
 
   useEffect(() => {
-    setCore(selectedCourse,currentCourse, track, setCurrentCourse, setTrack, getCourse)
-  }, [ track ])
+    if(selectedCourse){
+      setCurrentCourse( getCourse(selectedCourse) )
+    }
+  }, [ selectedCourse ])
 
   return (
     <div className={  '' }>
-      <CourseSeletor { ...{ selectedCourse, setTrack, setSelectedCourse } }  />
+      <CourseSeletor { ...{ selectedCourse, setSelectedCourse } }  />
       {
-        currentCourse && track === 6 && <CourseStructure { ...{ currentCourse, setCurrentCourse, setSelectedCourse, operation: 'edit' } } />
-      }
-    </div>
-  )
-}
-
-function ViewCourses(){
-  const [ selectedCourse, setSelectedCourse ] = useState('')
-  const { getCourse } = useCourses()
-  const [ currentCourse, setCurrentCourse ] = useState('')
-  const [ track, setTrack ] = useState(0)
-
-  useEffect(() => {
-    setCore(selectedCourse,currentCourse, track, setCurrentCourse, setTrack, getCourse)
-  }, [ track ])
-
-  return (
-    <div className={  '' }>
-      <CourseSeletor selectedCourse={ selectedCourse } setTrack={ setTrack } setSelectedCourse={ setSelectedCourse }  />
-      {
-        currentCourse && track === 6 && <CourseStructure currentCourse={ currentCourse } viewCourse />
+        currentCourse && <CourseStructure { ...{ currentCourse, setCurrentCourse, setSelectedCourse, operation: 'edit' } } />
       }
     </div>
   )
@@ -494,27 +441,24 @@ function EditModule(){
   const [ selectedCourse, setSelectedCourse ] = useState('')
   const { getCourse } = useCourses()
   const [ currentCourse, setCurrentCourse ] = useState('')
-  const [ currentModule, setCurrentModule ] = useState([])
-  const [ track, setTrack ] = useState(0)
+  const [ currentModules, setCurrentModules ] = useState([])
 
   useEffect(() => {
-    if(track === 1) {
-      setCurrentCourse(getCourse(selectedCourse, 'course'))
-      setTrack(2)
+    if(!currentCourse) {
+      setCurrentCourse( getCourse(selectedCourse) )
     }
-    if(track === 2){
-      setCurrentModule(fetchCurrentModule(currentCourse.courseCode, getCourse))
-      setTrack(3)
+    if(currentCourse){
+      setCurrentModules( currentCourse.modules || [] )
     }
 
-  }, [ track ])
+  }, [ currentCourse ])
 
   return (
     <>
-      <CourseSeletor selectedCourse={ selectedCourse } setTrack={ setTrack } setSelectedCourse={ setSelectedCourse }  />
+      <CourseSeletor selectedCourse={ selectedCourse } setSelectedCourse={ setSelectedCourse }  />
       {
-        currentModule && track === 3 && <ModuleStructure 
-                                          { ...{ currentModule, operation: 'edit' } } />
+        currentModules && <ModuleStructure 
+                            { ...{ currentModules, operation: 'edit' } } />
       }
     </>
   )
@@ -551,11 +495,9 @@ function ModuleSublist({module, position, index, modulesDispatch }){
   )
 }
 
-function CourseSeletor({ selectedCourse, setSelectedCourse, setTrack }){
+function CourseSeletor({ selectedCourse, setSelectedCourse }){
   const { coursesList } = useCourses()
   const [ courseVisible, setCoursesVisible ] = useState(false)
-
-
 
   return(
     <ul className={ courseContainerClasses }>
@@ -571,7 +513,6 @@ function CourseSeletor({ selectedCourse, setSelectedCourse, setTrack }){
               return <li key={ Date.now() + '-' + index } onClick={ e => {
                 setSelectedCourse(course.course)
                 setCoursesVisible(false)
-                setTrack(1)
               }
             }> { course.course } </li>
             })
@@ -593,12 +534,12 @@ function CourseList({ title, viewCourse, value, courseDispatch, position }){
 }
 
 function CourseSubList({  course, title, viewCourse, courseDispatch, position }){
-  console.log(course, position)
+
   return(
     <label>
       <span className={ courseInputTitleClasses }> { title } </span>
       {
-        course && course[position] && course[position].map((currentItem, index) => {
+        course[position].length > 0 && course[position].map((currentItem, index) => {
           return <textarea className={ inputClasses } disabled={ viewCourse } value={ currentItem } onChange={ e => courseDispatch({ type: ACTIONS.COURSE.FILL_SUB_INPUT, position, index, value: e.target.value }) }  ></textarea>
         }) 
       }

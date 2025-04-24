@@ -23,7 +23,9 @@ export default function useCourse(){
   const [ refreshCourses, setRefreshCourses ] = useState(false)
   
   const serverUri = useServerUri()
-  console.log(COURSES)
+
+  useEffect(() => console.log(COURSES), [COURSES])
+  
   useEffect(() => {
     fetchCourses()
   },[])
@@ -45,39 +47,13 @@ export default function useCourse(){
     const response = await fetch(uri, { method, headers})
     if(!response.ok) return coursesDispatch({ type: 'failed' })
     const res = await response.json()
-    let c = [jwtDecode(res.mix)]
-    const courses = c[0].courses
-    coursesDispatch({ type: ACTIONS.ADD_COURSES, courses: c[0] })
+    const courses = res.courses
+    coursesDispatch({ type: ACTIONS.ADD_COURSES, courses })
     updateCoursesList(courses)
   }
 
-  function getCourse(searchCourse, place){
-    
-    let data = ''
-    switch(place){
-      case 'course':
-        data = COURSES.courses.find(course => course.course === searchCourse)
-        break
-
-      case 'modules':
-        
-        data = COURSES.modules.filter(module => module.courseCode === searchCourse)
-        break
-
-      case "benefits":
-        data = COURSES.benefits.find(benefit => benefit.courseCode === searchCourse).benefits
-        break
-        
-      case "outlines":
-        data = COURSES.outlines.find(outline => outline.courseCode === searchCourse).outlines   
-          break
-          
-      case "objectives":
-        data = COURSES.objectives.find(objective => objective.courseCode === searchCourse).objectives
-          break
-    }
-    
-    return data
+  function getCourse(searchCourse){
+    return COURSES.find(course => course.course === searchCourse)
   }
 
   function updateCoursesList(allCourses){
@@ -88,10 +64,5 @@ export default function useCourse(){
     setCoursesList([...filtered])
   }
 
-  function getModule(courseCode, title){
-    let module = COURSES.modules.find(module => module.courseCode === courseCode && module.title === title)
-    return module
-  }
-
-  return  { coursesList, getCourse, getModule, setRefreshCourses }
+  return  { coursesList, getCourse, setRefreshCourses }
 }

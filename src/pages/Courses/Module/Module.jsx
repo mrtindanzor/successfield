@@ -49,10 +49,8 @@ export default function Module(){
   
   useEffect(() => {
     if(coursesList){
-      const thisCodeSearch = coursesList.find( newcourse => newcourse.course === course)
-      let programmeModules 
-      if(thisCodeSearch) programmeModules = getCourse(thisCodeSearch.courseCode, 'modules')
-      if(programmeModules) setModules(programmeModules)
+      const programmeModules = getCourse(course)
+      if(programmeModules) setModules(programmeModules?.modules || [])
     }
   }, [coursesList])
 

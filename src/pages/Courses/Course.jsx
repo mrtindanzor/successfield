@@ -64,18 +64,9 @@ export default function Course(){
   useEffect(() => {
     setIsPendingLoading(true)
     if(coursesList.length > 0){
-      const findCourse = getCourse(course, "course")
-      const code = findCourse.courseCode
-      const m = getCourse(code, 'modules')
-      const b = getCourse(code, 'benefits')
-      const outs = getCourse(code, 'outlines')
-      const objs = getCourse(code, 'objectives')
+      const findCourse = getCourse(course)
       setCurrentCourse({
-        ...findCourse,
-        benefits: b,
-        outlines: outs,
-        objectives: objs,
-        modules: m
+        ...findCourse
       })
       setIsPendingLoading(false)
     }
