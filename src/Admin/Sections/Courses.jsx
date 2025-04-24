@@ -414,6 +414,8 @@ function CourseStructure({ currentCourse, setSelectedCourse,  setCurrentCourse, 
     if(operation !== 'add') courseDispatch({ type: ACTIONS.COURSE.SET_PREVIOUS_COURSE_CODE, value: currentCourse.courseCode })
   },[])
 
+return console.log(course)
+
   return (
     <form className={ formClasses } onSubmit={ handleCourseOperation }>
         <CourseList { ...{ title: 'course name', viewCourse, value: course.course, courseDispatch, position: 'course' } } />
