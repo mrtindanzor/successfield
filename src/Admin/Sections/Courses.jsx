@@ -274,7 +274,7 @@ function ModuleStructure({ currentModules, operation }){
       const res = await response.json()
       setMsg(res.msg)
       if(operation === 'add' && res.status === 201 ) modulesDispatch({ type: ACTIONS.MODULE.START_NEW_MODULE, emptyModule })
-      console.log(res)
+        
       if(res.failed && res.failed.length > 0) modulesDispatch({ type: ACTIONS.MODULE.FETCH_ERRORS, modules: res.failed })
       setRefreshCourses
     } 
@@ -468,7 +468,6 @@ function EditModule(){
 }
 
 function ModuleList({ module, modules, position, title, modulesDispatch, index }){
-  console.log('here')
   
   return(
     <label className={ labelClasses }>
