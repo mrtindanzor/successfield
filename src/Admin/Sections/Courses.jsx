@@ -162,6 +162,7 @@ function moduleReducer(state, action){
         if(action.index !== mIndex) return module
         return {
           ...module,
+          courseCode: state[0].courseCode,
           [action.position]: [...(module[action.position] || []), '']
         }
       })
@@ -301,7 +302,7 @@ function ModuleStructure({ currentModules, operation }){
             {
               module.reason && <span className="text-red-500 font-bold text-2xl uppercase flex items-center gap-1"> <Info /> { module.reason } </span>
             }
-            <ModuleList position='courseCode' title='Course code' { ...{ index, operation, module, modulesDispatch } } />
+            <ModuleList position='courseCode' title='Course code' { ...{ index, modules, operation, module, modulesDispatch } } />
             <ModuleList position='title' title='Title'  { ...{ index, operation, module, modulesDispatch } }  />
             <ModuleList position='outline' title='outline'  { ...{ index, operation, module, modulesDispatch } }  />
             <ModuleList position='link' title='Video link'  { ...{ index, operation, module, modulesDispatch } }  />
@@ -444,32 +445,35 @@ function EditModule(){
   const [ currentModules, setCurrentModules ] = useState([])
 
   useEffect(() => {
-    if(!currentCourse) {
+    if(selectedCourse) {
       setCurrentCourse( getCourse(selectedCourse) )
     }
+  }, [ selectedCourse ])
+
+  useEffect(() => {
     if(currentCourse){
       setCurrentModules( currentCourse.modules )
     }
 
-  }, [ currentCourse, selectedCourse ])
+  }, [ currentCourse ])
 
   return (
     <>
       <CourseSeletor selectedCourse={ selectedCourse } setSelectedCourse={ setSelectedCourse }  />
       {
-        currentModules && <ModuleStructure 
-                            { ...{ currentModules, operation: 'edit' } } />
+        currentModules.length > 0 && <ModuleStructure { ...{ currentModules, operation: 'edit' } } />
       }
     </>
   )
 }
 
-function ModuleList({ module, position, title, modulesDispatch, index }){
+function ModuleList({ module, modules, position, title, modulesDispatch, index }){
+  console.log('here')
   
   return(
     <label className={ labelClasses }>
     <span> { title } </span>
-    <textarea className={ inputClasses } value={ module[position] }
+    <textarea className={ inputClasses } value={ position === 'courseCode' ? modules[0][position] : module[position] }
       onChange={ e =>  modulesDispatch({ type: ACTIONS.MODULE.FILL_MAIN_INPUT, index, position, value: e.target.value  }) }  ></textarea>
     </label>
   )
