@@ -6,8 +6,9 @@ import useCourses from '../../Contexts/CoursesContext';
 import { useSetAlert } from '../../Hooks/Alerter';
 import usePendingLoader from '../../Contexts/PendingLoaderContext';
 import useServerUri from '../../Contexts/baseServer';
-import { ArrowBigLeftDash, ChevronDown, Info } from 'lucide-react';
+import { ArrowBigLeftDash, ChevronDown, Info, Trash } from 'lucide-react';
 import { useMemo } from 'react';
+import usePrompter from './../Components/Prompt'
 
 //tailwind classes for courses components
 const formClasses = 'grid z-0 gap-5 relative bg-gray-200 my-10  px-2 sm:px-5 md:10 rounded-lg py-10 *:grid *:gap-3 *:p-2 *:w-[calc(100%-10px)] md:*:w-[calc(100%-20px)] mx-auto *:rounded *:*:first:font-bold *:*:text-lg'
@@ -20,6 +21,7 @@ const coursesDropdownClasses = 'bg-gray-100 *:p-2 *:border-b-1 *:border-b-gray-5
 const submitButtonClasses = "w-[90%] !max-w-[200px] font-bold text-2xl h-fit block px-4 py-2 bg-gray-900 ml-auto cursor-pointer mt-5 hover:bg-gray-500 text-white rounded"
 const labelClasses = "grid gap-2 *:first:uppercase *:first:font-bold"
 const courseOperations = "*:w-[calc(100%-10px)] sm:*:w-[calc(100%-30px)] *:mx-auto :*max-w-[750px]"
+const trashIconClasses = "!w-10 h-10 text-red-500 border-1 cursor-pointer bg-white border-red-500 rounded p-1 ml-auto hover:text-white hover:bg-red-500"
 
 
 const ACTIONS = {
@@ -30,7 +32,9 @@ const ACTIONS = {
     FILL_SUB_INPUT: 'fill_sub_input',
     RESET_ERRORS: 'reset_errors',
     START_NEW_MODULE: 'start_new_module',
-    FETCH_ERRORS: 'fetch_errors'
+    FETCH_ERRORS: 'fetch_errors',
+    DELETE_MODULE: 'delete_module', 
+    SWITCH_COURSE: 'switch_course'
   },
   COURSE: {
     RESET_FORM: 'reset_form',
@@ -156,7 +160,15 @@ function coursesReducer(state, action){
 }
 
 function moduleReducer(state, action){
+  
   switch(action.type){
+    case ACTIONS.MODULE.SWITCH_COURSE:
+      return action.currentModules.map( module => ({
+        ...module,
+        previousCourseCode: module.courseCode,
+        previousTitle: module.title
+      }) )
+
     case ACTIONS.MODULE.ADD_INPUT:
       return state.map( (module, mIndex) => {
         if(action.index !== mIndex) return module
@@ -204,17 +216,15 @@ function moduleReducer(state, action){
       return [...state, action.emptyModule]
       
     case ACTIONS.MODULE.START_NEW_MODULE:
-      return action.emptyModule
+      return [ action.emptyModule ]
+
+    case ACTIONS.MODULE.DELETE_MODULE:
+      return state.filter( module => module.title !== action.title )
   }
 }
 
 function toggleModuleList(e){
   e.target.parentElement.classList.toggle('*:not-first:hidden')
-}
-
-function fetchCurrentModule(courseCode, getCourse){
-  const m = getCourse(courseCode, 'modules')
-  return m
 }
 
 function AddMoreField({ position, type, index, dispatch, reverse, emptyModule, viewCourse  }){
@@ -226,31 +236,46 @@ function AddMoreField({ position, type, index, dispatch, reverse, emptyModule, v
     } } className={ (reverse ? appendButtonClasses + ' !ml-[4px] !mr-auto' : appendButtonClasses) + ( viewCourse && ' hidden') }> + </span> 
 }
 
-function ModuleStructure({ currentModules, operation }){
-  const courseCode = useMemo(() => {
-    return currentModules && currentModules[0] && currentModules[0].courseCode
-  }, [ currentModules ])
-  const { setRefreshCourses } = useCourses()
-  const [ modules, modulesDispatch ] = useReducer(moduleReducer, currentModules || [])
+function ModuleStructure({ currentModules, operation, courseCode }){
+  const emptyModule = useMemo( () => ({
+    courseCode,
+    title: '',
+    outline: '',
+    link: '',
+    topics: [''],
+    notes: [''],
+    objectives: ['']
+  }), [ courseCode ])
 
-  const emptyModule = useMemo( () => [
-    {
-      courseCode: courseCode || '',
-      title: '',
-      outline: '',
-      link: '',
-      topics: [''],
-      notes: [''],
-      objectives: ['']
-    }
-  ], [modules])
+  const { setRefreshCourses } = useCourses()
+  const [ promptResponse, setPromptResponse ] = useState(null)
+  const [ deleteModule, setDeleteModule ] = useState()
+  const [ markedForDeletion, setMarkedForDeletion ] = useState([])
+  const [ modules, modulesDispatch ] = useReducer(moduleReducer, [])
+  const { prompterSetter } = usePrompter()
+
   const serverUri = useServerUri()
   const setMsg = useSetAlert()
   const { setIsPendingLoading } = usePendingLoader()
 
   useEffect(() => {
     if(operation === 'add') modulesDispatch({ type: ACTIONS.MODULE.START_NEW_MODULE , emptyModule })
-  }, [])
+  }, [courseCode])
+
+  useEffect(() => {
+    if(currentModules){
+      modulesDispatch({ type: ACTIONS.MODULE.SWITCH_COURSE, currentModules })
+    }
+  }, [ currentModules ])
+
+  useEffect(() => {
+    if(promptResponse) {
+      setMarkedForDeletion( m => [ ...m, deleteModule.module ])
+      modulesDispatch({ type: ACTIONS.MODULE.DELETE_MODULE, title: deleteModule.module.title })
+      setDeleteModule()
+      setPromptResponse(null)
+    }
+  }, [promptResponse])
 
   async function handleModulesSubmit(e){
     e.preventDefault()
@@ -261,7 +286,7 @@ function ModuleStructure({ currentModules, operation }){
     const headers = new Headers()
     headers.append('Content-Type', 'application/json')
     const method = 'PATCH'
-    const body = JSON.stringify({ modules, operation })
+    const body = JSON.stringify({ modules, markedForDeletion, operation })
     const options = {
       headers,
       method,
@@ -274,9 +299,8 @@ function ModuleStructure({ currentModules, operation }){
       const res = await response.json()
       setMsg(res.msg)
       if(operation === 'add' && res.status === 201 ) modulesDispatch({ type: ACTIONS.MODULE.START_NEW_MODULE, emptyModule })
-        
       if(res.failed && res.failed.length > 0) modulesDispatch({ type: ACTIONS.MODULE.FETCH_ERRORS, modules: res.failed })
-      setRefreshCourses
+      setRefreshCourses(true)
     } 
       catch (err) {
       setMsg(err.message)
@@ -299,12 +323,22 @@ function ModuleStructure({ currentModules, operation }){
               </span>
               <ChevronDown className='w-8 h-8' />
             </span>
-            {
-              module.reason && <span className="text-red-500 font-bold text-2xl uppercase flex items-center gap-1"> <Info /> { module.reason } </span>
+            { module.reason && <span className="text-red-500 font-bold text-2xl uppercase flex items-center gap-1">
+                                  <Info /> { module.reason }
+                                  </span> 
             }
+            { module.previousCourseCode && <Trash className={ trashIconClasses }
+                                              onClick={
+                                                () => {
+                                                  prompterSetter({ 
+                                                    message: `Are you sure you want to delete, ${ module.title }`, 
+                                                    setter: setPromptResponse })
+                                                  setDeleteModule({ module })
+                                                }
+                                              } /> }
             <ModuleList position='courseCode' title='Course code' { ...{ index, modules, operation, module, modulesDispatch } } />
             <ModuleList position='title' title='Title'  { ...{ index, operation, module, modulesDispatch } }  />
-            <ModuleList position='outline' title='outline'  { ...{ index, operation, module, modulesDispatch } }  />
+            <ModuleList position='outline' title='Outline'  { ...{ index, operation, module, modulesDispatch } }  />
             <ModuleList position='link' title='Video link'  { ...{ index, operation, module, modulesDispatch } }  />
             <ModuleSublist position='topics' { ...{ index, operation, module, modulesDispatch } } /> 
             <ModuleSublist position='notes' { ...{ index, operation, module, modulesDispatch } } /> 
@@ -314,8 +348,8 @@ function ModuleStructure({ currentModules, operation }){
         })
       }
       <hr />
-      <span className='font-semibold text-xl'>Add new module</span>
-      <AddMoreField dispatch={ modulesDispatch } reverse type={ ACTIONS.MODULE.ADD_NEW_MODULE } emptyModule={ emptyModule } />
+      { operation === 'add' && <span className='font-semibold text-xl'>Add new module</span> }
+      { operation === 'add' &&  <AddMoreField dispatch={ modulesDispatch } reverse type={ ACTIONS.MODULE.ADD_NEW_MODULE } emptyModule={ emptyModule } /> }
       <button className={ submitButtonClasses }> Apply Changes </button>
     </form>
   )
@@ -325,6 +359,8 @@ function CourseStructure({ currentCourse, setSelectedCourse, setCurrentCourse, o
   const setMsg = useSetAlert()
   const { setRefreshCourses } = useCourses()
   const { setIsPendingLoading } = usePendingLoader()
+  const [ promptResponse, setPromptResponse ] = useState(null)
+  const { prompterSetter } = usePrompter()
   const emptyCourse = useMemo(() => ({
     course: '',
     courseCode: '',
@@ -338,9 +374,9 @@ function CourseStructure({ currentCourse, setSelectedCourse, setCurrentCourse, o
     outlines: [''],
     previousCourseCode: ''
   }), [])
-
+  const baseServer = useServerUri() 
+  const uri = useMemo(() => baseServer  + 'courses', [baseServer])
   const [ course, courseDispatch ] = useReducer(coursesReducer, currentCourse || emptyCourse)
-  const uri = useServerUri() + 'courses'
 
   async function handleCourseOperation(e){
     e.preventDefault()
@@ -378,13 +414,44 @@ function CourseStructure({ currentCourse, setSelectedCourse, setCurrentCourse, o
           setIsPendingLoading(false)
         }
   }
+
+  async function handleCourseDeletion() {
+    try {
+      setIsPendingLoading(true)
+      const headers = new Headers()
+      headers.append('Content-Type', 'application/json')
+      const method = 'PATCH'
+      const body = JSON.stringify({ courseCode: course.courseCode, operation: 'delete' })
+      const response = await fetch(uri, { headers, method, body })
+      if(!response.ok) setMsg('Something went wrong')
+      const res = await response.json()
+      setMsg(res.msg)
+      if(res.status !== 201) return
+      setRefreshCourses(true)
+      setCurrentCourse('')
+      setSelectedCourse('')
+    } catch (err) {
+      setMsg(err.message)
+    } finally{
+      setIsPendingLoading(false)
+    }
+  }
                   
   useEffect(() => {
     if(operation !== 'add') courseDispatch({ type: ACTIONS.COURSE.SET_PREVIOUS_COURSE_CODE, value: currentCourse.courseCode })
   },[])
 
+  useEffect(() => {
+    if(promptResponse) handleCourseDeletion()
+    if(promptResponse) setPromptResponse(false)
+  }, [promptResponse])
+
   return (
     <form className={ formClasses } onSubmit={ handleCourseOperation }>
+        { operation === 'edit' && <Trash className={ trashIconClasses }
+                                   onClick={
+                                    () => prompterSetter({ message: `Are you sure you want to delete, ${ course.course }`, setter: setPromptResponse })
+                                  }  /> }
         <CourseList { ...{ title: 'course name', value: course.course, courseDispatch, position: 'course' } } />
         <CourseList { ...{ title: 'course code', value: course.courseCode, courseDispatch, position: 'courseCode' } } />
         <CourseList { ...{ title: 'course overview', value: course.overview, courseDispatch, position: 'overview' } } />
@@ -435,14 +502,26 @@ function EditCourse(){
 
 function AddModule(){
 
-  return <ModuleStructure { ...{ operation: 'add' } } />
+  const [ selectedCourse, setSelectedCourse ] = useState('')
+  const { getCourse } = useCourses()
+  const [ currentCourse, setCurrentCourse ] = useState('')
+
+  useEffect(() => {
+    if(selectedCourse) setCurrentCourse( getCourse(selectedCourse) )
+  }, [ selectedCourse ])
+
+  return (
+    <>
+      <CourseSeletor { ...{ selectedCourse, setSelectedCourse } } />
+      { currentCourse && <ModuleStructure { ...{ operation: 'add', courseCode: currentCourse.courseCode } } /> }
+    </>
+  )
 }
 
 function EditModule(){
   const [ selectedCourse, setSelectedCourse ] = useState('')
   const { getCourse } = useCourses()
   const [ currentCourse, setCurrentCourse ] = useState('')
-  const [ currentModules, setCurrentModules ] = useState([])
 
   useEffect(() => {
     if(selectedCourse) {
@@ -450,18 +529,16 @@ function EditModule(){
     }
   }, [ selectedCourse ])
 
-  useEffect(() => {
-    if(currentCourse){
-      setCurrentModules( currentCourse.modules )
-    }
-
-  }, [ currentCourse ])
-
   return (
     <>
-      <CourseSeletor selectedCourse={ selectedCourse } setSelectedCourse={ setSelectedCourse }  />
+      <CourseSeletor { ...{ selectedCourse, setSelectedCourse } } />
       {
-        currentModules.length > 0 && <ModuleStructure { ...{ currentModules, operation: 'edit' } } />
+        currentCourse && currentCourse.modules.length > 0 && <ModuleStructure { ...{ currentModules: currentCourse.modules, operation: 'edit' } } /> 
+      }
+      {
+        currentCourse && currentCourse.modules.length < 1 && <span
+        className='w-fit mx-auto font-semibold uppercase text-lg pt-10'
+      > No modules added for selected course </span>
       }
     </>
   )

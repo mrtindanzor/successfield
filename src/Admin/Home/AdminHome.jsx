@@ -7,6 +7,7 @@ import Navbar from '../Components/Navbar';
 import { useSearchParams } from 'react-router-dom';
 import Courses from '../Sections/Courses'
 import Certificates from '../Sections/Certificates'
+import { PromptContextProvider, Prompter } from './../Components/Prompt'
 
 export default function AdminHome(){
   const [ currentPage, setCurrentPage ] = useSearchParams({ m: 0 })
@@ -21,7 +22,8 @@ export default function AdminHome(){
   const mainSection = useMemo(() => currentPage.get('m'), [currentPage])
 
   return (
-    <>
+    <PromptContextProvider>
+      <Prompter />
       <PendingLoader />
       <Alerter />
       <Header { ...{ setNavToggle } } />
@@ -29,6 +31,6 @@ export default function AdminHome(){
       {
         mainSection && NavLinks[mainSection].section
       }
-    </>
+    </PromptContextProvider>
   )
 }
