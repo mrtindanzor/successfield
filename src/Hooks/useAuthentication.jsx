@@ -35,7 +35,6 @@ export default function useAuthentication(){
     currentUser && setUserFullName(capitalize(currentUser.firstname + (currentUser.middlename && ' ' + currentUser.middlename ) + ' ' + currentUser.surname) )
     
     setUserPhoto(currentUser?.userImage?.secure_url || '')
-    console.log(currentUser?.userImage)
 
     if(currentUser && !certificates) getCertificates()
   }, [currentUser])
