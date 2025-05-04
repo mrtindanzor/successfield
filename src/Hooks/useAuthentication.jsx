@@ -32,7 +32,7 @@ export default function useAuthentication(){
   }
 
   useEffect(() => {
-    currentUser && setUserFullName(capitalize(currentUser.firstname + (currentUser.middlename && ' ' + currentUser.middlename ) + ' ' + currentUser.surname) )
+    currentUser && setUserFullName(capitalize(currentUser.firstname + (currentUser.middlename && ' ' + currentUser.middlename || '' ) + ' ' + currentUser.surname) )
     
     setUserPhoto(currentUser?.userImage?.secure_url || '')
 
