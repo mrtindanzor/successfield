@@ -30,16 +30,12 @@ export default function useAuthentication(){
     autoFetchTokenRef.current = setInterval(refreshToken, 14 * 60 * 1000)
     fetchesRef.current = 1
   }
-  
-  useEffect(() => {
-    isLoggedIn && (fetch(serverUri + 'users/user', { headers, method: 'POST', body: JSON.stringify({ email: currentUser.email }) }) 
-    .then( response => response.json() )
-    .then(data => setUserPhoto(data.pic))
-    .catch(err => null))
-  }, [isLoggedIn])
 
   useEffect(() => {
     currentUser && setUserFullName(capitalize(currentUser.firstname + (currentUser.middlename && ' ' + currentUser.middlename ) + ' ' + currentUser.surname) )
+    
+    setUserPhoto(currentUser?.userImage?.secure_url || '')
+    console.log(currentUser?.userImage)
 
     if(currentUser && !certificates) getCertificates()
   }, [currentUser])
