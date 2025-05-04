@@ -56,7 +56,7 @@ export default function Dashboard(){
                         ],
                   },
                   {
-                    title: 'My Certifcates',
+                    title: 'My Certificates',
                     list: certificates?.length ? certificates.map((certificate) => {
                       return {
                         subList: certificate.programme,

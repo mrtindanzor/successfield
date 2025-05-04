@@ -15,11 +15,16 @@ export default function MainList({ ACTIONS, dispatchNavigationManager, currentLo
 
   return (
     <>
-      { ( sub || main ) && <button onClick={ handleBackBtn } className=' bg-gray-400 flex justify-center p-1 items-center text-gray-800 cursor-pointer m-3 md:hidden rounded-tl-lg rounded-bl-lg '> <ChevronLeft className=' w-8 h-8 ' /> </button> }
+      { ( sub || main ) && <button onClick={ handleBackBtn } className=' bg-gray-400 flex justify-center p-1 items-center text-gray-800 cursor-pointer m-3 md:hidden rounded-tl-lg rounded-bl-lg '> 
+      <ChevronLeft className=' w-8 h-8 ' /> 
+      </button> }
       <ul className={ classes }>
       {
         mainListItems.map((item, index) => {
-          return <li key={ index } className={`flex gap-3 justify-between items-center hover:bg-gray-950 cursor-pointer md:text-white w-full  p-2 border-b-1 border-b-gray-300 md:border-b-white ${ index == main ? 'md:bg-gray-950' : '' } `} 
+          return <li 
+            key={ index } 
+            className={`flex gap-3 justify-between items-center hover:bg-gray-950 cursor-pointer md:text-white w-full  p-2 border-b-1 border-b-gray-300 md:border-b-white ${ index == main ? 'md:bg-gray-950' : '' }
+            `} 
           onClick={ (e) => dispatchNavigationManager({ type: ACTIONS.SET_CURRENT_MAIN_LIST, index }) }>
             { item.title }
             <ChevronRight />
