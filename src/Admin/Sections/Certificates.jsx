@@ -22,7 +22,8 @@ const ACTIONS = {
   FILL_INPUT: 'fill_input',
   ADD_NEW_CERTIFICATE: 'add_new_certificate',
   RESET_CERTIFICATES: 'reset_certificates',
-  CHOOSE_COURSE_CODE: 'select_course_code'
+  CHOOSE_COURSE_CODE: 'select_course_code',
+  NEW_EDITS: 'new_edits'
 }
 
 function currentTabReducer(state, action){
@@ -49,8 +50,8 @@ function certificatesReducer(state, action){
     case ACTIONS.RESET_CERTIFICATES:
       return action.emptyCertificate
 
-    case ACTIONS.FAILED_CERTIFICATES:
-      return action.failed
+    case ACTIONS.NEW_EDITS:
+      return action.newEdits
 
     case ACTIONS.CHOOSE_COURSE_CODE:
       return state.map((certificate, index) => {
@@ -142,7 +143,10 @@ function EditCertificate(){
     <>
       <form className={ searchCertificateClasses } onSubmit={ findStudent }>
         <span> Student number </span>
-        <input className={ searchInputClasses } onChange={ e => setStudentNumber(e.target.value.trim().toLowerCase()) }  />
+        <input className={ searchInputClasses } onChange={ e => {
+          setStudentNumber(e.target.value.trim().toLowerCase())
+          setCurrentCertificate()
+        } }  />
         <button className={ submitButtonClasses } > find certificate </button>
       </form>
       {
@@ -189,11 +193,19 @@ function CertificateStructure({ currentCertificate, operation }){
       
       switch(res.status){
         case 201:
-          certificatesDispatch({ type: ACTIONS.RESET_CERTIFICATES, emptyCertificate })
+          if(operation === 'add'){
+            if(res.newEdits?.length > 0){
+              certificatesDispatch({ type: ACTIONS.NEW_EDITS, newEdits: res.newEdits })
+            } else{
+              certificatesDispatch({ type: ACTIONS.RESET_CERTIFICATES, emptyCertificate })
+            }
+          } else{
+            certificatesDispatch({ type: ACTIONS.NEW_EDITS, newEdits: res.newEdits })
+          }
         break
 
         default:
-          certificatesDispatch({ type: ACTIONS.FAILED_CERTIFICATES, failed: res.failed })
+          certificatesDispatch({ type: ACTIONS.NEW_EDITS, newEdits: res.newEdits })
       }
     }
       catch(err){
