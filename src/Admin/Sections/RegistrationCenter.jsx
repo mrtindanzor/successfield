@@ -167,11 +167,11 @@ function Applications(){
                                   </span>
                                 </h4>
                               <div
-                                className='flex flex-wrap gap-5'
+                                className=''
                                 >
                                 <img 
                                   src={ applicant.nationalId.secure_url } 
-                                  className='w-[200px] h-[200px] rounded object-fit border-1 border-gray-200 overflow-hidden '
+                                  className='h-[200px] block aspect-[3/1] rounded border-1 border-gray-200 overflow-hidden '
                                   />
                                 <img 
                                   src={ applicant.userImage.secure_url } 
