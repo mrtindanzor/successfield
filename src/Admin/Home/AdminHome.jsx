@@ -8,6 +8,7 @@ import { useSearchParams } from 'react-router-dom';
 import Courses from '../Sections/Courses'
 import Certificates from '../Sections/Certificates'
 import { PromptContextProvider, Prompter } from './../Components/Prompt'
+import RegistrationCenter from '../Sections/RegistrationCenter';
 
 export default function AdminHome(){
   const [ currentPage, setCurrentPage ] = useSearchParams({ m: 0 })
@@ -15,7 +16,7 @@ export default function AdminHome(){
   const NavLinks = useMemo(() => [
       { title: 'Courses', section: <Courses /> },
       { title: 'Certificates', section: <Certificates /> },
-      { title: 'Registration Center', section: <div></div> },
+      { title: 'Registration Center', section: <RegistrationCenter /> },
       { title: 'Partners', section: <div></div> },
       { title: 'Students', section: <div></div> },
     ], [])
