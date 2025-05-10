@@ -167,15 +167,15 @@ function Applications(){
                                   </span>
                                 </h4>
                               <div
-                                className=''
+                                className='flex justify-center'
                                 >
                                 <img 
-                                  src={ applicant.nationalId.secure_url } 
-                                  className='h-[200px] block aspect-[3/1] rounded border-1 border-gray-200 overflow-hidden '
+                                  src={ applicant.userImage.secure_url } 
+                                  className='max-h-[200px] aspect-[1/1] rounded border-1 border-gray-300 overflow-hidden '
                                   />
                                 <img 
-                                  src={ applicant.userImage.secure_url } 
-                                  className='w-[200px] h-[200px] rounded object-fit border-1 border-gray-300 overflow-hidden '
+                                  src={ applicant.nationalId.secure_url } 
+                                  className='max-h-[200px] block aspect-[5/2] rounded border-1 border-gray-200 overflow-hidden '
                                   />
                               </div>
     
