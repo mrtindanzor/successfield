@@ -114,8 +114,8 @@ function Applications(){
         setApplicationsCount(count)
       }
   }, [allApplications])
-
-  if(!allApplications || allApplications.length < 1 ) {
+  
+  if(applicationsCount < 1) {
     return <p
       className='text-gray-600 font-bold uppercase mx-auto w-fit'
       >
@@ -125,13 +125,12 @@ function Applications(){
 
   return (
     <>
-      { allApplications && allApplications.length > 0 && <h2
+      { applicationsCount > 0 && <h2
     className="text-green-800 font-bold text-2xl border-b-3
     pb-3"
     > Total applications: { applicationsCount } </h2> }
-    
       {
-         allApplications && allApplications.length > 0 && allApplications.map( application => {
+         applicationsCount > 0 && allApplications.map( application => {
           const { students } = application
           if(students.length > 0){
             return <div
