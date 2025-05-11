@@ -41,30 +41,38 @@ export default function Dashboard(){
                 {
                   title: 'Account Information',
                   list: [
-                          { subList: 'Name',
+                          { 
+                            subList: 'Name',
                             section: <Name />
                           },
-                          { subList: 'Email',
+                          { 
+                            subList: 'Email',
                             section: <Email />
                           },
-                          { subList: 'Phone number', 
+                          { 
+                            subList: 'Phone number', 
                             section: <PhoneNumber />
                           },
-                          { subList: 'Change password',
+                          { 
+                            subList: 'Change password',
                             section: <ChangePassword />
                           },
                         ],
-                  },
-                  {
-                    title: 'My Certificates',
-                    list: certificates?.length ? certificates.map((certificate) => {
-                      return {
-                        subList: certificate.programme,
-                        section: <Certificate key={ certificate._id } { ...{ certificate } } />
-                      }
-                    }) : [],
-                    message: !certificates ? 'You do not have any certificates' : null
-                  }
+                },
+                {
+                  title: 'My Certificates',
+                  list: certificates?.length ? certificates.map((certificate) => {
+                    return {
+                      subList: certificate.programme,
+                      section: <Certificate key={ certificate._id } { ...{ certificate } } />
+                    }
+                  }) : [],
+                  message: !certificates ? 'You do not have any certificates' : null
+                },
+                {
+                  title: 'Log out',
+                  Logout: true
+                }
               ]
 
   return m

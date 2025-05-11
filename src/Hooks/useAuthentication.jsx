@@ -188,9 +188,18 @@ export default function useAuthentication(){
   }
 
   async function logout(){
-    const uri = serverUri + 'logout'
+    const uri = serverUri + 'users/logout'
     const method = 'POST'
-    
+    const headers = new Headers()
+    try{
+      const response = await fetch(uri, { method: 'POST', credentials: 'include' })
+      if(!response.ok) return { msg:  'An error occured' }
+      const res = await response.json()
+      if(res.status === 200) return window.location.href = '/'
+      return { msg: 'Something went wrong' }
+    } catch(err){
+      return { msg: err.message }
+    }
   }
 
   async function getCertificates(){

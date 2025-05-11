@@ -1,7 +1,9 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
+import useAuth from './../../../Contexts/AuthenticationContext'
 
 export default function MainList({ ACTIONS, dispatchNavigationManager, currentLocation, mainListItems }){
+  const { logout } = useAuth()
   let main = useMemo(() => dispatchNavigationManager({ type: ACTIONS.GET_MAIN_LIST }), [currentLocation] )
   let sub = useMemo(() => dispatchNavigationManager({ type: ACTIONS.GET_SUB_LIST }), [currentLocation] )
   const handleBackBtn = useCallback(() => {
@@ -25,9 +27,12 @@ export default function MainList({ ACTIONS, dispatchNavigationManager, currentLo
             key={ index } 
             className={`flex gap-3 justify-between items-center hover:bg-gray-950 cursor-pointer md:text-white w-full  p-2 border-b-1 border-b-gray-300 md:border-b-white ${ index == main ? 'md:bg-gray-950' : '' }
             `} 
-          onClick={ (e) => dispatchNavigationManager({ type: ACTIONS.SET_CURRENT_MAIN_LIST, index }) }>
+          onClick={ (e) => {
+            if(item.Logout) logout()
+            if(!item.Logout) dispatchNavigationManager({ type: ACTIONS.SET_CURRENT_MAIN_LIST, index })
+          } }>
             { item.title }
-            <ChevronRight />
+            { !item.Logout && <ChevronRight /> } 
           </li>
         })
       }
