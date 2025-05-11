@@ -30,7 +30,7 @@ export default function OnlyAuthorizedForModule({ children }) {
       if(!currentUser.courses?.includes(courseCode)){
         checkIfStudentIsAuthorizedForCourse(courseCode)
         .then( res => {
-          if(res.status === 401){
+          if(res.status !== 200){
             console.log(res)
             setMsg(res.msg || 'Error authorizing you try again later')
             navigate('/users/students-area')
