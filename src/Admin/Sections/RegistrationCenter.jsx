@@ -39,7 +39,7 @@ export default function RegistrationCenter(){
     },
     {
       title: 'Courses',
-      section: <div/>
+      section: <CourseRegistration />
     }
   ])
   
@@ -200,5 +200,96 @@ function Applications(){
         } )
       }
     </>
+  )
+}
+
+function CourseRegistration(){
+  const setMsg = useSetAlert()
+  const { setIsPendingLoading } = usePendingLoader()
+  const uri = useServerUri() + 'users/courses/register'
+  const { coursesList } = useCourses()
+  const [ listVisible, setListVisible ] = useState(false)
+  const [ currentOperation, setCurrentOperation ] = useState({ studentNumber: '', programme: '' })
+  const headers = useMemo(() => {
+    const h = new Headers()
+    h.append('Content-Type', 'application/json')
+    return h
+  }, [])
+
+  async function handleOperation(e){
+    e.preventDefault()
+
+    try {
+      setIsPendingLoading(true)
+      const method = 'POST'
+      const body = JSON.stringify( currentOperation )
+      const options = {
+        method,
+        headers,
+        body
+      }
+
+      const response = await fetch(uri, options)
+      if(!response.ok) return setMsg('Something went wrong')
+      const res = await response.json()
+      setMsg(res.msg)
+      if(res.status === 201) setCurrentOperation( prev => ({ ...prev, programme: '' }) )
+    } catch (err) {
+      setMsg(err.message)
+    } finally {
+      setIsPendingLoading(false)
+    }
+  }
+
+  return (
+    <form onSubmit={ handleOperation }
+      className='grid gap-3 p-3'
+    >
+      <label 
+        className='grid gap-3'
+        >
+        <span
+          className='uppercase font-bold'
+          > Student ID: </span>
+        <input
+          onChange={ e => setCurrentOperation( prev => ({ ...prev, studentNumber: e.target.value }) ) }
+          value={ currentOperation.studentNumber }
+          className='border-2 rounded min-w-[200px] px-3 py-1'
+          />
+      </label>
+      <label 
+        className='grid gap-3'
+        >
+        { currentOperation.programme && <span
+            className='font-semibold text-lg capitalize'
+            > Programme: <br/> { currentOperation.programme } </span> }
+        <span
+          className='bg-gray-800 text-white px-2 py-1 cursor-pointer rounded'
+          onClick={ () => setListVisible( v => !v ) }
+          > Choose programme </span>
+        <ul
+          className={ `mx-3 ${ listVisible && 'border-1' } bg-white` }
+          >
+          {
+            listVisible && coursesList?.length > 0 && coursesList.map( course => {
+              return <li key={ course.course }
+                className='cursor-pointer p-1 capitalize border-b-1 first:border-t-1 hover:text-white hover:bg-gray-800'
+                onClick={ () => {
+                  setCurrentOperation( prev => ({ ...prev, programme: course.course }) )
+                  setListVisible( false )
+                } }
+                > { course.course } </li>
+            } )
+          }
+        </ul>
+      </label>
+      {
+        currentOperation.studentNumber && currentOperation.programme && <button
+          className='p-2 block font-bold text-lg uppercase bg-green-500 text-white rounded cursor-pointer hover:bg-green-600'
+          >
+            Submit
+          </button>
+      }
+    </form>
   )
 }
