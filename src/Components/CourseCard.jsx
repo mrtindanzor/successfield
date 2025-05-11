@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { capitalize, createAcronym } from "../core";
 
 export default function CourseCard({ pic = '', title, overview }){
-  const courseLink = title.toLowerCase().trim().split(' ').join('-')
+  const courseLink = title.toLowerCase().trim().split(' ').join('_')
   const courseAcronym = createAcronym(title)
   const placeholder = pic ? <img src={ pic } alt={ courseAcronym } className=" " /> : <div className=" flex place-items-center justify-center bg-green-200 text-green-900 w-full h-full flex-1 border-b-1 border-b-green-700 object-contain text-2xl texturina "> { courseAcronym } </div>
 

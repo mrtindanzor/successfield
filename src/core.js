@@ -19,12 +19,12 @@ export function capitalize(phrase){
 }
 
 export function formatUrl(url){
-  let newUrl = url.toLowerCase().trim().split('-').join(' ')
+  let newUrl = url.toLowerCase().trim().split('_').join(' ')
   return newUrl
 }
 
 export function createHyphenUrl(url){
-  return url.toLowerCase().trim().split(' ').join('-')
+  return url.toLowerCase().trim().split(' ').join('_')
 }
 
 export function getBaseUrl(url){

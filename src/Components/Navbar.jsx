@@ -157,7 +157,7 @@ export default function Navbar(){
                     </span>
                                 {
                                   menu.list.map((list, listIndex) => {
-                                    path = "/" + menu.title.toLowerCase().split(' ').join('-') + "/" + list.course.toLowerCase().split(' ').join('-')
+                                    path = "/" + menu.title.toLowerCase().split(' ').join('_') + "/" + list.course.toLowerCase().split(' ').join('_')
                                     let classes = "block p-2 border-b-1 border-b-gray-100 hover:bg-green-400 hover:text-white w-[100%] "
                                     if(listIndex > 2) classes += " md:hidden "
 
