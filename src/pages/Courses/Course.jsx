@@ -46,7 +46,7 @@ function ModuleList({ list, currentTabIndex, index }){
     <ul className={ listClasses } key={ Date.now() * Math.random() }>
       {
         newList.map( module => {
-          return <li key={ module._id } className=" py-2 leading-relaxed border-b-1 border-b-gray-300 "> <span className=" inline-flex items-center justify-center p-2 object-contain border-2 border-grey-400 rounded-[50%] w-10 h-10 "> { module.index } </span> { module.title } </li>
+          return <li key={ module._id } className=" py-2 leading-relaxed border-b-1 border-b-gray-300 "> { module.title } </li>
         })
       }
     </ul>
@@ -76,7 +76,9 @@ export default function Course(){
     <>
       {
         currentCourse && currentCourse.benefits ? <>
-          { currentCourse && <h1 className=" texturina text-3xl text-green-800 text-center px-10 py-20 uppercase "> { currentCourse.course } </h1> }
+          { currentCourse && <h1 className="raleway text-xl text-green-800 text-center px-3 py-5 pb-7 uppercase "> { currentCourse.course } </h1> }
+
+          <hr /><br />
 
           { currentCourse &&  <CourseCard title={ currentCourse.course } /> }
 
@@ -86,7 +88,7 @@ export default function Course(){
                               
           <hr />
 
-          { currentCourse && <div className=" grid gap-3 px-7 py-1 ">
+          { currentCourse && currentCourse.fee && <div className=" grid gap-3 px-7 py-1 ">
                                 <span className=" font-semibold "> Fee: </span>
                                 <SubListItem content={ currentCourse.fee } />
                               </div> }
@@ -122,6 +124,8 @@ function ShowList({ currentCourse, outlines, objectives, modules, benefits }){
       <div className=" grid grid-cols-2 md:grid-cols-5 w-fit gap-1 mx-10 ">
         { 
           list.map(( currentList, index) => {
+            if(currentList.list && currentList.list.length < 1) return 
+            if(currentList.modules && currentList.modules.length < 1) return 
             let classes = `rounded p-2 ${ index === currentTabIndex ? "bg-green-500" : "bg-green-200" }`
             return <span className={ classes } key={ currentList.title } onClick={ () => setCurrentTabIndex(index) } > { currentList.title } </span>
           }) 

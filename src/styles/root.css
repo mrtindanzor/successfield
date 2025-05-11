@@ -90,6 +90,9 @@ body{
 .texturina{
   font-family: texturina;
 }
+.raleway{
+  font-family: 'raleway';
+}
 .text-shadow-black-1{
   text-shadow: 1px 1px 1px black;
 }
@@ -104,7 +107,7 @@ body{
   position: fixed;
   bottom: 0;
   left: 0;
-  z-index: 10;
+  z-index: 999;
   pointer-events: none;
 }
 .loader > div{
@@ -113,6 +116,7 @@ body{
   animation: slide infinite linear;
   -webkit-animation: slide 1.2s infinite linear;
   background-color: var(--l-p-color);
+  box-shadow: 1px 1px 4px 1px rgb(32, 30, 30);
 }
 .loader > :first-child{
   animation-delay: .3s;

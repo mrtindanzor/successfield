@@ -34,12 +34,18 @@ export function getBaseUrl(url){
 
 export function createAcronym(title){
   let ac = []
-  let words = title.trim().toUpperCase().split(' ')
+  let words = title.trim().toUpperCase().split('(')[0]
+  words = words.split(' ')
   words.map(el => {
     ac.push(el[0])
   }) 
   let word =  ac.join('.')
   if(word.includes('(')) word = word.replace('(', '')
+  if(word.includes(')')) word = word.replace(')', '')
+  if(word.includes('-')) word = word.replace('-', '')
+  if(word.includes('_')) word = word.replace('_', '')
   if(word.includes('..')) word = word.replace('..', '.')
+  if(word.includes('..')) word = word.replace('..', '.')
+  if(word.endsWith('.')) word = word.slice(0, -1)
   return word
 }
