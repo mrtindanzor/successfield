@@ -12,11 +12,11 @@ import VerifyCerificate from './pages/VerifyCertificate';
 import CoursesOverview from './pages/Courses/CoursesOverview/CoursesOverview';
 import Course from './pages/Courses/Course';
 import Module from './pages/Courses/Module/Module';
-import Registration from "./Components/Authentication/Registration/Registration";
+import Registration from "./Components/Authentication/Registration";
 import SignedIn from './Components/ProtectRoutes/SignedIn';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
-import Login from './Components/Authentication/Login/Login';
+import Login from './Components/Authentication/Login';
 import OnlyAuthorizedForModule from "./Components/ProtectRoutes/OnlyAuthorizedForModule";
 import { PendingLoader } from "./Contexts/PendingLoaderContext";
 

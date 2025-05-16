@@ -1,9 +1,9 @@
 import { useState, useReducer, useMemo } from "react";
 import { useNavigate } from 'react-router-dom'
-import { useSetAlert } from "../../../Hooks/Alerter";
-import useAuth from './../../../Contexts/AuthenticationContext'
-import useCourses from './../../../Contexts/CoursesContext'
-import usePendingLoader from './../../../Contexts/PendingLoaderContext'
+import { useSetAlert } from "../../Hooks/Alerter";
+import useAuth from './../../Contexts/AuthenticationContext'
+import useCourses from './../../Contexts/CoursesContext'
+import usePendingLoader from './../../Contexts/PendingLoaderContext'
 import { Eye, EyeOff, ChevronDown } from "lucide-react";
 
 const ACTIONS = {
@@ -157,11 +157,11 @@ async function handleFormSubmission(e){
           <TextField { ...{ title: 'Surname', type: ACTIONS.FILL_MAIN_INPUT, value: user.surname, position: 'surname', dispatchUser } } />
           <TextField { ...{ title: 'Birth date', type: ACTIONS.FILL_MAIN_INPUT, value: user.birthDate, date: true, position: 'birthDate', dispatchUser } } />
           <TextField { ...{ title: 'Gender', value: user.gender } } disabled />
-          <Selector { ...{ dispatch: dispatchUser, db: genders, position: 'gender', reducerPosition: 'gender', title: 'gender' } } />
+          <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: genders, position: 'gender', reducerPosition: 'gender', title: 'gender' } } />
           <TextField { ...{ title: 'Programme', value: user.programme } } disabled />
-          <Selector { ...{ dispatch: dispatchUser, db: coursesList, position: 'course', reducerPosition: 'programme', title: 'programme' } } />
+          <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: coursesList, position: 'course', reducerPosition: 'programme', title: 'programme' } } />
           <TextField { ...{ title: 'Highest level of Education', value: user.educationLevel } } disabled />
-          <Selector { ...{ dispatch: dispatchUser, db: educationLevels, position: 'level', reducerPosition: 'educationLevel', title: 'your educational level' } } />
+          <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: educationLevels, position: 'level', reducerPosition: 'educationLevel', title: 'your educational level' } } />
         </div>
         <div >
           <TextField { ...{ title: 'Passport photo', type: ACTIONS.FILL_MAIN_INPUT, readImage, file: true, position: 'userImage', dispatchUser } } />
@@ -235,7 +235,7 @@ function TextField({ title, type, password, position, dispatchUser, disabled, va
   )
 }
 
-function Selector({ title, dispatch, db, position, reducerPosition }){
+export function Selector({ title, dispatch, type, db, position, reducerPosition }){
   const [ isVisible, setIsVisible ] = useState(false)
 
   return(
@@ -249,7 +249,7 @@ function Selector({ title, dispatch, db, position, reducerPosition }){
           {
             db.map((item, index) => {
               return <li key={ Date.now() + '-' + index } onClick={ e => {
-                dispatch({ type: ACTIONS.FILL_MAIN_INPUT, position: reducerPosition, value: item[position] })
+                dispatch({ type, position: reducerPosition, value: item[position] })
                 setIsVisible(false)
               }
             }> { item[position] } </li>

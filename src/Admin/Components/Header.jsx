@@ -10,7 +10,13 @@ export default function Header({ setNavToggle }){
   return (
     <div className={ menuClasses }>
       <Menu className={ menuButtonClasses } onClick={ () => setNavToggle(c => !c) } />
-      Admin: { userFullName }
+      <div
+        className="overflow-hidden"
+        >
+        <span
+        className="block [animation:_scrolltext_10s_linear_infinite] [-webkit-animation:_scrolltext_10s_linear_infinite]"
+        > Admin: { userFullName } </span>
+      </div>
     </div>
   )
 }

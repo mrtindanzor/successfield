@@ -5,6 +5,7 @@ import StarterLoader from "../../Hooks/StarterLoader";
 import { Outlet } from "react-router-dom";
 import ScrollToTop from "../ScrollToTop";
 import { PendingLoader } from './../../Contexts/PendingLoaderContext'
+import UserInfo from '../Authentication/UserInfo'
 
 export default function LayoutOne(){
 
@@ -16,6 +17,7 @@ export default function LayoutOne(){
       <StarterLoader />
       <Header />
       <Navbar />
+      <UserInfo />
       <Outlet />
     </div>
   )

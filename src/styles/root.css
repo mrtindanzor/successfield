@@ -96,38 +96,12 @@ body{
 .text-shadow-black-1{
   text-shadow: 1px 1px 1px black;
 }
-.loader{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  height: calc(100vh - 58px);
-  width: 100vw;
-  background-color: var(--w-color);
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 999;
-  pointer-events: none;
-}
-.loader > div{
-  width: 15px;
-  transform-origin: bottom;
-  animation: slide infinite linear;
-  -webkit-animation: slide 1.2s infinite linear;
-  background-color: var(--l-p-color);
-  box-shadow: 1px 1px 4px 1px rgb(32, 30, 30);
-}
-.loader > :first-child{
-  animation-delay: .3s;
-  background-color: var(--t-green);
-}
-.loader > :last-child{
-  animation-delay: .5s;
-  background-color: var(--p-color);
-}
 @keyframes slide {
   0% { height: 0px; }
-  50% { height: 100px; }
+  50% { height: 150px; }
   100% { height: 0px; }
+}
+@keyframes scrolltext{
+  0%  { transform: translateX(100%); }
+  100%  { transform: translateX(-100%); }
 }
