@@ -39,27 +39,13 @@ export default function SlideShowSection(){
   }
 
   return (
-    <div className=" relative w-[95vw] md:w-[700px] h-[300px] mx-auto  mt-5 overflow-hidden ">
-      <div className='z-6 absolute w-full h-full flex items-center justify-between *:block *:h-full *:w-7 *:bg-gray-900/10 *:text-white *:hover:bg-gray-900/50 *:cursor-pointer'>
-        <ChevronLeft onClick={ () => handleSideButtons('left') } />
-        <ChevronRight onClick={ () => handleSideButtons('right') } />
-      </div>
-      <div>
+      <div
+        className="relative w-[calc(100vw-2.5rem)] p-5 sm:px-10 h-[300px] flex overflow-hidden lg:max-w-[1440px] mx-auto">
         {
           images.map( ( image, index ) => {
-            return <img key={ image + index } src={ '/images/slides/' + image } className={ ` absolute z-5 top-0 left-[50%] h-full w-full bg-top translate-x-[-50%] md:left-[unset] md:translate-[unset] md:right-5 transition-opacity duration-500 ease-linear object-cover  ${ index === activeSlide ? " opacity-100 " : ' opacity-0 ' }` } />
+            return <img key={ image + index } src={ '/images/slides/' + image } className={ `absolute w-full h-full transition-transform object-contain duration-1000 ease-linear ${ activeSlide === index ? '': 'translate-x-[100vw]' }` } />
           })
         }
-        <div className=" absolute bg-white max-w-[95%] z-7 py-2 px-3 bottom-2 left-[50%] translate-x-[-50%] flex items-center gap-1 border-1 border-gray-400 rounded ">
-          {
-            images.map((_, index ) => {
-              return <span key={ index + _ } className="flex items-center w-2 h-2 md:w-4 md:h-4 bg-white cursor-pointer " onClick={ () => restartInterval(index) }>
-                        { index === activeSlide ? <CircleDot /> : <Circle /> }
-                      </span>
-            })
-          }
-        </div>
       </div>
-    </div>
   )
 }

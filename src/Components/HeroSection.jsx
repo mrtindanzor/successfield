@@ -1,5 +1,5 @@
-import background from "./../assets/images/hero.webp";
 import { Link } from "react-router-dom";
+import image from './../assets/images/hero.jpg'
 
 const Content = {
   title: 'Excel with Successfield!',
@@ -10,11 +10,11 @@ const Content = {
 export default function HeroSection(){
   
   return (
-    <div className=" relative h-[calc(100vh-100px)] w-[100vw] z-0 flex gap-3 flex-col *:not-last:w-[fit-content] *:not-last:ml-3 *:not-last:mt-3">
-      <h2 className="font-bold text-4xl text-green-600 text-shadow-gray-800"> { Content.title } </h2>
-      <p className="bg-white/80 p-4 font-semibold"> { Content.description } </p>
-      <Link to='courses' className=" bg-green-400 hover:bg-green-600 py-2 px-3 rounded text-white "> { Content.action } </Link>
-      <img src={ background } className=" absolute top-0 left-0 w-full h-full z-[-1] object-cover " />
+    <div className="grid  px-5 sm:px-10 py-10 pt-20 sm:pt-30 md:pt-20 gap-5 relative lg:max-w-[1440px] mx-auto">
+      <h2 className="font-extrabold text-5xl flex flex-wrap text-black w-[min-content]"> { Content.title } </h2>
+      <p className="sm:[text-shadow:1px_1px_1px_black] text-xl text-gray-700 sm:text-2xl max-w-[600px] sm:text-white sm:bg-gray-700/40 sm:px-3 sm:py-5 rounded"> { Content.description } </p>
+      <img src={ image } alt="graduation" className="z-[-1] sm:absolute sm:right-0 bottom-15 sm:translate-x-[30%] lg:translate-x-0" />
+      <Link to='courses' className="relative top-[-2.5rem] border-2 border-green-500 bg-green-500 [box-shadow:5px_5px_5px_5px_gray] hover:translate-y-1 transition-transform duration-300 ease-linear text-black w-fit px-5 py-3 rounded-sm font-semibold text-xl sm:text-2xl sm:mt-10"> { Content.action } </Link>
     </div>
   )
 }
