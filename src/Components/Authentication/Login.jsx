@@ -1,63 +1,62 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAuth from '../../Contexts/AuthenticationContext'
 import { useSetAlert } from '../../Hooks/Alerter'
 import { EyeOff, Eye } from 'lucide-react'
 
-const hideIcon = <EyeOff />
-const showIcon = <Eye />
-
-
 export default function Login(){
-  const [ email, setEmail ] = useState('')
-  const [ password, setPassword ] = useState('')
+  const [ credentials, setCredentials ] = useState({ email: '', password: '' })
   const [ isPassVisible, setIsPassVisible ] = useState(false)
   const setMsg = useSetAlert()
   const navigate = useNavigate()
-  
-  const credentials =  { email, password }
   const { login } = useAuth()
-  
-  const labelClasses = "relative flex flex-col items-start sm:flex-row sm:items-center w-full gap:2 sm:gap-5"
-  const inputClasses = "w-full flex-1 border-1 py-1 px-3 border-gray-500 rounded"
-  const emailLabel = <label className={ labelClasses }>
-                          <span>Email: </span>
-                          <input type="email" className={ inputClasses } onChange={ (e) => setEmail(e.target.value) } value={ email } />
-                        </label>
 
-  const passwordLabel = <label className={ labelClasses }>
-                          <span>Password: </span>
-                          <input type={ isPassVisible ? 'text' : 'password' } className={ inputClasses } onChange={ (e) => setPassword(e.target.value) } value={ password } />
-                          <span className=" absolute right-5 bottom-2 " onClick={ () => toggleIconVisibility('password') }> { !isPassVisible ? hideIcon : showIcon } </span>
-                        </label>
+  async function handleFormSubmission(e){
+    e.preventDefault()
 
-const handler = login
-
-function toggleIconVisibility(object){
-  if(object === 'password'){
-      setIsPassVisible(v => !v)
-    }
-}
-
-async function handleFormSubmission(e){
-  e.preventDefault()
-
-  try{
-    const res = await handler(credentials, navigate)
-    if(res && res.msg) setMsg(res.msg)
+    try{
+      const res = await login(credentials, navigate)
+      if(res && res.msg) setMsg(res.msg)
     } catch(err){
       setMsg(err.message)
     }
   }
+  console.log(credentials)
 
   return (
     <>
-      <form onSubmit={ (e) => handleFormSubmission(e) } className=" relative top-20 grid gap-10 bg-white mx-auto w-[98%] max-w-[400px] sm:max-w-[600px] rounded-xl py-10 px-3 md:px-10 ">
+      <form onSubmit={ (e) => handleFormSubmission(e) } className=" relative top-20 grid gap-10 bg-white mx-auto w-[98%] max-w-[400px] sm:max-w-[600px] rounded-xl py-10 px-3 md:px-10 pb-50">
         <h3 className=" text-4xl text-green-500 font-bold "> Sign in </h3>
-        { emailLabel }
-        { passwordLabel }
-        <button className=" text-white border-2 bg-green-600 w-fit ml-auto px-5 py-1 font-bold hover:bg-green-800 rounded-lg cursor-pointer "> Log in </button>
+        <TextField { ...{ value: credentials.email, title: 'Email', position: 'email', setter: setCredentials } } />
+        <TextField { ...{ value: credentials.password, title: 'Password', position: 'password', setter: setCredentials, setIsPassVisible, isPassVisible } } />
+        <button className=" text-white text-xl font-bold w-fit px-7 py-2 bg-green-500 hover:rounded-lg cursor-pointer "> Log in </button>
       </form>
     </>
+  )
+}
+
+function TextField({ value, title, position, setter, setIsPassVisible, isPassVisible }){
+  const inputType = useMemo(() => {
+    let c = 'email'
+    if(position === 'password' && !isPassVisible) c = 'password'
+    if(isPassVisible) c = 'text'
+    return c
+  }, [isPassVisible])
+
+  return (
+    <label 
+      className="relative grid gap-1"
+      >
+      <h3> { title }: </h3>
+      <input 
+        type={ inputType } 
+        className="border-b-1 py-1 outline-none" 
+        onChange={ e => setter( prev => ({ ...prev, [position]: e.target.value }) ) }
+        value={ value  } />
+      { position === 'password' && <span className="absolute right-5 bottom-2" 
+        onClick={ () => setIsPassVisible(v => !v) }>
+        { isPassVisible ? <EyeOff /> : <Eye /> }
+      </span> }
+    </label>
   )
 }

@@ -137,7 +137,7 @@ async function handleFormSubmission(e){
       <form onSubmit={ (e) => handleFormSubmission(e) }
         autoComplete="off"
         autoCapitalize="on"
-         className="grid px-5 gap-10 sm:px-8 md:px-10 w-[95%] sm:max-w-[900px] mx-auto pt-10 pb-50"
+         className="grid w-[calc(100%-2.5rem)] sm:max-w-[900px] mx-auto pt-10 pb-50"
          >
         <div
           className={`grid items-end sm:grid-cols-2 gap-10 ${ currentForm !== 1 && 'hidden' }`}
@@ -196,7 +196,7 @@ function TextField({ title, type, password, position, dispatchUser, disabled, va
     let t = password ? visible.type : 'text'
     if(date) t = 'date'
     if(file) t = 'file'
-    if(position === 'phoneNumber') t = 'number'
+    if(position === 'phoneNumber') t = 'tel'
     return t
   }, [visible])
   
@@ -210,7 +210,7 @@ function TextField({ title, type, password, position, dispatchUser, disabled, va
           inputType === 'file' && <div
             className="w-fit h-fit p-2 cursor-pointer [box-shadow:1px_1px_2px_2px_green] rounded-sm bg-green-600 text-white font-bold"
             >
-              <Plus size={50} />
+              <Plus />
             </div>
         }
         <input type={ inputType } 
@@ -245,7 +245,7 @@ function TextField({ title, type, password, position, dispatchUser, disabled, va
         image && <div 
                   className="h-50" >
                   <img src={ image } 
-                    className="w-full h-full object-contain" />
+                    className="w-full h-full object-left-center object-contain" />
                 </div>
       }
     </>
@@ -259,7 +259,7 @@ export function Selector({ title, dispatch, type, db, position, reducerPosition,
     <div 
       className={`grid items-end gap-2 relative h-fit border-1 ${ classList }`}>
         <span 
-          className="flex whitespace-nowrap h-fit w-full px-5 py-2 rounded-sm text-white text-xl font-bold justify-between bg-green-500 cursor-pointer  [box-shadow:_2px_2px_2px_2px_gray]" 
+          className="flex whitespace-nowrap h-fit w-full px-5 py-1 sm:py-2 rounded-sm text-white text-lg sm:text-xl font-bold justify-between bg-green-500 cursor-pointer  [box-shadow:_2px_2px_2px_2px_gray]" 
           onClick={ () => setIsVisible(c => !c) }>
           Select { title }
           <ChevronDown />

@@ -5,7 +5,7 @@ import { FileText, LogIn, UserCircle } from "lucide-react";
 function NotLoggedIn(){
   return (
     <div className=" flex ml-auto ">
-      <NavLink to='/users/students-area' className="flex gap-2 whitespace-nowrap items-center border-2 border-gray-400 px-3 py-2 sm:px-2 sm:py-2 md:px-5 md:py-2 rounded sm:border-none font-bold text-lg md:text-xl text-gray-950">
+      <NavLink to='/users/students-area' className="after:!border-none flex gap-2 whitespace-nowrap items-center border-2 border-gray-400 px-3 py-2 sm:px-2 sm:py-2 md:px-5 md:py-2 rounded sm:border-none font-bold text-lg md:text-xl text-gray-950">
         <LogIn />
         Log in
       </NavLink>
