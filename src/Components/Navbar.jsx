@@ -76,7 +76,7 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
                           } }
           ></div>
         <ul 
-          className="flex flex-col md:flex-row list-none !bg-white md:bg-transparent w-[calc(100vw-6rem)] h-full md:w-fit max-w-[500px] !z-2 md:max-w-fit"
+          className="flex flex-col md:flex-row list-none !bg-white md:bg-transparent w-[calc(100vw-30px)] h-full md:w-fit max-w-[500px] !z-2 md:max-w-fit"
           >
           { 
             !isLoggedIn && <li>
@@ -120,7 +120,7 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
 
                 {
                   menu.list && <ul key={ Math.random() + Math.random() * Math.random() } 
-                      className={`sub-nav md:absolute md:top-[100%] bg-white [box-shadow:1px_1px_3px_black] cursor-pointer pb-10 md:pd-[unset] ${ coursesActive ? 'absolute top-0 z-1 h-full w-[calc(100vw-6rem)] md:h-fit overflow-y-scroll md:overflow-[unset]' : 'hidden' } `}
+                      className={`sub-nav md:absolute md:top-[100%] bg-white [box-shadow:1px_1px_3px_black] cursor-pointer pb-10 md:pd-[unset] ${ coursesActive ? 'absolute top-0 z-1 h-full w-[calc(100vw-30px)] md:h-fit overflow-y-scroll md:overflow-[unset]' : 'hidden' } `}
                       onClick={ () => setCoursesActive(false) }
                       >
                       <span key={ Math.random() + Math.random() * Math.random() + Math.random() } className="flex items-center font-4xl font-bold capitalize py-2 border-b-1 border-gray-500 md:hidden">
