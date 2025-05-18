@@ -260,9 +260,9 @@ export function Selector({ title, dispatch, type, db, position, reducerPosition,
 
   return(
     <div 
-      className={`grid items-end gap-2 relative h-fit border-1 ${ classList }`}>
+      className={`grid items-end gap-2 relative h-fit ${ classList }`}>
         <span 
-          className="flex whitespace-nowrap h-fit w-full px-5 py-1 sm:py-2 rounded-sm text-white text-lg sm:text-xl font-bold justify-between bg-green-500 cursor-pointer  [box-shadow:_2px_2px_2px_2px_gray]" 
+          className="flex whitespace-nowrap h-fit w-full px-5 py-1 sm:py-2 rounded-sm text-white text-lg sm:text-xl font-bold justify-between bg-green-500 cursor-pointer [box-shadow:_2px_2px_2px_2px_gray]" 
           onClick={ () => setIsVisible(c => !c) }>
           Select { title }
           <ChevronDown />
