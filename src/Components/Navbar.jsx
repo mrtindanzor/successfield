@@ -86,7 +86,6 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
               onClick={ () => {
                             coursesActive && setCoursesActive(false)
                             navbarActive && setNavbarActive(false)
-                            alert()
                           } }>
                 <FileText />
                 Apply
@@ -107,7 +106,7 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
                   to={ path } 
                   className=" block  py-2 px-5 border-b-1 border-b-gray-100 md:border-none hover:bg-green-400 hover:text-white w-[100%]
                   md:w-fit whitespace-nowrap" 
-                  onClick={ () => coursesActive && setCoursesActive(false) }
+                  onClick={ () => navbarActive && setNavbarActive(false) }
                   > { menu.title } </NavLink> }
 
                 { menu.list && <span 
@@ -140,7 +139,7 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
                                 className={ `block md:pl-5 md:pr-10 py-2 px-5 w-full px-2 md:w-[500px] hover:bg-gray-950 hover:!text-white capitalize ${ listIndex > 3 ? 'md:hidden': 'block' } }` }
                                 onClick={ () => {
                                   coursesActive && setCoursesActive(false)
-                                  coursesActive && setNavbarActive(false)
+                                  navbarActive && setNavbarActive(false)
                                 } }
                                 > { list.course }
                               </NavLink>
