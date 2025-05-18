@@ -81,7 +81,7 @@ export default function Course(){
 
           { currentCourse &&  <CourseCard { ...{ title: currentCourse.course, isCourse: true } } /> }
 
-          { currentCourse && <div className="text-black text-xl capitalize bg-white px-5 py-10 leading-relaxed [font-family:arial]">
+          { currentCourse && <div className="text-black md:text-xl capitalize bg-white px-5 py-10 leading-relaxed [font-family:arial]">
                                 <SubListItem content={ currentCourse.overview } />
                               </div> }
                               
