@@ -1,5 +1,5 @@
 import { NavLink, Link } from "react-router-dom";
-import useAuth from './../../../Contexts/AuthenticationContext'
+import useAuth from './../../Contexts/AuthenticationContext'
 import { FileText, LogIn, UserCircle } from "lucide-react";
 
 function NotLoggedIn(){
@@ -20,7 +20,7 @@ function NotLoggedIn(){
 function MyProfile(){
 
   return (
-      <Link to='/dashboard/profile' className=" ml-auto py-2 px-4 bg-gray-800 h-[calc(100%-2px)] text-white hover:bg-gray-500 hover:text-white flex items-center gap-x-2 ">
+      <Link to='/dashboard/profile' className=" ml-auto py-2 px-4 bg-white border-2 h-[calc(100%-2px)] text-gray-950 rounded hover:bg-gray-950 hover:text-white flex items-center gap-x-2 ">
         <UserCircle />
         Profile
       </Link>

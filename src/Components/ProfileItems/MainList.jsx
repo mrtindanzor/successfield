@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
-import useAuth from './../../../Contexts/AuthenticationContext'
+import useAuth from './../../Contexts/AuthenticationContext'
 
 export default function MainList({ ACTIONS, dispatchNavigationManager, currentLocation, mainListItems }){
   const { logout } = useAuth()
@@ -10,22 +10,18 @@ export default function MainList({ ACTIONS, dispatchNavigationManager, currentLo
     if(sub) return dispatchNavigationManager({ type: ACTIONS.BACK_TO_MAIN_LIST })
     dispatchNavigationManager({ type: ACTIONS.BACK_TO_DASHBOARD })
   }, [currentLocation])
-  const classes = useMemo(() => {
-    let c = `${ sub || main ? 'hidden md:block' : '' } bg-white md:bg-gray-800 mt-[1px] md:min-h-100 md:max-w-[fit-content]`
-    return c
-  } , [currentLocation])
 
   return (
     <>
-      { ( sub || main ) && <button onClick={ handleBackBtn } className=' bg-gray-400 flex justify-center p-1 items-center text-gray-800 cursor-pointer m-3 md:hidden rounded-tl-lg rounded-bl-lg '> 
+      { ( sub || main ) && <button onClick={ handleBackBtn } className=' bg-gray-700 text-white flex justify-center py-1 px-3 items-center cursor-pointer ml-5 my-3 md:hidden rounded-tl-sm rounded-bl-sm '> 
       <ChevronLeft className=' w-8 h-8 ' /> 
       </button> }
-      <ul className={ classes }>
+      <ul className={ `${ sub || main ? 'hidden md:block' : '' } bg-white md:border-r-1 mt-[1px] md:min-h-100 md:max-w-[fit-content]` }>
       {
         mainListItems.map((item, index) => {
           return <li 
             key={ index } 
-            className={`flex gap-3 justify-between items-center hover:bg-gray-950 cursor-pointer md:text-white w-full  p-2 border-b-1 border-b-gray-300 md:border-b-white ${ index == main ? 'md:bg-gray-950' : '' }
+            className={`flex gap-3 justify-between items-center hover:bg-gray-500 hover:text-white cursor-pointer md:text-gray-950 w-full  p-2 border-b-1 border-b-gray-300 ${ index == main ? 'md:bg-gray-950 md:!text-white' : '' }
             `} 
           onClick={ (e) => {
             if(item.Logout) logout()

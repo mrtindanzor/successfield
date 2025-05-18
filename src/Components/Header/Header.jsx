@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import AuthButtons from "./Auth/AuthButtons";
-import LogoElement from "./Logo/Logo";
+import AuthButtons from "./AuthButtons";
+import LogoElement from "./Logo";
 import Navbar, { MenuButton } from "../Navbar";
 
 export default function Header(){
