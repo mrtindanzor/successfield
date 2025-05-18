@@ -73,7 +73,6 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
           onClick={ () => {
                             coursesActive && setCoursesActive(false)
                             navbarActive && setNavbarActive(false)
-                            alert()
                           } }
           ></div>
         <ul 
