@@ -4,26 +4,13 @@ import { useSetAlert } from "../../Hooks/Alerter";
 import useAuth from './../../Contexts/AuthenticationContext'
 import useCourses from './../../Contexts/CoursesContext'
 import usePendingLoader from './../../Contexts/PendingLoaderContext'
-import { Eye, EyeOff, ChevronDown } from "lucide-react";
+import { Eye, EyeOff, ChevronDown, ArrowRight, Plus } from "lucide-react";
 
 const ACTIONS = {
   FILL_MAIN_INPUT: 'fill_main_input',
   FILL_ADDRESS: 'fill_address',
   RESET_FORM: 'reset_form'
 }
-
-const formClasses = "w-94vw max-w-[95vw] md:max-w-[950px] mx-auto relative top-5 py-10 grid gap-10 *:not-first:bg-gray-200 *:not-first:py-5 *:not-first:px-3 *:not-first:rounded *:not-first:grid *:not-first:gap-7 rounded-xl *:not-first:not-last:w-full *:not-first:not-last:mx-auto"
-const labelClasses = "grid gap-3 w-[100%] mx-auto object-contain relative *:first:uppercase *:first:font-bold *:first:text-lg"
-const inputClasses = "border-2 border-b-gray-600 py-1 px-2 overflow-hidden whitespace-nowrap block w-[100%] rounded"
-const selectorClasses = " grid bg-white *:p-1 text-sm *:hover:bg-green-600 *:cursor-pointer *:hover:text-white *:border-b-1 *:border-b-gray-400 "
-const imageContainerClasses = "!w-[calc(100%-1.5rem)] overflow-hidden"
-const imageClasses = "aspect-square max-w-[250px] object-left object-contain rounded"
-const uploadButtonClasses = " w-[200px] relative before:absolute before:top-0 before:left-0 before:inset-0 py-1 px-2 rounded before:w-full before:h-[40px] before:content-['☁️_upload'] cursor-pointer before:bg-green-400 before:text-gray-700 before:py-2 before:text-xl uppercase before:flex before:items-center before:pl-1 before:rounded overflow-hidden"
-const listWrapperClasses = "grid gap-3 w-full *:first:font-bold mb-3"
-const listSelectorClasses = 'p-2 cursor-pointer flex justify-between items-center bg-gray-800 hover:bg-gray-950 text-white rounded'
-const dropdownMenuListClasses = 'bg-gray-100 *:p-2 *:capitalize *:border-b-1 *:border-b-gray-500 *:hover:bg-green-300 font-normal '
-const submitButtonClasses = '!py-2 !px-3 !bg-green-600 !text-white cursor-pointer uppercase font-2xl font-bold'
-const togglePasswordVisiblityClasses = 'absolute right-2 bottom-2'
 
 function userReducer(state, action){
   
@@ -55,8 +42,8 @@ export default function Registration(){
     firstname: '',
     middlename: '',
     surname: '',
-    gender: '',
-    birthDate: '2000-01-01',
+    gender: 'male',
+    birthDate: '',
     address: {
       country: '',
       state: '',
@@ -82,6 +69,7 @@ export default function Registration(){
   const { coursesList } = useCourses()
   const { setIsPendingLoading } = usePendingLoader()
   const { registration } = useAuth()
+  const [ currentForm, setCurrentForm ] = useState(1)
   const educationLevels = useMemo(() => {
     const e = [
       { level: "No Formal Education" },
@@ -141,6 +129,7 @@ async function handleFormSubmission(e){
       behavior: 'smooth'
     })
   }
+  setCurrentForm(1)
 }
 
   return (
@@ -148,44 +137,59 @@ async function handleFormSubmission(e){
       <form onSubmit={ (e) => handleFormSubmission(e) }
         autoComplete="off"
         autoCapitalize="on"
-         className={ formClasses }
+         className="grid px-5 gap-10 sm:px-8 md:px-10 w-[95%] sm:max-w-[900px] mx-auto pt-10 pb-50"
          >
-        <h3 className="text-3xl font-bold"> Start Your Admission Application </h3>
-        <div>
-          <TextField { ...{ title: 'First name', type: ACTIONS.FILL_MAIN_INPUT, value: user.firstname, position: 'firstname', dispatchUser } } />
+        <div
+          className={`grid items-end sm:grid-cols-2 gap-10 ${ currentForm !== 1 && 'hidden' }`}
+          >
+          <h3 
+            className="text-3xl sm:4xl md:text-5xl font-bold sm:col-span-2 text-black"
+            > Start Your Admission Application </h3>
+          <TextField { ...{ title: 'First name', type: ACTIONS.FILL_MAIN_INPUT, value: user.firstname, position: 'firstname', dispatchUser} } />
           <TextField { ...{ title: 'Middle name', type: ACTIONS.FILL_MAIN_INPUT, value: user.middlename, position: 'middlename', dispatchUser } } />
-          <TextField { ...{ title: 'Surname', type: ACTIONS.FILL_MAIN_INPUT, value: user.surname, position: 'surname', dispatchUser } } />
-          <TextField { ...{ title: 'Birth date', type: ACTIONS.FILL_MAIN_INPUT, value: user.birthDate, date: true, position: 'birthDate', dispatchUser } } />
+          <TextField { ...{ title: 'Surname', type: ACTIONS.FILL_MAIN_INPUT, value: user.surname, position: 'surname', dispatchUser, classList: 'sm:col-span-2'  } } />
+          <TextField { ...{ title: 'Birth date', type: ACTIONS.FILL_MAIN_INPUT, value: user.birthDate, date: true, position: 'birthDate', dispatchUser, classList: 'sm:col-span-2' } } />
           <TextField { ...{ title: 'Gender', value: user.gender } } disabled />
           <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: genders, position: 'gender', reducerPosition: 'gender', title: 'gender' } } />
-          <TextField { ...{ title: 'Programme', value: user.programme } } disabled />
-          <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: coursesList, position: 'course', reducerPosition: 'programme', title: 'programme' } } />
-          <TextField { ...{ title: 'Highest level of Education', value: user.educationLevel } } disabled />
-          <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: educationLevels, position: 'level', reducerPosition: 'educationLevel', title: 'your educational level' } } />
+          <NextButton { ...{ setter: setCurrentForm, location: 2 } } />
         </div>
-        <div >
-          <TextField { ...{ title: 'Passport photo', type: ACTIONS.FILL_MAIN_INPUT, readImage, file: true, position: 'userImage', dispatchUser } } />
-          <TextField { ...{ title: 'id photo', type: ACTIONS.FILL_MAIN_INPUT, readImage, file: true, position: 'nationalId', dispatchUser } } />
+        <div className={`${ currentForm !== 2 && 'hidden' } grid gap-10`} >
+          <TextField { ...{ title: 'Programme', value: user.programme, classList: "sm:col-span-2" } } disabled />
+          <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: coursesList, position: 'course', reducerPosition: 'programme', title: 'programme', classList: "sm:col-span-2"} } />
+          <TextField { ...{ title: 'Highest level of Education', value: user.educationLevel, classList: "sm:col-span-2" } } disabled />
+          <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: educationLevels, position: 'level', reducerPosition: 'educationLevel', title: 'your educational level', classList: "sm:col-span-2" } } />
+          <TextField { ...{ title: 'Passport photo', type: ACTIONS.FILL_MAIN_INPUT, readImage, file: true, position: 'userImage', dispatchUser, classList: "sm:col-span-2" } } />
+          <TextField { ...{ title: 'id photo', type: ACTIONS.FILL_MAIN_INPUT, readImage, file: true, position: 'nationalId', dispatchUser, classList: "sm:col-span-2" } } />
+          <NextButton { ...{ setter: setCurrentForm, location: 3 } } />
+        </div>
+        <div  className={`${ currentForm !== 3 && 'hidden' } grid gap-10`}>
+          <h3 
+            className="text-2xl sm:3xl md:text-4xl font-bold sm:col-span-2 text-black"
+            > Address* </h3>
           <TextField { ...{ title: 'country', type: ACTIONS.FILL_ADDRESS, value: user.address.country, position: 'country', dispatchUser } } />
           <TextField { ...{ title: 'region / state', type: ACTIONS.FILL_ADDRESS, value: user.address.state, position: 'state', dispatchUser } } />
-          <TextField { ...{ title: 'city', type: ACTIONS.FILL_ADDRESS, value: user.address.city, position: 'city', dispatchUser } } />
-          <TextField { ...{ title: 'address1', type: ACTIONS.FILL_ADDRESS, value: user.address.address1, position: 'address1', dispatchUser } } />
-          <TextField { ...{ title: 'address2', type: ACTIONS.FILL_ADDRESS, value: user.address.address2, position: 'address2', dispatchUser } } />
+          <TextField { ...{ title: 'city', type: ACTIONS.FILL_ADDRESS, value: user.address.city, position: 'city', dispatchUser, classList: "sm:col-span-2" } } />
+          <TextField { ...{ title: 'address1', type: ACTIONS.FILL_ADDRESS, value: user.address.address1, position: 'address1', dispatchUser, classList: "sm:col-span-2" } } />
+          <TextField { ...{ title: 'address2', type: ACTIONS.FILL_ADDRESS, value: user.address.address2, position: 'address2', dispatchUser, classList: "sm:col-span-2" } } />
+          <TextField { ...{ title: 'contact number', type: ACTIONS.FILL_MAIN_INPUT, value: user.phoneNumber, position: 'phoneNumber', dispatchUser, classList: "sm:col-span-2" } } />
+          <NextButton { ...{ setter: setCurrentForm, location: 4 } } />
         </div>
-        <div >
-          <TextField { ...{ title: 'contact number', type: ACTIONS.FILL_MAIN_INPUT, value: user.phoneNumber, position: 'phoneNumber', dispatchUser } } />
-          <TextField { ...{ title: 'email', type: ACTIONS.FILL_MAIN_INPUT, value: user.email, position: 'email', dispatchUser } } />
-          <TextField { ...{ title: 'password', type: ACTIONS.FILL_MAIN_INPUT, value: user.password, password: true, position: 'password', dispatchUser } } />
-          <TextField { ...{ title: 'confirm password', type: ACTIONS.FILL_MAIN_INPUT, value: user.cpassword, password: true, position: 'cpassword', dispatchUser } } />
+        <div className={`${ currentForm !== 4 && 'hidden' } grid gap-10`}>
+          <h3 
+            className="text-2xl sm:3xl md:text-4xl font-bold sm:col-span-2 text-black"
+            > Login Information* </h3>
+          <TextField { ...{ title: 'email', type: ACTIONS.FILL_MAIN_INPUT, value: user.email, position: 'email', dispatchUser, classList: 'sm:col-span-2' } } />
+          <TextField { ...{ title: 'password', type: ACTIONS.FILL_MAIN_INPUT, value: user.password, password: true, position: 'password', dispatchUser, classList: 'sm:col-span-2' } } />
+          <TextField { ...{ title: 'confirm password', type: ACTIONS.FILL_MAIN_INPUT, value: user.cpassword, password: true, position: 'cpassword', dispatchUser, classList: 'sm:col-span-2' } } />
           <TextField { ...{ title: 'contact', type: ACTIONS.FILL_MAIN_INPUT, value: user.contact, position: 'contact', dispatchUser } } />
         </div>
-        <button className={ `${ submitted ? "!cursor-not-allowed" : ''} ${ submitButtonClasses }` } disabled={ submitted }> Submit Application </button>
+        <button className={ `${ submitted ? "!cursor-not-allowed" : ''} ${ currentForm !== 4 && 'hidden' } cursor-pointer [box-shadow:_2px_2px_2px_2px_gray] w-fit sm:col-span-2 bg-green-600 px-5 py-2 ml-auto text-white text-xl sm:text-2xl font-bold rounded-sm` } disabled={ submitted }> Submit Application </button>
       </form>
     </>
   )
 }
 
-function TextField({ title, type, password, position, dispatchUser, disabled, value, date, file, readImage }){
+function TextField({ title, type, password, position, dispatchUser, disabled, value, date, file, readImage, classList }){
   const [ visible, setIsVisible ] = useState({ type: 'password' })
   const [ image, setImage ] = useState(null)
   const inputType = useMemo(() => {
@@ -198,10 +202,19 @@ function TextField({ title, type, password, position, dispatchUser, disabled, va
   
   return (
     <>
-      <label className={ `${labelClasses} ${ position === 'contact' ? "hidden" : '' }` }>
-        <span>{ title }: </span>
+      <label className={ `relative grid gap-3 ${classList} ${ position === 'contact' ? "hidden" : '' } ${ inputType === 'file' && image && '!col-span-1' }` }>
+        <span
+          className="font-semibold text-xl sm:text-2xl uppercase"
+          >{ title }: </span>
+        {
+          inputType === 'file' && <div
+            className="w-fit h-fit p-2 cursor-pointer [box-shadow:1px_1px_2px_2px_green] rounded-sm bg-green-600 text-white font-bold"
+            >
+              <Plus size={50} />
+            </div>
+        }
         <input type={ inputType } 
-        className={ file ? uploadButtonClasses : inputClasses } 
+        className={`border-b-2 border-b-gray-950 outline-none py-1 ${ inputType === 'file' && 'hidden' }`}
           value={ value ?? '' } 
           autoComplete="off"
           accept='image/jpg/jpeg/png'
@@ -220,43 +233,70 @@ function TextField({ title, type, password, position, dispatchUser, disabled, va
                   return { type: 'password' }
                 } ) }
               > { 
-                !visible ? 
-                  <EyeOff className={ togglePasswordVisiblityClasses } /> 
-                    : <Eye className={ togglePasswordVisiblityClasses } /> 
+                visible && visible.type !== 'password' ?
+                  <EyeOff 
+                    className="block mb-2"  /> 
+                    : <Eye 
+                      className="block mb-2"/> 
                 } </span> 
         }
       </label>
       {
-        image && <div className={ imageContainerClasses } >
-                  <img src={ image } className={ imageClasses } />
+        image && <div 
+                  className="h-50" >
+                  <img src={ image } 
+                    className="w-full h-full object-contain" />
                 </div>
       }
     </>
   )
 }
 
-export function Selector({ title, dispatch, type, db, position, reducerPosition }){
+export function Selector({ title, dispatch, type, db, position, reducerPosition, classList }){
   const [ isVisible, setIsVisible ] = useState(false)
 
   return(
-    <ul className={ listWrapperClasses }>
-        <span className={ listSelectorClasses } onClick={ () => setIsVisible(c => !c) }>
+    <div 
+      className={`grid items-end gap-2 relative h-fit border-1 ${ classList }`}>
+        <span 
+          className="flex whitespace-nowrap h-fit w-full px-5 py-2 rounded-sm text-white text-xl font-bold justify-between bg-green-500 cursor-pointer  [box-shadow:_2px_2px_2px_2px_gray]" 
+          onClick={ () => setIsVisible(c => !c) }>
           Select { title }
           <ChevronDown />
         </span>
         {
-          isVisible && <div className={ dropdownMenuListClasses }>
+          isVisible && <ul 
+            className="[box-shadow:_0_2px_1px_1px_gray] absolute top-[100%] w-full bg-white z-1">
           {
             db.map((item, index) => {
-              return <li key={ Date.now() + '-' + index } onClick={ e => {
+              return <li 
+                key={ item }
+                className="px-5 py-1 border-b-1 border-b-gray-300 cursor-pointer hover:bg-gray-950 hover:text-white"
+                onClick={ e => {
                 dispatch({ type, position: reducerPosition, value: item[position] })
                 setIsVisible(false)
               }
             }> { item[position] } </li>
             })
           }
-        </div>
+        </ul>
         }
-      </ul>
+      </div>
+  )
+}
+
+function NextButton({ setter, location }){
+
+  return (
+    <div 
+      className="flex items-center gap-3 whitespace-nowrap text-white font-bold text-xl w-fit px-5 py-2 rounded-sm bg-green-500 text white mt-10 ml-auto sm:col-span-2 cursor-pointer [box-shadow:_2px_2px_2px_2px_gray]"
+      onClick={ () => {
+        setter(location)
+        window.scrollTo({ top: 0, behavior: 'auto' })
+      } }
+      >
+        Next
+        <ArrowRight />
+    </div>
   )
 }
