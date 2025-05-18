@@ -68,8 +68,8 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
   
   return (
       <nav 
-        className={`${ !navbarActive && 'translate-x-[-100vw] md:translate-0' } transition md:transition-none duration-300 absolute md:relative left-0 md:left-0 top-[3.5rem] w-[100vw] md:top-0 h-[calc(100vh-3.5rem)] md:h-fit`}>
-        <div className={ navbarActive && 'bg-gray-950/90 md:bg-transparent inset-0 absolute md:!fixed md:left-0 md:right-0 w-[300vw] md:translate-x-[-50%] h-[100vh] md:top-[100%] z-[-1] border-red-500' }
+        className={`${ !navbarActive && 'translate-x-[-100vw] md:translate-0' } transition md:transition-none duration-300 absolute md:relative left-0 md:left-0 top-[6rem] w-[100vw] md:top-0 h-[calc(100vh-3.5rem)] md:h-fit`}>
+        <div className={ navbarActive || coursesActive && 'bg-gray-950/90 md:bg-transparent inset-0 absolute md:!fixed md:left-0 md:right-0 w-[300vw] md:translate-x-[-50%] h-[100vh] md:top-[100%] z-[-1] border-red-500' }
           onClick={ () => {
                             coursesActive && setCoursesActive(false)
                             navbarActive && setNavbarActive(false)
@@ -120,7 +120,7 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
 
                 {
                   menu.list && <ul key={ Math.random() + Math.random() * Math.random() } 
-                      className={`sub-nav md:absolute md:top-[100%] bg-white [box-shadow:1px_1px_3px_black] cursor-pointer pb-10 md:pd-[unset] ${ coursesActive ? 'absolute top-0 z-1 h-full w-[calc(100vw-30px)] md:h-fit overflow-y-scroll md:overflow-[unset]' : 'hidden' } `}
+                      className={`sub-nav md:absolute md:top-[100%] bg-white [box-shadow:1px_1px_3px_black] cursor-pointer pb-10 md:pb-[unset] md:pd-[unset] ${ coursesActive ? 'absolute top-0 z-1 h-full w-[calc(100vw-30px)] md:h-fit overflow-y-scroll md:overflow-[unset] md:w-fit' : 'hidden' } `}
                       onClick={ () => setCoursesActive(false) }
                       >
                       <span key={ Math.random() + Math.random() * Math.random() + Math.random() } className="flex items-center font-4xl font-bold capitalize py-2 px-5 border-b-1 border-gray-500 md:hidden">
