@@ -118,6 +118,31 @@ function ShowList({ currentCourse, outlines, objectives, modules, benefits }){
                 { title: 'Modules', modules: modules },
                 { title: 'Certificate', content: currentCourse.certificate }
               ]
+  useEffect(() => {
+    let found = false
+
+    list.map((item, index) => {
+      if(!found && item.list && item.list.length > 0 ){
+        setCurrentTabIndex(index)
+        found = true
+      }
+    })
+
+    list.map((item, index) => {
+      console.log('modules', found)
+      if(!found && item.modules && item.modules.length > 0 ){
+        setCurrentTabIndex(index)
+        found = true
+      }
+    })
+
+    list.map((item, index) => {
+      if(!found && item.content ){
+        setCurrentTabIndex(index)
+        found = true
+      }
+    })
+  }, [])
 
   return (
     <>
@@ -126,7 +151,7 @@ function ShowList({ currentCourse, outlines, objectives, modules, benefits }){
           list.map(( currentList, index) => {
             if(currentList.list && currentList.list.length < 1) return 
             if(currentList.modules && currentList.modules.length < 1) return 
-            let classes = `rounded p-2 ${ index === currentTabIndex ? "bg-green-500 text-white font-bold" : "bg-green-300" }`
+            let classes = `rounded p-2 cursor-pointer hover:bg-green-800 hover:text-white hover:font-bold ${ index === currentTabIndex ? "bg-green-500 text-white font-bold" : "bg-green-300" }`
             return <span className={ classes } key={ currentList.title } onClick={ () => setCurrentTabIndex(index) } > { currentList.title } </span>
           }) 
         }
