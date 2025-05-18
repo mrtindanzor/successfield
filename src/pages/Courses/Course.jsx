@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { Link, useParams, useLocation } from "react-router-dom";
 import useCourses from "../../Contexts/CoursesContext";
 import usePendingLoader from "../../Contexts/PendingLoaderContext";
 import CourseCard from "../../Components/CourseCard";
@@ -111,14 +111,8 @@ export default function Course(){
 
 function ShowList({ currentCourse, outlines, objectives, modules, benefits }){
   const [ currentTabIndex, setCurrentTabIndex ] = useState(0)
-  const list = [
-                { title: 'Outlines', list: outlines },
-                { title: 'Benefits', list: benefits },
-                { title: 'Objectives', list: objectives },
-                { title: 'Modules', modules: modules },
-                { title: 'Certificate', content: currentCourse.certificate }
-              ]
-  useEffect(() => {
+  const { pathname } = useLocation()
+  const setCurrentTab = useCallback((list) => {
     let found = false
 
     list.map((item, index) => {
@@ -129,7 +123,6 @@ function ShowList({ currentCourse, outlines, objectives, modules, benefits }){
     })
 
     list.map((item, index) => {
-      console.log('modules', found)
       if(!found && item.modules && item.modules.length > 0 ){
         setCurrentTabIndex(index)
         found = true
@@ -142,7 +135,17 @@ function ShowList({ currentCourse, outlines, objectives, modules, benefits }){
         found = true
       }
     })
-  }, [])
+  }, [currentCourse])
+  const list = [
+                { title: 'Outlines', list: outlines },
+                { title: 'Benefits', list: benefits },
+                { title: 'Objectives', list: objectives },
+                { title: 'Modules', modules: modules },
+                { title: 'Certificate', content: currentCourse.certificate }
+              ]
+  useEffect(() => {
+    setCurrentTab(list)
+  }, [pathname, currentCourse, outlines, objectives, modules, benefits])
 
   return (
     <>
