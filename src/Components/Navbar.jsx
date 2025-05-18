@@ -18,6 +18,7 @@ export function MenuButton({ navbarActive, setNavbarActive }){
         <div  
           className={`w-10 gap-1.5 grid  ${ navbarActive ? 'hidden' : '' }`} 
           onClick={() => setNavbarActive(true) }>
+          <div className="w-7 h-1 rounded-lg bg-gray-500"></div>
           <div className="w-7 h-1 rounded-lg bg-gray-500 ml-auto"></div>
           <div className="w-7 h-1 rounded-lg bg-gray-500"></div>
         </div>
