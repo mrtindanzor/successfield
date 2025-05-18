@@ -43,7 +43,7 @@ export default function Registration(){
     middlename: '',
     surname: '',
     gender: 'male',
-    birthDate: '',
+    birthDate: '00-00-0000',
     address: {
       country: '',
       state: '',
@@ -147,13 +147,16 @@ async function handleFormSubmission(e){
             > Start Your Admission Application </h3>
           <TextField { ...{ title: 'First name', type: ACTIONS.FILL_MAIN_INPUT, value: user.firstname, position: 'firstname', dispatchUser} } />
           <TextField { ...{ title: 'Middle name', type: ACTIONS.FILL_MAIN_INPUT, value: user.middlename, position: 'middlename', dispatchUser } } />
-          <TextField { ...{ title: 'Surname', type: ACTIONS.FILL_MAIN_INPUT, value: user.surname, position: 'surname', dispatchUser, classList: 'sm:col-span-2'  } } />
-          <TextField { ...{ title: 'Birth date', type: ACTIONS.FILL_MAIN_INPUT, value: user.birthDate, date: true, position: 'birthDate', dispatchUser, classList: 'sm:col-span-2' } } />
+          <TextField { ...{ title: 'Surname', type: ACTIONS.FILL_MAIN_INPUT, value: user.surname, position: 'surname', dispatchUser  } } />
+          <TextField { ...{ title: 'Birth date', type: ACTIONS.FILL_MAIN_INPUT, value: user.birthDate, date: true, position: 'birthDate', dispatchUser } } />
           <TextField { ...{ title: 'Gender', value: user.gender } } disabled />
           <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: genders, position: 'gender', reducerPosition: 'gender', title: 'gender' } } />
           <NextButton { ...{ setter: setCurrentForm, location: 2 } } />
         </div>
         <div className={`${ currentForm !== 2 && 'hidden' } grid gap-10`} >
+          <h3 
+            className="text-2xl sm:3xl md:text-4xl font-bold sm:col-span-2 text-black"
+            >Verification </h3>
           <TextField { ...{ title: 'Programme', value: user.programme, classList: "sm:col-span-2" } } disabled />
           <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: coursesList, position: 'course', reducerPosition: 'programme', title: 'programme', classList: "sm:col-span-2"} } />
           <TextField { ...{ title: 'Highest level of Education', value: user.educationLevel, classList: "sm:col-span-2" } } disabled />
@@ -165,7 +168,7 @@ async function handleFormSubmission(e){
         <div  className={`${ currentForm !== 3 && 'hidden' } grid gap-10`}>
           <h3 
             className="text-2xl sm:3xl md:text-4xl font-bold sm:col-span-2 text-black"
-            > Address* </h3>
+            > Address </h3>
           <TextField { ...{ title: 'country', type: ACTIONS.FILL_ADDRESS, value: user.address.country, position: 'country', dispatchUser } } />
           <TextField { ...{ title: 'region / state', type: ACTIONS.FILL_ADDRESS, value: user.address.state, position: 'state', dispatchUser } } />
           <TextField { ...{ title: 'city', type: ACTIONS.FILL_ADDRESS, value: user.address.city, position: 'city', dispatchUser, classList: "sm:col-span-2" } } />
@@ -177,7 +180,7 @@ async function handleFormSubmission(e){
         <div className={`${ currentForm !== 4 && 'hidden' } grid gap-10`}>
           <h3 
             className="text-2xl sm:3xl md:text-4xl font-bold sm:col-span-2 text-black"
-            > Login Information* </h3>
+            > Login Information </h3>
           <TextField { ...{ title: 'email', type: ACTIONS.FILL_MAIN_INPUT, value: user.email, position: 'email', dispatchUser, classList: 'sm:col-span-2' } } />
           <TextField { ...{ title: 'password', type: ACTIONS.FILL_MAIN_INPUT, value: user.password, password: true, position: 'password', dispatchUser, classList: 'sm:col-span-2' } } />
           <TextField { ...{ title: 'confirm password', type: ACTIONS.FILL_MAIN_INPUT, value: user.cpassword, password: true, position: 'cpassword', dispatchUser, classList: 'sm:col-span-2' } } />
