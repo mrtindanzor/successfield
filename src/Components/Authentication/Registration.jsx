@@ -217,7 +217,7 @@ function TextField({ title, type, password, position, dispatchUser, disabled, va
             </div>
         }
         <input type={ inputType } 
-        className={`border-b-2 border-b-gray-950 outline-none py-1 ${ inputType === 'file' && 'hidden' }`}
+          className={`border-b-2 border-b-gray-950 w-full outline-none py-1 ${ inputType === 'file' && 'hidden' }`}
           value={ value ?? '' } 
           autoComplete="off"
           accept='image/jpg/jpeg/png'
