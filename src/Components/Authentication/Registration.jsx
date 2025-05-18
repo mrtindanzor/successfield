@@ -137,7 +137,7 @@ async function handleFormSubmission(e){
       <form onSubmit={ (e) => handleFormSubmission(e) }
         autoComplete="off"
         autoCapitalize="on"
-         className="grid w-[calc(100%-2.5rem)] sm:max-w-[900px] mx-auto pt-10 pb-50"
+         className="w-[calc(100%-2.5rem)] sm:max-w-[900px] mx-auto pt-10 pb-50"
          >
         <div
           className={`grid items-end sm:grid-cols-2 gap-10 ${ currentForm !== 1 && 'hidden' }`}
@@ -177,7 +177,7 @@ async function handleFormSubmission(e){
           <TextField { ...{ title: 'contact number', type: ACTIONS.FILL_MAIN_INPUT, value: user.phoneNumber, position: 'phoneNumber', dispatchUser, classList: "sm:col-span-2" } } />
           <NextButton { ...{ setter: setCurrentForm, location: 4 } } />
         </div>
-        <div className={`${ currentForm !== 4 && 'hidden' } grid gap-10`}>
+        <div className={`${ currentForm !== 4 && 'hidden' } grid gap-10 sm:max-w-[600px] mx-auto`}>
           <h3 
             className="text-2xl sm:3xl md:text-4xl font-bold sm:col-span-2 text-black"
             > Login Information </h3>
@@ -185,8 +185,8 @@ async function handleFormSubmission(e){
           <TextField { ...{ title: 'password', type: ACTIONS.FILL_MAIN_INPUT, value: user.password, password: true, position: 'password', dispatchUser, classList: 'sm:col-span-2' } } />
           <TextField { ...{ title: 'confirm password', type: ACTIONS.FILL_MAIN_INPUT, value: user.cpassword, password: true, position: 'cpassword', dispatchUser, classList: 'sm:col-span-2' } } />
           <TextField { ...{ title: 'contact', type: ACTIONS.FILL_MAIN_INPUT, value: user.contact, position: 'contact', dispatchUser } } />
+          <button className={ `${ submitted ? "!cursor-not-allowed" : ''} cursor-pointer [box-shadow:_2px_2px_2px_2px_gray] w-fit sm:col-span-2 bg-green-600 px-5 py-2 ml-auto mt-5 text-white text-xl sm:text-2xl font-bold rounded-sm` } disabled={ submitted }> Submit Application </button>
         </div>
-        <button className={ `${ submitted ? "!cursor-not-allowed" : ''} ${ currentForm !== 4 && 'hidden' } cursor-pointer [box-shadow:_2px_2px_2px_2px_gray] w-fit sm:col-span-2 bg-green-600 px-5 py-2 ml-auto text-white text-xl sm:text-2xl font-bold rounded-sm` } disabled={ submitted }> Submit Application </button>
       </form>
     </>
   )
@@ -230,7 +230,7 @@ function TextField({ title, type, password, position, dispatchUser, disabled, va
             }
           } } />
           { 
-              password && <span className="absolute right-2 bottom-0"
+              password && <span className="absolute right-2 bottom-0 cursor-pointer"
                 onClick={ () => setIsVisible( c => {
                   if(c.type === 'password') return { type: 'text' }
                   return { type: 'password' }
