@@ -13,14 +13,13 @@ export default function CoursesOverview(){
 
   return (
     <section 
-      className="px-5 sm:px-8 md:px-10 lg:max-w-[1440px] mx-auto"
+      className="px-5 sm:px-8 md:px-10 pb-50 lg:max-w-[1440px] mx-auto"
       >
       <p className="py-10 font-semibold"> { Content.description } </p>
-      <div className="grid w-full md:grid-cols-[repeat(auto-fill,_minmax(20rem,_1fr))] gap-x-3 gap-y-20 justify-evenly" aria-label="All courses">
-      {
-        coursesList.map((course, index) => <CourseCard title={ course.course } key={ index } overview={ true } />)
-      }
-
+      <div className="grid w-full md:grid-cols-[repeat(auto-fill,_minmax(20rem,_1fr))] gap-x-5 gap-y-20 justify-evenly" aria-label="All courses">
+        {
+          coursesList.map((course, index) => <CourseCard title={ course.course } key={ index } overview={ true } />)
+        }
       </div>
     </section>
   )

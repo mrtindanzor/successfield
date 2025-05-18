@@ -11,7 +11,7 @@ import Name from "../Components/ProfileItems/Details/Name/Name";
 import Email from "../Components/ProfileItems/Details/Email/Email";
 import PhoneNumber from "../Components/ProfileItems/Details/PhoneNumber/PhoneNumber";
 import ChangePassword from "../Components/ProfileItems/Details/Password/ChangePassword/ChangePassword";
-import Certificate from "../Components/ProfileItems/Details/Certificates/Certificate";
+import Certificate from "../Components/Certificate";
 
 const ACTIONS = {
   SET_CURRENT_MAIN_LIST: 'set_current_main_list',
@@ -126,7 +126,7 @@ export default function Dashboard(){
   
   return (
     <> 
-      <div className=" flex flex-col md:flex-row text-center border-b-1 border-b-white items-center md:items-start md:text-left gap-5 p-4 bg-gray-950 ">
+      <div className=" flex flex-col md:flex-row text-center border-b-1 border-b-white items-center md:items-start md:text-left gap-5 p-4 bg-gray-950 lg:max-w-[1440px] mx-auto">
         {
           !userPhoto ? <User 
               className="h-20 w-20 object-cover object-center-top text-white border-2 rounded-full" /> 
@@ -141,7 +141,7 @@ export default function Dashboard(){
           { currentUser.admin && <AdminPanel />  }
         </div>
       </div>
-      <div className=" md:flex border-t-2">
+      <div className=" md:flex border-t-2 lg:max-w-[1440px] mx-auto">
         <MainList { ...{ ...listProps } } />
         <SubList { ...{ ...listProps } } />
         <Details { ...{ ...listProps } } />
