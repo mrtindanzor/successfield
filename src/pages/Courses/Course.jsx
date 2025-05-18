@@ -8,11 +8,10 @@ import { PendingLoading } from '../../Hooks/PendingLoader';
 
 
 function SubListItem({ list, content, mapped, index, currentTabIndex }){
-  let classes = `p-5 flex-col capitalize ${ currentTabIndex === index ? "flex" : "hidden" }`
   let contentClasses = `leading-relaxed capitalize ${ currentTabIndex === index ? "flex" : "hidden" }` 
 
   return (
-    list ? <ul className={ classes } key={ Date.now() * Math.random() }>
+    list ? <ul className={ `flex-col py-5 capitalize ${ currentTabIndex === index ? "flex" : "hidden" }` } key={ Date.now() * Math.random() }>
             {
               list.map((element, index) => {
                 return <li key={ element + index } className=" border-b-1 border-b-gray-300 py-2 "> { element } </li>
@@ -39,7 +38,7 @@ function ModuleList({ list, currentTabIndex, index }){
     if(!isInList) newList.push(obj)
   }
 
-  const listClasses = `p-5 flex-col capitalize ${  currentTabIndex === index ? "flex" : "hidden" }`
+  const listClasses = `py-5 flex-col capitalize ${  currentTabIndex === index ? "flex" : "hidden" }`
   
 
   return (
@@ -74,32 +73,34 @@ export default function Course(){
 
   return (
     <section
-      className="px-5 sm:px-8 md:px-10 lg:max-w-[1440px] mx-auto"
+      className="px-5 sm:px-8 md:px-10 lg:max-w-[1440px] mx-auto pb-100"
       >
       {
         currentCourse && currentCourse.benefits ? <>
 
-          { currentCourse &&  <CourseCard { ...{ title: currentCourse.course, isCourse: true } } /> }
+          { currentCourse &&  <h2
+              className="text-2xl sm:text-3xl pt-10 text-center text-black font-extrabold uppercase"
+              >
+                { currentCourse.course }
+            </h2> }
 
-          { currentCourse && <div className="text-black md:text-xl capitalize bg-white px-5 py-10 leading-relaxed [font-family:arial]">
+          { currentCourse && <div className="text-black md:text-xl capitalize bg-white pt-10">
                                 <SubListItem content={ currentCourse.overview } />
                               </div> }
-                              
-          <hr />
 
-          { currentCourse && currentCourse.fee && <div className=" grid gap-3 px-7 py-1 ">
-                                <span className=" font-semibold "> Fee: </span>
+          { currentCourse && currentCourse.fee && <div className=" grid gap-3 py-1 ">
+                                <span 
+                                  className="font-bold text-xl sm:text-2xl"
+                                  > Fee: </span>
                                 <SubListItem content={ currentCourse.fee } />
                               </div> }
           
             { currentCourse && 
               currentCourse.modules?.length > 0 ? 
               <Link to={ 'module' } 
-              className=" px-6 py-2 rounded-tl-md rounded top-tr-md bg-green-600 hover:bg-green-700 text-white ml-3 mt-8 block w-fit "> Start Course </Link> : null }
+              className=" px-6 py-2 rounded-tl-md rounded top-tr-md bg-green-600 hover:bg-green-700 text-white mt-8 block w-fit "> Start Course </Link> : null }
 
-          <hr />
-
-          <div className=" block course-list-container">
+          <div className=" block course-list-container mt-10">
             { currentCourse && <ShowList { ...{ currentCourse, outlines: currentCourse.outlines, objectives: currentCourse.objectives, modules: currentCourse.modules, benefits: currentCourse.benefits } } /> }
           </div>
         </> : <PendingLoading />
@@ -120,12 +121,12 @@ function ShowList({ currentCourse, outlines, objectives, modules, benefits }){
 
   return (
     <>
-      <div className=" grid grid-cols-2 md:grid-cols-5 w-fit gap-1 mx-10 ">
+      <div className=" grid grid-cols-[repeat(auto-fill,_minmax(120px,_1fr))] w-full gap-1">
         { 
           list.map(( currentList, index) => {
             if(currentList.list && currentList.list.length < 1) return 
             if(currentList.modules && currentList.modules.length < 1) return 
-            let classes = `rounded p-2 ${ index === currentTabIndex ? "bg-green-500" : "bg-green-200" }`
+            let classes = `rounded p-2 ${ index === currentTabIndex ? "bg-green-500 text-white font-bold" : "bg-green-300" }`
             return <span className={ classes } key={ currentList.title } onClick={ () => setCurrentTabIndex(index) } > { currentList.title } </span>
           }) 
         }
@@ -142,7 +143,7 @@ function ShowList({ currentCourse, outlines, objectives, modules, benefits }){
             }
             else {
               return (
-                <div className=" pt-6 px-5 ">
+                <div className=" pt-6">
                   <SubListItem  { ...{ mapped: true, currentTabIndex, index: listIndex, content: nestedList.content } } />
                 </div>
               )
