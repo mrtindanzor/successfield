@@ -81,7 +81,7 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
           { 
             !isLoggedIn && <li>
               <Link to="/users/join" 
-              className=" sm:hidden flex bg-red-500 p-3 uppercase items-center gap-2 text-white font-bold hover:bg-red-700 " 
+              className=" sm:hidden flex bg-red-500 py-2 px-5 uppercase items-center gap-2 text-white font-bold hover:bg-red-700 " 
               onClick={ () => {
                             coursesActive && setCoursesActive(false)
                             navbarActive && setNavbarActive(false)
@@ -104,13 +104,13 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
 
                 { !menu.list && <NavLink 
                   to={ path } 
-                  className=" block p-2 border-b-1 border-b-gray-100 md:border-none hover:bg-green-400 hover:text-white w-[100%]
+                  className=" block  py-2 px-5 border-b-1 border-b-gray-100 md:border-none hover:bg-green-400 hover:text-white w-[100%]
                   md:w-fit whitespace-nowrap" 
                   onClick={ () => coursesActive && setCoursesActive(false) }
                   > { menu.title } </NavLink> }
 
                 { menu.list && <span 
-                      className=" flex items-center justify-between cursor-pointer p-2 border-b-1 border-b-gray-100 md:border-none hover:bg-green-400 hover:text-white w-[100%] capitalize"
+                      className=" flex items-center justify-between cursor-pointer py-2 px-5 border-b-1 border-b-gray-100 md:border-none hover:bg-green-400 hover:text-white w-[100%] capitalize"
                       onClick={ () => !coursesActive && setCoursesActive(prev => !prev) }
                       > { menu.title }
                       <ChevronRight 
@@ -123,7 +123,7 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
                       className={`sub-nav md:absolute md:top-[100%] bg-white [box-shadow:1px_1px_3px_black] cursor-pointer pb-10 md:pd-[unset] ${ coursesActive ? 'absolute top-0 z-1 h-full w-[calc(100vw-30px)] md:h-fit overflow-y-scroll md:overflow-[unset]' : 'hidden' } `}
                       onClick={ () => setCoursesActive(false) }
                       >
-                      <span key={ Math.random() + Math.random() * Math.random() + Math.random() } className="flex items-center font-4xl font-bold capitalize py-2 border-b-1 border-gray-500 md:hidden">
+                      <span key={ Math.random() + Math.random() * Math.random() + Math.random() } className="flex items-center font-4xl font-bold capitalize py-2 px-5 border-b-1 border-gray-500 md:hidden">
                         <ChevronLeft />
                         go back
                       </span>
@@ -136,7 +136,7 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
                               <NavLink
                                 key={ list.course }
                                 to={path}
-                                className={ `block md:pl-5 md:pr-10 py-2 w-full px-2 md:w-[500px] hover:bg-gray-950 hover:!text-white capitalize ${ listIndex > 3 ? 'md:hidden': 'block' } }` }
+                                className={ `block md:pl-5 md:pr-10 py-2 px-5 w-full px-2 md:w-[500px] hover:bg-gray-950 hover:!text-white capitalize ${ listIndex > 3 ? 'md:hidden': 'block' } }` }
                                 onClick={ () => {
                                   coursesActive && setCoursesActive(false)
                                   coursesActive && setNavbarActive(false)
@@ -146,7 +146,7 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
                               <hr />
                               { listIndex === 3 && <Link key={ 'see more' + index }
                                to="/courses"
-                                className="pl-5 pr-10 py-2 w-[500px] hidden md:block hover:bg-gray-950 hover:text-white" 
+                                className="md:pl-5 md:pr-10 py-2 px-5 w-[500px] hidden md:block hover:bg-gray-950 hover:text-white" 
                                 onClick={ () => {
                                   coursesActive && setCoursesActive(false)
                                   coursesActive && setNavbarActive(false)
