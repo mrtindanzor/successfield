@@ -123,7 +123,7 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
                       className={`sub-nav md:absolute md:top-[100%] bg-white [box-shadow:1px_1px_3px_black] cursor-pointer pb-10 md:pb-[unset] md:pd-[unset] ${ coursesActive ? 'absolute top-0 z-1 h-full w-[calc(100vw-30px)] md:h-fit overflow-y-scroll md:overflow-[unset] md:w-fit' : 'hidden' } `}
                       onClick={ () => setCoursesActive(false) }
                       >
-                      <span key={ Math.random() + Math.random() * Math.random() + Math.random() } className="flex items-center font-4xl font-bold capitalize py-2 px-5 border-b-1 border-gray-500 md:hidden">
+                      <span key={ Math.random() + Math.random() * Math.random() + Math.random() } className="sticky top-0 z-1 bg-white flex items-center font-4xl font-bold capitalize py-2 px-5 border-b-1 border-gray-500 md:hidden">
                         <ChevronLeft />
                         go back
                       </span>
