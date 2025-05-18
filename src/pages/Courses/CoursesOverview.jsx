@@ -1,6 +1,5 @@
-import CourseCard from "../../../Components/CourseCard";
-import styles from "./CoursesOverview.module.css";
-import useCourses from "./../../../Contexts/CoursesContext";
+import CourseCard from "../../Components/CourseCard";
+import useCourses from "./../../Contexts/CoursesContext";
 import { useMemo } from "react";
 
 export default function CoursesOverview(){
@@ -13,14 +12,16 @@ export default function CoursesOverview(){
   }, [])
 
   return (
-    <>
-      <p className={ styles.description }> { Content.description } </p>
-      <div className={ styles.mainContent } aria-label="All courses">
+    <section 
+      className="px-5 sm:px-8 md:px-10 lg:max-w-[1440px] mx-auto"
+      >
+      <p className="py-10 font-semibold"> { Content.description } </p>
+      <div className="grid w-full md:grid-cols-[repeat(auto-fill,_minmax(20rem,_1fr))] gap-x-3 gap-y-20 justify-evenly" aria-label="All courses">
       {
         coursesList.map((course, index) => <CourseCard title={ course.course } key={ index } overview={ true } />)
       }
 
       </div>
-    </>
+    </section>
   )
 }

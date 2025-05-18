@@ -73,16 +73,15 @@ export default function Course(){
   },[course, coursesList])
 
   return (
-    <>
+    <section
+      className="px-5 sm:px-8 md:px-10 lg:max-w-[1440px] mx-auto"
+      >
       {
         currentCourse && currentCourse.benefits ? <>
-          { currentCourse && <h1 className="raleway text-xl text-green-800 text-center px-3 py-5 pb-7 uppercase "> { currentCourse.course } </h1> }
 
-          <hr /><br />
+          { currentCourse &&  <CourseCard { ...{ title: currentCourse.course, isCourse: true } } /> }
 
-          { currentCourse &&  <CourseCard title={ currentCourse.course } /> }
-
-          { currentCourse && <div className=" px-5 py-10 leading-relaxed ">
+          { currentCourse && <div className="text-black text-xl capitalize bg-white px-5 py-10 leading-relaxed [font-family:arial]">
                                 <SubListItem content={ currentCourse.overview } />
                               </div> }
                               
@@ -105,7 +104,7 @@ export default function Course(){
           </div>
         </> : <PendingLoading />
       }
-    </>
+    </section>
   )
 }
 

@@ -9,7 +9,7 @@ import OnlyAdmin from './Components/ProtectRoutes/OnlyAdmin';
 import LayoutOne from './Components/Layouts/LayoutOne';
 import Home from './pages/Home';
 import VerifyCerificate from './pages/VerifyCertificate';
-import CoursesOverview from './pages/Courses/CoursesOverview/CoursesOverview';
+import CoursesOverview from './pages/Courses/CoursesOverview';
 import Course from './pages/Courses/Course';
 import Module from './pages/Courses/Module/Module';
 import Registration from "./Components/Authentication/Registration";
