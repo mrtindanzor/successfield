@@ -89,7 +89,7 @@ export default function AdminHome(){
         <Header />
         <Navbar { ...{ setCurrentPage, NavLinks, mainSection } } />
         <div
-          className="grid grid-rows-[auto_1fr] bg-white rounded px-5 sm:px-8 md:px-10 py-3 gap-5 sm:gap-8 md:gap-10"
+          className="grid grid-rows-[auto_1fr] bg-white rounded px-1 sm:px-8 md:px-10 py-3 gap-5 sm:gap-8 md:gap-10"
           >
             { mainSection && NavLinks[mainSection].sub && <ul
               className="flex flex-wrap gap-3"
