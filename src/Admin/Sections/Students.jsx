@@ -43,23 +43,23 @@ export default function Students(){
     }
   }, [searchKeyword])
 
-  // if(!initCount) return (
-  //   <span
-  //     className="texturina text-2xl mx-auto mt-[10%] "
-  //     >
-  //       loading...
-  //   </span>
-  // )
+  if(!initCount) return (
+    <span
+      className="texturina text-2xl mx-auto mt-[10%] "
+      >
+        loading...
+    </span>
+  )
 
-  // if(students && students.length < 1){
-  //   return (
-  //     <p
-  //       className="texturina w-fit mx-auto text-2xl mt-[10%]"
-  //       > No students registered 
-  //     </p>
-  //   )
+  if(students && students.length < 1){
+    return (
+      <p
+        className="texturina w-fit mx-auto text-2xl mt-[10%]"
+        > No students registered 
+      </p>
+    )
     
-  // }
+  }
   
   return (
     <ul>
