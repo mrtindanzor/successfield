@@ -12,32 +12,31 @@ export default function Certificate({ certificate }){
           className="object-fit"
           />
         <span
-          className="absolute whitespace-nowrap text-base z-1 font-extrabold uppercase top-[38%] left-[50%] translate-x-[-50%] text-black "
+          className="absolute whitespace-nowrap text-base sm:text-lg w-[80%] text-center text-green-600 z-1 font-bold uppercase top-[38%] left-[50%] translate-x-[-50%] text-black "
           >
           { certificate.name }
         </span>
+        <span 
+          className="uppercase font-semibold text-center [font-size:14px] md:font-base w-[80%] text-black absolute left-[50%] translate-x-[-50%] top-[51%]"
+          > { certificate.programme } </span>
         <div
-          className="absolute grid gap-0.5 sm:gap-1 md:gap-1.5 *:text-base *:not-first:whitespace-nowrap z-1 top-[50%] left-5 scale-[0.8]"
+          className="absolute grid justify-center gap-0.5 w-[80%] sm:gap-1 md:gap-1.5 *:text-base *:not-first:whitespace-nowrap z-1 top-[62%] left-[50%] translate-x-[-50%] scale-[0.8]"
           >
+            
             <span
-              className="capital text-black font-extrabold"
+              className="capital text-black font-semibold"
               >
-              Programme: <span className="uppercase font-semibold text-black"> { certificate.programme } </span>
+              Student ID: <span className="uppercase text-gray-700"> { certificate.studentNumber } </span>
             </span>
             <span
-              className="capital text-black font-extrabold"
+              className="capital text-black font-semibold"
               >
-              Student ID: <span className="uppercase font-semibold text-black"> { certificate.studentNumber } </span>
+              Certificate ID: <span className="uppercase text-gray-700"> { certificate.certificateCode } </span>
             </span>
             <span
-              className="capital text-black font-extrabold"
+              className="capital text-black font-semibold"
               >
-              Certificate ID: <span className="uppercase font-semibold text-black"> { certificate.certificateCode } </span>
-            </span>
-            <span
-              className="capital text-black font-extrabold"
-              >
-              Date of Completion: <span className="uppercase font-semibold text-black"> { certificate.dateCompleted } </span>
+              Date of Completion: <span className="uppercase text-gray-700"> { certificate.dateCompleted } </span>
             </span>
         </div>
     </div>

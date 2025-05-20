@@ -1,38 +1,113 @@
 // STYLES //
-import { useMemo, useState } from 'react';
+import { useMemo, useCallback, useEffect } from 'react';
 import { PendingLoader } from '../../Contexts/PendingLoaderContext';
 import Alerter from '../../Hooks/Alerter';
 import Header from '../Components/Header';
 import Navbar from '../Components/Navbar';
 import { useSearchParams } from 'react-router-dom';
-import Courses from '../Sections/Courses'
-import Certificates from '../Sections/Certificates'
+import Courses, { AddCourse, EditCourse, Modules } from '../Sections/Courses'
+import Certificates, { AddCertificate, EditCertificate } from '../Sections/Certificates'
 import { PromptContextProvider, Prompter } from './../Components/Prompt'
-import RegistrationCenter from '../Sections/RegistrationCenter';
+import RegistrationCenter, { Applications, CourseRegistration } from '../Sections/RegistrationCenter';
 import Students from '../Sections/Students';
 
 export default function AdminHome(){
-  const [ currentPage, setCurrentPage ] = useSearchParams({ m: 0 })
-  const [ navToggle, setNavToggle ] = useState(false)
+  const [ currentPage, setCurrentPage ] = useSearchParams({ m: 0, s: 0 })
   const NavLinks = useMemo(() => [
-      { title: 'Courses', section: <Courses /> },
-      { title: 'Certificates', section: <Certificates /> },
-      { title: 'Registration Center', section: <RegistrationCenter /> },
-      { title: 'Partners', section: <div></div> },
-      { title: 'Students', section: <Students /> },
+      { 
+        title: 'Courses', 
+        section: <Courses />,
+        sub: [
+          {
+                title: 'Add courses', section: <AddCourse />
+              },
+              {
+                title: 'Edit courses', section: <EditCourse />
+              },
+              {
+                title: 'Modules', section: <Modules />
+              }
+        ]
+      },
+      { 
+        title: 'Certificates', 
+        section: <Certificates />,
+        sub: [
+            {
+              title: 'Add certificate',
+              section: <AddCertificate />
+            },
+            {
+              title: 'Edit certificate',
+              section: <EditCertificate />
+            }
+          ]
+       },
+      { 
+        title: 'Registration Center', 
+        section: <RegistrationCenter />,
+        sub: [
+          {
+            title: 'Applications',
+            section: <Applications />
+          },
+          {
+            title: 'Courses',
+            section: <CourseRegistration />
+          }
+        ]
+      },
+      { 
+        title: 'Partners', 
+        section: <div></div> 
+
+      },
+      { 
+        title: 'Students', 
+        section: <Students /> 
+      },
     ], [])
   const mainSection = useMemo(() => currentPage.get('m'), [currentPage])
+  const subSection = useMemo(() => currentPage.get('s'), [currentPage])
+  const setSubPage = useCallback((s) => {
+    const m = currentPage.get('m')
+    setCurrentPage({ m, s })
+  }, [currentPage])
+
+  useEffect(() => {
+    mainSection && NavLinks[mainSection].sub && setSubPage(subSection || 0)
+  }, [mainSection])
 
   return (
     <PromptContextProvider>
       <Prompter />
       <PendingLoader />
       <Alerter />
-      <Header { ...{ setNavToggle } } />
-      <Navbar { ...{ setCurrentPage, NavLinks, navToggle, setNavToggle } } />
-      {
-        mainSection && NavLinks[mainSection].section
-      }
+      <div 
+        className="grid h-fit min-h-[100vh] grid-rows-[auto_auto_1fr] md:grid-rows-[auto_1fr] md:grid-cols-[auto_1fr] px-5 sm:px-8 md:px-10 bg-gray-200 gap-y-2 gap-x-5"
+        >
+        <Header />
+        <Navbar { ...{ setCurrentPage, NavLinks, mainSection } } />
+        <div
+          className="grid grid-rows-[auto_1fr] bg-white rounded px-5 sm:px-8 md:px-10 py-3 gap-5 sm:gap-8 md:gap-10"
+          >
+            { mainSection && NavLinks[mainSection].sub && <ul
+              className="flex flex-wrap gap-3"
+              >
+                { NavLinks[mainSection].sub.map((sub, subIndex) => {
+                  return <li
+                    className={`p-1 whitespace-nowrap w-fit px-2 sm:text-lg rounded cursor-pointer text-white font-bold ${ subIndex == subSection ? 'bg-gray-950' : 'bg-gray-400' }`}
+                    onClick={ () => setSubPage(subIndex) }
+                    key={ subIndex }
+                    >
+                      { sub.title }
+                  </li>
+            }) }
+              </ul> }
+            { !subSection && mainSection && NavLinks[mainSection].section }
+            { subSection && mainSection && NavLinks[mainSection] && NavLinks[mainSection].sub && NavLinks[mainSection].sub[subSection].section }
+        </div>
+      </div>
     </PromptContextProvider>
   )
 }

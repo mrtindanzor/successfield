@@ -5,16 +5,12 @@ import { useSetAlert } from "../../Hooks/Alerter"
 import { Info } from "lucide-react"
 import useCourses from "../../Contexts/CoursesContext"
 
-
-const mainContainerClasses = "grid sm:grid-cols-[auto_1fr] pt-[10px]"
-const navigationClasses = 'grid gap-3 px-2 py-3 *:bg-gray-800 *:hover:bg-gray-950 *:font-bold *:cursor-pointer *:text-white h-fit *:px-4 *:py-2 *:rounded '
-const certificateFormClasses = 'grid px-2 py-3 w-[calc(100%-10px)] mx-auto gap-5 sm:max-w-[750px] bg-gray-100 rounded'
+const certificateFormClasses = 'grid px-2 py-3 h-fit w-[calc(100%-10px)] mx-auto gap-5 sm:max-w-[750px] bg-gray-100 rounded'
 const textFieldClasses = 'grid gap-2 w-full *:block *:first:font-bold *:first:uppercase *:first:text-xl *:first:after:content-[":"] *:last:border-2 *:last:border-gray-500 *:last:p-2 *:last:rounded'
-const searchCertificateClasses = 'grid gap-5 w-full max-w-[750px] mx-auto px-2 py-5 bg-gray-100 *:block *:!w-[calc(100%-10px)] *:first:uppercase *:first:font-bold *:first:text-xl *:last:uppercase'
+const searchCertificateClasses = 'grid h-fit gap-5 w-full max-w-[750px] mx-auto px-2 py-5 bg-gray-100 *:block *:!w-[calc(100%-10px)] *:first:uppercase *:first:font-bold *:first:text-xl *:last:uppercase'
 const searchInputClasses = 'border-3 border-gray-500 rounded py-2 px-4'
 const submitButtonClasses = 'block p-2 bg-gray-800 text-white rounded font-bold text-xl cursor-pointer hover:bg-gray-950'
 const addNewButtonClasses = 'px-4 py-2 cursor-pointer block bg-gray-600 w-fit rounded uppercase text-white font-bold'
-const currentTabClasses = 'w-[calc(100%-10px)] sm:w-[calc(100%-20px)] grid gap-2 pt-2'
 const errorsClasses = " flex gap-2 items-center uppercase text-lg text-red-500 font-bold"
 const courseCodeSelectorClasses = "*:first:uppercase *:first:font-bold *:first:text-white *:first:bg-gray-800 *:first:block *:first:p-2 *:first:rounded *:first:hover:bg-gray-950 *:first:cursor-pointer *:last:*:p-2  *:last:bg-white  *:last:p-2 *:last:*:border-b-1  *:last:*:capitalize  *:last:*:hover:bg-gray-200"
 
@@ -65,37 +61,15 @@ function certificatesReducer(state, action){
 }
 
 export default function Certificates() {
-  const sections = useMemo(() => [
-    {
-      title: 'Add certificate',
-      section: <AddCertificate />
-    },
-    {
-      title: 'Edit certificate',
-      section: <EditCertificate />
-    }
-  ],[])
-  const [ currentTab, currentTabDispatch ] = useReducer(currentTabReducer, sections[0].section)
-
-  return (
-    <div className={ mainContainerClasses }>
-      <ul className={ navigationClasses }>
-        {
-          sections.map((section, index) => {
-            return <li key={ index } onClick={ () => currentTabDispatch({ type: 'switch_tab', sections, index }) } > { section.title } </li>
-          })
-        }
-      </ul>
-      <div className={ currentTabClasses }> { currentTab } </div>
-    </div>
-  )
+  
+  return null
 }
 
-function AddCertificate(){
+export function AddCertificate(){
   return <CertificateStructure operation="add" />
 }
 
-function EditCertificate(){
+export function EditCertificate(){
   const [ currentCertificate, setCurrentCertificate ] = useState()
   const [ studentNumber, setStudentNumber ] = useState(null)
   const serverUri = useServerUri()

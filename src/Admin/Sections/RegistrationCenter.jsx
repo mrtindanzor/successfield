@@ -32,37 +32,11 @@ function applicationsReducer(state, action){
 }
 
 export default function RegistrationCenter(){
-  const sections = useMemo(() => [
-    {
-      title: 'Applications',
-      section: <Applications />
-    },
-    {
-      title: 'Courses',
-      section: <CourseRegistration />
-    }
-  ])
   
-  const [ currentPage, setCurrentPage ] = useState(0)
-
-  return (
-    <div>
-      <ul
-        className='flex gap-5 p-5 mb-5'
-        >
-        { sections.map( (section, key) => {
-          return <li key={ key }
-            className="inline-block p-2 bg-gray-800 hover:bg-gray-950 text-white uppercase w-fit rounded cursor-pointer"
-            onClick={ () => setCurrentPage(key) }
-            > { section.title } </li>
-        } ) }
-      </ul>
-      { sections[currentPage].section }
-    </div>
-  )
+  return null
 }
 
-function Applications(){
+export function Applications(){
   const setMsg = useSetAlert()
   const [ applicationsCount, setApplicationsCount ] = useState(0)
   const { setIsPendingLoading } = usePendingLoader()
@@ -130,72 +104,72 @@ function Applications(){
     pb-3"
     > Total applications: { applicationsCount } </h2> }
       {
-         applicationsCount > 0 && allApplications.map( application => {
+        applicationsCount > 0 && allApplications.map( application => {
           const { students } = application
           if(students.length > 0){
             return <div
-                      className='p-5 border-t-1'
+                      className=''
                       >
-      
-              <h2
-                className='font-bold text-2xl mb-5 text-center texturina'
-                >Year: { application.term } </h2>
+                      <h2
+                        className='font-bold text-2xl mb-5 text-center texturina'
+                        >Year: { application.term } 
+                      </h2>
     
-              <ul
-                className='grid gap-5'
-                >
-                {
-                  students.map( applicant => {
-                    const details = { studentNumber: applicant.studentNumber, name: applicant.name, date: applicant.date, year: application.term }
-                    return <li
-                            key={ applicant._id }
-                            className='p-3 border-2 border-gray-200 rounded grid gap-3 bg-gray-200'
-                              >
-                              <h3
-                                className='uppercase font-bold text-xl text-gray-800'
-                                > Student Name: { applicant.name } </h3>
-                              <h3
-                                className='uppercase font-bold text-xl text-gray-800'
-                                > Student ID: { applicant.studentNumber } </h3>
-                              <h4
-                                className='pl-1 uppercase font-semibold'
-                                > Chosen programme: 
-                                  <span 
-                                    className='capitalize block font-normal'
-                                    >
-                                    { applicant.programme } 
-                                  </span>
-                                </h4>
-                              <div
-                                className='flex justify-center'
-                                >
-                                <img 
-                                  src={ applicant.userImage.secure_url } 
-                                  className='max-h-[200px] aspect-[1/1] rounded border-1 border-gray-300 overflow-hidden '
-                                  />
-                                <img 
-                                  src={ applicant.nationalId.secure_url } 
-                                  className='max-h-[200px] block aspect-[5/2] rounded border-1 border-gray-200 overflow-hidden '
-                                  />
-                              </div>
-    
-                              <div 
-                                className='flex justify-end gap-2'
-                                >
-                                <button
-                                  className='border-2 border-green-500 hover:border-green-800 rounded px-2 py-1 cursor-pointer text-white bg-green-500 hover:bg-green-800'
-                                  onClick={ () => applicationOperation({ operation: 'approve', ...details }) }
-                                  > Accept application </button>
-                                <button
-                                  className='border-2 border-red-500 hover:border-red-800 rounded px-2 py-1 cursor-pointer text-white bg-red-500 hover:bg-red-800'
-    onClick={ () => applicationOperation({ operation: 'decline', ...details }) }
-      > Decline application </button>
-                              </div>
-                           </li>
-                  })
-                }
-              </ul>
-        </div>
+                      <ul
+                        className='grid gap-5'
+                        >
+                        {
+                          students.map( applicant => {
+                            const details = { studentNumber: applicant.studentNumber, name: applicant.name, date: applicant.date, year: application.term }
+                            return <li
+                                    key={ applicant._id }
+                                    className='p-3 border-2 border-gray-200 rounded grid gap-3 bg-gray-200'
+                                      >
+                                      <h3
+                                        className='uppercase font-bold text-xl text-gray-800'
+                                        > Student Name: { applicant.name } </h3>
+                                      <h3
+                                        className='uppercase font-bold text-xl text-gray-800'
+                                        > Student ID: { applicant.studentNumber } </h3>
+                                      <h4
+                                        className='pl-1 uppercase font-semibold'
+                                        > Chosen programme: 
+                                          <span 
+                                            className='capitalize block font-normal'
+                                            >
+                                            { applicant.programme } 
+                                          </span>
+                                        </h4>
+                                      <div
+                                        className='flex justify-center'
+                                        >
+                                        <img 
+                                          src={ applicant.userImage.secure_url } 
+                                          className='max-h-[200px] aspect-[1/1] rounded border-1 border-gray-300 overflow-hidden '
+                                          />
+                                        <img 
+                                          src={ applicant.nationalId.secure_url } 
+                                          className='max-h-[200px] block aspect-[5/2] rounded border-1 border-gray-200 overflow-hidden '
+                                          />
+                                      </div>
+            
+                                      <div 
+                                        className='flex justify-end gap-2'
+                                        >
+                                        <button
+                                          className='border-2 border-green-500 hover:border-green-800 rounded px-2 py-1 cursor-pointer text-white bg-green-500 hover:bg-green-800'
+                                          onClick={ () => applicationOperation({ operation: 'approve', ...details }) }
+                                          > Accept application </button>
+                                        <button
+                                          className='border-2 border-red-500 hover:border-red-800 rounded px-2 py-1 cursor-pointer text-white bg-red-500 hover:bg-red-800'
+            onClick={ () => applicationOperation({ operation: 'decline', ...details }) }
+              > Decline application </button>
+                                      </div>
+                                  </li>
+                          })
+                        }
+                      </ul>
+                    </div>
           }
         } )
       }
@@ -203,7 +177,7 @@ function Applications(){
   )
 }
 
-function CourseRegistration(){
+export function CourseRegistration(){
   const setMsg = useSetAlert()
   const { setIsPendingLoading } = usePendingLoader()
   const uri = useServerUri() + 'users/courses/register'
@@ -243,7 +217,7 @@ function CourseRegistration(){
 
   return (
     <form onSubmit={ handleOperation }
-      className='grid gap-3 p-3'
+      className='grid gap-3 p-3 h-fit'
     >
       <label 
         className='grid gap-3'

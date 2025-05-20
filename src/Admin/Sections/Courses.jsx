@@ -82,42 +82,7 @@ export function Modules(){
 }
 
 export default function Courses(){
-  const sections = [
-    {
-      title: 'Add courses', section: <AddCourse />
-    },
-    {
-      title: 'Edit courses', section: <EditCourse />
-    },
-    {
-      title: 'Modules', section: <Modules />
-    }
-  ]
-
-  const [ currentSection, setCurrentSection ] = useState(0)
-  const [ activeSection, setActiveSection ] = useState(sections[0].section)
-  
-  useEffect(() => {
-    setActiveSection(sections[currentSection].section)
-  }, [currentSection])
-   
-  return (
-    <div className="grid gap-4 pt-8 sm:grid-cols-[auto_1fr] sm:h-[calc(100vh-70px)]"> 
-      <ul className="grid !h-fit pl-2 gap-3 sm:w-fit min-w-[100px] pr-5">
-        {
-          sections.map((section, index) => {
-            return <li key={ section.title } className={`text-white bg-gray-400 rounded cursor-pointer font-semibold text-xl py-1 px-3 ${ currentSection === index ? '!bg-gray-700' : '' }`} onClick={ () => setCurrentSection(index) }> { section.title } </li>
-          })
-        }
-      </ul>
-      <div className={ courseOperations }>
-        {
-        activeSection
-      }
-      </div>
-      
-    </div>
-  )
+  return null
 }
 
 function coursesReducer(state, action){
@@ -468,7 +433,7 @@ function CourseStructure({ currentCourse, setSelectedCourse, setCurrentCourse, o
   )
 }
 
-function AddCourse(){
+export function AddCourse(){
   return (
     <div>
       <h2 className='font-bold text-2xl uppercase'> Add a new programme </h2>
@@ -479,7 +444,7 @@ function AddCourse(){
   
 }
 
-function EditCourse(){
+export function EditCourse(){
   const [ selectedCourse, setSelectedCourse ] = useState('')
   const { getCourse } = useCourses()
   const [ currentCourse, setCurrentCourse ] = useState('')
@@ -500,7 +465,7 @@ function EditCourse(){
   )
 }
 
-function AddModule(){
+export function AddModule(){
 
   const [ selectedCourse, setSelectedCourse ] = useState('')
   const { getCourse } = useCourses()
@@ -518,7 +483,7 @@ function AddModule(){
   )
 }
 
-function EditModule(){
+export function EditModule(){
   const [ selectedCourse, setSelectedCourse ] = useState('')
   const { getCourse } = useCourses()
   const [ currentCourse, setCurrentCourse ] = useState('')
