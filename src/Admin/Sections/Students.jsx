@@ -3,16 +3,11 @@ import useGetStudents from './../Hooks/GetStudents'
 
 export default function Students(){
   const init = useGetStudents()
-  const [ initCount, setInitCount ] = useState(false)
   const [ students, setStudents ] = useState()
   const [ searchKeyword, setSearchKeyword ] = useState('')
 
   useEffect(() => {
-    setInitCount(false)
-  }, [])
-
-  useEffect(() => {
-    if(init && init.length > 0 && !initCount){
+    if(init && init.length > 0){
       setStudents(() => {
         return init.map( c => {
           return {
@@ -26,9 +21,8 @@ export default function Students(){
           }
         } )
       })
-      setInitCount(true)
     }
-  }, [init, initCount])
+  }, [init])
 
   useEffect(() => {
     function trimToLower(word){ return word.trim().toLowerCase() }
@@ -47,7 +41,7 @@ export default function Students(){
     }
   }, [searchKeyword])
 
-  if(!initCount) return (
+  if(!init) return (
     <span
       className="texturina text-2xl mx-auto mt-[10%] "
       >
@@ -79,7 +73,7 @@ export default function Students(){
           onChange={ e => setSearchKeyword( e.target.value ) }
           />
       </label>
-      { initCount && students.map( terms => {
+      { students && students.map( terms => {
       return <div
         key={ terms._id }
         className='grid gap-6 px-2 py-5 bg-gray-100'
