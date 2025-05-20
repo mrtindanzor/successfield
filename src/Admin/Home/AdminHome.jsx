@@ -84,7 +84,7 @@ export default function AdminHome(){
       <PendingLoader />
       <Alerter />
       <div 
-        className="grid h-fit min-h-[100vh] grid-rows-[auto_auto_1fr] md:grid-rows-[auto_1fr] md:grid-cols-[auto_1fr] px-5 sm:px-8 md:px-10 bg-gray-200 gap-y-2 gap-x-5"
+        className="grid h-fit min-h-[100vh] grid-rows-[auto_auto_1fr] md:grid-rows-[auto_1fr] md:grid-cols-[auto_1fr] px-1 sm:px-8 md:px-10 bg-gray-200 gap-y-2 gap-x-5"
         >
         <Header />
         <Navbar { ...{ setCurrentPage, NavLinks, mainSection } } />
