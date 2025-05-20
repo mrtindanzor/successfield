@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { ChevronDown } from "lucide-react"
 
 export default function Navbar({ NavLinks, setCurrentPage, mainSection }) {
-  const [ currentSection, setCurrentSection ] = useState('Courses')
+  const currentPage = useMemo(() => {
+    return NavLinks[mainSection].title
+  }, [mainSection])
   const [ navToggle, setNavToggle ] = useState(false)
 
   useEffect(() => {
@@ -22,7 +24,7 @@ export default function Navbar({ NavLinks, setCurrentPage, mainSection }) {
           setNavToggle(c => !c)
         } }
         >
-          { currentSection }
+          { currentPage }
           <ChevronDown />
       </span>
       <ul 
@@ -34,7 +36,6 @@ export default function Navbar({ NavLinks, setCurrentPage, mainSection }) {
               className={`block p-2 px-3 border-b-1 border-b-gray-200 last:border-none sm:border-none sm:p-1 sm:rounded hover:text-black hover:bg-gray-300 cursor-pointer  items-center md:text-lg md:text-semi-bold ${ mainSection == linkIndex ? 'bg-gray-950 text-white' : 'text-gray-500' }`}
               key={ linkIndex } 
               onClick={ () => {
-                setCurrentSection(currentLink.title)
                 setCurrentPage({ m: `${linkIndex}` })
                 setNavToggle(c => !c)
               } }> { currentLink.title } </li>

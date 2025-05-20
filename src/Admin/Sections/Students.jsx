@@ -4,11 +4,11 @@ import useGetStudents from './../Hooks/GetStudents'
 export default function Students(){
   const init = useGetStudents()
   const [ initCount, setInitCount ] = useState(false)
-  const [ students, setStudents ] = useState([])
+  const [ students, setStudents ] = useState()
   const [ searchKeyword, setSearchKeyword ] = useState('')
 
   useEffect(() => {
-    if(init?.length > 0 && !initCount){
+    if(init && init.length > 0 && !initCount){
       setStudents(() => {
         return init.map( c => {
           return {
@@ -43,15 +43,28 @@ export default function Students(){
     }
   }, [searchKeyword])
 
+  if(!initCount) return (
+    <span
+      className="texturina text-2xl mx-auto mt-[10%] "
+      >
+        loading...
+    </span>
+  )
 
   if(students && students.length < 1){
-    return <p> No students registered </p>
+    return (
+      <p
+        className="texturina w-fit mx-auto text-2xl mt-[10%]"
+        > No students registered 
+      </p>
+    )
+    
   }
-
+  
   return (
     <ul>
       <label 
-        className='bg-gray-300 p-3 rounded grid gap-3 m-5'
+        className='bg-gray-300 rounded grid gap-3 px-1 mb-5'
         >
         <span
           className='font-semibold'
@@ -62,7 +75,7 @@ export default function Students(){
           onChange={ e => setSearchKeyword( e.target.value ) }
           />
       </label>
-      { setInitCount && students.map( terms => {
+      { initCount && students.map( terms => {
       return <div
         key={ terms._id }
         className='grid gap-6 p-5 bg-gray-100'

@@ -96,7 +96,7 @@ export default function AdminHome(){
               >
                 { NavLinks[mainSection].sub.map((sub, subIndex) => {
                   return <li
-                    className={`p-1 whitespace-nowrap w-fit px-2 sm:text-lg rounded cursor-pointer text-white font-bold ${ subIndex == subSection ? 'bg-gray-950' : 'bg-gray-400' }`}
+                    className={`p-1 whitespace-nowrap w-fit px-2 sm:text-lg rounded cursor-pointer text-white font-bold hover:bg-gray-950 ${ subIndex == subSection ? 'bg-gray-950' : 'bg-gray-400' }`}
                     onClick={ () => setSubPage(subIndex) }
                     key={ subIndex }
                     >

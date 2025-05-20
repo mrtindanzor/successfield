@@ -63,11 +63,13 @@ export function Modules(){
   }, [currentSection])
    
   return (
-    <div > 
-      <ul className="w-full grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 mx-auto">
+    <div 
+      className="border-t-2 pt-5"
+      > 
+      <ul className="w-full flex gap-3 flex-wrap">
         {
           sections.map((section, index) => {
-            return <li key={ section.title } className={`text-white bg-green-400 rounded cursor-pointer font-semibold text-xl py-1 px-3 ${ currentSection === index ? '!bg-green-700' : '' }`} onClick={ () => setCurrentSection(index) }> { section.title } </li>
+            return <li key={ section.title } className={`text-white  rounded cursor-pointer font-semibold md:text-xl py-1 px-3 hover:bg-gray-950 ${ currentSection === index ? 'bg-gray-800' : 'bg-gray-400' }`} onClick={ () => setCurrentSection(index) }> { section.title } </li>
           })
         }
       </ul>
