@@ -62,7 +62,7 @@ export default function Students(){
   return (
     <ul>
       <label 
-        className='bg-gray-300 rounded grid gap-3 px-2 py-2 mb-5'
+        className='bg-gray-300 rounded grid gap-3 px-2 py-2 mb-5 max-w-[500px]'
         >
         <span
           className='font-semibold text-lg'
@@ -76,7 +76,7 @@ export default function Students(){
       { students && students.map( terms => {
       return <div
         key={ terms._id }
-        className='grid gap-6 px-2 py-5 bg-gray-100'
+        className='grid gap-6 px-2 py-5'
         >
         <h2
           className='uppercase font-bold text-xl texturina'
