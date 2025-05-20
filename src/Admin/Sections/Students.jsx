@@ -8,6 +8,10 @@ export default function Students(){
   const [ searchKeyword, setSearchKeyword ] = useState('')
 
   useEffect(() => {
+    setInitCount(false)
+  }, [])
+
+  useEffect(() => {
     if(init && init.length > 0 && !initCount){
       setStudents(() => {
         return init.map( c => {
@@ -24,7 +28,7 @@ export default function Students(){
       })
       setInitCount(true)
     }
-  }, [init])
+  }, [init, initCount])
 
   useEffect(() => {
     function trimToLower(word){ return word.trim().toLowerCase() }
