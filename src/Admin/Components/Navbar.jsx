@@ -19,7 +19,7 @@ export default function Navbar({ NavLinks, setCurrentPage, mainSection }) {
   return (
     <>
       <span
-        className="p-1 flex justify-between sm:hidden bg-white rounded cursor-pointer" 
+        className="p-1 flex text-lg justify-between sm:hidden bg-white rounded cursor-pointer" 
         onClick={ () => {
           setNavToggle(c => !c)
         } }
