@@ -43,42 +43,42 @@ export default function Students(){
     }
   }, [searchKeyword])
 
-  if(!initCount) return (
-    <span
-      className="texturina text-2xl mx-auto mt-[10%] "
-      >
-        loading...
-    </span>
-  )
+  // if(!initCount) return (
+  //   <span
+  //     className="texturina text-2xl mx-auto mt-[10%] "
+  //     >
+  //       loading...
+  //   </span>
+  // )
 
-  if(students && students.length < 1){
-    return (
-      <p
-        className="texturina w-fit mx-auto text-2xl mt-[10%]"
-        > No students registered 
-      </p>
-    )
+  // if(students && students.length < 1){
+  //   return (
+  //     <p
+  //       className="texturina w-fit mx-auto text-2xl mt-[10%]"
+  //       > No students registered 
+  //     </p>
+  //   )
     
-  }
+  // }
   
   return (
     <ul>
       <label 
-        className='bg-gray-300 rounded grid gap-3 px-1 mb-5'
+        className='bg-gray-300 rounded grid gap-3 px-2 py-2 mb-5'
         >
         <span
-          className='font-semibold'
+          className='font-semibold text-lg'
           > Find Student: </span>
         <input 
           placeholder='email or name or id'
-          className='inline-block px-3 py-1 border-1 border-gray-200 bg-gray-200 w-full'
+          className='px-3 py-1 bg-gray-200 w-full'
           onChange={ e => setSearchKeyword( e.target.value ) }
           />
       </label>
       { initCount && students.map( terms => {
       return <div
         key={ terms._id }
-        className='grid gap-6 p-5 bg-gray-100'
+        className='grid gap-6 px-2 py-5 bg-gray-100'
         >
         <h2
           className='uppercase font-bold text-xl texturina'
@@ -87,7 +87,7 @@ export default function Students(){
           className='font-semibold text-lg uppercase'
           > Total students for year: { terms.students.length } </h3>
         <li
-        className='grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-5 px-4'
+        className='grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-5'
         >
         {
           terms.students.map( student => {
