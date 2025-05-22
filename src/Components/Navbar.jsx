@@ -96,13 +96,13 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
 
                 { !menu.list && <NavLink 
                   to={ path } 
-                  className=" block  py-2 px-5 border-b-1 border-b-gray-100 md:border-none hover:bg-green-400 hover:text-white w-[100%]
+                  className=" block  py-2 px-5 sm:px-2 border-b-1 border-b-gray-100 md:border-none hover:bg-green-400 hover:text-white w-[100%]
                   md:w-fit whitespace-nowrap" 
                   onClick={ () => navbarActive && setNavbarActive(false) }
                   > { menu.title } </NavLink> }
 
                 { menu.list && <span 
-                      className=" flex items-center justify-between cursor-pointer py-2 px-5 border-b-1 border-b-gray-100 md:border-none hover:bg-green-400 hover:text-white w-[100%] capitalize"
+                      className=" flex items-center justify-between cursor-pointer py-2 px-5 sm:px-2 border-b-1 border-b-gray-100 md:border-none hover:bg-green-400 hover:text-white w-[100%] capitalize"
                       onClick={ () => !coursesActive && setCoursesActive(prev => !prev) }
                       > { menu.title }
                       <ChevronRight 
