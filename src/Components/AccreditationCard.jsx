@@ -5,13 +5,13 @@ const AccreditationCard = ({ accreditation }) => {
   const [ imageLoaded, setImageLoaded ] = useState(false)
   return (
     <div
-      className="grid grid-rows-[1fr_auto] gap-2 min-h-fit h-100"
+      className="grid grid-rows-[1fr_auto] gap-2 h-100 sm:h-130 pb-5 overflow-hidden bg-gray-100 rounded-md"
       >
       <span
-        className={`${ imageLoaded && 'hidden' } bg-gray-100 rounded flex items-center justify-center text-6xl`}
+        className={`${ imageLoaded && 'hidden' } w-full h-90 sm:h-120 bg-gray-100 rounded flex items-center justify-center text-6xl`}
       >...</span>
       <img
-        className={`${ !imageLoaded && 'hidden' } object-contain`}
+        className={`${ !imageLoaded && 'hidden' } w-full h-90 sm:h-120 object-cover`}
         src={ accreditation?.image.secure_url || null }
         onLoad={ () => setImageLoaded(true) }
         alt={ accreditation.name } />

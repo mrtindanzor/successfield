@@ -25,11 +25,10 @@ const Accreditations = () => {
 
   return (
     <ul
-      className="px-5 sm:px-8 md:px-10 md:pt-10 pt-5 lg:max-w-[1440px] mx-auto"
+      className="px-5 sm:px-8 md:px-10 md:pt-10 pb-40 pt-5 lg:max-w-[1440px] mx-auto grid sm:grid-cols-[repeat(auto-fit,_minmax(500px,_1fr))] gap-x-5 gap-y-10"
       >
       { accreditations && accreditations.map( agent => {
-        return <li 
-          className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] md:grid-cols-[repeat(auto-fill,_minmax(500px,_1fr))]"
+        return <li
           key={agent._id}
           >
             <AccreditationCard { ...{ accreditation: agent } } />
