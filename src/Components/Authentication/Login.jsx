@@ -21,7 +21,6 @@ export default function Login(){
       setMsg(err.message)
     }
   }
-  console.log(credentials)
 
   return (
     <>

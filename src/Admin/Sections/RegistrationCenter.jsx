@@ -31,11 +31,6 @@ function applicationsReducer(state, action){
   }
 }
 
-export default function RegistrationCenter(){
-  
-  return null
-}
-
 export function Applications(){
   const setMsg = useSetAlert()
   const [ applicationsCount, setApplicationsCount ] = useState(0)

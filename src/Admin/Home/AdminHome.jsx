@@ -5,18 +5,18 @@ import Alerter from '../../Hooks/Alerter';
 import Header from '../Components/Header';
 import Navbar from '../Components/Navbar';
 import { useSearchParams } from 'react-router-dom';
-import Courses, { AddCourse, EditCourse, Modules } from '../Sections/Courses'
-import Certificates, { AddCertificate, EditCertificate } from '../Sections/Certificates'
+import { AddCourse, EditCourse, Modules } from '../Sections/Courses'
+import { AddCertificate, EditCertificate } from '../Sections/Certificates'
 import { PromptContextProvider, Prompter } from './../Components/Prompt'
-import RegistrationCenter, { Applications, CourseRegistration } from '../Sections/RegistrationCenter';
+import { Applications, CourseRegistration } from '../Sections/RegistrationCenter';
 import Students from '../Sections/Students';
+import { NewAccreditations } from '../Sections/Accreditations';
 
 export default function AdminHome(){
   const [ currentPage, setCurrentPage ] = useSearchParams({ m: 0, s: 0 })
   const NavLinks = useMemo(() => [
       { 
-        title: 'Courses', 
-        section: <Courses />,
+        title: 'Courses',
         sub: [
           {
                 title: 'Add courses', section: <AddCourse />
@@ -30,8 +30,7 @@ export default function AdminHome(){
         ]
       },
       { 
-        title: 'Certificates', 
-        section: <Certificates />,
+        title: 'Certificates',
         sub: [
             {
               title: 'Add certificate',
@@ -44,8 +43,7 @@ export default function AdminHome(){
           ]
        },
       { 
-        title: 'Registration Center', 
-        section: <RegistrationCenter />,
+        title: 'Registration Center',
         sub: [
           {
             title: 'Applications',
@@ -58,13 +56,14 @@ export default function AdminHome(){
         ]
       },
       { 
-        title: 'Partners', 
-        section: <div></div> 
-
-      },
-      { 
         title: 'Students', 
         section: <Students /> 
+      },
+      { 
+        title: 'Accreditations', 
+        sub: [
+          { title: 'Add accredited partner', section: <NewAccreditations /> }
+        ]
       },
     ], [])
   const mainSection = useMemo(() => currentPage.get('m'), [currentPage])
@@ -75,6 +74,7 @@ export default function AdminHome(){
   }, [currentPage])
 
   useEffect(() => {
+    document.body.title = NavLinks[mainSection].title
     mainSection && NavLinks[mainSection].sub && setSubPage(subSection || 0)
   }, [mainSection])
 

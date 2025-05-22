@@ -60,11 +60,6 @@ function certificatesReducer(state, action){
   }
 }
 
-export default function Certificates() {
-  
-  return null
-}
-
 export function AddCertificate(){
   return <CertificateStructure operation="add" />
 }

@@ -83,10 +83,6 @@ export function Modules(){
   )
 }
 
-export default function Courses(){
-  return null
-}
-
 function coursesReducer(state, action){
 
   switch(action.type){
@@ -587,7 +583,12 @@ function CourseSubList({  course, title, viewCourse, courseDispatch, position })
       <span className={ courseInputTitleClasses }> { title } </span>
       {
         course[position].length > 0 && course[position].map((currentItem, index) => {
-          return <textarea className={ inputClasses } disabled={ viewCourse } value={ currentItem } onChange={ e => courseDispatch({ type: ACTIONS.COURSE.FILL_SUB_INPUT, position, index, value: e.target.value }) }  ></textarea>
+          return <textarea
+                    key={ index }
+                    className={ inputClasses } 
+                    disabled={ viewCourse } 
+                    value={ currentItem } 
+                    onChange={ e => courseDispatch({ type: ACTIONS.COURSE.FILL_SUB_INPUT, position, index, value: e.target.value }) }  ></textarea>
         }) 
       }
       <AddMoreField { ...{ position, type: ACTIONS.COURSE.ADD_INPUT, dispatch: courseDispatch, viewCourse  } } />

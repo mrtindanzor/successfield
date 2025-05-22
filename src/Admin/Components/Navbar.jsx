@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react"
+import { useState, useMemo } from "react"
 import { ChevronDown } from "lucide-react"
 
 export default function Navbar({ NavLinks, setCurrentPage, mainSection }) {
@@ -6,15 +6,6 @@ export default function Navbar({ NavLinks, setCurrentPage, mainSection }) {
     return NavLinks[mainSection].title
   }, [mainSection])
   const [ navToggle, setNavToggle ] = useState(false)
-
-  useEffect(() => {
-    if(navToggle) return
-    const menuBtn = document.querySelector('.adminMenuBtn')
-    const navbar = document.querySelector('.adminNavbar')
-    document.body.addEventListener('click', e => {
-      if(e.target !== menuBtn && !menuBtn.contains(e.target) && navbar !== e.target && !navbar.contains(e.target)) setNavToggle(false)
-    })
-  }, [])
 
   return (
     <>

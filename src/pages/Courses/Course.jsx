@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import useCourses from "../../Contexts/CoursesContext";
 import usePendingLoader from "../../Contexts/PendingLoaderContext";
-import CourseCard from "../../Components/CourseCard";
 import { formatUrl } from "../../core";
 import { PendingLoading } from '../../Hooks/PendingLoader';
 
@@ -58,7 +57,6 @@ export default function Course(){
   const { setIsPendingLoading } = usePendingLoader()
   let { course } = useParams()
   course = formatUrl(course)
-  const listContainerRef = useRef()
 
   useEffect(() => {
     setIsPendingLoading(true)
@@ -78,30 +76,36 @@ export default function Course(){
       {
         currentCourse && currentCourse.benefits ? <>
 
-          { currentCourse &&  <h2
-              className="text-2xl sm:text-3xl pt-10 text-center text-black font-extrabold uppercase"
-              >
-                { currentCourse.course }
-            </h2> }
+          { currentCourse && 
+              <h2
+                className="text-2xl sm:text-3xl pt-10 text-center text-black font-extrabold uppercase"
+                >
+                  { currentCourse.course }
+              </h2> }
 
-          { currentCourse && <div className="text-black md:text-xl capitalize bg-white pt-10">
-                                <SubListItem content={ currentCourse.overview } />
-                              </div> }
+          { currentCourse && 
+              <div className="text-black md:text-xl capitalize bg-white pt-10">
+                <SubListItem content={ currentCourse.overview } />
+              </div> }
 
-          { currentCourse && currentCourse.fee && <div className=" grid gap-3 py-1 ">
-                                <span 
-                                  className="font-bold text-xl sm:text-2xl"
-                                  > Fee: </span>
-                                <SubListItem content={ currentCourse.fee } />
-                              </div> }
+          { currentCourse && currentCourse.fee && 
+              <div className=" grid gap-3 py-1 ">
+                <span 
+                  className="font-bold text-xl sm:text-2xl"
+                  > Fee: </span>
+                <SubListItem content={ currentCourse.fee } />
+              </div> }
           
-            { currentCourse && 
-              currentCourse.modules?.length > 0 ? 
-              <Link to={ 'module' } 
-              className=" px-6 py-2 rounded-tl-md rounded top-tr-md bg-green-600 hover:bg-green-700 text-white mt-8 block w-fit "> Start Course </Link> : null }
+            { currentCourse && currentCourse.modules?.length > 0 ? 
+                <Link to={ 'module' } 
+                  className=" px-6 py-2 rounded-tl-md rounded top-tr-md bg-green-600 hover:bg-green-700 text-white mt-8 block w-fit "
+                  >
+                  Start Course
+                </Link> : null }
 
           <div className=" block course-list-container mt-10">
-            { currentCourse && <ShowList { ...{ currentCourse, outlines: currentCourse.outlines, objectives: currentCourse.objectives, modules: currentCourse.modules, benefits: currentCourse.benefits } } /> }
+            { currentCourse && 
+                <ShowList { ...{ currentCourse, outlines: currentCourse.outlines, objectives: currentCourse.objectives, modules: currentCourse.modules, benefits: currentCourse.benefits } } /> }
           </div>
         </> : <PendingLoading />
       }
@@ -159,26 +163,26 @@ function ShowList({ currentCourse, outlines, objectives, modules, benefits }){
           }) 
         }
       </div>
-      <div>
+      <ul>
         {
           list.map(( nestedList, listIndex) => {
-            if(nestedList.list){
-              return <SubListItem { ...{ currentTabIndex, index: listIndex, list: nestedList.list, mapped: true } } />
-            } 
+            return (
+              <li
+                key={ listIndex }
+                >
+                  { nestedList.list && 
+                      <SubListItem { ...{ currentTabIndex, index: listIndex, list: nestedList.list, mapped: true } } />  } 
 
-            if(nestedList.modules){
-              return <ModuleList { ...{ list: nestedList.modules, index: listIndex, currentTabIndex } } />
-            }
-            else {
-              return (
-                <div className=" pt-6">
-                  <SubListItem  { ...{ mapped: true, currentTabIndex, index: listIndex, content: nestedList.content } } />
-                </div>
-              )
-            }
+                  { nestedList.modules &&
+                      <ModuleList { ...{ list: nestedList.modules, index: listIndex, currentTabIndex } } /> }
+                    
+                  { nestedList.content &&
+                      <SubListItem  { ...{ mapped: true, currentTabIndex, index: listIndex, content: nestedList.content } } /> }
+                </li>
+            )
           })
         }
-      </div>
+      </ul>
     </>
   )
 }

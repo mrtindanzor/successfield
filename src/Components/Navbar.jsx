@@ -1,12 +1,11 @@
 import { useEffect, useMemo } from "react";
 import { Link, NavLink } from "react-router-dom";
 import useCourses from "../Contexts/CoursesContext";
-import { capitalize } from "../core";
-import { ChevronDown, ChevronLeft, ChevronRight, FileText, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, FileText, X } from "lucide-react";
 import useAuth from "../Contexts/AuthenticationContext";
 
 export function MenuButton({ navbarActive, setNavbarActive }){
-  useEffect(() => { console.log(navbarActive) }, [navbarActive])
+  
   const toggleWrapperClasses="*:first:w-10 *:first:h-10 text-white flex *:p-1 cursor-pointer md:hidden *:first:items-center *:first:justify-center *:first:rounded"
 
   return (
@@ -42,9 +41,9 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
     {
       title: 'Verify Certificate'
     },
-    // {
-    //   title: 'Accreditation'
-    // },
+    {
+      title: 'Accreditations'
+    },
     // {
     //   title: 'Training Partners'
     // },
@@ -57,20 +56,13 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
   ]
 
   useEffect(() => {
-    document.body.addEventListener('click', function(e){
-        
-    })
-
-  }, [])
-
-  useEffect(() => {
     if(!navbarActive && coursesActive) setCoursesActive(false)
   }, [navbarActive])
   
   return (
       <nav 
         className={`${ !navbarActive && 'translate-x-[-100vw] md:translate-0' } transition md:transition-none duration-300 absolute md:relative left-0 md:left-0 top-[6rem] w-[100vw] md:top-0 h-[calc(100vh-3.5rem)] md:h-fit`}>
-        <div className={ navbarActive || coursesActive && 'bg-gray-950/90 md:bg-transparent inset-0 absolute md:!fixed md:left-0 md:right-0 w-[300vw] md:translate-x-[-50%] h-[100vh] md:top-[100%] z-[-1] border-red-500' }
+        <div className={`${ navbarActive || coursesActive && 'bg-gray-950/90 md:bg-transparent inset-0 absolute md:!fixed md:left-0 md:right-0 w-[300vw] md:translate-x-[-50%] h-[100vh] md:top-[100%] z-[-1] border-red-500' }`}
           onClick={ () => {
                             coursesActive && setCoursesActive(false)
                             navbarActive && setNavbarActive(false)
@@ -98,7 +90,7 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
             if(menu.title.toLocaleLowerCase() === 'home') path=''
             return (
               <li 
-                key={ menu.title + index } 
+                key={ menu.title } 
                 className="md:relative"
                 >
 
@@ -132,11 +124,12 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
                           path = "/" + menu.title.toLowerCase().split(' ').join('_') + "/" + list.course.toLowerCase().split(' ').join('_')
 
                           return (
-                            <>
+                            <li
+                              key={ list.course }
+                              >
                               <NavLink
-                                key={ list.course }
                                 to={path}
-                                className={ `block md:pl-5 md:pr-10 py-2 px-5 w-full px-2 md:w-[500px] hover:bg-gray-950 hover:!text-white capitalize ${ listIndex > 3 ? 'md:hidden': 'block' } }` }
+                                className={ `block md:pl-5 md:pr-10 py-2 px-5 w-full md:w-[500px] hover:bg-gray-950 hover:!text-white capitalize ${ listIndex > 3 ? 'md:hidden': 'block' } }` }
                                 onClick={ () => {
                                   coursesActive && setCoursesActive(false)
                                   navbarActive && setNavbarActive(false)
@@ -144,15 +137,16 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
                                 > { list.course }
                               </NavLink>
                               <hr />
-                              { listIndex === 3 && <Link key={ 'see more' + index }
-                               to="/courses"
-                                className="md:pl-5 md:pr-10 py-2 px-5 w-[500px] hidden md:block hover:bg-gray-950 hover:text-white" 
-                                onClick={ () => {
-                                  coursesActive && setCoursesActive(false)
-                                  coursesActive && setNavbarActive(false)
-                                } }
-                               > View all courses </Link> }
-                            </>
+                              { listIndex === 3 && <Link 
+                                  to="/courses"
+                                    className="md:pl-5 md:pr-10 py-2 px-5 w-[500px] hidden md:block hover:bg-gray-950 hover:text-white" 
+                                    onClick={ () => {
+                                      coursesActive && setCoursesActive(false)
+                                      coursesActive && setNavbarActive(false)
+                                    } }
+                                  > View all courses
+                                </Link> }
+                            </li>
                           )
                         })
                       }
