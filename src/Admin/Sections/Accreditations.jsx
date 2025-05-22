@@ -1,6 +1,7 @@
 import { useMemo, useReducer, useState, useCallback } from "react"
 import useServerUri from "../../Contexts/baseServer"
 import DisplayNotification from "../../Components/DisplayNotification"
+import { CloudUpload } from "lucide-react"
 
 const ACTIONS = {
   FILL_INPUT: 'fill_input',
@@ -23,6 +24,7 @@ const accreditationsReducer = (state, action) => {
 }
 
 const InputField = ({ title, file, value, index, position, dispatch }) => {
+  const [ image, setImage ] = useState(null)
 
   return (
     <label
@@ -38,8 +40,22 @@ const InputField = ({ title, file, value, index, position, dispatch }) => {
         className={`${ file && 'hidden' } border-2 border-gray-500 rounded-sm px-3 py-2`}
         type={`${ file ? 'file' : 'text' }`}
         value={`${ file ? '' : value }`}
-        onChange={ e => dispatch({ type: ACTIONS.FILL_INPUT, index, position, value: file ? e.target.files[0] : e.target.value }) }
+        onChange={ e => {
+          dispatch({ type: ACTIONS.FILL_INPUT, index, position, value: file ? e.target.files[0] : e.target.value })
+          if(file) setImage(e.target.files[0])
+        } }
         />
+      
+      { file && <div
+          className=""
+          >
+            <CloudUpload
+          className="bg-green-500 w-30 h-10 p-2 rounded text-white cursor-pointer"
+          />
+          { file && image && <span
+              className="text-lg font-bold text-green-600"
+              > Image selected </span> }
+          </div> }
     </label>
   )
 }
