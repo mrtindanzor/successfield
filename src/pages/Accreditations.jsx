@@ -25,7 +25,7 @@ const Accreditations = () => {
 
   return (
     <ul
-      className="px-5 sm:px-8 md:px-10 pt-5"
+      className="px-5 sm:px-8 md:px-10 md:pt-10 pt-5 lg:max-w-[1440px] mx-auto"
       >
       { accreditations && accreditations.map( agent => {
         return <li 
