@@ -35,6 +35,7 @@ function AdminPanel(){
 export default function Dashboard(){
   const { currentUser, userFullName, userPhoto  } = useAuth()
   const { certificates } = useAuth()
+  const [ isLoaded, setIsLoaded ] = useState(false)
   const mainListItems = useMemo(() => {
     const m = [
                 {
@@ -130,9 +131,11 @@ export default function Dashboard(){
         {
           !userPhoto ? <User 
               className="h-20 w-20 object-cover object-center-top text-white border-2 rounded-full" /> 
-              : <img loading='lazy' 
+              : <img 
+                  loading='lazy'
+                  onLoad={ () => setIsLoaded(true) }
                   src={ userPhoto } 
-                  className="h-20 w-20 object-cover object-center-top text-white border-2 rounded-full" 
+                  className={`${ isLoaded && '!opacity-100 transition duration-4000 ease-linear' } opacity-0 h-20 w-20 object-cover object-center-top text-white border-2 rounded-full`} 
                   />
         }
         <div className=' grid gap-3'>
