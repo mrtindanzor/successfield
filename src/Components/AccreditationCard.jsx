@@ -9,7 +9,7 @@ const AccreditationCard = ({ accreditation }) => {
       >
       <img
         className={`${ imageLoaded && '!opacity-100 transition duration-3000 ease-out' } opacity-0 w-full h-auto object-cover`}
-        src={ accreditation?.image.secure_url || null }
+        src={ accreditation?.image.secure_url.split('upload').join('upload/q_auto/f_auto') || null }
         loading="lazy"
         onLoad={ () => setImageLoaded(true) }
         alt={ accreditation.name } />
