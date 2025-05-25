@@ -94,7 +94,7 @@ const handler = registration
 function readImage(e, setter){
   const allowedExts = ['jpg','png','jpeg']
   const file = e.target.files[0]
-  console.log(file)
+  
   if(!file){
     setMsg("Choose a picture")
     setter('')
