@@ -25,15 +25,9 @@ const Accreditations = () => {
 
   return (
     <ul
-      className="px-5 sm:px-8 md:px-10 md:pt-10 pb-40 pt-5 lg:max-w-[1440px] mx-auto sm:columns-2 md:columns-3"
+      className="grid grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-x-5 gap-y-10 lg:max-w-[1440px] mx-auto px-5 sm:px-8 md:px-10"
       >
-      { accreditations && accreditations.map( agent => {
-        return <li
-          key={agent._id}
-          >
-            <AccreditationCard { ...{ accreditation: agent } } />
-          </li>
-      } ) }
+      { accreditations && accreditations.map( agent => <AccreditationCard key={agent._id} { ...{ accreditation: agent } } />) }
     </ul>
   )
 }
