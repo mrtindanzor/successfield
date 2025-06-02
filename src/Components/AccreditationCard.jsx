@@ -5,7 +5,7 @@ const AccreditationCard = ({ accreditation }) => {
   const [ imageLoaded, setImageLoaded ] = useState(false)
   return (
     <li
-      className="grid grid-rows-[1fr_auto] gap-2 mb-10 bg-white"
+      className="grid grid-rows-[1fr_auto] gap-2 mb-10 bg-white break-inside-avoid"
       >
       <img
         className={`${ imageLoaded && '!opacity-100 transition duration-3000 ease-out' } opacity-0 w-full h-auto`}
