@@ -25,7 +25,7 @@ const Accreditations = () => {
 
   return (
     <ul
-      className="[columns:300px] gap-x-5 gap-y-10 lg:max-w-[1440px] mx-auto px-5 sm:px-8 md:px-10"
+      className="[columns:300px] gap-x-5 lg:max-w-[1440px] mx-auto px-5 sm:px-8 md:px-10"
       >
       { accreditations && accreditations.map( agent => <AccreditationCard key={agent._id} { ...{ accreditation: agent } } />) }
     </ul>
