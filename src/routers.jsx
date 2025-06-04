@@ -10,21 +10,20 @@ import LayoutOne from './Components/Layouts/LayoutOne';
 import Home from './pages/Home';
 import VerifyCerificate from './pages/VerifyCertificate';
 import CoursesOverview from './pages/Courses/CoursesOverview';
-import Course from './pages/Courses/Course';
-import Module from './pages/Courses/Module/Module';
-import Registration from "./Components/Authentication/Registration";
-import SignedIn from './Components/ProtectRoutes/SignedIn';
-import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 import Login from './Components/Authentication/Login';
-import OnlyAuthorizedForModule from "./Components/ProtectRoutes/OnlyAuthorizedForModule";
 import { PendingLoader } from "./Contexts/PendingLoaderContext";
-import Accreditations from "./pages/Accreditations";
-import Faq from "./pages/Faq";
 
 //lazy components
 const AdminHome = lazy(() => import('./Admin/Home/AdminHome'))
-
+const Accreditations = lazy(() => import("./pages/Accreditations"))
+const Faq = lazy(() => import("./pages/Faq"))
+const Registration = lazy(() => import("./Components/Authentication/Registration"))
+const SignedIn = lazy(() => import('./Components/ProtectRoutes/SignedIn'))
+const Dashboard = lazy(() => import("./pages/Dashboard"))
+const OnlyAuthorizedForModule = lazy(() => import("./Components/ProtectRoutes/OnlyAuthorizedForModule"))
+const Course = lazy(() => import('./pages/Courses/Course'))
+const Module = lazy(() => import('./pages/Courses/Module/Module'))
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route >
@@ -47,30 +46,42 @@ const router = createBrowserRouter(
 
         <Route path='verify' element={ <VerifyCerificate /> } />
 
-        <Route path='faqs' element={ <Faq /> } />
+        <Route path='faqs' element={ <Suspense fallback={ <PendingLoader /> }>
+                                        <Faq />
+                                      </Suspense> } />
                                                     
         <Route path='courses' element={ <CoursesOverview /> } />
                                                     
-        <Route path='accreditations' element={ <Accreditations /> } />
+        <Route path='accreditations' element={ <Suspense fallback={ <PendingLoader /> }>
+                                                  <Accreditations />
+                                                </Suspense> } />
                                         
-        <Route path='courses/:course' element={ <Course /> } />
+        <Route path='courses/:course' element={ <Suspense fallback={ <PendingLoader /> }>
+                                                  <Course />
+                                                </Suspense> } />
                                                 
         <Route path='courses/:course/:module' element={ <NotAuthenticated> 
-                                                          <OnlyAuthorizedForModule>
-                                                            <Module /> 
-                                                          </OnlyAuthorizedForModule>
+                                                          <Suspense fallback={ <PendingLoader /> }>
+                                                            <OnlyAuthorizedForModule>
+                                                              <Module /> 
+                                                            </OnlyAuthorizedForModule>
+                                                          </Suspense>
                                                         </NotAuthenticated> } />
                                                         
         <Route path='users/join' element={ <SignedIn>
-                                              <Registration />
+                                              <Suspense fallback={ <PendingLoader /> }>
+                                                <Registration />
+                                              </Suspense>
                                             </SignedIn> } />
                                                         
         <Route path='users/students-area' element={ <SignedIn>
                                                       <Login />
                                                     </SignedIn> } />
                                               
-        <Route path='dashboard/profile' element={ <NotAuthenticated> 
+        <Route path='dashboard/profile' element={ <NotAuthenticated>
+                                                    <Suspense fallback={ <PendingLoader /> }>
                                                       <Dashboard />
+                                                    </Suspense>
                                                   </NotAuthenticated> } />
 
         <Route path='*' element={ <NotFound /> } />

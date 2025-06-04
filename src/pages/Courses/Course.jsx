@@ -6,8 +6,8 @@ import { formatUrl } from "../../core";
 import { PendingLoading } from '../../Hooks/PendingLoader';
 
 
-function SubListItem({ list, content, mapped, index, currentTabIndex }){
-  let contentClasses = `leading-relaxed capitalize ${ currentTabIndex === index ? "flex" : "hidden" }` 
+function SubListItem({ list, content, index, currentTabIndex, cert }){
+  let contentClasses = `leading-relaxed capitalize ${ currentTabIndex === index ? "flex" : "hidden" } pt-5 ${ cert ? '[line-height:2.5rem]' : '' }` 
 
   return (
     list ? <ul className={ `flex-col py-5 capitalize ${ currentTabIndex === index ? "flex" : "hidden" }` } key={ Date.now() * Math.random() }>
@@ -177,7 +177,7 @@ function ShowList({ currentCourse, outlines, objectives, modules, benefits }){
                       <ModuleList { ...{ list: nestedList.modules, index: listIndex, currentTabIndex } } /> }
                     
                   { nestedList.content &&
-                      <SubListItem  { ...{ mapped: true, currentTabIndex, index: listIndex, content: nestedList.content } } /> }
+                      <SubListItem  { ...{ mapped: true, currentTabIndex, index: listIndex, content: nestedList.content, cert: true } } /> }
                 </li>
             )
           })
