@@ -47,7 +47,7 @@ const router = createBrowserRouter(
 
         <Route path='verify' element={ <VerifyCerificate /> } />
 
-        <Route path='faq' element={ <Faq /> } />
+        <Route path='faqs' element={ <Faq /> } />
                                                     
         <Route path='courses' element={ <CoursesOverview /> } />
                                                     
