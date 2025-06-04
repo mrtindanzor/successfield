@@ -31,28 +31,13 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
   const { isLoggedIn } = useAuth()
   
   const MenuItems = [
-    {
-      title: 'Home',
-    },
-    {
-      title: 'Courses',
-      list: coursesList,
-    },
-    {
-      title: 'Verify Certificate'
-    },
-    {
-      title: 'Accreditations'
-    },
-    // {
-    //   title: 'Training Partners'
-    // },
-    // {
-    //   title: 'About us'
-    // },
-    // {
-    //   title: 'Contact us'
-    // }
+    { title: 'Home', },
+    { title: 'Courses', list: coursesList, },
+    { title: 'Verify Certificate' },
+    { title: 'Accreditations' },
+    { title: 'Faqs' },
+    // { title: 'About us' },
+    // { title: 'Contact us' }
   ]
 
   useEffect(() => {

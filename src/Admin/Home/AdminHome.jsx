@@ -11,6 +11,7 @@ import { PromptContextProvider, Prompter } from './../Components/Prompt'
 import { Applications, CourseRegistration } from '../Sections/RegistrationCenter';
 import Students from '../Sections/Students';
 import { NewAccreditations } from '../Sections/Accreditations';
+import { AddFaq } from '../Sections/Faq';
 
 export default function AdminHome(){
   const [ currentPage, setCurrentPage ] = useSearchParams({ m: 0, s: 0 })
@@ -18,41 +19,23 @@ export default function AdminHome(){
       { 
         title: 'Courses',
         sub: [
-          {
-                title: 'Add courses', section: <AddCourse />
-              },
-              {
-                title: 'Edit courses', section: <EditCourse />
-              },
-              {
-                title: 'Modules', section: <Modules />
-              }
+          { title: 'Add courses', section: <AddCourse /> },
+          { title: 'Edit courses', section: <EditCourse /> },
+          { title: 'Modules', section: <Modules /> }
         ]
       },
       { 
         title: 'Certificates',
         sub: [
-            {
-              title: 'Add certificate',
-              section: <AddCertificate />
-            },
-            {
-              title: 'Edit certificate',
-              section: <EditCertificate />
-            }
-          ]
+          { title: 'Add certificate', section: <AddCertificate /> },
+          { title: 'Edit certificate', section: <EditCertificate /> }
+        ]
        },
       { 
         title: 'Registration Center',
         sub: [
-          {
-            title: 'Applications',
-            section: <Applications />
-          },
-          {
-            title: 'Courses',
-            section: <CourseRegistration />
-          }
+          { title: 'Applications', section: <Applications /> },
+          { title: 'Courses', section: <CourseRegistration /> }
         ]
       },
       { 
@@ -65,6 +48,12 @@ export default function AdminHome(){
           { title: 'Add accredited partner', section: <NewAccreditations /> }
         ]
       },
+      { 
+        title: 'Faq', 
+        sub: [
+          { title: 'Add Faq', section: <AddFaq /> }
+        ]
+      },
     ], [])
   const mainSection = useMemo(() => currentPage.get('m'), [currentPage])
   const subSection = useMemo(() => currentPage.get('s'), [currentPage])
@@ -74,7 +63,7 @@ export default function AdminHome(){
   }, [currentPage])
 
   useEffect(() => {
-    document.body.title = NavLinks[mainSection].title
+    document.title = `Dashboard - ${ NavLinks[mainSection].title }`
     mainSection && NavLinks[mainSection].sub && setSubPage(subSection || 0)
   }, [mainSection])
 
@@ -91,8 +80,7 @@ export default function AdminHome(){
         <div
           className="grid grid-rows-[auto_1fr] bg-white rounded px-1 sm:px-8 md:px-10 py-3 gap-5 sm:gap-8 md:gap-10"
           >
-            { mainSection && NavLinks[mainSection].sub && <ul
-              className="flex flex-wrap gap-3"
+            { mainSection && NavLinks[mainSection].sub && <ul className="flex flex-wrap gap-3"
               >
                 { NavLinks[mainSection].sub.map((sub, subIndex) => {
                   return <li

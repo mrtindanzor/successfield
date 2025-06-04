@@ -20,6 +20,7 @@ import Login from './Components/Authentication/Login';
 import OnlyAuthorizedForModule from "./Components/ProtectRoutes/OnlyAuthorizedForModule";
 import { PendingLoader } from "./Contexts/PendingLoaderContext";
 import Accreditations from "./pages/Accreditations";
+import Faq from "./pages/Faq";
 
 //lazy components
 const AdminHome = lazy(() => import('./Admin/Home/AdminHome'))
@@ -45,6 +46,8 @@ const router = createBrowserRouter(
         <Route path='verify-certificate' element={ <VerifyCerificate /> } />
 
         <Route path='verify' element={ <VerifyCerificate /> } />
+
+        <Route path='faq' element={ <Faq /> } />
                                                     
         <Route path='courses' element={ <CoursesOverview /> } />
                                                     
