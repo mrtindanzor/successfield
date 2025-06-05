@@ -1,11 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useSetAlert } from "./Alerter";
 import useServerUri from "../Contexts/baseServer";
 import { jwtDecode } from 'jwt-decode'
 import { capitalize } from "../core";
 
 export default function useAuthentication(){
-  const setAlert = useSetAlert()
   const stringPattern = /^[\w\s.,-]+$/
   const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
   const [ isLoggedIn, setIsLoggedIn ] = useState(false)
@@ -149,17 +147,15 @@ export default function useAuthentication(){
           const decodedUser = jwtDecode(res.token)
           setCurrentUser(decodedUser)
           setIsLoggedIn(true)
-          setAlert(res.msg)
           navigate('/', { replace: true })
-        break
+          return res
         
         default: 
-          setAlert(res.msg)
-        break
+          return res
       }
     }
       catch(err){
-        return setAlert(err.message)
+        return ({ status: 500, message: err.message})
       }
   }
 

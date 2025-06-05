@@ -1,13 +1,13 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAuth from '../../Contexts/AuthenticationContext'
-import { useSetAlert } from '../../Hooks/Alerter'
 import { EyeOff, Eye } from 'lucide-react'
+import DisplayNotification from '../DisplayNotification'
 
 export default function Login(){
   const [ credentials, setCredentials ] = useState({ email: '', password: '' })
   const [ isPassVisible, setIsPassVisible ] = useState(false)
-  const setMsg = useSetAlert()
+  const [ feedback, setFeedback ] = useState({})
   const navigate = useNavigate()
   const { login } = useAuth()
 
@@ -16,15 +16,20 @@ export default function Login(){
 
     try{
       const res = await login(credentials, navigate)
-      if(res && res.msg) setMsg(res.msg)
+      if(!res) throw Error('Something went wrong')
+      if(res){
+        if(!res.status || res.status !== 200) throw Error(res.msg)
+        setFeedback({ success: true, message: res.msg })
+      }
     } catch(err){
-      setMsg(err.message)
+      setFeedback({ error: true, message: err.message })
     }
   }
 
   return (
     <>
       <form onSubmit={ (e) => handleFormSubmission(e) } className=" relative grid gap-10 bg-gray-100 mx-auto w-[98%] max-w-[400px] sm:max-w-[600px] rounded-xl py-5 mt-10 sm:py-10 px-5 mb-10 md:px-10 pb-20">
+        { feedback.message && <DisplayNotification { ...{ feedback } } /> }
         <h3 className=" text-4xl sm:text-6xl text-green-500 font-bold [text-shadow:_1px_1px_1px_black] "> Sign in </h3>
         <TextField { ...{ value: credentials.email, title: 'Email', position: 'email', setter: setCredentials } } />
         <TextField { ...{ value: credentials.password, title: 'Password', position: 'password', setter: setCredentials, setIsPassVisible, isPassVisible } } />
