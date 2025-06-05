@@ -123,7 +123,7 @@ async function handleFormSubmission(e){
           { currentForm === 4 && 'Login Information' }
         </h3>
         <div
-          className={`grid grid-10 md:gap-5 ${ currentForm !== 1 && 'hidden' }`}
+          className={`grid gap-10 md:gap-5 ${ currentForm !== 1 && 'hidden' }`}
           >
           <TextField { ...{ title: 'First name', type: ACTIONS.FILL_MAIN_INPUT, value: user.firstname, position: 'firstname', dispatchUser} } />
           <TextField { ...{ title: 'Middle name', type: ACTIONS.FILL_MAIN_INPUT, value: user.middlename, position: 'middlename', dispatchUser } } />
@@ -135,7 +135,7 @@ async function handleFormSubmission(e){
           <TextField { ...{ title: 'Birth date', type: ACTIONS.FILL_MAIN_INPUT, value: user.birthDate, date: true, position: 'birthDate', dispatchUser } } />
           <NextButton { ...{ setter: setCurrentForm, location: 2 } } />
         </div>
-        <div className={`${ currentForm !== 2 && 'hidden' } grid grid-10 md:gap-5`} >
+        <div className={`${ currentForm !== 2 && 'hidden' } grid gap-10 md:gap-5`} >
           <div>
             <TextField { ...{ title: 'Programme', value: user.programme } } disabled />
             <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: coursesList, position: 'course', reducerPosition: 'programme', title: 'programme'} } />
@@ -148,7 +148,7 @@ async function handleFormSubmission(e){
           <TextField { ...{ title: 'id photo', type: ACTIONS.FILL_MAIN_INPUT, file: true, value: user.nationalId, setFeedback, position: 'nationalId', dispatchUser } } />
           <NextButton { ...{ setter: setCurrentForm, location: 3 } } />
         </div>
-        <div  className={`${ currentForm !== 3 && 'hidden' } grid grid-10 md:gap-5`}>
+        <div  className={`${ currentForm !== 3 && 'hidden' } grid gap-10 md:gap-5`}>
           <TextField { ...{ title: 'country', type: ACTIONS.FILL_ADDRESS, value: user.address.country, position: 'country', dispatchUser } } />
           <TextField { ...{ title: 'region / state', type: ACTIONS.FILL_ADDRESS, value: user.address.state, position: 'state', dispatchUser } } />
           <TextField { ...{ title: 'city', type: ACTIONS.FILL_ADDRESS, value: user.address.city, position: 'city', dispatchUser } } />
@@ -157,7 +157,7 @@ async function handleFormSubmission(e){
           <TextField { ...{ title: 'contact number', type: ACTIONS.FILL_MAIN_INPUT, value: user.phoneNumber, position: 'phoneNumber', dispatchUser } } />
           <NextButton { ...{ setter: setCurrentForm, location: 4 } } />
         </div>
-        <div className={`${ currentForm !== 4 && 'hidden' } grid grid-10 md:gap-5 sm:max-w-[600px] mx-auto`}>
+        <div className={`${ currentForm !== 4 && 'hidden' } grid gap-10 md:gap-5 sm:max-w-[600px] mx-auto`}>
           <TextField { ...{ title: 'email', type: ACTIONS.FILL_MAIN_INPUT, value: user.email, position: 'email', dispatchUser, classList: 'sm:col-span-2' } } />
           <TextField { ...{ title: 'password', type: ACTIONS.FILL_MAIN_INPUT, value: user.password, password: true, position: 'password', dispatchUser, classList: 'sm:col-span-2' } } />
           <TextField { ...{ title: 'confirm password', type: ACTIONS.FILL_MAIN_INPUT, value: user.cpassword, password: true, position: 'cpassword', dispatchUser, classList: 'sm:col-span-2' } } />
@@ -187,7 +187,7 @@ function TextField({ title, type, password, position, dispatchUser, disabled, va
           >{ title }: </span>
         {
           inputType === 'file' && <div
-            className="flex gap-2 items-center w-fit h-fit p-2 cursor-pointer rounded-sm bg-green-800 text-white font-normal"
+            className="flex gap-2 items-center w-fit h-fit p-2 cursor-pointer rounded-sm bg-green-600 text-white font-normal"
             >
               <Upload /> upload image
             </div>
@@ -227,7 +227,7 @@ export function Selector({ title, dispatch, type, db, position, reducerPosition,
     <div 
       className={`grid items-end gap-2 relative h-fit ${ classList }`}>
         <span 
-          className="flex whitespace-nowrap h-fit w-full px-5 py-1 sm:py-2 rounded-sm text-white text-lg sm:text-xl justify-between bg-green-800 cursor-pointer" 
+          className="flex whitespace-nowrap h-fit w-full px-5 py-1 sm:py-2 rounded-sm text-white text-lg sm:text-xl justify-between bg-green-600 cursor-pointer" 
           onClick={ () => setIsVisible(c => !c) }>
           Select { title }
           <ChevronDown />
