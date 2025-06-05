@@ -12,16 +12,20 @@ export default function MainList({ ACTIONS, dispatchNavigationManager, currentLo
   }, [currentLocation])
 
   return (
-    <>
-      { ( sub || main ) && <button onClick={ handleBackBtn } className=' bg-gray-700 text-white flex justify-center py-1 px-3 items-center cursor-pointer ml-5 my-3 md:hidden rounded-tl-sm rounded-bl-sm '> 
+    <section
+      className='md:bg-gray-300'
+      >
+      { ( sub || main ) && <button onClick={ handleBackBtn } className=' bg-gray-700 text-white flex justify-center py-1 px-3 items-center cursor-pointer my-3 md:hidden rounded-tl-sm rounded-bl-sm '> 
       <ChevronLeft className=' w-8 h-8 ' /> 
       </button> }
-      <ul className={ `${ sub || main ? 'hidden md:block' : '' } bg-white md:border-r-1 mt-[1px] md:min-h-100 md:max-w-[fit-content]` }>
+      <ul className={ `${ sub || main ? 'hidden md:block' : '' } h-fit border-none` }>
       {
         mainListItems.map((item, index) => {
           return <li 
             key={ index } 
-            className={`flex gap-3 justify-between items-center hover:bg-gray-500 hover:text-white cursor-pointer md:text-gray-950 w-full  p-2 border-b-1 border-b-gray-300 ${ index == main ? 'md:bg-gray-950 md:!text-white' : '' }
+            className={`flex gap-3 justify-between items-center hover:bg-gray-500 
+              hover:text-white cursor-pointer md:text-gray-950 w-full  p-2 not-last:border-b-1 text-base
+              border-b-gray-300 ${ index == main ? 'md:bg-gray-950 md:!text-white' : '' }
             `} 
           onClick={ (e) => {
             if(item.Logout) logout()
@@ -33,6 +37,6 @@ export default function MainList({ ACTIONS, dispatchNavigationManager, currentLo
         })
       }
     </ul>
-    </>
+    </section>
   )
 }

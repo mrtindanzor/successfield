@@ -123,7 +123,7 @@ async function handleFormSubmission(e){
           { currentForm === 4 && 'Login Information' }
         </h3>
         <div
-          className={`grid gap-5 ${ currentForm !== 1 && 'hidden' }`}
+          className={`grid grid-10 md:gap-5 ${ currentForm !== 1 && 'hidden' }`}
           >
           <TextField { ...{ title: 'First name', type: ACTIONS.FILL_MAIN_INPUT, value: user.firstname, position: 'firstname', dispatchUser} } />
           <TextField { ...{ title: 'Middle name', type: ACTIONS.FILL_MAIN_INPUT, value: user.middlename, position: 'middlename', dispatchUser } } />
@@ -135,7 +135,7 @@ async function handleFormSubmission(e){
           <TextField { ...{ title: 'Birth date', type: ACTIONS.FILL_MAIN_INPUT, value: user.birthDate, date: true, position: 'birthDate', dispatchUser } } />
           <NextButton { ...{ setter: setCurrentForm, location: 2 } } />
         </div>
-        <div className={`${ currentForm !== 2 && 'hidden' } grid gap-5`} >
+        <div className={`${ currentForm !== 2 && 'hidden' } grid grid-10 md:gap-5`} >
           <div>
             <TextField { ...{ title: 'Programme', value: user.programme } } disabled />
             <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: coursesList, position: 'course', reducerPosition: 'programme', title: 'programme'} } />
@@ -148,7 +148,7 @@ async function handleFormSubmission(e){
           <TextField { ...{ title: 'id photo', type: ACTIONS.FILL_MAIN_INPUT, file: true, value: user.nationalId, setFeedback, position: 'nationalId', dispatchUser } } />
           <NextButton { ...{ setter: setCurrentForm, location: 3 } } />
         </div>
-        <div  className={`${ currentForm !== 3 && 'hidden' } grid gap-5`}>
+        <div  className={`${ currentForm !== 3 && 'hidden' } grid grid-10 md:gap-5`}>
           <TextField { ...{ title: 'country', type: ACTIONS.FILL_ADDRESS, value: user.address.country, position: 'country', dispatchUser } } />
           <TextField { ...{ title: 'region / state', type: ACTIONS.FILL_ADDRESS, value: user.address.state, position: 'state', dispatchUser } } />
           <TextField { ...{ title: 'city', type: ACTIONS.FILL_ADDRESS, value: user.address.city, position: 'city', dispatchUser } } />
@@ -157,7 +157,7 @@ async function handleFormSubmission(e){
           <TextField { ...{ title: 'contact number', type: ACTIONS.FILL_MAIN_INPUT, value: user.phoneNumber, position: 'phoneNumber', dispatchUser } } />
           <NextButton { ...{ setter: setCurrentForm, location: 4 } } />
         </div>
-        <div className={`${ currentForm !== 4 && 'hidden' } grid gap-5 sm:max-w-[600px] mx-auto`}>
+        <div className={`${ currentForm !== 4 && 'hidden' } grid grid-10 md:gap-5 sm:max-w-[600px] mx-auto`}>
           <TextField { ...{ title: 'email', type: ACTIONS.FILL_MAIN_INPUT, value: user.email, position: 'email', dispatchUser, classList: 'sm:col-span-2' } } />
           <TextField { ...{ title: 'password', type: ACTIONS.FILL_MAIN_INPUT, value: user.password, password: true, position: 'password', dispatchUser, classList: 'sm:col-span-2' } } />
           <TextField { ...{ title: 'confirm password', type: ACTIONS.FILL_MAIN_INPUT, value: user.cpassword, password: true, position: 'cpassword', dispatchUser, classList: 'sm:col-span-2' } } />

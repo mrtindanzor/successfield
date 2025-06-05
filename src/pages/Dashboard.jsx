@@ -126,29 +126,31 @@ export default function Dashboard(){
   if(!currentUser) return <PendingLoading />
   
   return (
-    <> 
-      <div className=" flex flex-col md:flex-row text-center border-b-1 border-b-white items-center md:items-start md:text-left gap-5 p-4 bg-gray-950 lg:max-w-[1440px] mx-auto">
+    <main-content
+      className="h-[100vh] w-[100vw] grid grid-rows-[auto_1fr] lg:max-w-[1440px] px-5 sm:px-8 md:px-10 mx-auto"
+      > 
+      <div className="flex flex-col md:bg-gray-200 w-full md:flex-row text-center items-center md:items-start md:text-left gap-5 md:px-5 py-4">
         {
           !userPhoto ? <User 
-              className="h-20 w-20 object-cover object-center-top text-white border-2 rounded-full" /> 
+              className="h-20 w-20 object-cover object-center-top text-gray-950 border-2 rounded-full" /> 
               : <img 
                   loading='lazy'
                   onLoad={ () => setIsLoaded(true) }
                   src={ userPhoto } 
-                  className={`${ isLoaded && '!opacity-100 transition duration-4000 ease-linear' } opacity-0 h-20 w-20 object-cover object-center-top text-white border-2 rounded-full`} 
+                  className={`${ isLoaded && '!opacity-100 transition duration-4000 ease-linear' } opacity-0 h-20 w-20 object-cover object-center-top text-gray-950 border-2 rounded-full`} 
                   />
         }
-        <div className=' grid gap-3'>
-          <b className=' text-white texturina text-3xl '> { userFullName } </b>
+        <div className='grid gap-3'>
+          <b className=' text-gray-950 texturina text-3xl '> { userFullName } </b>
           <span className=" uppercase text-base text-gray-400 font-bold "> <span>Student ID: </span>{ currentUser.studentNumber } </span>
           { currentUser.admin && <AdminPanel />  }
         </div>
       </div>
-      <div className=" md:flex border-t-2 lg:max-w-[1440px] mx-auto">
+      <div className="w-full md:flex lg:max-w-[1440px] mx-auto md:bg-gray-100">
         <MainList { ...{ ...listProps } } />
         <SubList { ...{ ...listProps } } />
         <Details { ...{ ...listProps } } />
       </div>
-    </>
+    </main-content>
   )
 }
