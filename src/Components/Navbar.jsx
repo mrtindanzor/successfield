@@ -57,7 +57,7 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
           { 
             !isLoggedIn && <li>
               <Link to="/users/join" 
-              className=" hidden flex bg-red-500 py-2 px-5 uppercase items-center gap-2 text-white font-bold hover:bg-red-700 " 
+              className="lg:hidden flex bg-red-500 py-2 px-5 uppercase items-center gap-2 text-white font-bold hover:bg-red-700 " 
               onClick={ () => {
                             coursesActive && setCoursesActive(false)
                             navbarActive && setNavbarActive(false)
