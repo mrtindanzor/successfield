@@ -24,7 +24,7 @@ export default function Login(){
 
   return (
     <>
-      <form onSubmit={ (e) => handleFormSubmission(e) } className=" relative top-20 grid gap-10 bg-white mx-auto w-[98%] max-w-[400px] sm:max-w-[600px] rounded-xl py-10 px-3 md:px-10 pb-50">
+      <form onSubmit={ (e) => handleFormSubmission(e) } className=" relative grid gap-10 bg-gray-100 mx-auto w-[98%] max-w-[400px] sm:max-w-[600px] rounded-xl py-5 mt-10 sm:py-10 px-5 mb-10 md:px-10 pb-20">
         <h3 className=" text-4xl sm:text-6xl text-green-500 font-bold [text-shadow:_1px_1px_1px_black] "> Sign in </h3>
         <TextField { ...{ value: credentials.email, title: 'Email', position: 'email', setter: setCredentials } } />
         <TextField { ...{ value: credentials.password, title: 'Password', position: 'password', setter: setCredentials, setIsPassVisible, isPassVisible } } />
@@ -44,7 +44,7 @@ function TextField({ value, title, position, setter, setIsPassVisible, isPassVis
 
   return (
     <label 
-      className="relative grid gap-1"
+      className="relative grid"
       >
       <h3
         className="font-semibold text-xl sm:text-2xl"

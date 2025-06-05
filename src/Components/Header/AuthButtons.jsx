@@ -4,8 +4,8 @@ import { FileText, LogIn, UserCircle } from "lucide-react";
 
 function NotLoggedIn(){
   return (
-    <div className=" flex gap-1 !justify-self-end w-fit ">
-      <NavLink to='/users/students-area' className="after:!border-none flex gap-2 whitespace-nowrap items-center border-2 border-gray-400 px-3 py-2 sm:px-4 sm:py-2 md:px-5 md:py-2 rounded border-transparent hover:border-gray-200 font-bold text-lg md:text-xl text-gray-950 hover:bg-gray-100">
+    <div className=" flex gap-1 w-fit z-3 justify-self-end">
+      <NavLink to='/users/students-area' className="after:!border-none flex gap-2 whitespace-nowrap items-center border-2 px-3 py-2 sm:px-4 sm:py-2 md:px-5 md:py-2 rounded border-transparent hover:border-gray-200 font-bold text-lg md:text-xl text-gray-950 hover:bg-gray-100">
         <LogIn />
         Log in
       </NavLink>

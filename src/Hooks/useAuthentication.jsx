@@ -75,27 +75,30 @@ export default function useAuthentication(){
       cpassword
     } = credentials
 
-    if(contact !== '') return { msg: 'Unable to complete registration at this time', status: 403 }
-    if(!programme) return { msg: 'Select a programme', status: 403 }
-    if(!educationLevel) return { msg: 'Select your highest level of education', status: 403 }
-    if(!firstname) return { msg: 'Enter your first name', status: 403 }
-    if(firstname.length < 3) return { msg: 'First name too short', status: 403 }
-    if(!stringPattern.test(firstname)) return { msg: 'First name contains invalid characters', status: 403 }
-    if(middlename && middlename.length < 2) return { msg: 'Middle name too short', status: 403 }
-    if(middlename && !stringPattern.test(middlename)) return { msg: 'middle name contains invalid characters', status: 403 }
-    if(!surname) return { msg: 'Enter your surname', status: 403 }
-    if(surname.length < 3) return { msg: 'Surname too short', status: 403 }
-    if(!stringPattern.test(surname)) return { msg: 'Surname contains invalid characters', status: 403 }
-    if(!gender) return { msg: 'Select your gender', status: 403 }
-    if(!address) return { msg: 'Fill your address', status: 403 }
-    if(!nationalId) return { msg: 'Select an identification document', status: 403 }
-    if(!userImage) return { msg: 'Add a passport photo', status: 403 }
-    if(!phoneNumber) return { msg: 'Enter a valid phone number', status: 403 }
-    if(!email) return { msg: 'Enter your email address', status: 403 }
-    if(!emailPattern.test(email)) return { msg: 'Email address contains invalid characters', status: 403 }
-    if(!password) return { msg: 'Enter a password', status: 403 }
-    if(password.length < 8) return { msg: 'Password must not be less than 8 characters', status: 403 }
-    if(password !== cpassword) return { msg: 'Passwords do not match', status: 403 }
+    if(contact !== '') return { msg: 'Unable to complete registration at this time', status: 403, currentForm: 1 }
+    if(!firstname) return { msg: 'Enter your first name', status: 403, currentForm: 1 }
+    if(firstname.length < 3) return { msg: 'First name too short', status: 403, currentForm: 1 }
+    if(!stringPattern.test(firstname)) return { msg: 'First name contains invalid characters', status: 403, currentForm: 1 }
+    if(middlename && middlename.length < 2) return { msg: 'Middle name too short', status: 403, currentForm: 1 }
+    if(middlename && !stringPattern.test(middlename)) return { msg: 'middle name contains invalid characters', status: 403, currentForm: 1 }
+    if(!surname) return { msg: 'Enter your surname', status: 403, currentForm: 1 }
+    if(surname.length < 3) return { msg: 'Surname too short', status: 403, currentForm: 1 }
+    if(!stringPattern.test(surname)) return { msg: 'Surname contains invalid characters', status: 403, currentForm: 1 }
+    if(!gender) return { msg: 'Select your gender', status: 403, currentForm: 1 }
+    if(!programme) return { msg: 'Select a programme', status: 403, currentForm: 2 }
+    if(!educationLevel) return { msg: 'Select your highest level of education', status: 403, currentForm: 2 }
+    if(!nationalId) return { msg: 'Select an identification document', status: 403, currentForm: 2 }
+    if(!userImage) return { msg: 'Add a passport photo', status: 403, currentForm: 2  }
+    if(!address.country) return { msg: 'Add your country', status: 403, currentForm: 2 }
+    if(!address.state) return { msg: 'Add your region', status: 403, currentForm: 3 }
+    if(!address.city) return { msg: 'Add your city', status: 403, currentForm: 3 }
+    if(!address.address1) return { msg: 'Add your street address', status: 403, currentForm: 3 }
+    if(!phoneNumber) return { msg: 'Enter a valid phone number', status: 403, currentForm: 3 }
+    if(!email) return { msg: 'Enter your email address', status: 403, currentForm: 4 }
+    if(!emailPattern.test(email)) return { msg: 'Email address contains invalid characters', status: 403, currentForm: 4 }
+    if(!password) return { msg: 'Enter a password', status: 403, currentForm: 4 }
+    if(password.length < 8) return { msg: 'Password must not be less than 8 characters', status: 403, currentForm: 4 }
+    if(password !== cpassword) return { msg: 'Passwords do not match', status: 403, currentForm: 4 }
 
 
     const uri = serverUri + 'users/register'

@@ -50,9 +50,9 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
   
   return (
       <nav 
-        className={`${ !navbarActive && 'translate-x-[-100vw] lg:translate-0' } transition lg:transition-none duration-300 absolute lg:relative left-0 lg:left-0 top-[3.75rem] md:top-[4.5rem] border-t-2 border-t-gray-200 w-[100vw] lg:top-0 h-[calc(100vh-3.5rem)] lg:h-fit grid grid-cols-[80%_20%]`}>
+        className={`${ !navbarActive && 'translate-x-[-100vw] lg:translate-0' } transition lg:transition-none duration-300 absolute lg:relative left-0 lg:left-0 top-[3.75rem] md:top-[4.5rem] border-t-2 border-t-gray-200 lg:border-none w-full lg:top-0 h-[calc(100vh-3.5rem)] lg:h-fit grid grid-cols-[80%_20%]`}>
         <ul 
-          className="relative flex bg-red-500 flex-col lg:flex-row list-none !bg-white lg:bg-transparent h-full lg:w-fit w-full !z-[8888] lg:max-w-fit"
+          className="relative flex flex-col lg:flex-row list-none bg-white lg:bg-transparent h-full lg:w-fit w-full !z-[8888] lg:max-w-fit"
           >
           { 
             !isLoggedIn && <li>
@@ -79,7 +79,7 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
 
                 { !menu.list && <NavLink 
                   to={ path } 
-                  className="block text-gray-900 py-2 px-5 sm:px-2 border-b-1 font-semibold border-b-1 border-b-gray-100 lg:border-2 lg:border-transparent lg:hover:rounded lg:hover:border-gray-300 hover:bg-gray-200 w-full whitespace-nowrap" 
+                  className="block text-gray-900 py-2 px-5 sm:px-2 border-b-1 font-semibold border-b-gray-100 lg:border-2 lg:border-transparent lg:hover:rounded lg:hover:border-gray-300 hover:bg-gray-200 w-full whitespace-nowrap" 
                   onClick={ () => navbarActive && setNavbarActive(false) }
                   > { menu.title } </NavLink> }
 
