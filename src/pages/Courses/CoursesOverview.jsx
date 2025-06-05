@@ -16,7 +16,9 @@ export default function CoursesOverview(){
       className="px-5 sm:px-8 md:px-10 pb-50 lg:max-w-[1440px] mx-auto"
       >
       <p className="py-10 font-semibold"> { Content.description } </p>
-      <div className="grid w-full md:grid-cols-[repeat(auto-fill,_minmax(20rem,_1fr))] gap-x-5 gap-y-20 justify-evenly" aria-label="All courses">
+      <div 
+        className="grid w-full md:grid-cols-[repeat(auto-fill,_minmax(20rem,_1fr))] gap-x-5 md:gap-y-20 gap-y-10 justify-evenly"
+        aria-label="All courses">
         {
           coursesList.map((course, index) => <CourseCard title={ course.course } key={ index } overview={ true } />)
         }
