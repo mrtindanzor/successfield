@@ -39,7 +39,7 @@ export default function SlideShowSection(){
 
   return (
       <div
-        className="grid grid-cols-[auto_1fr_auto] md:grid-cols-[auto_auto_auto] md:justify-center w-[calc(100%-2.5rem)] sm:w-[calc(100%-4rem)] md:w-[calc(100%-5rem)] max-w-[1440px] mx-auto bg-gray-100 px-5 sm:px-8 md:px-10 gap-2 h-[300px]"
+        className="grid grid-cols-[auto_1fr_auto] md:grid-cols-[auto_auto_auto] md:justify-center w-[calc(100%-2.5rem)] sm:w-[calc(100%-4rem)] md:w-[calc(100%-5rem)] max-w-[1440px] mx-auto bg-gray-100 px-1 gap-1 h-[300px]"
         >
           <button>
             <ChevronLeft 
