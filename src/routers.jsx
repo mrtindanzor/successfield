@@ -13,6 +13,7 @@ import CoursesOverview from './pages/Courses/CoursesOverview';
 import NotFound from './pages/NotFound';
 import Login from './Components/Authentication/Login';
 import { PendingLoader } from "./Contexts/PendingLoaderContext";
+import FindPro from "./pages/FindPro";
 
 //lazy components
 const AdminHome = lazy(() => import('./Admin/Home/AdminHome'))
@@ -41,6 +42,8 @@ const router = createBrowserRouter(
       <Route path='/' element={ <LayoutOne /> } errorElement={ <ErrorElement /> } >
                                 
         <Route index element={ <Home /> } />
+
+        <Route path="find-professional" element={ <FindPro /> } />
                                 
         <Route path='verify-certificate' element={ <VerifyCerificate /> } />
 

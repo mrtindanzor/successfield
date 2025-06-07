@@ -6,6 +6,7 @@ import usePendingLoader from './../../Contexts/PendingLoaderContext'
 import { Eye, EyeOff, ChevronDown, ArrowRight, Upload } from "lucide-react";
 import PreviewImage from "../PreviewImage";
 import DisplayNotification from '../DisplayNotification'
+import LoginQuestion from "./LoginQuestion";
 
 const ACTIONS = {
   FILL_MAIN_INPUT: 'fill_main_input',
@@ -116,7 +117,7 @@ async function handleFormSubmission(e){
           { feedback.message && <div className="sm:col-span-2">
             <DisplayNotification { ...{ feedback } } />
           </div> }
-        <h3 className="text-3xl font-bold text-green-500 [text-shadow:_1px_1px_1px_black]">
+        <h3 className="text-3xl md:text-4xl font-bold text-green-500 [text-shadow:_1px_1px_1px_black]">
           { currentForm === 1 && 'Start Your Admission Application' }
           { currentForm === 2 && 'Verification' }
           { currentForm === 3 && 'Address' }
@@ -125,45 +126,50 @@ async function handleFormSubmission(e){
         <div
           className={`grid gap-10 md:gap-5 ${ currentForm !== 1 && 'hidden' }`}
           >
-          <TextField { ...{ title: 'First name', type: ACTIONS.FILL_MAIN_INPUT, value: user.firstname, position: 'firstname', dispatchUser} } />
-          <TextField { ...{ title: 'Middle name', type: ACTIONS.FILL_MAIN_INPUT, value: user.middlename, position: 'middlename', dispatchUser } } />
-          <TextField { ...{ title: 'Surname', type: ACTIONS.FILL_MAIN_INPUT, value: user.surname, position: 'surname', dispatchUser  } } />
+          <TextField { ...{ title: 'First name:*', type: ACTIONS.FILL_MAIN_INPUT, value: user.firstname, position: 'firstname', dispatchUser} } />
+          <TextField { ...{ title: 'Middle name:', type: ACTIONS.FILL_MAIN_INPUT, value: user.middlename, position: 'middlename', dispatchUser } } />
+          <TextField { ...{ title: 'Surname:*', type: ACTIONS.FILL_MAIN_INPUT, value: user.surname, position: 'surname', dispatchUser  } } />
           <div>
-            <TextField { ...{ title: 'Gender', value: user.gender } } disabled />
+            <TextField { ...{ title: 'Gender:*', value: user.gender } } disabled />
             <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: genders, position: 'gender', reducerPosition: 'gender', title: 'gender' } } />
           </div>
-          <TextField { ...{ title: 'Birth date', type: ACTIONS.FILL_MAIN_INPUT, value: user.birthDate, date: true, position: 'birthDate', dispatchUser } } />
+          <TextField { ...{ title: 'Birth date:*', type: ACTIONS.FILL_MAIN_INPUT, value: user.birthDate, date: true, position: 'birthDate', dispatchUser } } />
           <NextButton { ...{ setter: setCurrentForm, location: 2 } } />
         </div>
         <div className={`${ currentForm !== 2 && 'hidden' } grid gap-10 md:gap-5`} >
           <div>
-            <TextField { ...{ title: 'Programme', value: user.programme } } disabled />
+            <TextField { ...{ title: 'Programme:*', value: user.programme } } disabled />
             <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: coursesList, position: 'course', reducerPosition: 'programme', title: 'programme'} } />
           </div>
           <div>
-            <TextField { ...{ title: 'Highest level of Education', value: user.educationLevel } } disabled />
+            <TextField { ...{ title: 'Highest level of Education:*', value: user.educationLevel } } disabled />
             <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: educationLevels, position: 'level', reducerPosition: 'educationLevel', title: 'your educational level' } } />
           </div>
-          <TextField { ...{ title: 'Passport photo', type: ACTIONS.FILL_MAIN_INPUT, file: true, value: user.userImage, setFeedback, position: 'userImage', dispatchUser } } />
-          <TextField { ...{ title: 'id photo', type: ACTIONS.FILL_MAIN_INPUT, file: true, value: user.nationalId, setFeedback, position: 'nationalId', dispatchUser } } />
+          <TextField { ...{ title: 'Passport photo:*', type: ACTIONS.FILL_MAIN_INPUT, file: true, value: user.userImage, setFeedback, position: 'userImage', dispatchUser } } />
+          <TextField { ...{ title: 'id photo:*', type: ACTIONS.FILL_MAIN_INPUT, file: true, value: user.nationalId, setFeedback, position: 'nationalId', dispatchUser } } />
           <NextButton { ...{ setter: setCurrentForm, location: 3 } } />
         </div>
         <div  className={`${ currentForm !== 3 && 'hidden' } grid gap-10 md:gap-5`}>
-          <TextField { ...{ title: 'country', type: ACTIONS.FILL_ADDRESS, value: user.address.country, position: 'country', dispatchUser } } />
-          <TextField { ...{ title: 'region / state', type: ACTIONS.FILL_ADDRESS, value: user.address.state, position: 'state', dispatchUser } } />
-          <TextField { ...{ title: 'city', type: ACTIONS.FILL_ADDRESS, value: user.address.city, position: 'city', dispatchUser } } />
-          <TextField { ...{ title: 'address1', type: ACTIONS.FILL_ADDRESS, value: user.address.address1, position: 'address1', dispatchUser } } />
-          <TextField { ...{ title: 'address2', type: ACTIONS.FILL_ADDRESS, value: user.address.address2, position: 'address2', dispatchUser } } />
-          <TextField { ...{ title: 'contact number', type: ACTIONS.FILL_MAIN_INPUT, value: user.phoneNumber, position: 'phoneNumber', dispatchUser } } />
+          <TextField { ...{ title: 'country:*', type: ACTIONS.FILL_ADDRESS, value: user.address.country, position: 'country', dispatchUser } } />
+          <TextField { ...{ title: 'region / state:*', type: ACTIONS.FILL_ADDRESS, value: user.address.state, position: 'state', dispatchUser } } />
+          <TextField { ...{ title: 'city:*', type: ACTIONS.FILL_ADDRESS, value: user.address.city, position: 'city', dispatchUser } } />
+          <TextField { ...{ title: 'address1:*', type: ACTIONS.FILL_ADDRESS, value: user.address.address1, position: 'address1', dispatchUser } } />
+          <TextField { ...{ title: 'address2:', type: ACTIONS.FILL_ADDRESS, value: user.address.address2, position: 'address2', dispatchUser } } />
+          <TextField { ...{ title: 'contact number:*', type: ACTIONS.FILL_MAIN_INPUT, value: user.phoneNumber, position: 'phoneNumber', dispatchUser } } />
           <NextButton { ...{ setter: setCurrentForm, location: 4 } } />
         </div>
         <div className={`${ currentForm !== 4 && 'hidden' } grid gap-10 md:gap-5 sm:max-w-[600px] mx-auto`}>
-          <TextField { ...{ title: 'email', type: ACTIONS.FILL_MAIN_INPUT, value: user.email, position: 'email', dispatchUser, classList: 'sm:col-span-2' } } />
-          <TextField { ...{ title: 'password', type: ACTIONS.FILL_MAIN_INPUT, value: user.password, password: true, position: 'password', dispatchUser, classList: 'sm:col-span-2' } } />
-          <TextField { ...{ title: 'confirm password', type: ACTIONS.FILL_MAIN_INPUT, value: user.cpassword, password: true, position: 'cpassword', dispatchUser, classList: 'sm:col-span-2' } } />
+          <TextField { ...{ title: 'email:*', type: ACTIONS.FILL_MAIN_INPUT, value: user.email, position: 'email', dispatchUser, classList: 'sm:col-span-2' } } />
+          <TextField { ...{ title: 'password:*', type: ACTIONS.FILL_MAIN_INPUT, value: user.password, password: true, position: 'password', dispatchUser, classList: 'sm:col-span-2' } } />
+          <TextField { ...{ title: 'confirm password:*', type: ACTIONS.FILL_MAIN_INPUT, value: user.cpassword, password: true, position: 'cpassword', dispatchUser, classList: 'sm:col-span-2' } } />
           <TextField { ...{ title: 'contact', type: ACTIONS.FILL_MAIN_INPUT, value: user.contact, position: 'contact', dispatchUser, hidden: true } } />
           <button className={ `${ submitted ? "!cursor-not-allowed" : ''} cursor-pointer [box-shadow:_2px_2px_2px_2px_gray] w-fit bg-green-600 px-5 py-2 ml-auto mt-5 text-white text-xl sm:text-2xl font-bold rounded-sm` } disabled={ submitted }> Submit Application </button>
         </div>
+        <LoginQuestion { ...{
+          question: "Already have account?",
+          label: 'Sign in',
+          link: '/users/students-area'
+        } } />
       </form>
     </>
   )
@@ -184,7 +190,7 @@ function TextField({ title, type, password, position, dispatchUser, disabled, va
       <label className={ `${ hidden ? 'hidden': '' } relative` }>
         <span
           className="font-semibold text-xl sm:text-2xl uppercase sm:text-gray-950"
-          >{ title }: </span>
+          >{ title } </span>
         {
           inputType === 'file' && <div
             className="flex gap-2 items-center w-fit h-fit p-2 cursor-pointer rounded-sm bg-green-600 text-white font-normal"

@@ -39,7 +39,7 @@ export default function SlideShowSection(){
 
   return (
       <div
-        className="grid grid-cols-[auto_1fr_auto] md:grid-cols-[auto_auto_auto] md:justify-center w-[calc(100%-2.5rem)] sm:w-[calc(100%-4rem)] md:w-[calc(100%-5rem)] max-w-[1440px] mx-auto bg-gray-100 px-1 gap-1 h-[300px]"
+        className="grid grid-cols-[auto_1fr_auto] md:grid-cols-[auto_auto_auto] md:justify-center w-[calc(100%-2.5rem)] sm:w-[calc(100%-4rem)] md:w-[calc(100%-5rem)] max-w-[1440px] mx-auto bg-gray-100 px-1 gap-1 h-[300px] md:h-[500px]"
         >
           <button>
             <ChevronLeft 
@@ -51,7 +51,7 @@ export default function SlideShowSection(){
             className="relative h-full overflow-hidden w-full md:min-w-[800px]">
             {
               images.map( ( image, index ) => {
-                return <img key={ image + index } src={ '/images/slides/' + image } className={ `absolute w-full h-full transition object-cover md:object-contain duration-1000 md:duration-300 ease-linear ${ activeSlide === index ? 'md:opacity-100': 'translate-x-[100vw] md:translate-x-0 md:opacity-0' }` } />
+                return <img key={ image + index } src={ '/images/slides/' + image } className={ `absolute top-[50%] md:translate-y-[-50%] w-full h-auto transition object-cover md:object-contain duration-1000 md:duration-300 ease-linear ${ activeSlide === index ? 'md:opacity-100': 'translate-x-[100vw] md:translate-x-0 md:opacity-0' }` } />
               })
             }
           </div>

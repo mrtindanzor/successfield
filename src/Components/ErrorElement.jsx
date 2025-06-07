@@ -8,10 +8,10 @@ export default function ErrorElement(){
 
   return(
     <div
-      className="grid grid-cols-[auto_1fr] gap-x-1 items-start w-fit relative top-20 left-[50%] sm:gap-x-5 sm:left-[20%] translate-x-[-50%] px-5"
+      className="grid grid-cols-[auto_1fr] gap-x-1 items-start w-fit mx-auto py-[10%]"
       >
       <LogoElement />
-      <div className="w-full max-w-[500px] grid gap-3">
+      <div className="grid gap-3">
         <h2 
           className="text-2xl font-bold text-red-500"
           > Something went wrong 

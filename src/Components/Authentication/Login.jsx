@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import useAuth from '../../Contexts/AuthenticationContext'
 import { EyeOff, Eye } from 'lucide-react'
 import DisplayNotification from '../DisplayNotification'
+import LoginQuestion from './LoginQuestion'
 
 export default function Login(){
   const [ credentials, setCredentials ] = useState({ email: '', password: '' })
@@ -34,6 +35,11 @@ export default function Login(){
         <TextField { ...{ value: credentials.email, title: 'Email', position: 'email', setter: setCredentials } } />
         <TextField { ...{ value: credentials.password, title: 'Password', position: 'password', setter: setCredentials, setIsPassVisible, isPassVisible } } />
         <button className=" text-white text-xl font-bold w-fit px-7 py-2 bg-green-500 hover:rounded-lg rounded cursor-pointer "> Log in </button>
+        <LoginQuestion { ...{
+          question: "Don't have account?",
+          label: 'Create an account',
+          link: '/users/join'
+        } } />
       </form>
     </>
   )

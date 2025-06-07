@@ -87,7 +87,7 @@ export default function useAuthentication(){
     if(!educationLevel) return { msg: 'Select your highest level of education', status: 403, currentForm: 2 }
     if(!nationalId) return { msg: 'Select an identification document', status: 403, currentForm: 2 }
     if(!userImage) return { msg: 'Add a passport photo', status: 403, currentForm: 2  }
-    if(!address.country) return { msg: 'Add your country', status: 403, currentForm: 2 }
+    if(!address.country) return { msg: 'Add your country', status: 403, currentForm: 3 }
     if(!address.state) return { msg: 'Add your region', status: 403, currentForm: 3 }
     if(!address.city) return { msg: 'Add your city', status: 403, currentForm: 3 }
     if(!address.address1) return { msg: 'Add your street address', status: 403, currentForm: 3 }

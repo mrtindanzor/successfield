@@ -127,9 +127,9 @@ export default function Dashboard(){
   
   return (
     <main-content
-      className="h-[100vh] w-[100vw] grid grid-rows-[auto_1fr] lg:max-w-[1440px] px-5 sm:px-8 md:px-10 mx-auto"
+      className="h-[100vh] w-[100vw] grid grid-rows-[auto_1fr] mx-auto"
       > 
-      <div className="flex flex-col md:bg-gray-200 w-full md:flex-row text-center items-center md:items-start md:text-left gap-5 md:px-5 py-4">
+      <div className="flex flex-col md:bg-gray-200 px-5 sm:px-8 md:px-10 w-full md:flex-row text-center items-center md:items-start md:text-left gap-5 py-4">
         {
           !userPhoto ? <User 
               className="h-20 w-20 object-cover object-center-top text-gray-950 border-2 rounded-full" /> 
@@ -146,7 +146,7 @@ export default function Dashboard(){
           { currentUser.admin && <AdminPanel />  }
         </div>
       </div>
-      <div className="w-full md:flex lg:max-w-[1440px] mx-auto md:bg-gray-100">
+      <div className="w-full md:flex mx-auto  md:bg-gray-100">
         <MainList { ...{ ...listProps } } />
         <SubList { ...{ ...listProps } } />
         <Details { ...{ ...listProps } } />
