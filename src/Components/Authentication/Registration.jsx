@@ -112,7 +112,7 @@ async function handleFormSubmission(e){
       <form onSubmit={ (e) => handleFormSubmission(e) }
         autoComplete="off"
         autoCapitalize="on"
-         className="w-[calc(100%-2.5rem)] grid sm:grid-cols-[1fr_3fr] gap-y-10 sm:max-w-[900px] mx-auto pt-10 pb-30 sm:bg-gray-100 sm:px-5 md:px-10 sm:my-10 sm:rounded-md "
+         className="w-[calc(100%-2.5rem)] grid sm:grid-cols-[1fr_3fr] gap-y-10 my-10 sm:max-w-[900px] mx-auto pt-10 pb-30 sm:bg-gray-100 sm:px-5 md:px-10 sm:my-10 sm:rounded-md "
          >
           { feedback.message && <div className="sm:col-span-2">
             <DisplayNotification { ...{ feedback } } />
