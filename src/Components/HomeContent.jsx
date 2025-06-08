@@ -26,7 +26,7 @@ export default function HomeContent(){
 
 
   return (
-    <ul className="py-10 grid gap-y-10 gap-x-5 md:gap-x-10 md:gap-y-15 px-5 sm:px-10 md:grid-cols-2 lg:max-w-[1440px] mx-auto">
+    <ul className="py-10 grid gap-y-10 gap-x-5 md:gap-x-10 md:gap-y-15 px-5 sm:px-10 2xl:px-0 md:grid-cols-2 lg:max-w-[1440px] mx-auto">
       {
         contents.map( (content, index) => {
           return (<li key={ content.title } className={`bg-green-300/20 flex flex-col items-center gap-5 rounded-md pt-10 pb-20 px-5 sm:px-10 [box-shadow:2px_2px_5px_gray] ${ index === 4 && 'sm:col-span-2' }`}>

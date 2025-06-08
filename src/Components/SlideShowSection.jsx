@@ -51,7 +51,7 @@ export default function SlideShowSection(){
             className="relative h-full overflow-hidden w-full md:min-w-[800px]">
             {
               images.map( ( image, index ) => {
-                return <img key={ image + index } src={ '/images/slides/' + image } className={ `absolute top-[50%] md:translate-y-[-50%] w-full h-auto transition object-cover md:object-contain duration-1000 md:duration-300 ease-linear ${ activeSlide === index ? 'md:opacity-100': 'translate-x-[100vw] md:translate-x-0 md:opacity-0' }` } />
+                return <img key={ image + index } src={ '/images/slides/' + image } className={ `absolute md:top-[50%] md:translate-y-[-50%] w-full h-full md:h-auto transition object-cover md:object-contain duration-1000 md:duration-300 ease-linear ${ activeSlide === index ? 'md:opacity-100': 'translate-x-[100vw] md:translate-x-0 md:opacity-0' }` } />
               })
             }
           </div>
