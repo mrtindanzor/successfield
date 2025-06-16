@@ -235,6 +235,7 @@ export function StudentCard({ applicant, year }){
 
   if(loading) return <span>loading...</span>
   if(error) return <span> { error } </span>
+  if(!student) return null
 
   return(
     <div
