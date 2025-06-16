@@ -4,6 +4,8 @@ import usePendingLoader from "../../Contexts/PendingLoaderContext"
 import { useSetAlert } from "../../Hooks/Alerter"
 import { Info } from "lucide-react"
 import useCourses from "../../Contexts/CoursesContext"
+import { useSetFeedback } from "../Home/AdminHome"
+import axios from "axios"
 
 const certificateFormClasses = 'grid px-2 py-3 h-fit w-[calc(100%-10px)] mx-auto gap-5 sm:max-w-[750px] bg-gray-100 rounded'
 const textFieldClasses = 'grid gap-2 w-full *:block *:first:font-bold *:first:uppercase *:first:text-xl *:first:after:content-[":"] *:last:border-2 *:last:border-gray-500 *:last:p-2 *:last:rounded'
@@ -21,12 +23,6 @@ const ACTIONS = {
   CHOOSE_COURSE_CODE: 'select_course_code',
   NEW_EDITS: 'new_edits'
 }
-
-function currentTabReducer(state, action){
-  if(action.type === 'switch_tab') return action.sections[action.index].section
-  return state
-}
-
 function certificatesReducer(state, action){
   
   switch(action.type){
@@ -69,43 +65,30 @@ export function EditCertificate(){
   const [ studentNumber, setStudentNumber ] = useState(null)
   const serverUri = useServerUri()
   const { setIsPendingLoading } = usePendingLoader()
-  const setMsg = useSetAlert()
+  const setFeedback = useSetFeedback()
 
   async function findStudent(e) {
     e.preventDefault()
 
     setIsPendingLoading(true)
     const uri = serverUri + 'certificate'
-    const headers = new Headers()
-    headers.append('Content-Type', 'application/json')
-    const method = 'PATCH'
-    const body = JSON.stringify({ studentNumber, operation: 'findCertificate' })
-    const options = {
-      headers,
-      method,
-      body
-    }
 
     try{
-      const response = await fetch(uri, options)
-      if(!response.ok) throw Error('Something went wrong')
-      const res = await response.json()
-      switch(res.status){
+      const res = await axios.patch(uri, { studentNumber, operation: 'findCertificate' })
+      switch(res.data.status){
         case 200:
           setCurrentCertificate(res.findCertificates)
         break
         
         default:
           setCurrentCertificate(null)
-          setMsg(res.msg)
+          setFeedback({ error: true, message: res.data.msg })
       }
+    } catch(err){
+        setFeedback({ error: true, message: err.message })
+    } finally{
+      setIsPendingLoading(false)
     }
-      catch(err){
-        setMsg(err.message)
-      }
-        finally{
-          setIsPendingLoading(false)
-        }
   }
 
   return (
@@ -127,16 +110,14 @@ export function EditCertificate(){
 
 function CertificateStructure({ currentCertificate, operation }){
   const serverUri = useServerUri()
-  const setMsg = useSetAlert()
+  const setFeedback = useSetFeedback()
   const { coursesList } = useCourses()
   const { setIsPendingLoading } = usePendingLoader()
-  const emptyCertificate = useMemo(() => [
-    {
+  const emptyCertificate = useMemo(() => [ {
     courseCode: '',
     studentNumber: '',
     dateCompleted: ''
-  }
-], [])
+  } ], [])
   const [ certificates, certificatesDispatch ] = useReducer(certificatesReducer, operation === 'add' ? emptyCertificate : currentCertificate)
 
   async function handleCertificateSubmit(e) {
@@ -144,73 +125,60 @@ function CertificateStructure({ currentCertificate, operation }){
 
     setIsPendingLoading(true)
     const uri = serverUri + 'certificate'
-    const headers = new Headers()
-    headers.append('Content-Type', 'application/json')
-    const method = 'PATCH'
-    const body = JSON.stringify({ certificates, operation })
-    const options = {
-      headers,
-      method,
-      body
-    }
 
     try{
-      const response = await fetch(uri, options)
-      if(!response.ok) throw Error('Something went wrong')
-      const res = await response.json()
-      setMsg(res.msg)
+      const res = await axios.patch(uri, { certificates, operation })
+      setFeedback({ success: true, message: res.data.msg })
       
-      switch(res.status){
+      switch(res.data.status){
         case 201:
           if(operation === 'add'){
-            if(res.newEdits?.length > 0){
-              certificatesDispatch({ type: ACTIONS.NEW_EDITS, newEdits: res.newEdits })
+            if(res.data.newEdits?.length > 0){
+              certificatesDispatch({ type: ACTIONS.NEW_EDITS, newEdits: res.data.newEdits })
             } else{
               certificatesDispatch({ type: ACTIONS.RESET_CERTIFICATES, emptyCertificate })
             }
           } else{
-            certificatesDispatch({ type: ACTIONS.NEW_EDITS, newEdits: res.newEdits })
+            certificatesDispatch({ type: ACTIONS.NEW_EDITS, newEdits: res.data.newEdits })
           }
         break
 
         default:
-          certificatesDispatch({ type: ACTIONS.NEW_EDITS, newEdits: res.newEdits })
+          certificatesDispatch({ type: ACTIONS.NEW_EDITS, newEdits: res.data.newEdits })
       }
+    } catch(err){
+        setFeedback({ error: true, message: err.message || 'Something went wrong' })
+    } finally {
+        setIsPendingLoading(false)
     }
-      catch(err){
-        setMsg(err.message)
-      }
-        finally{
-          setIsPendingLoading(false)
-        }
 
   }
 
   return(
-    <form className={ certificateFormClasses } onSubmit={ handleCertificateSubmit }>
-      {
-        certificates && certificates.map((certificate, index) =>{
+    <form 
+      className={ certificateFormClasses } 
+      onSubmit={ handleCertificateSubmit }>
+      { certificates && certificates.map((certificate, index) =>{
           const { certificateCode, courseCode, studentNumber, dateCompleted, reason } = certificate
-          return(<>
-            {
-              reason && <div className={ errorsClasses }> <Info /> { reason } </div>
-            }
-            <TextField { ...{ value: courseCode, title: 'Course code' } } disabled />
-            <CourseCodeSelector  { ...{ certificatesDispatch, coursesList, index } } />
-            {
-              certificateCode && <TextField { ...{ index, certificatesDispatch, position: "certificateCode", value: certificateCode, title: 'Certicate ID' } } disabled />
-            }
-            <TextField { ...{ index, certificatesDispatch, position: "studentNumber", value: studentNumber, title: 'Student number' } } />
-            <TextField { ...{ index, certificatesDispatch, position: "dateCompleted", value: dateCompleted, title: 'Date of completion' } } />
-            <br />
-            <hr />
-            <br />
-          </>)
-        })
-      }
-      {
-        operation !== 'edit' && <span className={ addNewButtonClasses } onClick={ () => certificatesDispatch({ type: ACTIONS.ADD_NEW_CERTIFICATE, emptyCertificate }) }> New </span>
-      }
+          return(
+            <div
+              key={index}
+              className="grid gap-3">
+              { reason && <div className={ errorsClasses }> <Info /> { reason } </div>}
+              <TextField { ...{ value: courseCode, title: 'Course code' } } disabled />
+              <CourseCodeSelector  { ...{ certificatesDispatch, coursesList, index } } />
+              {
+                certificateCode && <TextField { ...{ index, certificatesDispatch, position: "certificateCode", value: certificateCode, title: 'Certicate ID' } } disabled />
+              }
+              <TextField { ...{ index, certificatesDispatch, position: "studentNumber", value: studentNumber, title: 'Student number' } } />
+              <TextField { ...{ index, certificatesDispatch, position: "dateCompleted", value: dateCompleted, title: 'Date of completion' } } />
+              <br />
+              <hr />
+              <br />
+            </div>
+          )
+        }) }
+      { operation !== 'edit' && <span className={ addNewButtonClasses } onClick={ () => certificatesDispatch({ type: ACTIONS.ADD_NEW_CERTIFICATE, emptyCertificate }) }> New </span> }
       <button className={ submitButtonClasses } > Save </button>
     </form>
   )

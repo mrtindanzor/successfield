@@ -6,10 +6,10 @@ const LoginQuestion = ({ question, label, link }) => {
       className="flex flex-wrap gap-3"
     >
       <span
-        className="text-xl md:text-2xl font-semibold"
+        className="text-xl"
       > { question } </span>
       <Link
-        className="underline text-red-600 md:text-xl md:font-semibold"
+        className="underline text-red-600 md:font-semibold"
         to={link}
       > { label } </Link>
     </p>

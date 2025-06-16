@@ -2,6 +2,7 @@ import { useMemo, useReducer, useState, useCallback } from "react"
 import useServerUri from "../../Contexts/baseServer"
 import DisplayNotification from "../../Components/DisplayNotification"
 import { CloudUpload } from "lucide-react"
+import { useSetFeedback } from "../Home/AdminHome"
 
 const ACTIONS = {
   FILL_INPUT: 'fill_input',
@@ -61,6 +62,7 @@ const InputField = ({ title, file, value, index, position, dispatch }) => {
 }
 
 const AccreditationStructure = ({ currentAccreditations, operation }) => {
+  const setFeedback = useSetFeedback()
   const emptyAccreditationForm = useMemo(() => {
     return {
       name: '',
@@ -69,7 +71,6 @@ const AccreditationStructure = ({ currentAccreditations, operation }) => {
   }, [])
   const uri = useServerUri() + 'new_accreditation'
   const [ submitted, setSubmitted ] = useState(false)
-  const [ feedback, setFeedback ] = useState({ message: '', error: false, success: false })
   const [ Accreditations, dispatchAccreditations ] = useReducer(accreditationsReducer, ( currentAccreditations ||  emptyAccreditationForm ) )
   const handleSubmit = useCallback( async e => {
     e.preventDefault()
@@ -107,11 +108,7 @@ const AccreditationStructure = ({ currentAccreditations, operation }) => {
   return (
     <form
       onSubmit={ handleSubmit }
-      className="max-w-[600px] grid gap-y-5 h-fit"
-      >
-      { feedback.message && <DisplayNotification { ...{ feedback } } />
-        }
-          
+      className="max-w-[600px] grid gap-y-5 h-fit">          
         <InputField { ...{ title: 'Name', value: Accreditations.name, position: 'name', dispatch: dispatchAccreditations } } />
         <InputField { ...{ title: 'Image', file: true, position: 'image', dispatch: dispatchAccreditations } } />
                 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { ImagePreview, StudentField, StudentCard } from './RegistrationCenter'
 import useGetStudents from './../Hooks/GetStudents'
 
 export default function Students(){
@@ -84,28 +85,48 @@ export default function Students(){
         <h3
           className='font-semibold text-lg uppercase'
           > Total students for year: { terms.students.length } </h3>
-        <li
-        className='grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-5'
-        >
-        {
-          terms.students.map( student => {
+        <li>
+          <ul
+            className='grid'>
+            { terms.students.map( student => {
             if(!student.visible) return
-            return (
-              <div
-                key={ student._id }
-                className='grid gap-3 px-3 py-5 border-1 border-gray-200 rounded bg-gray-200'
-                >
-                <span> Name: { student.name } </span>
-                <span> Student ID: { student.studentNumber } </span>
-                <span> Email: { student.email } </span>
-                <span> Date: { student.date } </span>
-              </div>
-            )
-          } )
-        }
+            return <Student key={student._id} { ...{ student } } />
+          } ) }
+          </ul>
       </li>
       </div>
     } ) }
     </ul>
+  )
+}
+
+function Student({ student }){
+  const [ active, setActive ] = useState(false)
+
+  return (
+    <li
+      className="break-inside-avoid bg-gray-300 px-3 py-4 rounded-md overflow-hidden grid gap-5 grid-rows-[auto_1fr] mb-5">
+      <div
+        onClick={() => setActive(a => !a)}
+        className="flex gap-2 cursor-pointer">
+        <h3> Name: </h3>
+        <h4>
+          { student.name }
+        </h4>
+      </div>
+      <div
+        onClick={() => setActive(a => !a)}
+        className="flex gap-2 uppercase">
+        <h3> Student ID: </h3>
+        <h4>
+          { student.studentNumber }
+        </h4>
+      </div>
+      
+        { active && <div
+            className='bg-white p-5 rounded-sm'>
+              <StudentCard { ...{ applicant: student } } />
+            </div> }
+    </li>
   )
 }

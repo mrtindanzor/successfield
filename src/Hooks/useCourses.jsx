@@ -1,13 +1,12 @@
 import { useEffect, useState, useReducer } from "react";
 import useServerUri from "../Contexts/baseServer";
-import { jwtDecode } from 'jwt-decode'
+import axios from "axios";
 
 const ACTIONS = {
   ADD_COURSES: 'fetch_courses'
 }
 
 function coursesReducer(state, action){
-  
   switch (action.type) {
     case ACTIONS.ADD_COURSES:
       return action.courses
@@ -30,23 +29,21 @@ export default function useCourse(){
   useEffect(() =>{
     if(refreshCourses){
       fetchCourses()
-        .then(res => {
+        .then(() => {
           setRefreshCourses(false)
         })
     }
   }, [refreshCourses])
 
   async function fetchCourses(){
-    const uri = serverUri + 'courses'
-    const headers = new Headers()
-    headers.append('Content-Type', 'application/json')
-    const method = 'POST'
-    const response = await fetch(uri, { method, headers})
-    if(!response.ok) return coursesDispatch({ type: 'failed' })
-    const res = await response.json()
-    const courses = res.courses
-    coursesDispatch({ type: ACTIONS.ADD_COURSES, courses })
-    updateCoursesList(courses)
+    
+    try{
+      const uri = serverUri + 'courses'
+      const res = await axios.post(uri)
+      const courses = res.data.courses
+      coursesDispatch({ type: ACTIONS.ADD_COURSES, courses })
+      updateCoursesList(courses)
+    } catch(err){}
   }
 
   function getCourse(searchCourse){

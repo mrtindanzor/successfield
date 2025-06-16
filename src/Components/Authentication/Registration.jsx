@@ -109,15 +109,17 @@ async function handleFormSubmission(e){
   return (
     <>
       
-      <form onSubmit={ (e) => handleFormSubmission(e) }
+      <form 
+        onSubmit={ (e) => handleFormSubmission(e) }
         autoComplete="off"
         autoCapitalize="on"
+        tabIndex={1}
          className="w-[calc(100%-2.5rem)] grid sm:grid-cols-[1fr_3fr] gap-y-10 my-10 sm:max-w-[900px] mx-auto pt-10 pb-30 sm:bg-gray-100 sm:px-5 md:px-10 sm:my-10 sm:rounded-md "
          >
           { feedback.message && <div className="sm:col-span-2">
             <DisplayNotification { ...{ feedback } } />
           </div> }
-        <h3 className="text-3xl md:text-4xl font-bold text-green-500 [text-shadow:_1px_1px_1px_black]">
+        <h3 className="text-2xl font-semibold text-black">
           { currentForm === 1 && 'Start Your Admission Application' }
           { currentForm === 2 && 'Verification' }
           { currentForm === 3 && 'Address' }
@@ -189,15 +191,15 @@ function TextField({ title, type, password, position, dispatchUser, disabled, va
     <>
       <label className={ `${ hidden ? 'hidden': '' } relative` }>
         <span
-          className="font-semibold text-xl sm:text-2xl uppercase sm:text-gray-950"
-          >{ title } </span>
-        {
-          inputType === 'file' && <div
-            className="flex gap-2 items-center w-fit h-fit p-2 cursor-pointer rounded-sm bg-green-600 text-white font-normal"
-            >
+          className="font- text-xl uppercase sm:text-gray-950">
+          { title } </span>
+
+        { inputType === 'file' && <div
+            tabIndex={0}
+            className="flex gap-2 items-center w-fit h-fit p-2 cursor-pointer rounded-sm bg-green-600 text-white font-normal">
               <Upload /> upload image
-            </div>
-        }
+            </div> }
+
         <input type={ inputType } 
           className={`${ disabled ? 'border-2 rounded px-2 mb-2 capitalize': 'border-b-2 border-b-gray-950' } text-gray-800 w-full outline-none py-1 ${ inputType === 'file' && 'hidden' }`}
           value={ file ? '' : value } 
@@ -208,18 +210,16 @@ function TextField({ title, type, password, position, dispatchUser, disabled, va
             if(!file) dispatchUser({ type, position, value: e.target.value })
             if(file)  dispatchUser({ type, position, value: e.target.files[0] }) 
           } } />
-          { 
-              password && <span className="absolute right-2 bottom-0 cursor-pointer"
-                onClick={ () => setIsVisible( c => {
-                  if(c.type === 'password') return { type: 'text' }
-                  return { type: 'password' }
-                } ) }
-              > { 
-                visible && visible.type !== 'password' ?
-                  <EyeOff className="block mb-2 w-7 h-7"  /> 
-                  : <Eye className="block mb-2 w-7 h-7"/> 
-                } </span> 
-        }
+          { password && <span className="absolute right-2 bottom-0 cursor-pointer"
+              onClick={ () => setIsVisible( c => {
+                if(c.type === 'password') return { type: 'text' }
+                return { type: 'password' }
+              } ) }
+            > { 
+              visible && visible.type !== 'password' ?
+                <EyeOff className="block mb-2 w-7 h-7"  /> 
+                : <Eye className="block mb-2 w-7 h-7"/> 
+              } </span> }
       </label>
       { file && value && <PreviewImage { ...{ file: value, setFeedback } } /> }
     </>
@@ -232,9 +232,11 @@ export function Selector({ title, dispatch, type, db, position, reducerPosition,
   return(
     <div 
       className={`grid items-end gap-2 relative h-fit ${ classList }`}>
-        <span 
-          className="flex whitespace-nowrap h-fit w-full px-5 py-1 sm:py-2 rounded-sm text-white text-lg sm:text-xl justify-between bg-green-600 cursor-pointer" 
-          onClick={ () => setIsVisible(c => !c) }>
+        <span
+          tabIndex={0}
+          className="flex whitespace-nowrap h-fit w-full px-5 py-1 sm:py-2 rounded-sm text-white justify-between bg-green-600 cursor-pointer" 
+          onClick={ () => setIsVisible(c => !c) }
+          onKeyDown={ e =>  (e.key === 'Enter') ? setIsVisible(c => !c) :''  }>
           Select { title }
           <ChevronDown />
         </span>
@@ -245,12 +247,21 @@ export function Selector({ title, dispatch, type, db, position, reducerPosition,
             db.map((item, index) => {
               return <li 
                 key={ item }
+                tabIndex={0}
                 className="px-5 py-1 border-b-1 capitalize border-b-gray-300 cursor-pointer hover:bg-gray-950 hover:text-white"
                 onClick={ e => {
-                dispatch({ type, position: reducerPosition, value: item[position] })
-                setIsVisible(false)
-              }
-            }> { item[position] } </li>
+                  dispatch({ type, position: reducerPosition, value: item[position] })
+                  setIsVisible(false)
+                  }
+                }
+                onKeyDown={ e => {
+                    if(e.key === 'Enter'){
+                      dispatch({ type, position: reducerPosition, value: item[position] })
+                      setIsVisible(false)
+                    }
+                  }
+                }> 
+            { item[position] } </li>
             })
           }
         </ul>
@@ -262,15 +273,18 @@ export function Selector({ title, dispatch, type, db, position, reducerPosition,
 function NextButton({ setter, location }){
 
   return (
-    <div 
-      className="flex items-center gap-3 whitespace-nowrap text-white font-bold text-xl w-fit px-5 py-2 rounded-sm bg-green-500 text white mt-10 ml-auto cursor-pointer [box-shadow:_2px_2px_2px_2px_gray]"
-      onClick={ () => {
+    <button
+      role="button"
+      tabIndex={0}
+      className="flex items-center gap-3 whitespace-nowrap text-white font-bold w-fit px-5 py-2 rounded-sm bg-green-600 mt-10 ml-auto cursor-pointer drop-shadow-md drop-shadow-gray-300"
+      onClick={ e => {
+        e.preventDefault()
         setter(location)
         window.scrollTo({ top: 0, behavior: 'auto' })
       } }
       >
         Next
         <ArrowRight />
-    </div>
+    </button>
   )
 }

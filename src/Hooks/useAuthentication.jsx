@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import useServerUri from "../Contexts/baseServer";
 import { jwtDecode } from 'jwt-decode'
 import { capitalize } from "../core";
+import axios from "axios";
 
 export default function useAuthentication(){
   const stringPattern = /^[\w\s.,-]+$/
@@ -16,13 +17,6 @@ export default function useAuthentication(){
   const fetchesRef = useRef(0)
   const autoFetchTokenRef = useRef()
   const serverUri = useServerUri()
-
-  const headers = useMemo(() => {
-    const h = new Headers()
-    h.append('Content-Type', 'application/json')
-    if(token) h.append('Authorization', `Bearer ${token}`)
-    return h
-  },[token])
 
   const autoFetchToken = () => {
     autoFetchTokenRef.current = setInterval(refreshToken, 14 * 60 * 1000)
@@ -100,24 +94,27 @@ export default function useAuthentication(){
 
 
     const uri = serverUri + 'users/register'
-    const body = new FormData()
+    const formdata = new FormData()
     for(const key in credentials){
       if( key === 'address' ){
-        body.append(key, JSON.stringify(credentials[key]))
+        formdata.append(key, JSON.stringify(credentials[key]))
         continue
       }
-      body.append(key, credentials[key])
-    }
-    const options = {
-      method: 'PUT',
-      body
+      formdata.append(key, credentials[key])
     }
 
     try{
-      const response = await fetch(uri, options)
-      if(!response.ok) return { msg: 'An error occured'} 
-      const res = await response.json()
-      return res
+      const res = await axios.put(uri, formdata,{ 
+        headers: { 'Content-Type': 'multipary/form-data' }
+       })
+      switch(res.data.msg){
+        case 201:
+          res.data
+        break
+
+        default:
+          throw Error(res.data.msg || 'Something went wrong')
+      }
     } 
       catch(err){
         return { msg: err.message, status: 403 }
@@ -133,25 +130,20 @@ export default function useAuthentication(){
     if(!password) return { msg: 'Enter your password'}
     if(!emailPattern.test(email)) return { msg: 'Enter a valid email address'}
 
-    const uri = serverUri + 'users/login'
-    const body = JSON.stringify({email, password})
-    const options = { method: 'POST', headers, body, credentials: 'include' }
-
     try{
-      const response = await fetch(uri, options)
-      if(!response.ok) return setAlert('An error occured')
-      const res = await response.json()
-      switch(res.status){
+      const uri = serverUri + 'users/login'
+      const res = await axios.post(uri, { email, password }, { withCredentials: true })
+      switch(res.data.status){
         case 200: 
-          setToken(res.token)
-          const decodedUser = jwtDecode(res.token)
+          setToken(res.data.token)
+          const decodedUser = jwtDecode(res.data.token)
           setCurrentUser(decodedUser)
           setIsLoggedIn(true)
           navigate('/', { replace: true })
-          return res
+          return res.data
         
         default: 
-          return res
+          return res.data
       }
     }
       catch(err){
@@ -160,15 +152,13 @@ export default function useAuthentication(){
   }
 
   async function refreshToken(){
-    const uri = serverUri + 'users/newToken'
     const method = 'POST'
     try{
-      const response = await fetch(uri, { method, headers, credentials: 'include' })
-      if(!response.ok) return
-      const res = await response.json()
-      if(res.token){
-        setToken(res.token)
-        const decodedUser = jwtDecode(res.token)
+      const uri = serverUri + 'users/newToken'
+      const res = await axios.post(uri, {},{ withCredentials: true })
+      if(res.data.token){
+        setToken(res.data.token)
+        const decodedUser = jwtDecode(res.data.token)
         delete decodedUser.iat
         delete decodedUser.exp
         setCurrentUser(decodedUser)
@@ -187,36 +177,21 @@ export default function useAuthentication(){
   }
 
   async function logout(){
-    const uri = serverUri + 'users/logout'
-    const method = 'POST'
-    const headers = new Headers()
     try{
-      const response = await fetch(uri, { method: 'POST', credentials: 'include' })
-      if(!response.ok) return { msg:  'An error occured' }
-      const res = await response.json()
-      if(res.status === 200) return window.location.href = '/'
-      return { msg: 'Something went wrong' }
+      const uri = serverUri + 'users/logout'
+      const res = await axios.post(uri, {}, { withCredentials: true })
+      if(res.data.status === 200) return window.location.href = '/'
+      return { success: res.data.status === 200, error: res.data.status !== 200, msg: res.data?.msg || 'Something went wrong' }
     } catch(err){
-      return { msg: err.message }
+      return { error: true, msg: err.message }
     }
   }
 
   async function getCertificates(){
-    const uri = serverUri + 'certificate'
-    const method = 'PATCH'
-    const body = JSON.stringify({ studentNumber: currentUser.studentNumber, operation: 'findCertificate' })
-    
-    const options = {
-      method, 
-      headers,
-      body
-    }
-
     try {
-      const response = await fetch(uri, options)
-      if(!response) setCertificates(null)
-      const res = await response.json()
-      if(res.findCertificates.length > 0) return setCertificates(res.findCertificates)
+      const uri = serverUri + 'certificate'
+      const res = await axios.patch(uri, { studentNumber: currentUser.studentNumber, operation: 'findCertificate' })
+      if(res.data?.findCertificates.length > 0) return setCertificates(res.data.findCertificates)
       setCertificates(null)
     } catch (err) {
       setCertificates(null)
@@ -227,11 +202,8 @@ export default function useAuthentication(){
     try {
       let courseCode = code.toLowerCase().trim()
       const uri = serverUri + 'users/module'
-      const body = JSON.stringify({ courseCode })
-      const response = await fetch(uri, { headers, method: 'POST', body })
-      if(!response) throw Error('Error authorizing you, try again in a moment')
-      const res = await response.json()
-      return res
+      const res = await axios.post(uri, { courseCode })
+      return res.data
     } catch (err) {
       return ({ msg: err.message, status: 401 })
     }
@@ -249,7 +221,6 @@ export default function useAuthentication(){
     currentUser, 
     setCurrentUser, 
     userFullName,
-    token, 
-    userPhoto }
+    token }
 }
 

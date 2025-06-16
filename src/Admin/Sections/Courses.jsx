@@ -6,9 +6,11 @@ import useCourses from '../../Contexts/CoursesContext';
 import { useSetAlert } from '../../Hooks/Alerter';
 import usePendingLoader from '../../Contexts/PendingLoaderContext';
 import useServerUri from '../../Contexts/baseServer';
-import { ArrowBigLeftDash, ChevronDown, Info, Trash } from 'lucide-react';
+import { ChevronDown, Info, Trash } from 'lucide-react';
 import { useMemo } from 'react';
 import usePrompter from './../Components/Prompt'
+import axios from 'axios';
+import { useSetFeedback } from '../Home/AdminHome';
 
 //tailwind classes for courses components
 const formClasses = 'grid z-0 gap-5 relative bg-gray-200 my-10  px-2 sm:px-5 md:10 rounded-lg py-10 *:grid *:gap-3 *:p-2 *:w-[calc(100%-10px)] md:*:w-[calc(100%-20px)] mx-auto *:rounded *:*:first:font-bold *:*:text-lg'
@@ -20,7 +22,6 @@ const courseSelectorClasses = 'p-2 cursor-pointer hover:bg-gray-300 rounded font
 const coursesDropdownClasses = 'bg-gray-100 *:p-2 *:border-b-1 *:border-b-gray-500 *:hover:bg-green-300 font-normal '
 const submitButtonClasses = "w-[90%] !max-w-[200px] font-bold text-2xl h-fit block px-4 py-2 bg-gray-900 ml-auto cursor-pointer mt-5 hover:bg-gray-500 text-white rounded"
 const labelClasses = "grid gap-2 *:first:uppercase *:first:font-bold"
-const courseOperations = "*:w-[calc(100%-10px)] sm:*:w-[calc(100%-30px)] *:mx-auto :*max-w-[750px]"
 const trashIconClasses = "!w-10 h-10 text-red-500 border-1 cursor-pointer bg-white border-red-500 rounded p-1 ml-auto hover:text-white hover:bg-red-500"
 
 
@@ -47,12 +48,8 @@ const ACTIONS = {
 
 export function Modules(){
   const sections = [
-    {
-      title: 'Add', section: <AddModule />
-    },
-    {
-      title: 'Edit', section: <EditModule />
-    }
+    { title: 'Add', section: <AddModule /> },
+    { title: 'Edit', section: <EditModule /> }
   ]
 
   const [ currentSection, setCurrentSection ] = useState(0)
@@ -216,9 +213,8 @@ function ModuleStructure({ currentModules, operation, courseCode }){
   const [ markedForDeletion, setMarkedForDeletion ] = useState([])
   const [ modules, modulesDispatch ] = useReducer(moduleReducer, [])
   const { prompterSetter } = usePrompter()
-
   const serverUri = useServerUri()
-  const setMsg = useSetAlert()
+  const setFeedback = useSetFeedback()
   const { setIsPendingLoading } = usePendingLoader()
 
   useEffect(() => {
@@ -246,36 +242,24 @@ function ModuleStructure({ currentModules, operation, courseCode }){
     setIsPendingLoading(true)
     modulesDispatch({ type: ACTIONS.MODULE.RESET_ERRORS })
     const uri = serverUri + 'modules'
-    const headers = new Headers()
-    headers.append('Content-Type', 'application/json')
-    const method = 'PATCH'
-    const body = JSON.stringify({ modules, markedForDeletion, operation })
-    const options = {
-      headers,
-      method,
-      body
-    }
     
     try {
-      const response = await fetch(uri, options)
-      if(!response.ok) throw Error('Something went wrong, try again')
-      const res = await response.json()
-      setMsg(res.msg)
-      if(operation === 'add' && res.status === 201 ) modulesDispatch({ type: ACTIONS.MODULE.START_NEW_MODULE, emptyModule })
-      if(res.failed && res.failed.length > 0) modulesDispatch({ type: ACTIONS.MODULE.FETCH_ERRORS, modules: res.failed })
+      const res = await axios.patch(uri, { modules, markedForDeletion, operation })
+      setFeedback({ success: true, message: res.data.msg })
+      if(operation === 'add' && res.data.status === 201 ) modulesDispatch({ type: ACTIONS.MODULE.START_NEW_MODULE, emptyModule })
+      if(res.data.failed && res.data.failed.length > 0) modulesDispatch({ type: ACTIONS.MODULE.FETCH_ERRORS, modules: res.data.failed })
       setRefreshCourses(true)
-    } 
-      catch (err) {
-      setMsg(err.message)
-    } 
-      finally{
-        setIsPendingLoading(false)
-        
-      }
+    } catch (err) {
+      setFeedback({ error: true, message: err.message || 'Something went wrong' })
+    } finally{
+      setIsPendingLoading(false)
+    }
   }
  
   return (
-    <form className={ formClasses } onSubmit={ handleModulesSubmit }>
+    <form 
+      className={ formClasses } 
+      onSubmit={ handleModulesSubmit }>
       {
         modules && modules.map((module, index) => {
           return (
@@ -319,7 +303,8 @@ function ModuleStructure({ currentModules, operation, courseCode }){
 }
 
 function CourseStructure({ currentCourse, setSelectedCourse, setCurrentCourse, operation }){
-  const setMsg = useSetAlert()
+  console.log('here')
+  const setFeedback = useSetFeedback()
   const { setRefreshCourses } = useCourses()
   const { setIsPendingLoading } = usePendingLoader()
   const [ promptResponse, setPromptResponse ] = useState(null)
@@ -340,61 +325,46 @@ function CourseStructure({ currentCourse, setSelectedCourse, setCurrentCourse, o
   const baseServer = useServerUri() 
   const uri = useMemo(() => baseServer  + 'courses', [baseServer])
   const [ course, courseDispatch ] = useReducer(coursesReducer, currentCourse || emptyCourse)
-
   async function handleCourseOperation(e){
     e.preventDefault()
-    
     setIsPendingLoading(true)
     try {
-      const headers = new Headers()
-      headers.append('Content-Type', 'application/json')
-      const method = "PATCH"
-      const body = JSON.stringify({ ...course, operation })
-      const options = { 
-        headers,
-        method,
-        body
-       }
-
-      const response = await fetch(uri, options)
-      const res = await response.json()
-      setMsg(res.msg)
-      if(res.status === 201){
+      console.log(uri)
+      console.log('triggered')
+      const res = await axios.patch(uri, { ...course, operation })
+      setFeedback({ success: true, message: res.data.msg })
+      if(res.data.status === 201){
         setRefreshCourses(true)
-        if(operation === 'add'){
-          courseDispatch({ type: ACTIONS.COURSE.RESET_FORM, emptyCourse })
-        }
-          else {
+        switch(operation){
+          case 'add':
+            courseDispatch({ type: ACTIONS.COURSE.RESET_FORM, emptyCourse })
+          break
+
+          default:
             setCurrentCourse('')
             setSelectedCourse('')
-          }
-      }
-    } 
-      catch (err) {
-        setMsg(err.msg)
-      }
-        finally{
-          setIsPendingLoading(false)
         }
+      }
+    } catch (err) {
+        setFeedback({ error: true, message: err.message || 'Something went wrong' })
+    } finally{
+      console.log(uri)
+      console.log('triggered')
+        setIsPendingLoading(false)
+    }
   }
 
   async function handleCourseDeletion() {
     try {
       setIsPendingLoading(true)
-      const headers = new Headers()
-      headers.append('Content-Type', 'application/json')
-      const method = 'PATCH'
-      const body = JSON.stringify({ courseCode: course.courseCode, operation: 'delete' })
-      const response = await fetch(uri, { headers, method, body })
-      if(!response.ok) setMsg('Something went wrong')
-      const res = await response.json()
-      setMsg(res.msg)
-      if(res.status !== 201) return
+      const res = await axios.patch(uri, { courseCode: course.courseCode, operation: 'delete' })
+      setFeedback({ success: true, message: res.data.msg })
+      if(res.data.status !== 201) return
       setRefreshCourses(true)
       setCurrentCourse('')
       setSelectedCourse('')
     } catch (err) {
-      setMsg(err.message)
+      setFeedback({ error: true, message: err.message || 'Something went wrong' })
     } finally{
       setIsPendingLoading(false)
     }
@@ -410,11 +380,13 @@ function CourseStructure({ currentCourse, setSelectedCourse, setCurrentCourse, o
   }, [promptResponse])
 
   return (
-    <form className={ formClasses } onSubmit={ handleCourseOperation }>
+    <form 
+      className={ formClasses } 
+      onSubmit={ handleCourseOperation }>
         { operation === 'edit' && <Trash className={ trashIconClasses }
-                                   onClick={
-                                    () => prompterSetter({ message: `Are you sure you want to delete, ${ course.course }`, setter: setPromptResponse })
-                                  }  /> }
+            onClick={
+            () => prompterSetter({ message: `Are you sure you want to delete, ${ course.course }`, setter: setPromptResponse })
+          }  /> }
         <CourseList { ...{ title: 'course name', value: course.course, courseDispatch, position: 'course' } } />
         <CourseList { ...{ title: 'course code', value: course.courseCode, courseDispatch, position: 'courseCode' } } />
         <CourseList { ...{ title: 'course overview', value: course.overview, courseDispatch, position: 'overview' } } />
@@ -446,6 +418,7 @@ export function EditCourse(){
   const [ selectedCourse, setSelectedCourse ] = useState('')
   const { getCourse } = useCourses()
   const [ currentCourse, setCurrentCourse ] = useState('')
+  console.log('edit')
 
   useEffect(() => {
     if(selectedCourse){
@@ -456,9 +429,7 @@ export function EditCourse(){
   return (
     <div className={  '' }>
       <CourseSeletor { ...{ selectedCourse, setSelectedCourse } }  />
-      {
-        currentCourse && <CourseStructure { ...{ currentCourse, setCurrentCourse, setSelectedCourse, operation: 'edit' } } />
-      }
+      { currentCourse && <CourseStructure { ...{ currentCourse, setCurrentCourse, setSelectedCourse, operation: 'edit' } } /> }
     </div>
   )
 }
@@ -495,14 +466,10 @@ export function EditModule(){
   return (
     <>
       <CourseSeletor { ...{ selectedCourse, setSelectedCourse } } />
-      {
-        currentCourse && currentCourse.modules.length > 0 && <ModuleStructure { ...{ currentModules: currentCourse.modules, operation: 'edit' } } /> 
-      }
-      {
-        currentCourse && currentCourse.modules.length < 1 && <span
-        className='w-fit mx-auto font-semibold uppercase text-lg pt-10'
-      > No modules added for selected course </span>
-      }
+      { currentCourse && currentCourse.modules.length > 0 && <ModuleStructure { ...{ currentModules: currentCourse.modules, operation: 'edit' } } />  }
+      { currentCourse && currentCourse.modules.length < 1 && <span
+        className='w-fit mx-auto font-semibold uppercase text-lg pt-10'> 
+        No modules added for selected course </span> }
     </>
   )
 }

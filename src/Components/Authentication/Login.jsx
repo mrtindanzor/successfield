@@ -4,8 +4,10 @@ import useAuth from '../../Contexts/AuthenticationContext'
 import { EyeOff, Eye } from 'lucide-react'
 import DisplayNotification from '../DisplayNotification'
 import LoginQuestion from './LoginQuestion'
+import SubmitButton from '../SubmitButton'
 
 export default function Login(){
+  const [ submitted, setSubmitted ] = useState(false)
   const [ credentials, setCredentials ] = useState({ email: '', password: '' })
   const [ isPassVisible, setIsPassVisible ] = useState(false)
   const [ feedback, setFeedback ] = useState({})
@@ -16,6 +18,7 @@ export default function Login(){
     e.preventDefault()
 
     try{
+      setSubmitted(true)
       const res = await login(credentials, navigate)
       if(!res) throw Error('Something went wrong')
       if(res){
@@ -24,17 +27,27 @@ export default function Login(){
       }
     } catch(err){
       setFeedback({ error: true, message: err.message })
+    } finally{
+      setSubmitted(false)
     }
   }
 
   return (
     <>
-      <form onSubmit={ (e) => handleFormSubmission(e) } className=" relative grid gap-10 bg-gray-100 mx-auto w-[98%] max-w-[400px] sm:max-w-[600px] rounded-xl py-5 mt-10 sm:py-10 px-5 mb-10 md:px-10 pb-20">
+      <form onSubmit={ (e) => handleFormSubmission(e) } className="relative grid gap-10 bg-gray-100 mx-5 w-[calc(100%-2.5rem)] sm:max-w-[600px] rounded-xl py-5 mt-10 sm:py-10 px-8 sm:mx-auto mb-10 md:px-10 pb-20">
         { feedback.message && <DisplayNotification { ...{ feedback } } /> }
-        <h3 className=" text-4xl sm:text-6xl text-green-500 font-bold [text-shadow:_1px_1px_1px_black] "> Sign in </h3>
+        <h3 className=" text-xl text-center border-2 font-semibold border-black py-2 rounded-md text-black">
+          Login to Successfield
+        </h3>
         <TextField { ...{ value: credentials.email, title: 'Email', position: 'email', setter: setCredentials } } />
         <TextField { ...{ value: credentials.password, title: 'Password', position: 'password', setter: setCredentials, setIsPassVisible, isPassVisible } } />
-        <button className=" text-white text-xl font-bold w-fit px-7 py-2 bg-green-500 hover:rounded-lg rounded cursor-pointer "> Log in </button>
+        <SubmitButton { ...{
+          classes: `!w-full ${ submitted ? '!lowercase':'' }`,
+          submitted,
+          setter: setSubmitted,
+          text: 'Login',
+          submitText: 'signing you in...'
+        } } />
         <LoginQuestion { ...{
           question: "Don't have account?",
           label: 'Create an account',

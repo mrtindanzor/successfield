@@ -27,7 +27,7 @@ export default function PreviewImage({ file, setFeedback }){
       >
       <img 
         src={ image } 
-        className="w-full h-auto overflow-hidden rounded-md" />
+        className="w-full h-auto overflow-hidden rounded-md drop-shadow-md drop-shadow-black" />
     </div>
   )
 }
