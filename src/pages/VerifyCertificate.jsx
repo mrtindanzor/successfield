@@ -94,7 +94,7 @@ function List({ title, value, status }){
     <label
       className={`${ status ? 'flex gap-2 items-baseline':'grid gap-1' } uppercase`}>
       <b
-        className="text-xl text-black/90"> { title }: </b>
+        className="text-lg font-semibold text-black/90"> { title }: </b>
       <span
         className={`${ status ? 'text-green-600 font-semibold text-2xl':'text-gray-800 text-base' }`}> { value } </span>
     </label>
