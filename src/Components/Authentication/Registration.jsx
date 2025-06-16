@@ -1,4 +1,4 @@
-import { useState, useReducer, useMemo } from "react";
+import { useState, useReducer, useMemo, useEffect } from "react";
 import { useSetAlert } from "../../Hooks/Alerter";
 import useAuth from './../../Contexts/AuthenticationContext'
 import useCourses from './../../Contexts/CoursesContext'
@@ -92,6 +92,8 @@ export default function Registration(){
 
 const handler = registration
 
+useEffect(() => { feedback.message && setTimeout(() => setFeedback({}), 7000); }, [feedback])
+
 async function handleFormSubmission(e){
   e.preventDefault()
 
@@ -107,14 +109,14 @@ async function handleFormSubmission(e){
 }
 
   return (
-    <>
-      
+    <div
+      className="h-[100vh] min-h-fit w-full bg-gray-100 px-5 py-10">
       <form 
         onSubmit={ (e) => handleFormSubmission(e) }
         autoComplete="off"
         autoCapitalize="on"
         tabIndex={1}
-         className="w-[calc(100%-2.5rem)] grid sm:grid-cols-[1fr_3fr] gap-y-10 my-10 sm:max-w-[900px] mx-auto pt-10 pb-30 sm:bg-gray-100 sm:px-5 md:px-10 sm:my-10 sm:rounded-md "
+         className="w-full bg-white grid sm:grid-cols-[1fr_3fr] gap-y-10 sm:max-w-[900px] mx-auto py-10 px-5 sm:px-8 md:px-10 rounded-md drop-shadow-md"
          >
           { feedback.message && <div className="sm:col-span-2">
             <DisplayNotification { ...{ feedback } } />
@@ -173,7 +175,7 @@ async function handleFormSubmission(e){
           link: '/users/students-area'
         } } />
       </form>
-    </>
+    </div>
   )
 }
 
@@ -276,7 +278,7 @@ function NextButton({ setter, location }){
     <button
       role="button"
       tabIndex={0}
-      className="flex items-center gap-3 whitespace-nowrap text-white font-bold w-fit px-5 py-2 rounded-sm bg-green-600 mt-10 ml-auto cursor-pointer drop-shadow-md drop-shadow-gray-300"
+      className="flex items-center gap-3 whitespace-nowrap text-white font-bold w-fit px-5 py-2 rounded-sm bg-green-600 ml-auto cursor-pointer drop-shadow-md drop-shadow-gray-300"
       onClick={ e => {
         e.preventDefault()
         setter(location)

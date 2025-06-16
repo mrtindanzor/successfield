@@ -33,8 +33,9 @@ export default function Login(){
   }
 
   return (
-    <>
-      <form onSubmit={ (e) => handleFormSubmission(e) } className="relative grid gap-10 bg-gray-100 mx-5 w-[calc(100%-2.5rem)] sm:max-w-[600px] rounded-xl py-5 mt-10 sm:py-10 px-8 sm:mx-auto mb-10 md:px-10 pb-20">
+    <div
+      className="w-full h-[100vh] bg-gray-100 py-10 px-5">
+      <form onSubmit={ (e) => handleFormSubmission(e) } className="relative grid gap-10 bg-white w-full sm:max-w-[600px] rounded-xl py-5 sm:py-10 px-5 py-10 sm:mx-auto md:px-10 pb-20 drop-shadow-md">
         { feedback.message && <DisplayNotification { ...{ feedback } } /> }
         <h3 className=" text-xl text-center border-2 font-semibold border-black py-2 rounded-md text-black">
           Login to Successfield
@@ -54,7 +55,7 @@ export default function Login(){
           link: '/users/join'
         } } />
       </form>
-    </>
+    </div>
   )
 }
 
