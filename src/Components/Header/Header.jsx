@@ -9,7 +9,7 @@ export default function Header(){
   const [ navbarActive, setNavbarActive ] = useState(false)
 
   return (
-    <header className="sticky px-5 sm:px-8 md:px-10 md:py-2 bg-white z-2 w-[100vw] gap-x-2 top-0 left-0 md:h-22 grid grid-cols-[auto_1fr_auto] md:grid-cols-[1fr_auto_auto] md:grid-rows-[auto_1fr] justify-start items-center md:items-start drop-shadow-md">
+    <header className="sticky px-5 py-4 sm:px-8 md:px-10 md:py-2 bg-white z-2 w-[100vw] gap-x-2 top-0 left-0 md:h-22 grid grid-cols-[auto_1fr_auto] md:grid-cols-[1fr_auto_auto] md:grid-rows-[auto_1fr] justify-start items-center md:items-start drop-shadow-md">
       <MenuButton { ...{ navbarActive, setNavbarActive } } />
       <LogoElement />
       <Link

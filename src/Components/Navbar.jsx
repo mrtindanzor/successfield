@@ -50,7 +50,7 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
   
   return (
       <nav 
-        className={`${ !navbarActive && 'translate-x-[-100vw] md:translate-0' } md:col-span-full transition md:transition-none duration-300 absolute md:static left-0 top-[3.75rem] border-t-2 border-t-gray-200 md:border-none w-full h-[calc(100vh-3.5rem)] md:h-fit grid grid-cols-[80%_20%]`}>
+        className={`${ !navbarActive && 'translate-x-[-100vw] md:translate-0' } md:col-span-full transition md:transition-none duration-300 absolute md:static left-0 top-[5.6rem] border-t-2 border-t-gray-200 md:border-none w-full h-[calc(10vh-5.6rem)] md:h-fit grid grid-cols-[80%_20%]`}>
         <ul 
           className="relative flex flex-col md:flex-row bg-white md:bg-transparent h-full z-2"
           >
@@ -84,23 +84,21 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
 
                   { !menu.list && <NavLink 
                     to={ path } 
-                    className="block text-gray-900 py-2 md:py-0 px-5 sm:px-8 md:px-3 font-semibold hover:bg-gray-200 w-full whitespace-nowrap" 
+                    className="block text-gray-900 py-2 md:py-0 px-5 sm:px-8 md:px-3 hover:bg-gray-200 w-full whitespace-nowrap" 
                     onClick={ () => navbarActive && setNavbarActive(false) }
                     > { menu.title } </NavLink> }
 
                   { menu.list && <span 
-                        className=" text-gray-900 font-semibold flex items-center justify-between cursor-pointer py-2 md:py-0 px-5 sm:px-8 md:px-3 w-full hover:bg-gray-200 capitalize"
+                        className=" text-gray-900 flex items-center justify-between cursor-pointer py-2 md:py-0 px-5 sm:px-8 md:px-3 w-full hover:bg-gray-200 capitalize"
                         onClick={ () => setCoursesActive(prev => !prev) }
                         > { menu.title }
                         <ChevronRight 
                           className="md:rotate-[90deg]"/>
-                      </span> 
-                  }
+                      </span>  }
 
-                  {
-                    menu.list && <ul
-                        className={`sub-nav bg-white md:top-[100%] md:max-h-[60vh] md:border-t-2
-                          ${ coursesActive ? 'absolute top-0 z-1 h-full w-full md:h-fit overflow-y-scroll md:overflow-[unset] md:w-fit' : 'hidden' }
+                  { menu.list && <ul
+                        className={`sub-nav bg-white md:top-[100%] h-full pb-30 md:pb-3 md:max-h-[60vh] md:border-t-2
+                          ${ coursesActive ? 'absolute top-0 z-1 w-full md:h-fit overflow-y-scroll md:overflow-[unset] md:w-fit' : 'hidden' }
                           `}
                         onClick={ () => setCoursesActive(false) }
                         >

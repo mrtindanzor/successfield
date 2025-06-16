@@ -71,7 +71,6 @@ body{
 [aria-current='page'].active{
   position: relative;
   z-index: 0;
-  font-weight: bolder;
   color: var(--p-color) !important;
 }
 [aria-current='page'].active::after {
