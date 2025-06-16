@@ -77,7 +77,7 @@ export function EditCertificate(){
       const res = await axios.patch(uri, { studentNumber, operation: 'findCertificate' })
       switch(res.data.status){
         case 200:
-          setCurrentCertificate(res.findCertificates)
+          setCurrentCertificate(res.data.findCertificates)
         break
         
         default:

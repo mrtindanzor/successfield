@@ -1,103 +1,102 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useCallback } from 'react'
+import DisplayNotification from '../Components/DisplayNotification'
+import SubmitButton from '../Components/SubmitButton'
+import axios from "axios";
 import useServerUri from '../Contexts/baseServer'
 
 export default function VerifyCerificate(){
+  const [ submitted, setSubmitted ] = useState(false)
+  const [ feedback, setFeedback ] = useState({})
+  const [ certificateCode, setCertificateCode ] = useState('')
   const certificateCodeRef = useRef('')
-  const serverUri = useServerUri()
+  const uri = useServerUri() + 'verify-certificate'
   const [ details, setDetails ] = useState('')
   const [ invalid, setInvalid ] = useState(false)
-
-  const handleFormSubmit = async (e) => {
-    e.preventDefault()
-    const uri = serverUri + 'verify-certificate'
-    const headers = new Headers()
-    headers.append('Content-Type', 'application/json')
-    const method = 'POST'
-    const certificateCode = certificateCodeRef.current.value
-    const body = JSON.stringify({ certificateCode: certificateCode.toLowerCase().trim() })
-    console.log('here')
-    const response = await fetch(uri, { method, headers, body })
-    console.log('there')
-    if(!response.ok) return { status: 500, msg: 'An error occured.' }
-
-    const res = await response.json()
-    
-    switch(res.status){
-      case 200: 
-          setDetails(res.certificate)
-        break
-
-      case 403:
-          setInvalid(true)
-        break
-    }
-  }
-
-  const resetDetailsAndInvalid = () => {
+  const resetDetailsAndInvalid = useCallback(() => {
     setDetails('')
     setInvalid(false)
-  }
+  },[])
+
+  const handleFormSubmit = useCallback( async e => {
+    e.preventDefault()
+    try {
+      const res = await axios.post(uri, { certificateCode })
+  
+      switch(res.data.status){
+        case 200: 
+            setDetails(res.data.certificate)
+          break
+
+        default:
+            setFeedback({ error: true, message: `Invalid Certificate ID: ${ certificateCode }` })
+          break
+      }
+    } catch (error) {
+      setFeedback({ error: true, message: error.message || 'Something went wrong' })
+    }finally{
+      setSubmitted(false)
+    }
+   
+  }, [uri, certificateCode])
 
   return (
-   <>
-     <form onSubmit={ (e) => handleFormSubmit(e) } className=" grid gap-10 bg-white w-[95%] max-w-[600px] mx-auto py-10 px-5 rounded-xl relative top-10 " > 
-      <h1 className=" text-4xl font-bold text-green-800 "> Verify Certificate </h1>
-      <label className=" grid gap-3 ">
-        <span className=" text-2xl font-semibold ">Certificate ID: </span>
-        <input type="text" ref={ certificateCodeRef } className=" py-2 px-4 uppercase border-1 rounded " onChange={ resetDetailsAndInvalid } />  
+   <div
+    className="bg-gray-100 h-[100vh] flex flex-col gap-10 py-10">
+     <form 
+        onSubmit={ handleFormSubmit } 
+        className="drop-shadow-xl grid gap-5 bg-white w-[95%] max-w-[600px] mx-auto py-10 px-5 rounded-md" > 
+      <h1 
+        className="text-3xl font-bold text-gray-800 ">
+          Verify Certificate 
+      </h1>
+      { feedback.message && <DisplayNotification { ...{ feedback } } /> }
+      <label 
+        className="grid gap-3">
+        <span 
+          className="text-xl text-gray-700">
+            Certificate ID:
+        </span>
+        <input 
+          type="text" 
+          className=" py-2 px-4 uppercase border-2 border-gray-400 rounded " 
+          onChange={ e => setCertificateCode( e.target.value?.toLowerCase().trim() )  } />  
       </label>
-      <button className=" bg-green-600 py-2 px-4 text-white rounded cursor-pointer "> Search </button>
+      <SubmitButton { ...{
+        setter: setSubmitted,
+        submitted,
+        text: 'find',
+        submitText: 'finding certificate...',
+        classes: `w-full ${ submitted ? '!lowercase': '' }`
+      } } />
     </form>
-    { details && <CertificateDetails studentDetails={ details } /> }
-    { invalid && <InvalidCertificate certificateCode={ certificateCodeRef.current.value } /> }
-   </>
+    { details && <CertificateDetails { ...{ studentDetails: details } } /> }
+   </div>
   )
 }
 
 function CertificateDetails( { studentDetails } ){
-
-  console.log(studentDetails)
   const { name, studentNumber, certificateCode, programme, dateCompleted } = studentDetails
 
   return (
-    <div className=" grid gap-10 bg-white w-[95%] max-w-[600px] mx-auto py-10 px-5 rounded-xl mt-30 relative bottom-10 *:*:uppercase *:*:last:text-gray-600">
-      <div>
-        <b>Name: </b>
-        <span> { name } </span>
-      </div>
-      <div>
-        <b>Student Number: </b>
-        <span> { studentNumber } </span>
-      </div>
-      <div>
-        <b>Certificate ID: </b>
-        <span> { certificateCode } </span>
-      </div>
-      <div>
-        <b>Programme: </b>
-        <span> { programme } </span>
-      </div>
-      <div>
-        <b>Status:</b>
-        <span className=" !text-green-500 font-bold "> VALID </span>
-      </div>
-      <div>
-        <b>Date Completed: </b>
-        <span> { dateCompleted } </span>
-      </div>
+    <div className="grid gap-3 w-[95%] max-w-[600px] mx-auto bg-white drop-shadow-2xl px-5 py-8 rounded-md">
+      <List { ...{ title: 'Name', value: name } } />
+      <List { ...{ title: 'Student ID', value: studentNumber } } />
+      <List { ...{ title: 'Certificate ID', value: certificateCode } } />
+      <List { ...{ title: 'Programme', value: programme } } />
+      <List { ...{ title: 'Validity', value: 'valid', status: true } } />
+      <List { ...{ title: 'Date of completion', value: dateCompleted } } />
     </div>
   )
 }
 
-function InvalidCertificate( { certificateCode } ){
-
+function List({ title, value, status }){
   return (
-    <div className=" grid gap-5 bg-white w-[95%] max-w-[600px] mx-auto py-10 px-5 rounded-xl mt-30 relative bottom-10 ">
-      <h2 className=" font-bold text-xl uppercase ">Invalid Certificate ID: <span className=" text-lg font-semibold "> { certificateCode }  </span></h2>
-      <div>
-        <b> Status: </b>
-        <span className=" font-bold text-red-500 "> INVALID </span>
-      </div>
-    </div>
+    <label
+      className={`${ status ? 'flex gap-2 items-baseline':'grid gap-1' } uppercase`}>
+      <b
+        className="text-xl text-black/90"> { title }: </b>
+      <span
+        className={`${ status ? 'text-green-600 font-semibold text-2xl':'text-gray-800 text-base' }`}> { value } </span>
+    </label>
   )
 }
