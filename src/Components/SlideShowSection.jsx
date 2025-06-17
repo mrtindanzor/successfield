@@ -48,13 +48,13 @@ export default function SlideShowSection(){
               }) }
               <button>
               <ChevronLeft 
-                className={`absolute z-1 top-1/2 left-3 translate-y-[-1/2] ${ activeSlide === 0 ? 'pointer-events-none opacity-0' : '' } bg-gray-500 text-white rounded-full w-8 h-8 p-1 cursor-pointer hover:bg-gray-700 drop-shadow-xl`}
+                className={`absolute z-1 top-1/2 left-3 translate-y-[-1/2] ${ activeSlide === 0 ? 'pointer-events-none opacity-0' : '' } bg-black text-white rounded-full w-8 h-8 p-1 cursor-pointer hover:bg-gray-700 border-gray-400 border-1`}
                 onClick={ () => handleSideButtons('left') }
                 />
             </button>
             <button>
               <ChevronRight 
-                className={`absolute z-1 top-1/2 right-3 translate-y-[-1/2] ${ activeSlide === images.length - 1 ? 'pointer-events-none opacity-0' : '' } bg-gray-500 text-white rounded-full w-8 h-8 p-1 cursor-pointer hover:bg-gray-700 drop-shadow-xl`}
+                className={`absolute z-1 top-1/2 right-3 translate-y-[-1/2] ${ activeSlide === images.length - 1 ? 'pointer-events-none opacity-0' : '' } bg-black text-white rounded-full w-8 h-8 p-1 cursor-pointer hover:bg-gray-700 border-gray-400 border-1`}
                 onClick={ () => handleSideButtons('right') }
                 />
             </button>
