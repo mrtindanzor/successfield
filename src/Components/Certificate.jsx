@@ -5,7 +5,7 @@ export default function Certificate({ certificate }){
 
   return (
     <div
-      className="relative w-[calc(100%-2.5rem)] mx-auto sm:w-100 md:w-150 rounded"
+      className="relative w-[calc(100%-2.5rem)] mx-auto sm:w-100 md:w-150 rounded [font-family:_sans-serif]"
       >
         <img
           src={ sample }

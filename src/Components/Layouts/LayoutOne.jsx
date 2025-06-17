@@ -10,8 +10,7 @@ import Certificate from '../Certificate'
 export default function LayoutOne(){
 
   return (
-    <div className="text-lg text-gray-600 min-h-[100vh] ">
-      <Certificate { ...{ name: 'simon tindanzor', certificateCode: 'cnas', programme: 'programme', studentNumber: 'sfc-827193', dateCompleted: 'July 2024' } } />
+    <div className="text-lg text-gray-600 min-h-[100vh] tuffy">
       <ScrollToTop />
       <PendingLoader />
       <Alerter />
