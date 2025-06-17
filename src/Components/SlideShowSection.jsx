@@ -39,7 +39,7 @@ export default function SlideShowSection(){
 
   return (
       <div
-        className="w-[calc(100%-2.5rem)] sm:w-[calc(100%-4rem)] md:w-[calc(100%-5rem)] max-w-[700px] mx-auto h-[300px] md:h-[500px]"
+        className="w-[calc(100%-2.5rem)] sm:w-[calc(100%-4rem)] md:w-[calc(100%-5rem)] max-w-[700px] mx-auto h-[300px] md:h-[400px]"
         >
           <div
             className="relative h-full overflow-hidden w-full md:min-w-[800px] drop-shadow-xl rounded-xl overflow-hidden">

@@ -27,14 +27,17 @@ export default function HomeContent(){
 
   return (
     <ul className="py-10 grid gap-y-10 gap-x-5 md:gap-x-10 md:gap-y-15 px-5 sm:px-10 2xl:px-0 md:grid-cols-2 lg:max-w-[1440px] mx-auto">
-      {
-        contents.map( (content, index) => {
-          return (<li key={ content.title } className={`bg-green-300/20 flex flex-col items-center gap-5 rounded-md pt-10 pb-20 px-5 sm:px-10 [box-shadow:2px_2px_5px_gray] ${ index === 4 && 'sm:col-span-2' }`}>
-                    <h3 className="font-bold text-3xl text-black text-center"> { content.title } </h3>
-                    <p className="text-gray-700 text-xl"> { content.content } </p>
-                  </li>)
-        })
-      }
+      { contents.map( (content, index) => <Card key={ content.title } { ...{ content, index } } /> ) }
     </ul>
+  )
+}
+
+function Card({ content, index }){
+
+  return(
+    <li key={ content.title } className={`bg-gray-200 flex flex-col items-center gap-5 rounded-md pt-10 pb-20 px-5 sm:px-10 border-2 border-gray-200/20 drop-shadow-md drop-shadow-gray-700 ${ index === 4 && 'sm:col-span-2' }`}>
+      <h3 className="font-bold text-3xl text-black text-center"> { content.title } </h3>
+      <p className="text-gray-700 text-xl text-justify"> { content.content } </p>
+    </li>
   )
 }

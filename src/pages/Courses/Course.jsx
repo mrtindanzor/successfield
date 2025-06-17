@@ -5,52 +5,6 @@ import usePendingLoader from "../../Contexts/PendingLoaderContext";
 import { formatUrl } from "../../core";
 import { PendingLoading } from '../../Hooks/PendingLoader';
 
-
-function SubListItem({ list, content, index, currentTabIndex, cert }){
-  let contentClasses = `leading-relaxed capitalize ${ currentTabIndex === index ? "flex" : "hidden" } pt-5 ${ cert ? '[line-height:2.5rem]' : '' }` 
-
-  return (
-    list ? <ul className={ `flex-col py-5 capitalize ${ currentTabIndex === index ? "flex" : "hidden" }` } key={ Date.now() * Math.random() }>
-            {
-              list.map((element, index) => {
-                return <li key={ element + index } className=" border-b-1 border-b-gray-300 py-2 "> { element } </li>
-              })
-            }
-          </ul>
-          : 
-          <p className={ contentClasses }>
-            { content }
-          </p>
-  )
-}
-
-function ModuleList({ list, currentTabIndex, index }){
-
-  const newList = []
-  for(const item in list){
-    const obj = {
-      _id: list[item]._id,
-      index: list[item].index,
-      title: list[item].title
-    }
-    const isInList = newList.find(alist => alist.title === list[item].title)
-    if(!isInList) newList.push(obj)
-  }
-
-  const listClasses = `py-5 flex-col capitalize ${  currentTabIndex === index ? "flex" : "hidden" }`
-  
-
-  return (
-    <ul className={ listClasses } key={ Date.now() * Math.random() }>
-      {
-        newList.map( module => {
-          return <li key={ module._id } className=" py-2 leading-relaxed border-b-1 border-b-gray-300 "> { module.title } </li>
-        })
-      }
-    </ul>
-  )
-}
-
 export default function Course(){
   const [currentCourse, setCurrentCourse] = useState(null)
   const { getCourse, coursesList } = useCourses()
@@ -71,42 +25,38 @@ export default function Course(){
 
   return (
     <section
-      className="px-5 sm:px-8 md:px-10 lg:max-w-[1440px] mx-auto pb-100"
+      className="grid gap-5 py-10 px-5 sm:px-8 md:px-10 bg-gray-100 lg:max-w-[1440px] mx-auto pb-100"
       >
-      {
-        currentCourse && currentCourse.benefits ? <>
+      { currentCourse && currentCourse.benefits ? <>
+        <h2
+          className="text-2xl text-center text-black font-extrabold uppercase">
+          { currentCourse.course }
+        </h2>
 
-          { currentCourse && 
-              <h2
-                className="text-2xl sm:text-3xl pt-10 text-center text-black font-extrabold uppercase"
-                >
-                  { currentCourse.course }
-              </h2> }
+       <div className="text-justify">
+          <Content { ...{ content: currentCourse.overview } } />
+        </div>
 
-          { currentCourse && 
-              <div className="text-black md:text-xl capitalize bg-white pt-10">
-                <SubListItem content={ currentCourse.overview } />
-              </div> }
-
-          { currentCourse && currentCourse.fee && 
-              <div className=" grid gap-3 py-1 ">
-                <span 
-                  className="font-bold text-xl sm:text-2xl"
-                  > Fee: </span>
-                <SubListItem content={ currentCourse.fee } />
-              </div> }
+          { currentCourse.fee && 
+            <div className=" grid gap-3 py-1 ">
+              <span 
+                className="font-bold text-xl sm:text-2xl"
+                > Fee: </span>
+                <Content { ...{ content: currentCourse.fee } } />
+            </div> }
           
-            { currentCourse && currentCourse.modules?.length > 0 ? 
+            { currentCourse.modules?.length > 0 ? 
                 <Link to={ 'module' } 
-                  className=" px-6 py-2 rounded-tl-md rounded top-tr-md bg-green-600 hover:bg-green-700 text-white mt-8 block w-fit "
-                  >
+                  className=" px-6 py-2 rounded-tl-md rounded top-tr-md bg-green-600 hover:bg-green-700 text-white block w-fit">
                   Start Course
                 </Link> : null }
-
-          <div className=" block course-list-container mt-10">
-            { currentCourse && 
-                <ShowList { ...{ currentCourse, outlines: currentCourse.outlines, objectives: currentCourse.objectives, modules: currentCourse.modules, benefits: currentCourse.benefits } } /> }
-          </div>
+                
+          <ShowList { ...{ 
+            currentCourse, 
+            outlines: currentCourse.outlines, 
+            objectives: currentCourse.objectives, 
+            modules: currentCourse.modules, 
+            benefits: currentCourse.benefits } } />
         </> : <PendingLoading />
       }
     </section>
@@ -140,49 +90,102 @@ function ShowList({ currentCourse, outlines, objectives, modules, benefits }){
       }
     })
   }, [currentCourse])
-  const list = [
-                { title: 'Outlines', list: outlines },
-                { title: 'Benefits', list: benefits },
-                { title: 'Objectives', list: objectives },
-                { title: 'Modules', modules: modules },
-                { title: 'Certificate', content: currentCourse.certificate }
-              ]
+  const list = useMemo(() => [
+    { title: 'Outlines', list: outlines },
+    { title: 'Benefits', list: benefits },
+    { title: 'Objectives', list: objectives },
+    { title: 'Modules', modules: modules },
+    { title: 'Certificate', content: currentCourse.certificate }
+  ], [])
   useEffect(() => {
     setCurrentTab(list)
   }, [pathname, currentCourse, outlines, objectives, modules, benefits])
 
   return (
-    <>
-      <div className=" grid grid-cols-[repeat(auto-fill,_minmax(120px,_1fr))] w-full gap-1">
-        { 
-          list.map(( currentList, index) => {
+    <div
+      className="grid gap-5">
+      <div className="grid bg-gray-300 grid-cols-[repeat(auto-fill,_minmax(120px,_1fr))] w-full">
+        { list.map(( currentList, index) => {
             if(currentList.list && currentList.list.length < 1) return 
             if(currentList.modules && currentList.modules.length < 1) return 
-            let classes = `rounded p-2 cursor-pointer hover:bg-green-800 hover:text-white hover:font-bold ${ index === currentTabIndex ? "bg-green-500 text-white font-bold" : "bg-green-300" }`
-            return <span className={ classes } key={ currentList.title } onClick={ () => setCurrentTabIndex(index) } > { currentList.title } </span>
-          }) 
-        }
+            return ( 
+              <span 
+                  className={`px-3 py-2 text-center cursor-pointer hover:bg-gray-600 hover:text-white ${ index === currentTabIndex ? "bg-gray-800 text-white" : "bg-gray-300 text-gray-900" }`} 
+                  key={ currentList.title } 
+                  onClick={ () => setCurrentTabIndex(index) } > 
+                  { currentList.title }
+              </span>
+              )
+          }) }
       </div>
       <ul>
-        {
-          list.map(( nestedList, listIndex) => {
-            return (
-              <li
-                key={ listIndex }
-                >
-                  { nestedList.list && 
-                      <SubListItem { ...{ currentTabIndex, index: listIndex, list: nestedList.list, mapped: true } } />  } 
-
-                  { nestedList.modules &&
-                      <ModuleList { ...{ list: nestedList.modules, index: listIndex, currentTabIndex } } /> }
-                    
-                  { nestedList.content &&
-                      <SubListItem  { ...{ mapped: true, currentTabIndex, index: listIndex, content: nestedList.content, cert: true } } /> }
-                </li>
-            )
-          })
-        }
+        <ListItem
+          { ...{ currentTabIndex, index: 0, list: list[0].list } } />
+        <ListItem
+          { ...{ currentTabIndex, index: 1, list: list[1].list } } />
+        <ListItem
+          { ...{ currentTabIndex, index: 2, list: list[2].list } } />
+        <ModuleList
+          { ...{ list: list[3].modules, index: 3, currentTabIndex } } />
+        <Content
+          { ...{ currentTabIndex, index: 4, content: list[4].content, cert: true } } />
       </ul>
-    </>
+    </div>
+  )
+}
+
+function ListItem({ list, currentTabIndex, index }){
+  return (
+    <ul 
+      className={ `flex-col capitalize ${ currentTabIndex === index ? "flex" : "hidden" }` }>
+      { list.map((content, index) => <li 
+            key={ index } 
+            className=" border-b-1 border-b-gray-300 py-2 ">
+          { content }
+        </li> ) }
+      </ul>
+  )
+}
+
+function Content({ content, currentTabIndex, index, cert }){
+  const _content = useMemo(() => {
+    const _s = content.split('. ')
+    const s = _s.map( i => {
+      const _f = i[0].toUpperCase()
+      return _f + i.slice(1, i.length - 1)
+    } ).join('. ')
+    return s
+
+  }, [content])
+
+  return (
+     <p 
+      className={`leading-relaxed !first-letter:uppercase ${ currentTabIndex === index ? "flex" : "hidden" } ${ cert ? '[line-height:2.5rem] underline underline-offset-10 text-justify' : '' }`}>
+      { _content }
+    </p>
+  )
+}
+
+function ModuleList({ list, currentTabIndex, index }){
+  const newList = []
+  for(const item in list){
+    const obj = {
+      _id: list[item]._id,
+      index: list[item].index,
+      title: list[item].title
+    }
+    const isInList = newList.find(alist => alist.title === list[item].title)
+    if(!isInList) newList.push(obj)
+  }
+  
+  return (
+    <ul 
+      className={ `flex-col capitalize ${  currentTabIndex === index ? "flex" : "hidden" }`}>
+      { newList.map( module => <li 
+          key={ module._id } 
+          className=" py-2 leading-relaxed border-b-1 border-b-gray-300 "> 
+          { module.title } 
+          </li> ) }
+    </ul>
   )
 }
