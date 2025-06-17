@@ -50,7 +50,7 @@ export default function Navbar({ coursesActive, setCoursesActive, navbarActive, 
   
   return (
       <nav 
-        className={`${ !navbarActive && 'translate-x-[-100vw] md:translate-0' } md:col-span-full transition md:transition-none duration-300 absolute md:static left-0 top-[5.6rem] border-t-2 border-t-gray-200 md:border-none w-full h-[calc(10vh-5.6rem)] md:h-fit grid grid-cols-[80%_20%]`}>
+        className={`${ !navbarActive && 'translate-x-[-100vw] md:translate-0' } tuffy md:col-span-full transition md:transition-none duration-300 absolute md:static left-0 top-[5.6rem] border-t-2 border-t-gray-200 md:border-none w-full h-[calc(10vh-5.6rem)] md:h-fit grid grid-cols-[80%_20%]`}>
         <ul 
           className="relative flex flex-col md:flex-row bg-white md:bg-transparent h-full z-2"
           >

@@ -35,8 +35,10 @@ export default function HomeContent(){
 function Card({ content, index }){
 
   return(
-    <li key={ content.title } className={`bg-gray-200 flex flex-col items-center gap-5 rounded-md pt-10 pb-20 px-5 sm:px-10 border-2 border-gray-200/20 drop-shadow-md drop-shadow-gray-700 ${ index === 4 && 'sm:col-span-2' }`}>
-      <h3 className="font-bold text-3xl text-black text-center"> { content.title } </h3>
+    <li
+       className={`bg-gray-200 tuffy flex flex-col items-center gap-5 rounded-md pt-10 pb-20 px-5 sm:px-10 border-2 border-gray-200/20 drop-shadow-md drop-shadow-gray-700 ${ index === 4 && 'sm:col-span-2' }`}>
+      <h3
+        className="text-3xl text-gray-900 text-center caprasimo"> { content.title } </h3>
       <p className="text-gray-700 text-xl text-justify"> { content.content } </p>
     </li>
   )

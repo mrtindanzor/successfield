@@ -29,11 +29,11 @@ export default function Course(){
       >
       { currentCourse && currentCourse.benefits ? <>
         <h2
-          className="text-2xl text-center text-black font-extrabold uppercase">
+          className="text-2xl md:text-3xl text-center text-gray-800 uppercase caprasimo">
           { currentCourse.course }
         </h2>
 
-       <div className="text-justify">
+       <div className="text-justify md:text-2xl tuffy">
           <Content { ...{ content: currentCourse.overview } } />
         </div>
 
@@ -47,7 +47,7 @@ export default function Course(){
           
             { currentCourse.modules?.length > 0 ? 
                 <Link to={ 'module' } 
-                  className=" px-6 py-2 rounded-tl-md rounded top-tr-md bg-green-600 hover:bg-green-700 text-white block w-fit">
+                  className=" px-6 py-2 tuffy rounded-tl-md rounded top-tr-md bg-green-600 hover:bg-green-700 text-white block w-fit">
                   Start Course
                 </Link> : null }
                 
@@ -103,7 +103,7 @@ function ShowList({ currentCourse, outlines, objectives, modules, benefits }){
 
   return (
     <div
-      className="grid gap-5">
+      className="grid gap-5 tuffy">
       <div className="grid bg-gray-300 grid-cols-[repeat(auto-fill,_minmax(120px,_1fr))] w-full">
         { list.map(( currentList, index) => {
             if(currentList.list && currentList.list.length < 1) return 

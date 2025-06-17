@@ -233,7 +233,7 @@ export function Selector({ title, dispatch, type, db, position, reducerPosition,
 
   return(
     <div 
-      className={`grid items-end gap-2 relative h-fit ${ classList }`}>
+      className={`grid items-end gap-2 relative tuffy h-fit ${ classList }`}>
         <span
           tabIndex={0}
           className="flex whitespace-nowrap h-fit w-full px-5 py-1 sm:py-2 rounded-sm text-white justify-between bg-green-600 cursor-pointer" 

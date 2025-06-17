@@ -15,7 +15,7 @@ export default function CoursesOverview(){
     <section 
       className="px-5 sm:px-8 md:px-10 pb-50 bg-gray-100 mx-auto"
       >
-      <p className=" text-900 py-10 font-semibold"> { Content.description } </p>
+      <p className=" text-900 py-10 font-semibold tuffy-bold"> { Content.description } </p>
       <div 
         className="grid w-full md:grid-cols-[repeat(auto-fill,_minmax(20rem,_1fr))] gap-x-5 md:gap-y-20 gap-y-10 justify-evenly"
         aria-label="All courses">

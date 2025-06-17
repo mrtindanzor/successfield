@@ -38,7 +38,7 @@ function FaqQuestionCard ({ question }){
   const [ visible, setVisible ] = useState(true)
   return (
     <li
-      className={`${visible ? 'pb-5' : '*:not-first:hidden ' } grid gap-4 bg-white rounded-md`}>
+      className={`${visible ? 'pb-5' : '*:not-first:hidden ' } tuffy grid gap-4 bg-white rounded-md`}>
       <button
         onClick={ () => setVisible( v => !v )}
         className="p-2 bg-gray-800 rounded-md grid grid-cols-[1fr_auto] justify-between items-center gap-x-2 cursor-pointer"

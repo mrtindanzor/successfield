@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 const LoginQuestion = ({ question, label, link }) => {
   return (
     <p
-      className="flex flex-wrap gap-3"
+      className="flex flex-wrap gap-3 tuffy"
     >
       <span
         className="text-xl"

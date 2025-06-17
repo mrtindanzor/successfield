@@ -44,9 +44,9 @@ export default function VerifyCerificate(){
     className="bg-gray-100 h-[100vh] flex flex-col gap-10 py-10">
      <form 
         onSubmit={ handleFormSubmit } 
-        className="drop-shadow-xl grid gap-5 bg-white w-[95%] max-w-[600px] mx-auto py-10 px-5 rounded-md" > 
+        className="drop-shadow-xl grid gap-5 bg-white w-[95%] max-w-[600px] mx-auto py-10 px-5 rounded-md tuffy" > 
       <h1 
-        className="text-3xl font-bold text-gray-800 ">
+        className="text-3xl text-gray-800 tuffy-bold">
           Verify Certificate 
       </h1>
       { feedback.message && <DisplayNotification { ...{ feedback } } /> }
@@ -94,9 +94,9 @@ function List({ title, value, status }){
     <label
       className={`${ status ? 'flex gap-2 items-baseline':'grid gap-1' } uppercase`}>
       <b
-        className="text-lg font-semibold text-black/90"> { title }: </b>
+        className="text-lg font-normal tuffy-bold text-black/90"> { title }: </b>
       <span
-        className={`${ status ? 'text-green-600 font-semibold text-2xl':'text-gray-800 text-base' }`}> { value } </span>
+        className={`${ status ? 'text-green-600 font-semibold text-xl':'text-gray-800' } tuffy`}> { value } </span>
     </label>
   )
 }

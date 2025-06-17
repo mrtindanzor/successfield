@@ -1,53 +1,34 @@
 @import 'tailwindcss';
 
 @font-face {
-  font-family: raleway;
-  src: url('../assets/fonts/raleway/Raleway-Black.ttf');
-}
-@font-face {
-  font-family: raleway-l;
-  src: url('../assets/fonts/raleway/Raleway-Light.ttf');
-}
-@font-face {
-  font-family: raleway-m;
-  src: url('../assets/fonts/raleway/Raleway-Medium.ttf');
-}
-@font-face {
-  font-family: raleway-i;
-  src: url('../assets/fonts/raleway/Raleway-Italic.ttf');
-}
-@font-face {
-  font-family: texturina-b;
-  src: url('../assets/fonts/texturina/Texturina_14pt-Bold.ttf');
-}
-@font-face {
   font-family: texturina;
   src: url('../assets/fonts/texturina/Texturina_14pt-Black.ttf');
 }
 @font-face {
-  font-family: texturina-i;
-  src: url('../assets/fonts/texturina/Texturina_14pt-Italic.ttf');
+  font-family: tuffy-regular;
+  src: url('../assets/fonts/Tuffy/Tuffy-Regular.ttf');
 }
-:root{
-  --p-color: #039703;
-  --t-green: rgba(0, 128, 0, 0.397);
-  --l-p-color: lightgreen;
-  --s-color: #d41f1f;
-  --t-color: purple;
-  --f-color: #ccc;
-  --glossy-l-color: rgba(255, 255, 255, 0.293);
-  --glossy-m-color: rgba(255, 255, 255, 0.593);
-  --glossy-h-color: rgba(255, 255, 255, 0.793);
-  --b-color: black;
-  --w-color: white;
-
-  --f-size: 16px;
-  --s-size: 20px;
-  --t-size: 24px;
-  --fo-size: 28px;
-  --fi-size: 32px;
-  --si-size: 36px;
+@font-face {
+  font-family: tuffy-bold;
+  src: url('../assets/fonts/Tuffy/Tuffy-Bold.ttf');
 }
+@font-face {
+  font-family: tuffy-bold-italic;
+  src: url('../assets/fonts/Tuffy/Tuffy-BoldItalic.ttf');
+}
+@font-face {
+  font-family: tuffy-italic;
+  src: url('../assets/fonts/Tuffy/Tuffy-Italic.ttf');
+}
+@font-face {
+  font-family: Caprasimo-Regular;
+  src: url('../assets/fonts/Caprasimo-Regular.ttf');
+}
+.tuffy{ font-family: tuffy-regular; }
+.tuffy-bold{  font-family: tuffy-bold; }
+.tuffy-bold-italic{ font-family: tuffy-bold-italic; }
+.tuffy-italic{  font-family: tuffy-italic; }
+.caprasimo{  font-family: Caprasimo-Regular; }
 *{
   box-sizing: border-box;
   user-select: none;
@@ -88,12 +69,6 @@ body{
 }
 .texturina{
   font-family: texturina;
-}
-.raleway{
-  font-family: 'raleway';
-}
-.text-shadow-black-1{
-  text-shadow: 1px 1px 1px black;
 }
 @keyframes slide {
   0% { height: 0px; }

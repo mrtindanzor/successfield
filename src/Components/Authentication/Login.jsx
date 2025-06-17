@@ -34,7 +34,7 @@ export default function Login(){
 
   return (
     <div
-      className="w-full h-[100vh] bg-gray-100 py-10 px-5">
+      className="w-full h-[100vh] bg-gray-100 py-10 px-5 tuffy">
       <form onSubmit={ (e) => handleFormSubmission(e) } className="relative grid gap-10 bg-white w-full sm:max-w-[600px] rounded-xl py-5 sm:py-10 px-5 py-10 sm:mx-auto md:px-10 pb-20 drop-shadow-md">
         { feedback.message && <DisplayNotification { ...{ feedback } } /> }
         <h3 className=" text-xl text-center border-2 font-semibold border-black py-2 rounded-md text-black">
