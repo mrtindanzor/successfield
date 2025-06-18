@@ -202,7 +202,7 @@ export default function useAuthentication(){
     try {
       let courseCode = code.toLowerCase().trim()
       const uri = serverUri + 'users/module'
-      const res = await axios.post(uri, { courseCode })
+      const res = await axios.post(uri, { courseCode }, { withCredentials: true })
       return res.data
     } catch (err) {
       return ({ msg: err.message, status: 401 })

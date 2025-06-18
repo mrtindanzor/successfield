@@ -19,7 +19,6 @@ export function AlertMsgProvider({ children }){
 export default function Alerter(){
   const setAlertMsg = useSetAlert()
   const alertMsg = useAlertMsg("")
-  const classes = useMemo(() => " fixed z-10000 w-[95vw] max-w-[400px] top-14 right-3 bg-green-500 text-white border-1 pr-7 border-l-7 uppercase border-gray-600 py-2 px-3 ",[])
   useEffect(() => {
     if(alertMsg){
       const time = 5 * 1000
@@ -28,10 +27,15 @@ export default function Alerter(){
     }
   },[alertMsg])
   
-  return  (alertMsg ? <div className={ classes }>
-     { alertMsg } 
-     <X className="absolute right-1 top-1 cursor-pointer text-gray-500 hover:text-gray-700 rounded w-9 h-9" onClick={ () => setAlertMsg('') } />
-     </div> : null)
+  return  (
+    <div 
+      className={`${ !alertMsg ? 'hidden':'' } fixed z-10000 w-[95vw] grid items-center grid-cols-[1fr_auto] top-20 drop-shadow-gray-500 drop-shadow-md right-1/2 translate-x-1/2 bg-gray-200 text-black tuffy-bold rounded-sm border-2 uppercase border-gray-300 py-2 px-3`}>
+      { alertMsg } 
+      <X 
+        className="cursor-pointer text-gray-500 hover:text-gray-700" 
+        onClick={ () => setAlertMsg('') }
+      />
+    </div>)
 }
 
   export function useSetAlert(){ return useContext(SetAlertMsgContext) } 
