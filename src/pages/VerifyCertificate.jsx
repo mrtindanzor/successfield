@@ -9,7 +9,7 @@ export default function VerifyCerificate(){
   const [ feedback, setFeedback ] = useState({})
   const [ certificateCode, setCertificateCode ] = useState('')
   const certificateCodeRef = useRef('')
-  const uri = useSelector( serverUriSelector ) + 'verify-certificate'
+  const uri = useSelector( serverUriSelector ) + '/verify-certificate'
   const [ details, setDetails ] = useState('')
   const [ invalid, setInvalid ] = useState(false)
   const resetDetailsAndInvalid = useCallback(() => {
@@ -22,15 +22,8 @@ export default function VerifyCerificate(){
     try {
       const res = await axios.post(uri, { certificateCode })
   
-      switch(res.data.status){
-        case 200: 
-            setDetails(res.data.certificate)
-          break
-
-        default:
-            setFeedback({ error: true, message: `Invalid Certificate ID: ${ certificateCode }` })
-          break
-      }
+      if(res.data.status) return setDetails(res.data.certificate)
+      throw Error(`Invalid Certificate ID: ${ certificateCode }`)
     } catch (error) {
       setFeedback({ error: true, message: error.message || 'Something went wrong' })
     }finally{
