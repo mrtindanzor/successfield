@@ -27,5 +27,5 @@ const FaqsSlice = createSlice({
   }
 })
 
-export const faqsSelector = state => state.faqs.faqs
+export const faqsSelector = state => state.faqs
 export default FaqsSlice.reducer
