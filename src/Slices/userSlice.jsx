@@ -207,10 +207,13 @@ const UserSlice = createSlice({
       } )
       .addCase( login.fulfilled, ( state, action ) => {
         const _n = action.payload
-        state.token = _n.token
-        state.userPhoto = _n.userImage?.secure_url
+        const user = jwtDecode(_n.token)
+        const name = `${ user.firstname } ${ user.middlename ?? '' } ${ user.surname } `
+        state.token = user.token
+        state.userFullName = name
+        state.userPhoto = user.userImage?.secure_url
         state.isLoggedIn = true
-        state.user = jwtDecode(_n.token)
+        state.user = user
       } )
       .addCase( logout.fulfilled, ( state, action ) => {
         state = initialState
