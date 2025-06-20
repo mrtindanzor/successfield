@@ -17,6 +17,7 @@ import usePrompter from './../Components/Prompt'
 import axios from 'axios';
 import { useSetFeedback } from '../Home/AdminHome';
 import SubmitButton from '../Components/SubmitButton'
+import { Selector } from '../../Components/Authentication/Registration'
 
 const ACTIONS = {
   COURSE: {
@@ -87,9 +88,11 @@ function CourseStructure({ currentCourse, setSelectedCourse, setCurrentCourse, o
     objectives: [''],
     benefits: [''],
     outlines: [''],
-    previousCourseCode: ''
+    previousCourseCode: '',
+    hidden: false
   }), [])
   const [ course, courseDispatch ] = useReducer(coursesReducer, emptyCourse )
+  const hideOptions = useMemo(() => [ 'Yes', 'No' ], [])
   const handleCourseOperation = useCallback( async (action = operation) => {
     dispatch( setLoader(true))
     
@@ -150,6 +153,13 @@ function CourseStructure({ currentCourse, setSelectedCourse, setCurrentCourse, o
         <CourseList { ...{ title: 'course code', value: course.courseCode, courseDispatch, position: 'courseCode' } } />
         <CourseList { ...{ title: 'course overview', value: course.overview, courseDispatch, position: 'overview' } } />
         <CourseList { ...{ title: 'course fee', value: course.fee, courseDispatch, position: 'fee' } } />
+        <Selector { ...{ 
+          title: 'Hidden', 
+          dispatch: courseDispatch, 
+          type: ACTIONS.FILL_MAIN_INPUT, 
+          db: hideOptions, 
+          position: course.hidden, 
+          reducerPosition: 'hidden' } } />
         <CourseList { ...{ title: 'certification', value: course.certificate, courseDispatch, position: 'certificate' } } />
         <CourseList { ...{ title: 'course availability', value: course.availability, courseDispatch, position: 'availability' } } />
         <CourseList { ...{ title: 'course duration', value: course.duration, courseDispatch, position: 'duration' } } />

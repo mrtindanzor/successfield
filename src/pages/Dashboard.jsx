@@ -6,7 +6,7 @@ import { capitalize } from '../core'
 import MainList from '../Components/ProfileItems/MainList'
 import SubList from '../Components/ProfileItems/SubList'
 import Details from '../Components/ProfileItems/Details'
-import { Loading } from '../Components/Loader'
+import { Loading as Loader } from '../Components/Loader'
 import { User } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router-dom'
 import Name from "../Components/ProfileItems/Name";
@@ -37,7 +37,7 @@ function AdminPanel(){
 export default function Dashboard(){
   const dispatch = useDispatch()
   const [ myCourses, setMyCourses ] = useState([])
-  const { user, courses, userFullName, certificates, userPhoto  } = useSelector( userSelector )
+  const { user, courses, userFullName, certificates, userPhoto, loading  } = useSelector( userSelector )
   const [ isLoaded, setIsLoaded ] = useState(false)
   const mainListItems = useMemo(() => {
     const m = [
@@ -128,12 +128,12 @@ export default function Dashboard(){
       }
   }, [currentLocation])
   const listProps = useMemo(() => ({ ACTIONS, currentLocation, dispatchNavigationManager, mainListItems }), [certificates, currentLocation])
-
+  const main = useMemo(() => dispatchNavigationManager({ type: ACTIONS.GET_MAIN_LIST }), [currentLocation] )
   useEffect(() => {
-    if(userFullName) document.title = capitalize('Successfield | ' + userFullName )
-  }, [userFullName])
+    document.title = capitalize(`Successfield | ${ mainListItems[main]?.title }`)
+  }, [main])
 
-  if(!user) return <Loading />
+  if(loading) return <Loader />
   
   return (
     <main-content

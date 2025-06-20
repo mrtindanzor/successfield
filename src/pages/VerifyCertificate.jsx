@@ -22,7 +22,7 @@ export default function VerifyCerificate(){
     try {
       const res = await axios.post(uri, { certificateCode })
   
-      if(res.data.status === 200) return setDetails(res.data.certificate)
+      if(res.data.status) return setDetails(res.data.certificate)
       throw Error(`Invalid Certificate ID: ${ certificateCode }`)
     } catch (error) {
       setFeedback({ error: true, message: error.message || 'Something went wrong' })

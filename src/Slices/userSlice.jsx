@@ -98,7 +98,7 @@ export const getUserCertificates = createAsyncThunk('user/certificates', async (
       const uri = thunkApi.getState().settings.serverUri + '/certificate'
       const studentNumber = thunkApi.getState().auth.user.studentNumber
       const res = await axios.patch(uri, { studentNumber, operation: 'findCertificate' })
-      if(res.data?.findCertificates.length > 0) return res.data.findCertificates
+      if(res.data?.findCertificates) return res.data.findCertificates
       throw Error(res.data.msg || 'Something went wrong')
     } catch (error) {
       return thunkApi.rejectWithValue(error.message || 'Something went wrong')
@@ -193,7 +193,7 @@ const UserSlice = createSlice({
         delete user.isnew
         delete user.verified
         delete user.__v
-        state.token = action.payload
+        state.token = action.payload.token
         state.user = user
         state.userFullName = `${user.firstname} ${user.middlename} ${ user.surname }`
         state.userPhoto = user.userImage?.secure_url
@@ -208,7 +208,7 @@ const UserSlice = createSlice({
         const _n = action.payload
         const user = jwtDecode(_n.token)
         const name = `${ user.firstname } ${ user.middlename ?? '' } ${ user.surname } `
-        state.token = user.token
+        state.token = _n.token
         state.userFullName = name
         state.userPhoto = user.userImage?.secure_url
         state.isLoggedIn = true
