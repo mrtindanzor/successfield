@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const getServerUri = () => {
   const _l = window.location.href.toLowerCase()
   if(_l.includes('localhost')) return 'http://localhost:8000/successfield'
-  return 'https://api.successfieldcollege.com/successfield'
+  return 'https://www.api.successfieldcollege.com/successfield'
 }
 
 const initialState = {
@@ -24,7 +24,6 @@ const SettingsSlice = createSlice({
     }
   }
 })
-
 
 export const serverUriSelector = state => state.settings.serverUri
 export const loaderStateSelector = state => state.settings.loaderState
