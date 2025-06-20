@@ -35,14 +35,17 @@ export function Applications(){
 
   return (
     <div
-      className="grid 2xl:grid-cols-2 gap-y-5 gap-x-3">
+      className="flex flex-col !min-w-full items-start max-h-fit gap-y-5">
       <h2
-        className="text-green-800 font-bold text-2xl border-b-3 h-fit pb-3 flex col-span-full"> 
+        className="text-green-800 font-bold w-full text-2xl border-b-3 h-fit pb-3 flex"> 
         Total applications: { total } 
       </h2>
-      { applications.map( applicant => <ListStudentCard 
+      <ul
+        className="grid 2xl:grid-cols-2 gap-y-5 gap-x-3 w-full">
+        { applications.map( applicant => <ListStudentCard 
           key={ applicant._id } 
           { ...{ student: applicant, application: true } } /> ) }
+      </ul>
     </div>   
   )
 }
@@ -71,7 +74,7 @@ function StudentList({ student, active, setActive }){
       onClick={ () => setActive( a => !a ) }
       className="flex justify-between bg-gray-800 rounded py-3 px-5 text-white cursor-pointer hover:bg-gray-950">
         <h2
-          className="tuffy-bold"> 
+          className="tuffy-bold capitalize"> 
           { name } 
         </h2>
         <ChevronDown 

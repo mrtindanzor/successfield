@@ -56,12 +56,12 @@ export default function Students(){
     <ul
       className="grid grid-cols-[auto_1fr]">
       <h2
-       className="px-5 flex flex-col h-full items-center py-3 tuffy-bold text-xl">
+       className="px-5 col-span-full md:col-span-1 flex flex-col h-full items-center py-3 tuffy-bold text-xl">
         Total Students: 
         <span> { total } </span>
       </h2>
       <label 
-        className='bg-gray-300 rounded grid gap-3 p-3 mb-5'>
+        className='bg-gray-300 col-span-full md:col-span-1 rounded grid gap-3 p-3 mb-5'>
         <span
           className='font-semibold text-lg'> 
           Find Student:
