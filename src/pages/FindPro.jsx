@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import axios from 'axios'
-import useServerUri from '../Contexts/baseServer'
+import { useSelector } from 'react-redux'
+import { serverUriSelector } from '../Slices/settingsSlice'
 import InputField from '../Components/InputField'
 import TextArea from '../Components/TextArea'
 import DisplayNotification from '../Components/DisplayNotification'
@@ -9,7 +10,7 @@ import SubmitButton from '../Components/SubmitButton'
 const FindPro = () => {
   const [ feedback, setFeedback ] = useState({})
   const [ submitted, setSubmitted ] = useState(false)
-  const uri = useServerUri() + 'get_professional'
+  const uri = useSelector( serverUriSelector ) + '/get_professional'
   const [ credentials, setCredentials ] = useState({
     name: '',
     email: '',

@@ -1,8 +1,9 @@
 import { useCallback, useMemo, useState, useReducer, useEffect } from 'react'
-import { useSetAlert } from './../../Hooks/Alerter'
-import useAuth from './../../Contexts/AuthenticationContext'
 import { UserCircle } from 'lucide-react'
 import { Selector } from './Registration'
+import { useSelector } from 'react-redux'
+import { userSelector } from '../../Slices/userSlice'
+import { setAlertMessage } from '../../Slices/settingsSlice'
 
 const ACTIONS = {
   ADD_USER: 'add_user',
@@ -37,7 +38,7 @@ function userReducer(state, action){
 }
 
 export default function  UserInfo() {
-  const { currentUser } = useAuth()
+  const currentUser = useSelector( userSelector ).user
   const [ user, dispatchUser ] = useReducer(userReducer, currentUser)
   const genders = useMemo(() => [
     { gender: 'male' },
@@ -77,13 +78,14 @@ export default function  UserInfo() {
       >
       <div className="absolute inset-0 bg-gray-900/90 !z-1"></div>
       <div
-        className="flex flex-col gap-5 bg-white px-2 py-7 rounded-lg w-[99%] sm:max-w-[600px] h-[95vh] overflow-y-scroll"
-        >
+        className="flex flex-col gap-5 bg-white px-2 py-7 rounded-lg w-[99%] sm:max-w-[600px] h-[95vh] overflow-y-scroll">
           <div
-            className="grid gap-5"
-            >
+            className="grid gap-5">
             <h3 className="flex gap-2 items-center">
-              <UserCircle className="bg-green-400 rounded-full text-white" size="50"/>
+              <UserCircle 
+                className="bg-green-400 rounded-full text-white" 
+                size="50"
+              />
               <span className="sm:text-2xl capitalize font-bold">
                 Update Your Information
               </span>

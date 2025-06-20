@@ -1,8 +1,9 @@
-import useAuth from './../../Contexts/AuthenticationContext'
+import { useSelector } from 'react-redux'
+import { userSelector } from '../../Slices/userSlice'
 import LogoElement from '../../Components/Header/Logo'
 
 export default function Header(){
-  const { userFullName } = useAuth()
+  const { userFullName } = useSelector( userSelector )
 
   return (
     <div 

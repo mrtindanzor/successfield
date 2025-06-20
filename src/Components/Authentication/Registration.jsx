@@ -1,8 +1,12 @@
-import { useState, useReducer, useMemo, useEffect } from "react";
-import { useSetAlert } from "../../Hooks/Alerter";
-import useAuth from './../../Contexts/AuthenticationContext'
-import useCourses from './../../Contexts/CoursesContext'
-import usePendingLoader from './../../Contexts/PendingLoaderContext'
+import { useState, useReducer, useMemo, useEffect, useCallback } from "react";
+import { useSelector } from 'react-redux'
+import { registration } from '../../Slices/userSlice'
+import { 
+  setAlertMessage,
+  setLoader,
+  serverUriSelector
+ } from '../../Slices/settingsSlice'
+import { coursesListSelector } from '../../Slices/coursesSlice'
 import { Eye, EyeOff, ChevronDown, ArrowRight, Upload } from "lucide-react";
 import PreviewImage from "../PreviewImage";
 import DisplayNotification from '../DisplayNotification'
@@ -38,6 +42,7 @@ function userReducer(state, action){
 }
 
 export default function Registration(){
+  const serverUri = useSelector( serverUriSelector )
   const emptyUser = useMemo(() => ({
     programme: '',
     educationLevel: '',
@@ -59,7 +64,8 @@ export default function Registration(){
     email: '',
     password: '',
     cpassword: '', 
-    contact: ''
+    contact: '',
+    serverUri
   }), [])
   const genders = useMemo(() => ([
     { gender: 'male' },
@@ -67,9 +73,7 @@ export default function Registration(){
   ]), [])
   const [ user, dispatchUser ] = useReducer(userReducer, emptyUser)
   const [ feedback, setFeedback ] = useState({})
-  const { coursesList } = useCourses()
-  const { setIsPendingLoading } = usePendingLoader()
-  const { registration } = useAuth()
+  const coursesList = useSelector( coursesListSelector )
   const [ currentForm, setCurrentForm ] = useState(1)
   const educationLevels = useMemo(() => {
     const e = [
@@ -89,30 +93,38 @@ export default function Registration(){
     return e 
   },[])
   const [ submitted, setSubmitted ] = useState(false)
+  const handleSubmit = useCallback( async e => {
+    e.preventDefault()
 
-const handler = registration
+    try{
+      setSubmitted(true)
+      const res = await registration(user)
+      switch(res.status){
+        case 201:
+          setFeedback({ success: true, message: res.msg })
+          dispatchUser({ type: ACTIONS.RESET_FORM, emptyUser })
+        break
 
-useEffect(() => { feedback.message && setTimeout(() => setFeedback({}), 7000); }, [feedback])
+        default: 
+          setFeedback({ error: true, message: res.msg })
+      } 
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      setCurrentForm(res?.currentForm || 1)
+    } catch(error){
+      setFeedback({ error: true, message: error.message || 'Something went wrong' })
+    } finally{
+      setSubmitted(false)
+    }
+    
+  }, [user])
 
-async function handleFormSubmission(e){
-  e.preventDefault()
-
-  setIsPendingLoading(true)
-  setSubmitted(true)
-  const res = await handler(user)
-  setFeedback(() => !res.status ? ({ error: true, message: res.msg }) : res.status === 201 ? ({ success: true, message: res.msg }) : ({ error: true, message: res.msg }) )
-  setIsPendingLoading(false)
-  if(res.status !== 201) setSubmitted(false)
-  if(res.status === 201) dispatchUser({ type: ACTIONS.RESET_FORM, emptyUser })
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-  setCurrentForm(res?.currentForm || 1)
-}
+  useEffect(() => { feedback.message && setTimeout(() => setFeedback({}), 7000); }, [feedback])
 
   return (
     <div
       className="h-[100vh] min-h-fit w-full bg-gray-100 px-5 py-10">
       <form 
-        onSubmit={ (e) => handleFormSubmission(e) }
+        onSubmit={ handleSubmit }
         autoComplete="off"
         autoCapitalize="on"
         tabIndex={1}

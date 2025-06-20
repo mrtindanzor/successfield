@@ -1,41 +1,41 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import useAuth from '../../Contexts/AuthenticationContext'
 import { EyeOff, Eye } from 'lucide-react'
+import { useSelector, useDispatch } from 'react-redux'
+import { login } from '../../Slices/userSlice'
 import DisplayNotification from '../DisplayNotification'
 import LoginQuestion from './LoginQuestion'
 import SubmitButton from '../SubmitButton'
 
 export default function Login(){
+  const dispatch = useDispatch()
   const [ submitted, setSubmitted ] = useState(false)
   const [ credentials, setCredentials ] = useState({ email: '', password: '' })
   const [ isPassVisible, setIsPassVisible ] = useState(false)
   const [ feedback, setFeedback ] = useState({})
   const navigate = useNavigate()
-  const { login } = useAuth()
-
-  async function handleFormSubmission(e){
+  const handleSubmit = useCallback (async e => {
     e.preventDefault()
-
+    
     try{
       setSubmitted(true)
-      const res = await login(credentials, navigate)
-      if(!res) throw Error('Something went wrong')
-      if(res){
-        if(!res.status || res.status !== 200) throw Error(res.msg)
-        setFeedback({ success: true, message: res.msg })
-      }
+      const res = await dispatch(login(credentials)).unwrap()
+      if(res.status !== 200) throw Error(res.msg)
+      setFeedback({ success: true, message: res.msg })
+      navigate('/')
     } catch(err){
-      setFeedback({ error: true, message: err.message })
+      setFeedback({ error: true, message: err.msg })
     } finally{
       setSubmitted(false)
     }
-  }
+  }, [credentials])
 
   return (
     <div
       className="w-full h-[100vh] bg-gray-100 py-10 px-5 tuffy">
-      <form onSubmit={ (e) => handleFormSubmission(e) } className="relative grid gap-10 bg-white w-full sm:max-w-[600px] rounded-xl py-5 sm:py-10 px-5 py-10 sm:mx-auto md:px-10 pb-20 drop-shadow-md">
+      <form 
+        onSubmit={ handleSubmit } 
+        className="relative grid gap-10 bg-white w-full sm:max-w-[600px] rounded-xl py-5 sm:py-10 px-5 py-10 sm:mx-auto md:px-10 pb-20 drop-shadow-md">
         { feedback.message && <DisplayNotification { ...{ feedback } } /> }
         <h3 className=" text-xl text-center border-2 font-semibold border-black py-2 rounded-md text-black">
           Login to Successfield

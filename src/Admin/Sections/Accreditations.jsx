@@ -1,5 +1,6 @@
 import { useMemo, useReducer, useState, useCallback } from "react"
-import useServerUri from "../../Contexts/baseServer"
+import { useSelector } from 'react-redux'
+import { serverUriSelector } from '../../Slices/settingsSlice'
 import DisplayNotification from "../../Components/DisplayNotification"
 import { CloudUpload } from "lucide-react"
 import { useSetFeedback } from "../Home/AdminHome"
@@ -47,16 +48,12 @@ const InputField = ({ title, file, value, index, position, dispatch }) => {
         } }
         />
       
-      { file && <div
-          className=""
-          >
-            <CloudUpload
-          className="bg-green-500 w-30 h-10 p-2 rounded text-white cursor-pointer"
-          />
-          { file && image && <span
-              className="text-lg font-bold text-green-600"
-              > Image selected </span> }
-          </div> }
+      { file && <div >
+          <CloudUpload
+            className="bg-green-500 w-30 h-10 p-2 rounded text-white cursor-pointer" />
+            { file && image && <span
+                className="text-lg font-bold text-green-600"> Image selected </span> }
+        </div> }
     </label>
   )
 }
@@ -69,7 +66,7 @@ const AccreditationStructure = ({ currentAccreditations, operation }) => {
       image: ''
     }
   }, [])
-  const uri = useServerUri() + 'new_accreditation'
+  const uri = useSelector( serverUriSelector ) + '/new_accreditation'
   const [ submitted, setSubmitted ] = useState(false)
   const [ Accreditations, dispatchAccreditations ] = useReducer(accreditationsReducer, ( currentAccreditations ||  emptyAccreditationForm ) )
   const handleSubmit = useCallback( async e => {

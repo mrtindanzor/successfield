@@ -12,7 +12,7 @@ import VerifyCerificate from './pages/VerifyCertificate';
 import CoursesOverview from './pages/Courses/CoursesOverview';
 import NotFound from './pages/NotFound';
 import Login from './Components/Authentication/Login';
-import { PendingLoader } from "./Contexts/PendingLoaderContext";
+import { Loading } from './Components/Loader'
 import FindPro from "./pages/FindPro";
 
 //lazy components
@@ -29,15 +29,15 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route >
       <Route path="/admin" element={ <NotAuthenticated>
-                                          <OnlyAdmin>
-                                            <Suspense fallback={ <PendingLoader /> }>
-                                              <AdminHome />
-                                            </Suspense>
-                                          </OnlyAdmin> 
-                                        </NotAuthenticated> }
+          <OnlyAdmin>
+            <Suspense fallback={ <Loading /> }>
+              <AdminHome />
+            </Suspense>
+          </OnlyAdmin> 
+        </NotAuthenticated> }
 
-                                      errorElement={ <ErrorElement /> }
-                                       />
+        errorElement={ <ErrorElement /> }
+      />
                                     
       <Route path='/' element={ <LayoutOne /> } errorElement={ <ErrorElement /> } >
                                 
@@ -49,43 +49,43 @@ const router = createBrowserRouter(
 
         <Route path='verify' element={ <VerifyCerificate /> } />
 
-        <Route path='faqs' element={ <Suspense fallback={ <PendingLoader /> }>
-                                        <Faq />
-                                      </Suspense> } />
+        <Route path='faqs' element={ <Suspense fallback={ <Loading /> }>
+            <Faq />
+          </Suspense> } />
                                                     
         <Route path='courses' element={ <CoursesOverview /> } />
                                                     
-        <Route path='accreditations' element={ <Suspense fallback={ <PendingLoader /> }>
-                                                  <Accreditations />
-                                                </Suspense> } />
+        <Route path='accreditations' element={ <Suspense fallback={ <Loading /> }>
+            <Accreditations />
+          </Suspense> } />
                                         
-        <Route path='courses/:course' element={ <Suspense fallback={ <PendingLoader /> }>
-                                                  <Course />
-                                                </Suspense> } />
+        <Route path='courses/:course' element={ <Suspense fallback={ <Loading /> }>
+            <Course />
+          </Suspense> } />
                                                 
-        <Route path='courses/:course/:module' element={ <NotAuthenticated> 
-                                                          <Suspense fallback={ <PendingLoader /> }>
-                                                            <OnlyAuthorizedForModule>
-                                                              <Module /> 
-                                                            </OnlyAuthorizedForModule>
-                                                          </Suspense>
-                                                        </NotAuthenticated> } />
+        <Route path='courses/:course/module' element={ <NotAuthenticated> 
+            <Suspense fallback={ <Loading /> }>
+              <OnlyAuthorizedForModule>
+                <Module /> 
+              </OnlyAuthorizedForModule>
+            </Suspense>
+          </NotAuthenticated> } />
                                                         
         <Route path='users/join' element={ <SignedIn>
-                                              <Suspense fallback={ <PendingLoader /> }>
-                                                <Registration />
-                                              </Suspense>
-                                            </SignedIn> } />
+            <Suspense fallback={ <Loading /> }>
+              <Registration />
+            </Suspense>
+          </SignedIn> } />
                                                         
         <Route path='users/students-area' element={ <SignedIn>
-                                                      <Login />
-                                                    </SignedIn> } />
+            <Login />
+          </SignedIn> } />
                                               
         <Route path='dashboard/profile' element={ <NotAuthenticated>
-                                                    <Suspense fallback={ <PendingLoader /> }>
-                                                      <Dashboard />
-                                                    </Suspense>
-                                                  </NotAuthenticated> } />
+            <Suspense fallback={ <Loading /> }>
+              <Dashboard />
+            </Suspense>
+          </NotAuthenticated> } />
 
         <Route path='*' element={ <NotFound /> } />
       </Route>

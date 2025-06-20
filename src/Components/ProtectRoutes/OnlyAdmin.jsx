@@ -1,21 +1,22 @@
 import { useEffect } from "react";
-import useAuth from "../../Contexts/AuthenticationContext";
 import { useNavigate } from "react-router-dom";
-import { PendingLoading } from "../../Hooks/PendingLoader";
+import { useSelector } from 'react-redux'
+import { userSelector } from '../../Slices/userSlice'
+import { Loading } from '../../Components/Loader'
 
 
 export default function OnlyAdmin({ children }){
-  const { currentUser } = useAuth()
+  const { user } = useSelector( userSelector )
   const navigate = useNavigate()
 
   useEffect(() => {
-    if(currentUser && !currentUser.admin) {
+    if(user && !user.admin) {
       
       navigate('/', { replace: true })
     }
-  }, [currentUser])
+  }, [user])
 
-  if(currentUser && currentUser.admin){
+  if(user && user.admin){
 
     return <> { children } </>
   }

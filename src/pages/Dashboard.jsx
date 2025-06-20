@@ -1,16 +1,18 @@
 import { useEffect, useReducer, useMemo, useState, useCallback } from 'react'
-import useAuth from '../Contexts/AuthenticationContext'
+import { useSelector, useDispatch } from 'react-redux'
+import { userSelector } from '../Slices/userSlice'
+import { getCourseByCode } from '../Slices/coursesSlice'
 import { capitalize } from '../core'
 import MainList from '../Components/ProfileItems/MainList'
 import SubList from '../Components/ProfileItems/SubList'
-import Details from '../Components/ProfileItems/Details/Details'
-import { PendingLoading } from '../Hooks/PendingLoader'
+import Details from '../Components/ProfileItems/Details'
+import { Loading } from '../Components/Loader'
 import { User } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router-dom'
-import Name from "../Components/ProfileItems/Details/Name/Name";
-import Email from "../Components/ProfileItems/Details/Email/Email";
-import PhoneNumber from "../Components/ProfileItems/Details/PhoneNumber/PhoneNumber";
-import ChangePassword from "../Components/ProfileItems/Details/Password/ChangePassword/ChangePassword";
+import Name from "../Components/ProfileItems/Name";
+import Email from "../Components/ProfileItems/Email";
+import PhoneNumber from "../Components/ProfileItems/PhoneNumber";
+import ChangePassword from "../Components/ProfileItems/ChangePassword";
 import Certificate from "../Components/Certificate";
 
 const ACTIONS = {
@@ -33,50 +35,58 @@ function AdminPanel(){
 }
 
 export default function Dashboard(){
-  const { currentUser, userFullName, userPhoto  } = useAuth()
-  const { certificates } = useAuth()
+  const dispatch = useDispatch()
+  const [ myCourses, setMyCourses ] = useState([])
+  const { user, courses, userFullName, certificates, userPhoto  } = useSelector( userSelector )
   const [ isLoaded, setIsLoaded ] = useState(false)
   const mainListItems = useMemo(() => {
     const m = [
-                {
-                  title: 'Account Information',
-                  list: [
-                          { 
-                            subList: 'Name',
-                            section: <Name />
-                          },
-                          { 
-                            subList: 'Email',
-                            section: <Email />
-                          },
-                          { 
-                            subList: 'Phone number', 
-                            section: <PhoneNumber />
-                          },
-                          { 
-                            subList: 'Change password',
-                            section: <ChangePassword />
-                          },
-                        ],
-                },
-                {
-                  title: 'My Certificates',
-                  list: certificates?.length ? certificates.map((certificate) => {
-                    return {
-                      subList: certificate.programme,
-                      section: <Certificate key={ certificate._id } { ...{ certificate } } />
-                    }
-                  }) : [],
-                  message: !certificates ? 'You do not have any certificates' : null
-                },
-                {
-                  title: 'Log out',
-                  Logout: true
-                }
-              ]
+      {
+        title: 'Account Information',
+        list: [
+          { 
+            subList: 'Name',
+            section: <Name />
+          },
+          { 
+            subList: 'Email',
+            section: <Email />
+          },
+          { 
+            subList: 'Phone number', 
+            section: <PhoneNumber />
+          },
+          { 
+            subList: 'Change password',
+            section: <ChangePassword />
+          },
+        ],
+      },
+      {
+        title: 'My Certificates',
+        list: certificates?.length ? certificates.map((certificate) => {
+          return {
+            subList: certificate.programme,
+            section: <Certificate key={ certificate._id } { ...{ certificate } } />
+          }
+        }) : [],
+        message: !certificates ? 'You do not have any certificates' : null
+      },
+      {
+        title: 'My Courses',
+        list: courses ? courses.map((course) => {
+          return {
+            subList: course,
+            link: true
+          }
+        }) : [],
+        message: !courses ? 'You have not been enrolled in any course.' : null
+      },
+      { title: 'Log out', Logout: true }
+    ]
 
   return m
-  }, [certificates])
+  }, [user, certificates, courses])
   const [currentLocation, setCurrentLocation] = useSearchParams()
   const dispatchNavigationManager = useCallback((action) => {
     let m = String(currentLocation.get('m') ?? '')
@@ -120,10 +130,10 @@ export default function Dashboard(){
   const listProps = useMemo(() => ({ ACTIONS, currentLocation, dispatchNavigationManager, mainListItems }), [certificates, currentLocation])
 
   useEffect(() => {
-    if(userFullName) document.title = capitalize('Dashboard - ' + userFullName )
+    if(userFullName) document.title = capitalize('Successfield | ' + userFullName )
   }, [userFullName])
 
-  if(!currentUser) return <PendingLoading />
+  if(!user) return <Loading />
   
   return (
     <main-content
@@ -142,11 +152,11 @@ export default function Dashboard(){
         }
         <div className='grid gap-3'>
           <b className=' text-gray-950 texturina text-3xl '> { userFullName } </b>
-          <span className=" uppercase text-base text-gray-400 font-bold "> <span>Student ID: </span>{ currentUser.studentNumber } </span>
-          { currentUser.admin && <AdminPanel />  }
+          <span className=" uppercase text-base text-gray-400 font-bold "> <span>Student ID: </span>{ user.studentNumber } </span>
+          { user.admin && <AdminPanel />  }
         </div>
       </div>
-      <div className="w-full md:flex mx-auto  md:bg-gray-100">
+      <div className="w-full md:flex mx-auto px-5 sm:px-8 md:px-0  md:bg-gray-100">
         <MainList { ...{ ...listProps } } />
         <SubList { ...{ ...listProps } } />
         <Details { ...{ ...listProps } } />

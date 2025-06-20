@@ -1,14 +1,15 @@
 import CourseCard from "../../Components/CourseCard";
-import useCourses from "./../../Contexts/CoursesContext";
+import { useSelector } from 'react-redux'
+import { coursesListSelector } from '../../Slices/coursesSlice'
 import { useMemo } from "react";
 
 export default function CoursesOverview(){
-  const { coursesList } = useCourses()
+  const coursesList = useSelector( coursesListSelector )
   const Content = useMemo(() => {
     const c = {
-                description: `Successfield College offers high-impact professional courses designed for ambitious leaders like you. From Executive Certificates to Doctorates, our programs equip you with the skills and credentials to thrive in today's fast-paced world. Explore our courses and take your career to the next level!`
-              }
-              return c
+      description: `Successfield College offers high-impact professional courses designed for ambitious leaders like you. From Executive Certificates to Doctorates, our programs equip you with the skills and credentials to thrive in today's fast-paced world. Explore our courses and take your career to the next level!`
+    }
+    return c
   }, [])
 
   return (

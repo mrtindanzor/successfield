@@ -1,20 +1,21 @@
 import { useNavigate } from "react-router-dom";
-import useAuth from "../../Contexts/AuthenticationContext";
 import { useEffect } from "react";
-import { PendingLoading } from './../../Hooks/PendingLoader';
+import { useSelector, useDispatch } from 'react-redux'
+import { userSelector } from '../../Slices/userSlice'
+import { Loading } from '../Loader'
 
 
 export default function SignedIn({ children }){
   const navigate = useNavigate()
-  const { isLoggedIn, initialFetch } = useAuth()
+  const { isLoggedIn, loading } = useSelector( userSelector )
 
   useEffect(() => {
-    if(!initialFetch && isLoggedIn)  navigate('/', { replace: true })
-  }, [isLoggedIn, initialFetch])
+    if(!loading && isLoggedIn)  navigate('/', { replace: true })
+  }, [isLoggedIn, loading])
 
-  if(!initialFetch && !isLoggedIn) return <> { children } </>
+  if(!loading && !isLoggedIn) return children
 
   return(
-    <PendingLoading />
+    <Loading />
   )
 }

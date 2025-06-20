@@ -1,21 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import useAuth from "./../../Contexts/AuthenticationContext";
 import { useEffect } from "react";
-import { PendingLoading } from "../../Hooks/PendingLoader";
+import { useSelector } from 'react-redux'
+import { userSelector } from '../../Slices/userSlice'
+import { Loading } from '../../Components/Loader'
 
 
 export function NotAuthenticated({ children }){
-  const { isLoggedIn, initialFetch } = useAuth()
+  const { isLoggedIn, loading } = useSelector( userSelector )
   const navigate = useNavigate()
   
   useEffect(() => {
-    if(!initialFetch && !isLoggedIn) navigate('/users/students-area', { replace: true })
+    if(!loading && !isLoggedIn) navigate('/users/students-area', { replace: true })
 
-  }, [isLoggedIn, initialFetch])
+  }, [isLoggedIn, loading])
 
-  if(!initialFetch && isLoggedIn){
-    return <>{ children }</>
-  }
+  if(!loading && isLoggedIn) return children
   
-  return <PendingLoading />
+  return <Loading />
 }

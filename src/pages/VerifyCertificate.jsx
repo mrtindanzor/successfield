@@ -2,14 +2,14 @@ import { useRef, useState, useCallback } from 'react'
 import DisplayNotification from '../Components/DisplayNotification'
 import SubmitButton from '../Components/SubmitButton'
 import axios from "axios";
-import useServerUri from '../Contexts/baseServer'
-
+import { serverUriSelector } from '../Slices/settingsSlice'
+import { useSelector } from 'react-redux'
 export default function VerifyCerificate(){
   const [ submitted, setSubmitted ] = useState(false)
   const [ feedback, setFeedback ] = useState({})
   const [ certificateCode, setCertificateCode ] = useState('')
   const certificateCodeRef = useRef('')
-  const uri = useServerUri() + 'verify-certificate'
+  const uri = useSelector( serverUriSelector ) + 'verify-certificate'
   const [ details, setDetails ] = useState('')
   const [ invalid, setInvalid ] = useState(false)
   const resetDetailsAndInvalid = useCallback(() => {

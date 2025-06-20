@@ -1,4 +1,5 @@
 import { ChevronRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { useMemo } from 'react'
 
 export default function SubList({ ACTIONS, currentLocation, dispatchNavigationManager, mainListItems }){
@@ -18,23 +19,34 @@ export default function SubList({ ACTIONS, currentLocation, dispatchNavigationMa
     return li
   }, [currentLocation, mainListItems])
 
-  return (
-    <>
-      {
-        <ul className={ classes }>
-          { mainListItems[main] && mainListItems[main].message }
-          { 
-            mainListItems[main]?.list && mainListItems[main].list.map((item, index) => {
-            return <li key={ index } 
+  return ( 
+    <ul className={ classes }>
+      { mainListItems[main] && mainListItems[main].message }
+      { mainListItems[main]?.list && mainListItems[main].list.map((item, index) => {
+        return (
+          <>
+            { item.link ? <li key={ index }>
+              <Link
+                className={ `${ liClasses } grid items-center grid-cols-[1fr_auto] gap-3` }
+                to={{
+                  pathname: `/courses/${ item.subList.split(' ').join('_') }`
+                }}>
+                { item.subList }
+                <ChevronRight
+                  className="w-6 h-6"
+                />
+              </Link>
+          </li> :
+          <li 
+            key={ index } 
             className={ `${ liClasses }  ${ index == sub ? 'md:bg-gray-950 md:!text-white' : '' } ` } 
             onClick={ (e) => dispatchNavigationManager({ type: ACTIONS.SET_CURRENT_SUB_LIST, index }) }>
-              { item.subList }
-              <ChevronRight />
-              </li>
-          }) }
-        </ul>
-      }
-    </>
-    
+            { item.subList }
+            <ChevronRight />
+            </li> }
+          </>
+        )
+      }) }
+    </ul> 
   )
 }

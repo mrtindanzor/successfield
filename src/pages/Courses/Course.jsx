@@ -1,26 +1,29 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
-import useCourses from "../../Contexts/CoursesContext";
-import usePendingLoader from "../../Contexts/PendingLoaderContext";
+import { useSelector, useDispatch } from 'react-redux'
+import { 
+  coursesListSelector,
+  getCourse
+ } from '../../Slices/coursesSlice'
+import { setLoader } from '../../Slices/settingsSlice'
+import { Loading } from '../../Components/Loader'
 import { formatUrl } from "../../core";
-import { PendingLoading } from '../../Hooks/PendingLoader';
 
 export default function Course(){
+  const dispatch = useDispatch()
   const [currentCourse, setCurrentCourse] = useState(null)
-  const { getCourse, coursesList } = useCourses()
-  const { setIsPendingLoading } = usePendingLoader()
+  const coursesList = useSelector( coursesListSelector )
   let { course } = useParams()
   course = formatUrl(course)
+  const getCurrentCourse = useCallback( async () => {
+    setLoader(true)
+    const findCourse = await dispatch( getCourse(course) ).unwrap()
+    setCurrentCourse( findCourse )
+    setLoader(false)
+  }, [course, coursesList] )
 
   useEffect(() => {
-    setIsPendingLoading(true)
-    if(coursesList.length > 0){
-      const findCourse = getCourse(course)
-      setCurrentCourse({
-        ...findCourse
-      })
-      setIsPendingLoading(false)
-    }
+    if(coursesList.length > 0) getCurrentCourse()
   },[course, coursesList])
 
   return (
@@ -57,7 +60,7 @@ export default function Course(){
             objectives: currentCourse.objectives, 
             modules: currentCourse.modules, 
             benefits: currentCourse.benefits } } />
-        </> : <PendingLoading />
+        </> : <Loading />
       }
     </section>
   )

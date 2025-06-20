@@ -1,13 +1,19 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
-import useAuth from './../../Contexts/AuthenticationContext'
+import { logout } from '../../Slices/userSlice'
+import { useDispatch } from 'react-redux'
 
 export default function MainList({ ACTIONS, dispatchNavigationManager, currentLocation, mainListItems }){
-  const { logout } = useAuth()
+
+  const dispatch = useDispatch()
+
   let main = useMemo(() => dispatchNavigationManager({ type: ACTIONS.GET_MAIN_LIST }), [currentLocation] )
+
   let sub = useMemo(() => dispatchNavigationManager({ type: ACTIONS.GET_SUB_LIST }), [currentLocation] )
+
   const handleBackBtn = useCallback(() => {
     if(sub) return dispatchNavigationManager({ type: ACTIONS.BACK_TO_MAIN_LIST })
+
     dispatchNavigationManager({ type: ACTIONS.BACK_TO_DASHBOARD })
   }, [currentLocation])
 
@@ -22,15 +28,22 @@ export default function MainList({ ACTIONS, dispatchNavigationManager, currentLo
       {
         mainListItems.map((item, index) => {
           return <li 
+            tabIndex={0}
             key={ index } 
             className={`flex gap-3 justify-between items-center hover:bg-gray-500 
               hover:text-white cursor-pointer md:text-gray-950 w-full  p-2 not-last:border-b-1 text-base
               border-b-gray-300 ${ index == main ? 'md:bg-gray-950 md:!text-white' : '' }
             `} 
-          onClick={ (e) => {
-            if(item.Logout) logout()
-            if(!item.Logout) dispatchNavigationManager({ type: ACTIONS.SET_CURRENT_MAIN_LIST, index })
-          } }>
+            onKeyDown={ (e) => {
+              if(e.key === 'Enter'){
+                if(item.Logout) dispatch( logout() )
+                if(!item.Logout) dispatchNavigationManager({ type: ACTIONS.SET_CURRENT_MAIN_LIST, index })
+              }
+            } }
+            onClick={ (e) => {
+              if(item.Logout) dispatch( logout() )
+              if(!item.Logout) dispatchNavigationManager({ type: ACTIONS.SET_CURRENT_MAIN_LIST, index })
+            } }>
             { item.title }
             { !item.Logout && <ChevronRight /> } 
           </li>

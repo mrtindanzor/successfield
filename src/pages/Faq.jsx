@@ -1,21 +1,22 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ChevronDown } from "lucide-react"
-import useServerUri from '../Contexts/baseServer'
+import { useSelector, useDispatch } from 'react-redux'
+import { 
+  faqsSelector,
+  getFaqs
+ } from '../Slices/FaqsSlice'
+import { Loading } from '../Components/Loader'
 import axios from 'axios'
 
 export default function Faq(){
-  const [ faqs, setFaqs ] = useState()
-  const uri = useServerUri() + 'faqs'
-  const getFaqs = useCallback( async () => {
-    try{
-      const res = await axios.post(uri)
-      setFaqs( res.data.faqs )
-    } catch(error){ }
-  }, [])
+  const dispatch = useDispatch()
+  const { faqs, loading } = useSelector( faqsSelector )
 
   useEffect(() => {
-    getFaqs()
+    dispatch( getFaqs() )
   }, [])
+
+  if(loading) return <Loading />
 
   return (
     <main-content

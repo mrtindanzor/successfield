@@ -13,10 +13,8 @@ export default function Details({ ACTIONS, currentLocation, dispatchNavigationMa
     <>
       {
         sub && mainListItems[main].list && mainListItems[main].list[sub] ? <div className={ classes }>
-                          { 
-                            mainListItems[main].list[sub].section
-                          }
-                        </div> : null
+          { mainListItems[main].list[sub].section }
+        </div> : null
       }
     </>
   )

@@ -1,8 +1,9 @@
 import { useEffect, useMemo } from "react";
 import { Link, NavLink } from "react-router-dom";
-import useCourses from "../Contexts/CoursesContext";
+import { useSelector } from 'react-redux'
+import { userSelector } from '../Slices/userSlice'
+import { coursesListSelector } from '../Slices/coursesSlice'
 import { ChevronLeft, ChevronRight, FileText, X } from "lucide-react";
-import useAuth from "../Contexts/AuthenticationContext";
 
 export function MenuButton({ navbarActive, setNavbarActive }){
   
@@ -27,8 +28,8 @@ export function MenuButton({ navbarActive, setNavbarActive }){
 }
 
 export default function Navbar({ coursesActive, setCoursesActive, navbarActive, setNavbarActive }){
-  const { coursesList } = useCourses()
-  const { isLoggedIn } = useAuth()
+  const coursesList = useSelector( coursesListSelector )
+  const { isLoggedIn } = useSelector( userSelector )
   
   const MenuItems = [
     { title: 'Home', },

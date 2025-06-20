@@ -1,53 +1,40 @@
 import { useEffect , useMemo, useState, useCallback } from "react"
-import useAuth from "../../Contexts/AuthenticationContext"
-import { useSetAlert } from "../../Hooks/Alerter"
-import { PendingLoading } from "../../Hooks/PendingLoader"
 import { useNavigate, useParams } from "react-router-dom"
 import { formatUrl } from "../../core"
-import useCourses from "../../Contexts/CoursesContext"
+import { 
+  coursesListSelector,
+  getCourse
+ } from '../../Slices/coursesSlice'
+import { useSelector, useDispatch } from 'react-redux'
+import { userSelector } from '../../Slices/userSlice'
+import { setAlertMessage } from '../../Slices/settingsSlice'
+import { Loading } from '../Loader'
 
 export default function OnlyAuthorizedForModule({ children }) {
+  const { user, courses } = useSelector( userSelector )
   let { course } = useParams()
-  const { getCourse, coursesList } = useCourses()  
+  const coursesList = useSelector( coursesListSelector )  
   const [ authorized, setAuthorized ] = useState(null)
-  const setMsg = useSetAlert()
   const navigate = useNavigate()
-  let courseCode = useMemo(() => {
-    let c 
-    if(coursesList.length > 0) c = getCourse(formatUrl(course), 'course').courseCode.toLowerCase()
-    return c
-  }, [course, coursesList])
-  const getCoursesOfStudent = useCallback( async () => {
-    if(courseCode){
-      if(currentUser.courses?.includes(courseCode)) setAuthorized({ status: 200 })
-
-      if(!currentUser.courses?.includes(courseCode)){
-        const res = await checkIfStudentIsAuthorizedForCourse(courseCode)
-        switch (res.status) {
-          case 200:
-            setAuthorized(res)
-            setCurrentUser( user => ({
-              ...user,
-              courses: Array.from(new Set([ ...(user.courses || []), courseCode]))
-            }))
-          break;
-        
-          default:
-            setMsg(res.msg || 'Error authorizing you try again later')
-            navigate('/users/students-area')
-        }
-      }
-    }
-  }, [courseCode])
-  const { checkIfStudentIsAuthorizedForCourse, currentUser, setCurrentUser } = useAuth()
+  
+  const checkAuthorization = useCallback( async () => {
+    if(!coursesList || !courses) return
+    const _c = formatUrl(course).toLowerCase()
+    const find = coursesList.find( course => course.course === _c )
+    if(!find){
+      setAlertMessage((res.msg || 'Error authorizing you try again later'))
+      return navigate('/', { replace: true })
+    } 
+    setAuthorized(true)
+  }, [coursesList, courses, courses])
 
   useEffect(() => {
-    getCoursesOfStudent()
-  }, [courseCode])
+    checkAuthorization()
+  }, [coursesList, courses, courses])
   
-  if(authorized && authorized.status === 200) return <> { children } </>
+  if(authorized) return children
 
   return (
-     <PendingLoading />
+     <Loading />
   )
 }

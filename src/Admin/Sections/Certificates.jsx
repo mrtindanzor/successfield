@@ -1,9 +1,8 @@
 import { useMemo, useReducer, useState } from "react"
-import useServerUri from "../../Contexts/baseServer"
-import usePendingLoader from "../../Contexts/PendingLoaderContext"
-import { useSetAlert } from "../../Hooks/Alerter"
+import { useSelector, useDispatch } from 'react-redux'
+import { serverUriSelector, setLoader } from '../../Slices/settingsSlice'
+import { coursesListSelector } from '../../Slices/coursesSlice'
 import { Info } from "lucide-react"
-import useCourses from "../../Contexts/CoursesContext"
 import { useSetFeedback } from "../Home/AdminHome"
 import axios from "axios"
 
@@ -61,17 +60,17 @@ export function AddCertificate(){
 }
 
 export function EditCertificate(){
+  const dispatch = useDispatch()
   const [ currentCertificate, setCurrentCertificate ] = useState()
   const [ studentNumber, setStudentNumber ] = useState(null)
-  const serverUri = useServerUri()
-  const { setIsPendingLoading } = usePendingLoader()
+  const serverUri = useSelector( serverUriSelector)
   const setFeedback = useSetFeedback()
 
   async function findStudent(e) {
     e.preventDefault()
 
-    setIsPendingLoading(true)
-    const uri = serverUri + 'certificate'
+    dispatch( setLoader(true) )
+    const uri = serverUri + '/certificate'
 
     try{
       const res = await axios.patch(uri, { studentNumber, operation: 'findCertificate' })
@@ -87,7 +86,7 @@ export function EditCertificate(){
     } catch(err){
         setFeedback({ error: true, message: err.message })
     } finally{
-      setIsPendingLoading(false)
+      dispatch( setLoader(false) )
     }
   }
 
@@ -109,10 +108,10 @@ export function EditCertificate(){
 }
 
 function CertificateStructure({ currentCertificate, operation }){
-  const serverUri = useServerUri()
+  const dispatch = useDispatch()
+  const serverUri = useSelector( serverUriSelector)
   const setFeedback = useSetFeedback()
-  const { coursesList } = useCourses()
-  const { setIsPendingLoading } = usePendingLoader()
+  const coursesList = useSelector( coursesListSelector )
   const emptyCertificate = useMemo(() => [ {
     courseCode: '',
     studentNumber: '',
@@ -123,8 +122,8 @@ function CertificateStructure({ currentCertificate, operation }){
   async function handleCertificateSubmit(e) {
     e.preventDefault()
 
-    setIsPendingLoading(true)
-    const uri = serverUri + 'certificate'
+    dispatch( setLoader(true) )
+    const uri = serverUri + '/certificate'
 
     try{
       const res = await axios.patch(uri, { certificates, operation })
@@ -149,7 +148,7 @@ function CertificateStructure({ currentCertificate, operation }){
     } catch(err){
         setFeedback({ error: true, message: err.message || 'Something went wrong' })
     } finally {
-        setIsPendingLoading(false)
+       dispatch( setLoader(false) )
     }
 
   }

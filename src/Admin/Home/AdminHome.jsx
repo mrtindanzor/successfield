@@ -1,10 +1,11 @@
 // STYLES //
 import { useMemo, useCallback, useEffect, useState, useContext, createContext, useRef } from 'react';
-import { PendingLoader } from '../../Contexts/PendingLoaderContext';
+import Loader from '../../Components/Loader';
 import Header from '../Components/Header';
 import Navbar from '../Components/Navbar';
 import { useSearchParams } from 'react-router-dom';
-import { AddCourse, EditCourse, Modules } from '../Sections/Courses'
+import { AddCourse, EditCourse } from '../Sections/Courses'
+import { AddModule, EditModule } from '../Sections/Modules'
 import { AddCertificate, EditCertificate } from '../Sections/Certificates'
 import { PromptContextProvider, Prompter } from './../Components/Prompt'
 import { Applications, CourseRegistration } from '../Sections/RegistrationCenter';
@@ -24,8 +25,14 @@ export default function AdminHome(){
         title: 'Courses',
         sub: [
           { title: 'Add courses', section: <AddCourse /> },
-          { title: 'Edit courses', section: <EditCourse /> },
-          { title: 'Modules', section: <Modules /> }
+          { title: 'Edit courses', section: <EditCourse /> }
+        ]
+      },
+      { 
+        title: 'Modules',
+        sub: [
+          { title: 'Add', section: <AddModule /> },
+          { title: 'Edit', section: <EditModule /> }
         ]
       },
       { 
@@ -44,7 +51,9 @@ export default function AdminHome(){
       },
       { 
         title: 'Students', 
-        section: <Students /> 
+        sub: [
+          { title: 'Students', section: <Students />  }
+        ]
       },
       { 
         title: 'Accreditations', 
@@ -78,32 +87,30 @@ export default function AdminHome(){
   return (
     <PromptContextProvider>
       <Prompter />
-      <PendingLoader />
       <FeedbackContext.Provider value={ setFeedback }>
-         <div 
-          className="grid h-fit min-h-[100vh] grid-rows-[auto_auto_1fr] md:grid-rows-[auto_1fr] md:grid-cols-[auto_1fr] bg-white gap-x-5"
+        <div 
+        className="grid h-fit min-h-[100vh] tuffy grid-rows-[auto_auto_1fr] md:grid-rows-[auto_1fr] md:grid-cols-[auto_1fr] bg-white gap-x-5"
+        >
+        <Header />
+        <Navbar { ...{ setCurrentPage, NavLinks, mainSection } } />
+        <div
+          className={`grid ${ feedback.message ? 'grid-rows-[auto_auto_1fr]' :'grid-rows-[auto_1fr]' } bg-white rounded px-5 sm:px-8 md:px-10 py-3 gap-5 sm:gap-8 md:gap-10`}
           >
-          <Header />
-          <Navbar { ...{ setCurrentPage, NavLinks, mainSection } } />
-          <div
-            className={`grid ${ feedback.message ? 'grid-rows-[auto_auto_1fr]' :'grid-rows-[auto_1fr]' } bg-white rounded px-5 sm:px-8 md:px-10 py-3 gap-5 sm:gap-8 md:gap-10`}
-            >
-              { feedback.message && <DisplayNotification { ...{ feedback } } /> }
-              { mainSection && NavLinks[mainSection].sub && <ul className="flex flex-wrap gap-3">
-                  { NavLinks[mainSection].sub.map((sub, subIndex) => {
-                    return <li
-                      className={`px-4 py-2 whitespace-nowrap w-fit sm:text-lg rounded cursor-pointer text-white font-bold hover:!bg-black/60 ${ subIndex == subSection ? 'bg-gray-950' : 'bg-gray-400' }`}
-                      onClick={ () => setSubPage(subIndex) }
-                      key={ subIndex }
-                      >
-                        { sub.title }
-                    </li>
-              }) }
-                </ul> }
-              { !subSection && mainSection && NavLinks[mainSection].section }
-              { subSection && mainSection && NavLinks[mainSection] && NavLinks[mainSection].sub && NavLinks[mainSection].sub[subSection].section }
-          </div>
+            { feedback.message && <DisplayNotification { ...{ feedback } } /> }
+            { mainSection && NavLinks[mainSection].sub?.length > 1 && <ul className="flex flex-wrap gap-3">
+              { NavLinks[mainSection].sub.map((sub, subIndex) => {
+                return <li
+                  className={`px-4 py-2 whitespace-nowrap text-center min-w-30 md:min-w-40 w-fit sm:text-lg rounded cursor-pointer text-white font-bold hover:!bg-black/60 ${ subIndex == subSection ? 'bg-gray-950' : 'bg-gray-400' }`}
+                  onClick={ () => setSubPage(subIndex) }
+                  key={ subIndex }
+                  >
+                    { sub.title }
+                </li>
+            }) }
+              </ul> }
+            { subSection && mainSection && NavLinks[mainSection] && NavLinks[mainSection].sub && NavLinks[mainSection].sub[subSection].section }
         </div>
+      </div>
       </FeedbackContext.Provider>
     </PromptContextProvider>
   )
