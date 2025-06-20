@@ -16,6 +16,7 @@ const store = configureStore({
     settings: settingsSlice,
     courses: coursesSlice,
     accreditations: accreditationsSlice,
+    faqs: faqsSlice,
     admin: adminSlice
   }
 })
