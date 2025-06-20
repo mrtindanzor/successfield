@@ -1,7 +1,7 @@
 {
   "name": "successfield-react",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.5.0",
   "author": "Mr. Simon Tindanzor",
   "type": "module",
   "scripts": {
@@ -35,7 +35,7 @@
     "postcss": "^8.5.3",
     "vite": "^6.2.0"
   },
-  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "description": "The official successfield college web app",
   "main": "eslint.config.js",
   "repository": {
     "type": "git",
