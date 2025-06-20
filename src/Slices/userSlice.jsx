@@ -179,7 +179,6 @@ export const getStudentCourses = createAsyncThunk('user/courses', async (payload
 const UserSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: { },
   extraReducers: builder => {
     builder
       .addCase( getUserCertificates.fulfilled, (state, action) => {
