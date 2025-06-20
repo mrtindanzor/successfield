@@ -260,7 +260,7 @@ export function Selector({ title, dispatch, type, db, position, reducerPosition,
           {
             db.map((item, index) => {
               return <li 
-                key={ item }
+                key={ index }
                 tabIndex={0}
                 className="px-5 py-1 border-b-1 capitalize border-b-gray-300 cursor-pointer hover:bg-gray-950 hover:text-white"
                 onClick={ e => {

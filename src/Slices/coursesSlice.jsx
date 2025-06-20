@@ -9,7 +9,7 @@ const initialState = {
 export const fetchCourses = createAsyncThunk('courses/get', async (payload, thunkApi) => {
   try{
       const uri = thunkApi.getState().settings.serverUri + '/courses'
-      const res = await axios.post(uri)
+      const res = await axios.post(uri, {}, { withCredentials: true })
       const courses = res.data.courses
       return courses
     } catch(err){ }

@@ -31,13 +31,13 @@ const ACTIONS = {
 }
 
 function coursesReducer(state, action){
+  const _pos = action.position
 
   switch(action.type){
-
     case ACTIONS.COURSE.FILL_MAIN_INPUT:
       return {
         ...state,
-        [action.position]: action.value
+        [_pos]: _pos === 'hidden' ?  action.value === 'Yes' ? true : false : action.value
       }
 
     case ACTIONS.COURSE.FILL_SUB_INPUT:
@@ -92,7 +92,10 @@ function CourseStructure({ currentCourse, setSelectedCourse, setCurrentCourse, o
     hidden: false
   }), [])
   const [ course, courseDispatch ] = useReducer(coursesReducer, emptyCourse )
-  const hideOptions = useMemo(() => [ 'Yes', 'No' ], [])
+  const hideOptions = useMemo(() => [ 
+    { option: "Yes" },
+    { option: 'No' }
+   ], [])
   const handleCourseOperation = useCallback( async (action = operation) => {
     dispatch( setLoader(true))
     
@@ -156,10 +159,12 @@ function CourseStructure({ currentCourse, setSelectedCourse, setCurrentCourse, o
         <Selector { ...{ 
           title: 'Hidden', 
           dispatch: courseDispatch, 
-          type: ACTIONS.FILL_MAIN_INPUT, 
+          type: ACTIONS.COURSE.FILL_MAIN_INPUT, 
           db: hideOptions, 
-          position: course.hidden, 
-          reducerPosition: 'hidden' } } />
+          position: 'option', 
+          reducerPosition: 'hidden',
+          classList: '*:first:!bg-gray-950 !hover:*:first:bg-gray-800'
+          } } />
         <CourseList { ...{ title: 'certification', value: course.certificate, courseDispatch, position: 'certificate' } } />
         <CourseList { ...{ title: 'course availability', value: course.availability, courseDispatch, position: 'availability' } } />
         <CourseList { ...{ title: 'course duration', value: course.duration, courseDispatch, position: 'duration' } } />
@@ -211,7 +216,6 @@ export function CourseSeletor({ selectedCourse, setSelectedCourse }){
   const coursesList = useSelector( coursesListSelector )
   const [ activeCourse, setActiveCourse ] = useState()
   const [ courseVisible, setCoursesVisible ] = useState(false)
-  console.log(activeCourse)
 
   return(
     <ul 
