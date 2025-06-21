@@ -14,20 +14,20 @@ export default function SubList({ ACTIONS, currentLocation, dispatchNavigationMa
     }
     return c
   }, [currentLocation, mainListItems])
-  const liClasses = useMemo(() => {
-    let li = 'capitalize flex items-center justify-between cursor-pointer gap-3 p-2 not-last:border-b-1 border-b-gray-300 h-fit hover:text-white text-base hover:bg-gray-500'
-    return li
-  }, [currentLocation, mainListItems])
 
   return ( 
-    <ul className={ classes }>
+    <ul 
+      className={ classes }>
       { mainListItems[main] && mainListItems[main].message }
-      { mainListItems[main]?.list && mainListItems[main].list.map((item, index) => {
-        return (
-          <>
-            { item.link ? <li key={ index }>
+      { mainListItems[main]?.list && mainListItems[main]
+        .list.map((item, index) => {
+          return item.link ? 
+            <li key={ index }>
               <Link
-                className={ `${ liClasses } grid items-center grid-cols-[1fr_auto] gap-3` }
+                className={ `capitalize justify-between cursor-pointer p-2 not-last:border-b-1
+                  border-b-gray-300 h-fit hover:text-white text-base
+                  hover:bg-gray-500 grid items-center grid-cols-[1fr_auto] gap-3` 
+                }
                 to={{
                   pathname: `/courses/${ item.subList.split(' ').join('_') }`
                 }}>
@@ -36,17 +36,19 @@ export default function SubList({ ACTIONS, currentLocation, dispatchNavigationMa
                   className="w-6 h-6"
                 />
               </Link>
-          </li> :
-          <li 
-            key={ index } 
-            className={ `${ liClasses }  ${ index == sub ? 'md:bg-gray-950 md:!text-white' : '' } ` } 
-            onClick={ (e) => dispatchNavigationManager({ type: ACTIONS.SET_CURRENT_SUB_LIST, index }) }>
-            { item.subList }
-            <ChevronRight />
-            </li> }
-          </>
-        )
-      }) }
+            </li> :
+            <li 
+              key={ index } 
+              className={ `capitalize flex items-center justify-between cursor-pointer gap-3 p-2 not-last:border-b-1
+                border-b-gray-300 h-fit hover:text-white text-base
+                hover:bg-gray-500  ${ index == sub ? 'md:bg-gray-950 md:!text-white' : '' } `
+              } 
+              onClick={ (e) => dispatchNavigationManager({ type: ACTIONS.SET_CURRENT_SUB_LIST, index }) }>
+              { item.subList }
+              <ChevronRight />
+            </li>  
+        })
+      }
     </ul> 
   )
 }
