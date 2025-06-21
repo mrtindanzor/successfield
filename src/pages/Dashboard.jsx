@@ -27,24 +27,30 @@ const ACTIONS = {
   GET_DETAILS: 'get_details'
 }
 
-function AdminPanel(){
+function AdminPanelButton(){
 
   return (
-    <Link to='/admin' className='block py-1 px-4 rounded w-fit text-gray-800 bg-green-500 mx-auto md:mx-unset transition-border duration-300 ease-in hover:text-white hover:rounded-xl border-2 text-xl font-semibold ' > Admin Panel </Link>
+    <Link 
+      to='/admin'
+      className={`block py-1 px-4 rounded w-fit text-gray-800 bg-green-500 mx-auto md:mx-unset 
+        transition-border duration-300 ease-in hover:text-white 
+        hover:rounded-xl border-2 text-xl font-semibold`}>
+        Admin Panel 
+    </Link>
   )
 }
 
 export default function Dashboard(){
   const dispatch = useDispatch()
-  const [ myCourses, setMyCourses ] = useState([])
   const { user, courses, userFullName, certificates, userPhoto, loading  } = useSelector( userSelector )
-  const [ isLoaded, setIsLoaded ] = useState(false)
+  const [ userImageLoaded, setUserImageLoaded ] = useState(false)
+  const [currentLocation, setCurrentLocation] = useSearchParams()
+
   const mainListItems = useMemo(() => {
     const m = [
       {
         title: 'Account Information',
-        list: [
-          { 
+        list: [ { 
             subList: 'Name',
             section: <Name />
           },
@@ -59,35 +65,32 @@ export default function Dashboard(){
           { 
             subList: 'Change password',
             section: <ChangePassword />
-          },
-        ],
+        }],
       },
       {
         title: 'My Certificates',
-        list: certificates?.length ? certificates.map((certificate) => {
-          return {
+        list: certificates?.length ? certificates.map((certificate) => ({
             subList: certificate.programme,
             section: <Certificate key={ certificate._id } { ...{ certificate } } />
-          }
-        }) : [],
+          })) : [],
         message: !certificates ? 'You do not have any certificates' : null
       },
       {
         title: 'My Courses',
-        list: courses ? courses.map((course) => {
+        list: courses && courses.length > 0 ? courses.map((course) => {
           return {
             subList: course,
             link: true
           }
         }) : [],
-        message: !courses ? 'You have not been enrolled in any course.' : null
+        message: !courses || courses?.length < 1 ? 'You have not been enrolled in any course.' : null
       },
       { title: 'Log out', Logout: true }
     ]
 
   return m
   }, [user, certificates, courses])
-  const [currentLocation, setCurrentLocation] = useSearchParams()
+
   const dispatchNavigationManager = useCallback((action) => {
     let m = String(currentLocation.get('m') ?? '')
     let s = String(currentLocation.get('s') ?? '')
@@ -127,33 +130,39 @@ export default function Dashboard(){
           return d
       }
   }, [currentLocation])
+
   const listProps = useMemo(() => ({ ACTIONS, currentLocation, dispatchNavigationManager, mainListItems }), [certificates, currentLocation])
+
   const main = useMemo(() => dispatchNavigationManager({ type: ACTIONS.GET_MAIN_LIST }), [currentLocation] )
+
   useEffect(() => {
-    document.title = capitalize(`Successfield | ${ mainListItems[main]?.title }`)
+    document.title = capitalize(`Successfield | ${ mainListItems[main]?.title || userFullName || 'Profile' }`)
   }, [main])
 
   if(loading) return <Loader />
   
   return (
     <main-content
-      className="h-[100vh] w-[100vw] grid grid-rows-[auto_1fr] mx-auto"
-      > 
+      className="h-[100vh] w-[100vw] grid grid-rows-[auto_1fr] mx-auto"> 
       <div className="flex flex-col md:bg-gray-200 px-5 sm:px-8 md:px-10 w-full md:flex-row text-center items-center md:items-start md:text-left gap-5 py-4">
-        {
-          !userPhoto ? <User 
-              className="h-20 w-20 object-cover object-center-top text-gray-950 border-2 rounded-full" /> 
-              : <img 
-                  loading='lazy'
-                  onLoad={ () => setIsLoaded(true) }
-                  src={ userPhoto } 
-                  className={`${ isLoaded && '!opacity-100 transition duration-4000 ease-linear' } opacity-0 h-20 w-20 object-cover object-center-top text-gray-950 border-2 rounded-full`} 
-                  />
-        }
+        { !userPhoto ? <User 
+            className="h-20 w-20 object-cover object-center-top text-gray-950 border-2 rounded-full" /> 
+            : <img 
+                loading='lazy'
+                onLoad={ () => setUserImageLoaded(true) }
+                src={ userPhoto } 
+                className={`${ userImageLoaded && '!opacity-100 transition duration-4000 ease-linear' } 
+                opacity-0 h-20 w-20 object-cover object-center-top text-gray-950 border-2 rounded-full`} 
+              /> }
         <div className='grid gap-3'>
           <b className=' text-gray-950 texturina text-3xl '> { userFullName } </b>
-          <span className=" uppercase text-base text-gray-400 font-bold "> <span>Student ID: </span>{ user.studentNumber } </span>
-          { user.admin && <AdminPanel />  }
+          <span 
+            className=" uppercase text-base text-gray-400 font-bold "> 
+            <span>
+              Student ID: 
+            </span> { user.studentNumber } 
+          </span>
+          { user.admin && <AdminPanelButton />  }
         </div>
       </div>
       <div className="w-full md:flex mx-auto px-5 sm:px-8 md:px-0  md:bg-gray-100">
