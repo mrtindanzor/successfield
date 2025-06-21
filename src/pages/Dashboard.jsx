@@ -136,7 +136,7 @@ export default function Dashboard(){
   const main = useMemo(() => dispatchNavigationManager({ type: ACTIONS.GET_MAIN_LIST }), [currentLocation] )
 
   useEffect(() => {
-    document.title = capitalize(`Successfield | ${ mainListItems[main]?.title || userFullName || 'Profile' }`)
+    document.title = capitalize(`Successfield | ${ mainListItems[main]?.title || 'Profile' }`)
   }, [main])
 
   if(loading) return <Loader />
