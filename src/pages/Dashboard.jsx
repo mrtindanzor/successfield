@@ -28,7 +28,6 @@ const ACTIONS = {
 }
 
 function AdminPanelButton(){
-
   return (
     <Link 
       to='/admin'

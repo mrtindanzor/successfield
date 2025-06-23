@@ -23,7 +23,7 @@ export default function Students(){
         setFiltering(false)
         return students.map( _s => ({ ..._s, isVisible: true }) )
       } 
-      const keyword = _keyword.split(' ').join('-').trim()
+      const keyword = _keyword.split(' ').join('-').trim().toLowerCase()
       return students
         .map( _s => {
           const number = _s.studentNumber.toLowerCase().trim()
