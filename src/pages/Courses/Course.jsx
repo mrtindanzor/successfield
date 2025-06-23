@@ -54,21 +54,22 @@ export default function Course(){
                   Start Course
                 </Link> : null }
                 
-          <ShowList { ...{ 
-            currentCourse, 
-            outlines: currentCourse.outlines, 
-            objectives: currentCourse.objectives, 
-            modules: currentCourse.modules, 
-            benefits: currentCourse.benefits } } />
+          <ShowList { ...{ currentCourse } } />
         </> : <Loading />
       }
     </section>
   )
 }
 
-function ShowList({ currentCourse, outlines, objectives, modules, benefits }){
+function ShowList({ currentCourse }){
   const [ currentTabIndex, setCurrentTabIndex ] = useState(0)
-  const { pathname } = useLocation()
+  const list = useMemo(() => [
+    { title: 'Outlines', list: currentCourse.outlines },
+    { title: 'Benefits', list: currentCourse.benefits },
+    { title: 'Objectives', list: currentCourse.objectives },
+    { title: 'Modules', modules: currentCourse.modules },
+    { title: 'Certificate', content: currentCourse.certificate }
+  ], [currentCourse])
   const setCurrentTab = useCallback((list) => {
     let found = false
 
@@ -92,17 +93,10 @@ function ShowList({ currentCourse, outlines, objectives, modules, benefits }){
         found = true
       }
     })
-  }, [currentCourse])
-  const list = useMemo(() => [
-    { title: 'Outlines', list: outlines },
-    { title: 'Benefits', list: benefits },
-    { title: 'Objectives', list: objectives },
-    { title: 'Modules', modules: modules },
-    { title: 'Certificate', content: currentCourse.certificate }
-  ], [])
+  }, [])
   useEffect(() => {
     setCurrentTab(list)
-  }, [pathname, currentCourse, outlines, objectives, modules, benefits])
+  }, [currentCourse])
 
   return (
     <div
