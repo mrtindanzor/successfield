@@ -1,9 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import usePersister from '../utils/Persister'
+
+const [ persitcourses, getPersistedCourses ] = usePersister()
+const [ persitcoursesList, getPersistedCoursesList ] = usePersister()
 
 const initialState = {
-  courses: [],
-  coursesList: [],
+  courses: getPersistedCourses('courses') ?? [],
+  coursesList: getPersistedCoursesList('coursesList') ?? [],
 }
 
 export const fetchCourses = createAsyncThunk('courses/get', async (payload, thunkApi) => {
@@ -149,4 +153,5 @@ const CoursesSlice = createSlice({
 })
 
 export const coursesListSelector = state => state.courses.coursesList
+export const coursesSelector = state => state.courses.courses
 export default CoursesSlice.reducer

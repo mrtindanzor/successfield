@@ -1,11 +1,11 @@
 import { useEffect, useCallback, useRef } from 'react'
-import { jwtDecode } from 'jwt-decode'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   setLoader
  } from '../Slices/settingsSlice'
 import { 
   coursesListSelector,
+  coursesSelector,
   fetchCourses,
  } from '../Slices/coursesSlice'
 import { 
@@ -16,11 +16,15 @@ import {
   getUserCertificates,
   logout
  } from '../Slices/userSlice'
+import usePersister from '../utils/Persister'
 
 export default function SetDependencies({ children }){
+  const [ persitCourses ] = usePersister()
+  const [ persitCoursesList ] = usePersister()
   const dispatch = useDispatch()
   const { isLoggedIn, loading, token } = useSelector( userSelector )
   const coursesList = useSelector( coursesListSelector )
+  const courses = useSelector( coursesSelector )
   const intervalId = useRef()
 
   const getMyCourses = useCallback( async () => {
@@ -29,6 +33,11 @@ export default function SetDependencies({ children }){
       coursesList.length > 0 && dispatch( getStudentCourses() )
     }
   }, [isLoggedIn, coursesList])
+
+  useEffect(() => {
+    if(coursesList && coursesList.length > 0) persitCoursesList('coursesList', coursesList)
+    if(courses && courses.length > 0) persitCourses('courses', courses)
+  }, [coursesList, courses])
   
   useEffect( () => {
     dispatch( fetchCourses() )

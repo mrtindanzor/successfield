@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import usePersister from '../utils/Persister'
 
+const [ persitAccreditations, getPersistedAccreditations ] = usePersister()
 const initialState = {
-  accreditations: [],
+  accreditations: getPersistedAccreditations('accreditations') ?? [],
   loading: true,
 }
 
@@ -23,6 +25,7 @@ const AccreditationsSlice = createSlice({
       .addCase( getAccreditations.fulfilled, (state, action) => {
         state.accreditations = action.payload
         state.loading = false
+        persitAccreditations('accreditations', action.payload)
       } )
   }
 })
