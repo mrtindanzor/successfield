@@ -1,13 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
-import usePersister from '../utils/Persister'
-
-const [ persitcourses, getPersistedCourses ] = usePersister()
-const [ persitcoursesList, getPersistedCoursesList ] = usePersister()
 
 const initialState = {
-  courses: getPersistedCourses('courses') ?? [],
-  coursesList: getPersistedCoursesList('coursesList') ?? [],
+  courses: [],
+  coursesList: [],
 }
 
 export const fetchCourses = createAsyncThunk('courses/get', async (payload, thunkApi) => {
@@ -75,12 +71,14 @@ const CoursesSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase( fetchCourses.fulfilled, (state, action) => {
-        state.courses = action.payload
-        state.coursesList = action.payload.map( course => ({
-          _id: course._id,
-          course: course.course,
-          courseCode: course.courseCode 
-        }))
+        if(action.payload && action.payload.length > 0){
+          state.courses = action.payload
+          state.coursesList = action.payload.map( course => ({
+            _id: course._id,
+            course: course.course,
+            courseCode: course.courseCode 
+          }))
+        }
       } )
       .addCase( addCourse.fulfilled, (state, action) => {
         const course = action.payload.course

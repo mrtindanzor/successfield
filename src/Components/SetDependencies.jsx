@@ -19,8 +19,6 @@ import {
 import usePersister from '../utils/Persister'
 
 export default function SetDependencies({ children }){
-  const [ persitCourses ] = usePersister()
-  const [ persitCoursesList ] = usePersister()
   const dispatch = useDispatch()
   const { isLoggedIn, loading, token } = useSelector( userSelector )
   const coursesList = useSelector( coursesListSelector )
@@ -33,11 +31,6 @@ export default function SetDependencies({ children }){
       coursesList.length > 0 && dispatch( getStudentCourses() )
     }
   }, [isLoggedIn, coursesList])
-
-  useEffect(() => {
-    if(coursesList && coursesList.length > 0) persitCoursesList('coursesList', coursesList)
-    if(courses && courses.length > 0) persitCourses('courses', courses)
-  }, [coursesList, courses])
   
   useEffect( () => {
     dispatch( fetchCourses() )
