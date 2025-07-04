@@ -162,7 +162,7 @@ export default function Registration(){
             <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: educationLevels, position: 'level', reducerPosition: 'educationLevel', title: 'your educational level' } } />
           </div>
           <TextField { ...{ title: 'Passport photo:*', type: ACTIONS.FILL_MAIN_INPUT, file: true, value: user.userImage, setFeedback, position: 'userImage', dispatchUser } } />
-          <TextField { ...{ title: 'id photo:*', type: ACTIONS.FILL_MAIN_INPUT, file: true, value: user.nationalId, setFeedback, position: 'nationalId', dispatchUser } } />
+          <TextField { ...{ title: 'National ID:*', type: ACTIONS.FILL_MAIN_INPUT, file: true, value: user.nationalId, setFeedback, position: 'nationalId', dispatchUser } } />
           <NextButton { ...{ setter: setCurrentForm, location: 3 } } />
         </div>
         <div  className={`${ currentForm !== 3 && 'hidden' } grid gap-10 md:gap-5`}>
@@ -215,7 +215,7 @@ function TextField({ title, type, password, position, dispatchUser, disabled, va
             </div> }
 
         <input type={ inputType } 
-          className={`${ disabled ? 'border-2 rounded px-2 mb-2 capitalize': 'border-b-2 border-b-gray-950' } text-gray-800 w-full outline-none py-1 ${ inputType === 'file' && 'hidden' }`}
+          className={`${ disabled ? 'rounded px-2 mb-2 capitalize border-gray-950/50 border-2': 'border-b-2 border-b-gray-950/50' } text-gray-800 w-full outline-none py-1 ${ inputType === 'file' && 'hidden' }`}
           value={ file ? '' : value } 
           autoComplete="off"
           accept='image/jpg/jpeg/png'

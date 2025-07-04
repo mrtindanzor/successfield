@@ -9,9 +9,6 @@ import coursesSlice from './Slices/coursesSlice.jsx'
 import faqsSlice from './Slices/FaqsSlice.jsx'
 import accreditationsSlice from './Slices/accreditationsSlice.jsx'
 import adminSlice from './Slices/adminSlice.jsx'
-import usePersister from './utils/Persister.jsx'
-
-const [ persistState, getPersistedState ] = usePersister()
 
 const store = configureStore({
   reducer:{
@@ -21,13 +18,7 @@ const store = configureStore({
     accreditations: accreditationsSlice,
     faqs: faqsSlice,
     admin: adminSlice
-  },
-  preloadedState: getPersistedState('sfc') ?? undefined
-})
-
-store.subscribe(() => {
-  const state = store.getState()
-  persistState('sfc', state)
+  }
 })
 
 createRoot(document.getElementById('root')).render(
