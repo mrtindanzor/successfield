@@ -34,7 +34,7 @@ export default function AccountInformation({ children }) {
         className={`${ children ? 'grid md:grid-cols-[auto_1fr]':'' }`}
       >
         <ul
-          className={`${ children ? 'hidden md:block':'w-fit' } h-screen border-r-2 border-r-gray-600`}
+          className={`${ children ? 'hidden md:block':'md:w-fit' } h-screen md:border-r-2 border-r-gray-600`}
         >
           { AccountLinks.map( item => <ListLink 
             key={item.title}

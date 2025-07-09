@@ -29,7 +29,7 @@ export default function PhoneNumber(){
   return (
     <form 
       onSubmit={ handleSubmit } 
-    className=" grid gap-5 py-10 px-3 mx-auto w-[95%] max-w-[500px] md:px-10 bg-white rounded-xl *:*:first:font-bold *:*:last:border-1 *:*:last:p-1 *:*:last:rounded *:grid *:gap-3 ">
+    className=" grid gap-5 py-10 px-3 mx-auto w-full max-w-[500px] md:px-10 bg-white rounded-xl *:*:first:font-bold *:*:last:border-1 *:*:last:p-1 *:*:last:rounded *:grid *:gap-3 ">
       <InputField { ...{
         title: 'Phone number',
         value: phoneNumber,
