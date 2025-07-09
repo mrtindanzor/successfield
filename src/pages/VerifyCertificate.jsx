@@ -4,25 +4,20 @@ import SubmitButton from '../Components/SubmitButton'
 import axios from "axios";
 import { serverUriSelector } from '../Slices/settingsSlice'
 import { useSelector } from 'react-redux'
+
 export default function VerifyCerificate(){
   const [ submitted, setSubmitted ] = useState(false)
   const [ feedback, setFeedback ] = useState({})
   const [ certificateCode, setCertificateCode ] = useState('')
-  const certificateCodeRef = useRef('')
   const uri = useSelector( serverUriSelector ) + '/verify-certificate'
   const [ details, setDetails ] = useState('')
-  const [ invalid, setInvalid ] = useState(false)
-  const resetDetailsAndInvalid = useCallback(() => {
-    setDetails('')
-    setInvalid(false)
-  },[])
 
   const handleFormSubmit = useCallback( async e => {
     e.preventDefault()
     try {
       const res = await axios.post(uri, { certificateCode })
   
-      if(res.data.status) return setDetails(res.data.certificate)
+      if(res.data.status === 200) return setDetails(res.data.certificate)
       throw Error(`Invalid Certificate ID: ${ certificateCode }`)
     } catch (error) {
       setFeedback({ error: true, message: error.message || 'Something went wrong' })
@@ -34,7 +29,7 @@ export default function VerifyCerificate(){
 
   return (
    <div
-    className="bg-gray-100 h-[100vh] flex flex-col gap-10 py-10">
+    className="bg-gray-100 min-h-screen flex flex-col gap-10 py-10">
      <form 
         onSubmit={ handleFormSubmit } 
         className="drop-shadow-xl grid gap-5 bg-white w-[95%] max-w-[600px] mx-auto py-10 px-5 rounded-md tuffy" > 
