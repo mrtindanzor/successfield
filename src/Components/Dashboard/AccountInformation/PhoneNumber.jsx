@@ -1,14 +1,14 @@
 import { useState, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { userSelector, changeEmail } from '../../Slices/userSlice'
-import { setLoader, setAlertMessage } from '../../Slices/settingsSlice'
-import SubmitButton from '../SubmitButton'
-import InputField from '../InputField'
+import { userSelector, changePhone } from '../../../Slices/userSlice'
+import { setLoader, setAlertMessage } from '../../../Slices/settingsSlice'
+import SubmitButton from '../../SubmitButton'
+import InputField from '../../InputField'
 
-export default function Email(){
+export default function PhoneNumber(){
   const dispatch = useDispatch()
   const { user } = useSelector( userSelector )
-  const [ email, setEmail ] = useState( user.email )
+  const [ phoneNumber, setPhoneNumber ] = useState( user.phone )
   const [ submitted, setSubmitted ] = useState(false)
   const handleSubmit = useCallback( async e => {
     e.preventDefault()
@@ -16,7 +16,7 @@ export default function Email(){
     try{
       setSubmitted(true)
       setLoader(true)
-      const res = await dispatch( changeEmail( email ) ).unwrap()
+      const res = await dispatch( changePhone({ phoneNumber }) ).unwrap()
       dispatch( setAlertMessage( res.msg ) )
     } catch(error){
       dispatch( setAlertMessage( error.message ) )
@@ -24,16 +24,16 @@ export default function Email(){
       setLoader(false)
       setSubmitted(false)
     }
-  },[ email ])
+  },[ phoneNumber ])
 
   return (
     <form 
       onSubmit={ handleSubmit } 
-    className=" grid gap-5 py-10 px-3 my-10 mx-auto w-[95%] max-w-[500px] md:px-10 bg-white rounded-xl *:*:first:font-bold *:*:last:border-1 *:*:last:p-1 *:*:last:rounded *:grid *:gap-3 ">
+    className=" grid gap-5 py-10 px-3 mx-auto w-[95%] max-w-[500px] md:px-10 bg-white rounded-xl *:*:first:font-bold *:*:last:border-1 *:*:last:p-1 *:*:last:rounded *:grid *:gap-3 ">
       <InputField { ...{
-        title: 'Email address',
-        value: email,
-        setter: setEmail,
+        title: 'Phone number',
+        value: phoneNumber,
+        setter: setPhoneNumber,
       } } />
       <SubmitButton { ...{
         classes: 'w-full',

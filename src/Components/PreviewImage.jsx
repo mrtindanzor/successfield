@@ -1,13 +1,15 @@
 import { useState, useMemo, useCallback, useEffect } from "react"
+import { getExtension } from "../utils/CheckExtension"
+
+export const allowedImageFormats = ['jpg','png','jpeg']
 
 export default function PreviewImage({ file, setFeedback }){
-  const allowedExts = useMemo(() => ['jpg','png','jpeg'], [])
   const [ image, setImage ] = useState(null)
   const setPreview = useCallback(() => {
-    const splitName = file.name.split('.')
-    const ext = splitName[splitName.length - 1].toLowerCase()
-    if(!allowedExts.includes(ext)){
+    const ext = getExtension(file)
+    if(!allowedImageFormats.includes(ext)){
       setFeedback({error: true, message: 'image type not supported, select another image'})
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       return setImage(false)
     }
     const url = URL.createObjectURL(file)

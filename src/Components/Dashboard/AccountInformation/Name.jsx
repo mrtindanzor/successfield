@@ -1,9 +1,9 @@
 import { useState, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { userSelector, changeName } from '../../Slices/userSlice'
-import { setLoader, setAlertMessage } from '../../Slices/settingsSlice'
-import InputField from '../InputField'
-import SubmitButton from '../SubmitButton'
+import { userSelector, changeName } from '../../../Slices/userSlice'
+import { setLoader, setAlertMessage } from '../../../Slices/settingsSlice'
+import InputField from '../../InputField'
+import SubmitButton from '../../SubmitButton'
 
 export default function Name(){
   const dispatch = useDispatch()
@@ -33,7 +33,7 @@ export default function Name(){
   return (
     <form 
       onSubmit={ handleSubmit } 
-      className=" grid gap-5 py-10 px-3 my-10 mx-auto w-[95%] max-w-[500px] md:px-10 bg-white rounded-xl *:*:first:font-bold *:*:last:border-1 *:*:last:p-1 *:*:last:rounded *:not-first:grid *:not-first:gap-3 " >
+      className=" grid gap-5 py-10 px-3 mx-auto w-[95%] max-w-[500px] md:px-10 bg-white rounded-xl *:*:first:font-bold *:*:last:border-1 *:*:last:p-1 *:*:last:rounded *:not-first:grid *:not-first:gap-3 " >
       <i>Name may only be changed once. For any subsequent changes, contact support.</i>
       <InputField { ...{
         classes: 'capitalize',

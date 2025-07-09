@@ -32,12 +32,12 @@ export default function Login(){
 
   return (
     <div
-      className="w-full h-[100vh] bg-gray-100 py-10 px-5 tuffy">
+      className="w-full h-[100vh] bg-gray-100 py-3 px-1 tuffy">
       <form 
         onSubmit={ handleSubmit } 
-        className="relative grid gap-10 bg-white w-full sm:max-w-[600px] rounded-xl py-5 sm:py-10 px-5 py-10 sm:mx-auto md:px-10 pb-20 drop-shadow-md">
+        className="relative grid gap-4 bg-white w-full sm:max-w-[600px] rounded-xl sm:py-10 px-5 py-5 sm:mx-auto md:px-10 pb-20 drop-shadow-md">
         { feedback.message && <DisplayNotification { ...{ feedback } } /> }
-        <h3 className=" text-xl text-center border-2 font-semibold border-black py-2 rounded-md text-black">
+        <h3 className=" text-xl text-center mb-5 bg-gray-600 border-2 font-semibold border-black py-2 rounded-md text-white">
           Login to Successfield
         </h3>
         <TextField { ...{ value: credentials.email, title: 'Email', position: 'email', setter: setCredentials } } />
@@ -72,11 +72,11 @@ function TextField({ value, title, position, setter, setIsPassVisible, isPassVis
       className="relative grid"
       >
       <h3
-        className="font-semibold text-xl sm:text-2xl"
+        className=""
         > { title }: </h3>
       <input 
         type={ inputType } 
-        className="border-b-2 py-1 outline-none" 
+        className="border-2 rounded-md py-1 outline-none px-3" 
         onChange={ e => setter( prev => ({ ...prev, [position]: e.target.value }) ) }
         value={ value  } />
       { position === 'password' && <span className="absolute right-5 bottom-2 cursor-pointer" 

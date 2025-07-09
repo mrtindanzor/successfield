@@ -2,7 +2,6 @@ import Header from "../Header/Header";
 import { Outlet } from "react-router-dom";
 import ScrollToTop from "../ScrollToTop";
 import UserInfo from '../Authentication/UserInfo'
-import Certificate from '../Certificate'
 
 export default function LayoutOne(){
 

@@ -1,6 +1,8 @@
 import axios from "axios"
 import { jwtDecode } from 'jwt-decode'
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import { allowedImageFormats } from "../Components/PreviewImage"
+import { getExtension } from "../utils/CheckExtension"
 
 const stringPattern = /^[\w\s.,-]+$/
 const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
@@ -34,7 +36,6 @@ export const registration = async credentials => {
       firstname,
       middlename,
       surname,
-      birthDate,
       gender,
       address,
       nationalId,
@@ -44,7 +45,6 @@ export const registration = async credentials => {
       educationLevel,
       contact,
       password,
-      cpassword,
       serverUri
     } = credentials
 
@@ -61,7 +61,9 @@ export const registration = async credentials => {
     if(!programme) return { msg: 'Select a programme', status: 403, currentForm: 2 }
     if(!educationLevel) return { msg: 'Select your highest level of education', status: 403, currentForm: 2 }
     if(!nationalId) return { msg: 'Select an identification document', status: 403, currentForm: 2 }
+    if(!allowedImageFormats.includes(getExtension(nationalId))) return { msg: 'Your National ID has an unsupported file type.', status: 403, currentForm: 2 }
     if(!userImage) return { msg: 'Add a passport photo', status: 403, currentForm: 2  }
+    if(!allowedImageFormats.includes(getExtension(userImage))) return { msg: 'Your passport photo has an unsupported file type.', status: 403, currentForm: 2 }
     if(!address.country) return { msg: 'Add your country', status: 403, currentForm: 3 }
     if(!address.state) return { msg: 'Add your region', status: 403, currentForm: 3 }
     if(!address.city) return { msg: 'Add your city', status: 403, currentForm: 3 }
@@ -71,8 +73,6 @@ export const registration = async credentials => {
     if(!emailPattern.test(email)) return { msg: 'Email address contains invalid characters', status: 403, currentForm: 4 }
     if(!password) return { msg: 'Enter a password', status: 403, currentForm: 4 }
     if(password.length < 8) return { msg: 'Password must not be less than 8 characters', status: 403, currentForm: 4 }
-    if(password !== cpassword) return { msg: 'Passwords do not match', status: 403, currentForm: 4 }
-
 
     const uri = serverUri + '/users/register'
     const formdata = new FormData()
@@ -165,7 +165,7 @@ export const login = createAsyncThunk('user/login', async (payload, thunkApi) =>
     return thunkApi.rejectWithValue({ status: 403, msg: error.message || 'Something went wrong' })
   }
 })
-export const getStudentCourses = createAsyncThunk('user/courses', async (payload, thunkApi) => {
+export const getStudentCourses = createAsyncThunk('user/courses', async (_, thunkApi) => {
   try {
       const uri = thunkApi.getState().settings.serverUri + '/users/courses'
       const res = await axios.post(uri, {}, { withCredentials: true })

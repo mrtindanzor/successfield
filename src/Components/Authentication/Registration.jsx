@@ -7,7 +7,7 @@ import {
   serverUriSelector
  } from '../../Slices/settingsSlice'
 import { coursesListSelector } from '../../Slices/coursesSlice'
-import { Eye, EyeOff, ChevronDown, ArrowRight, Upload } from "lucide-react";
+import { Eye, EyeOff, ChevronDown, Upload, MoveRight } from "lucide-react";
 import PreviewImage from "../PreviewImage";
 import DisplayNotification from '../DisplayNotification'
 import LoginQuestion from "./LoginQuestion";
@@ -122,64 +122,68 @@ export default function Registration(){
 
   return (
     <div
-      className="h-[100vh] min-h-fit w-full bg-gray-100 px-5 py-10">
+      className="h-[100vh] min-h-fit w-full bg-gray-100 px-1 sm:px-3 py-4">
       <form 
         onSubmit={ handleSubmit }
         autoComplete="off"
         autoCapitalize="on"
         tabIndex={1}
-         className="w-full bg-white grid sm:grid-cols-[1fr_3fr] gap-y-10 sm:max-w-[900px] mx-auto py-10 px-5 sm:px-8 md:px-10 rounded-md drop-shadow-md"
+         className="w-full bg-white grid gap-y-5 sm:max-w-[900px] mx-auto py-10 px-5 sm:px-8 md:px-10 rounded-md drop-shadow-md"
          >
-          { feedback.message && <div className="sm:col-span-2">
-            <DisplayNotification { ...{ feedback } } />
-          </div> }
-        <h3 className="text-2xl font-semibold text-black">
+          { feedback.message && <DisplayNotification { ...{ feedback } } /> }
+        <h3 className="text-xl tuffy-bold border-2 font-extralight bg-black/90 py-3 px-5 rounded text-white text-center">
           { currentForm === 1 && 'Start Your Admission Application' }
           { currentForm === 2 && 'Verification' }
           { currentForm === 3 && 'Address' }
           { currentForm === 4 && 'Login Information' }
         </h3>
         <div
-          className={`grid gap-10 md:gap-5 ${ currentForm !== 1 && 'hidden' }`}
+          className={`grid gap-4 ${ currentForm !== 1 && 'hidden' }`}
           >
-          <TextField { ...{ title: 'First name:*', type: ACTIONS.FILL_MAIN_INPUT, value: user.firstname, position: 'firstname', dispatchUser} } />
-          <TextField { ...{ title: 'Middle name:', type: ACTIONS.FILL_MAIN_INPUT, value: user.middlename, position: 'middlename', dispatchUser } } />
-          <TextField { ...{ title: 'Surname:*', type: ACTIONS.FILL_MAIN_INPUT, value: user.surname, position: 'surname', dispatchUser  } } />
+          <TextField { ...{ title: 'First name:', type: ACTIONS.FILL_MAIN_INPUT, value: user.firstname, position: 'firstname', dispatchUser} } />
+          <TextField { ...{ title: 'Middle name (Optional):', type: ACTIONS.FILL_MAIN_INPUT, value: user.middlename, position: 'middlename', dispatchUser } } />
+          <TextField { ...{ title: 'Surname:', type: ACTIONS.FILL_MAIN_INPUT, value: user.surname, position: 'surname', dispatchUser  } } />
           <div>
-            <TextField { ...{ title: 'Gender:*', value: user.gender } } disabled />
+            <TextField { ...{ title: 'Gender:', value: user.gender } } disabled />
             <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: genders, position: 'gender', reducerPosition: 'gender', title: 'gender' } } />
           </div>
-          <TextField { ...{ title: 'Birth date:*', type: ACTIONS.FILL_MAIN_INPUT, value: user.birthDate, date: true, position: 'birthDate', dispatchUser } } />
+          <TextField { ...{ title: 'Birth date:', type: ACTIONS.FILL_MAIN_INPUT, value: user.birthDate, date: true, position: 'birthDate', dispatchUser } } />
           <NextButton { ...{ setter: setCurrentForm, location: 2 } } />
         </div>
-        <div className={`${ currentForm !== 2 && 'hidden' } grid gap-10 md:gap-5`} >
+        <div className={`${ currentForm !== 2 && 'hidden' } grid gap-4`} >
           <div>
-            <TextField { ...{ title: 'Programme:*', value: user.programme } } disabled />
+            <TextField { ...{ title: 'Programme:', value: user.programme } } disabled />
             <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: coursesList, position: 'course', reducerPosition: 'programme', title: 'programme'} } />
           </div>
           <div>
-            <TextField { ...{ title: 'Highest level of Education:*', value: user.educationLevel } } disabled />
+            <TextField { ...{ title: 'Highest level of Education:', value: user.educationLevel } } disabled />
             <Selector { ...{ dispatch: dispatchUser, type: ACTIONS.FILL_MAIN_INPUT, db: educationLevels, position: 'level', reducerPosition: 'educationLevel', title: 'your educational level' } } />
           </div>
-          <TextField { ...{ title: 'Passport photo:*', type: ACTIONS.FILL_MAIN_INPUT, file: true, value: user.userImage, setFeedback, position: 'userImage', dispatchUser } } />
-          <TextField { ...{ title: 'National ID:*', type: ACTIONS.FILL_MAIN_INPUT, file: true, value: user.nationalId, setFeedback, position: 'nationalId', dispatchUser } } />
+          <TextField { ...{ title: 'Passport photo:', type: ACTIONS.FILL_MAIN_INPUT, file: true, value: user.userImage, setFeedback, position: 'userImage', dispatchUser } } />
+          <TextField { ...{ title: 'National ID:', type: ACTIONS.FILL_MAIN_INPUT, file: true, value: user.nationalId, setFeedback, position: 'nationalId', dispatchUser } } />
           <NextButton { ...{ setter: setCurrentForm, location: 3 } } />
         </div>
-        <div  className={`${ currentForm !== 3 && 'hidden' } grid gap-10 md:gap-5`}>
-          <TextField { ...{ title: 'country:*', type: ACTIONS.FILL_ADDRESS, value: user.address.country, position: 'country', dispatchUser } } />
-          <TextField { ...{ title: 'region / state:*', type: ACTIONS.FILL_ADDRESS, value: user.address.state, position: 'state', dispatchUser } } />
-          <TextField { ...{ title: 'city:*', type: ACTIONS.FILL_ADDRESS, value: user.address.city, position: 'city', dispatchUser } } />
-          <TextField { ...{ title: 'address1:*', type: ACTIONS.FILL_ADDRESS, value: user.address.address1, position: 'address1', dispatchUser } } />
-          <TextField { ...{ title: 'address2:', type: ACTIONS.FILL_ADDRESS, value: user.address.address2, position: 'address2', dispatchUser } } />
-          <TextField { ...{ title: 'contact number:*', type: ACTIONS.FILL_MAIN_INPUT, value: user.phoneNumber, position: 'phoneNumber', dispatchUser } } />
+        <div  className={`${ currentForm !== 3 && 'hidden' } grid gap-4`}>
+          <TextField { ...{ title: 'country:', type: ACTIONS.FILL_ADDRESS, value: user.address.country, position: 'country', dispatchUser } } />
+          <TextField { ...{ title: 'region / state:', type: ACTIONS.FILL_ADDRESS, value: user.address.state, position: 'state', dispatchUser } } />
+          <TextField { ...{ title: 'city:', type: ACTIONS.FILL_ADDRESS, value: user.address.city, position: 'city', dispatchUser } } />
+          <TextField { ...{ title: 'address1:', type: ACTIONS.FILL_ADDRESS, value: user.address.address1, position: 'address1', dispatchUser } } />
+          <TextField { ...{ title: 'address2 (optional):', type: ACTIONS.FILL_ADDRESS, value: user.address.address2, position: 'address2', dispatchUser } } />
+          <TextField { ...{ title: 'contact number:', type: ACTIONS.FILL_MAIN_INPUT, value: user.phoneNumber, position: 'phoneNumber', dispatchUser } } />
           <NextButton { ...{ setter: setCurrentForm, location: 4 } } />
         </div>
-        <div className={`${ currentForm !== 4 && 'hidden' } grid gap-10 md:gap-5 sm:max-w-[600px] mx-auto`}>
-          <TextField { ...{ title: 'email:*', type: ACTIONS.FILL_MAIN_INPUT, value: user.email, position: 'email', dispatchUser, classList: 'sm:col-span-2' } } />
-          <TextField { ...{ title: 'password:*', type: ACTIONS.FILL_MAIN_INPUT, value: user.password, password: true, position: 'password', dispatchUser, classList: 'sm:col-span-2' } } />
-          <TextField { ...{ title: 'confirm password:*', type: ACTIONS.FILL_MAIN_INPUT, value: user.cpassword, password: true, position: 'cpassword', dispatchUser, classList: 'sm:col-span-2' } } />
+        <div className={`${ currentForm !== 4 && 'hidden' } grid gap-4 w-full px-3 mx-auto`}>
+          <TextField { ...{ title: 'email:', type: ACTIONS.FILL_MAIN_INPUT, value: user.email, position: 'email', dispatchUser, classList: 'sm:col-span-2' } } />
+          <TextField { ...{ title: 'password:', type: ACTIONS.FILL_MAIN_INPUT, value: user.password, password: true, position: 'password', dispatchUser, classList: 'sm:col-span-2' } } />
           <TextField { ...{ title: 'contact', type: ACTIONS.FILL_MAIN_INPUT, value: user.contact, position: 'contact', dispatchUser, hidden: true } } />
-          <button className={ `${ submitted ? "!cursor-not-allowed" : ''} cursor-pointer [box-shadow:_2px_2px_2px_2px_gray] w-fit bg-green-600 px-5 py-2 ml-auto mt-5 text-white text-xl sm:text-2xl font-bold rounded-sm` } disabled={ submitted }> Submit Application </button>
+          <button className={ `${ submitted ? "!cursor-not-allowed" : ''}  flex items-center  gap-2 cursor-pointer w-fit border-2 border-green-600 bg-green-600 hover:bg-green-300 hover:text-green-600 text-lg text-white px-8 py-2 ml-auto mt-5 rounded-sm` } disabled={ submitted }> 
+            <MoveRight
+            
+            />
+            <span>
+              Submit Application  
+            </span>  
+          </button>
         </div>
         <LoginQuestion { ...{
           question: "Already have account?",
@@ -203,22 +207,22 @@ function TextField({ title, type, password, position, dispatchUser, disabled, va
   
   return (
     <>
-      <label className={ `${ hidden ? 'hidden': '' } relative` }>
+      <label className={ `${ hidden ? 'hidden': '' } grid gap-1 relative` }>
         <span
-          className="font- text-xl uppercase sm:text-gray-950">
+          className="text-md capitalize tuffy-bold text-green-700">
           { title } </span>
 
         { inputType === 'file' && <div
             tabIndex={0}
-            className="flex gap-2 items-center w-fit h-fit p-2 cursor-pointer rounded-sm bg-green-600 text-white font-normal">
-              <Upload /> upload image
+            className="flex gap-2 items-center w-fit h-fit p-2 cursor-pointer rounded-sm bg-green-800 text-white text-sm">
+              <Upload /> Upload image
             </div> }
 
         <input type={ inputType } 
-          className={`${ disabled ? 'rounded px-2 mb-2 capitalize border-gray-950/50 border-2': 'border-b-2 border-b-gray-950/50' } text-gray-800 w-full outline-none py-1 ${ inputType === 'file' && 'hidden' }`}
+          className={`${ disabled ? 'rounded mb-2 capitalize':'' } border-2 rounded-sm py-1 px-2 text-gray-950/70 w-full outline-none ${ inputType === 'file' && 'hidden' }`}
           value={ file ? '' : value } 
           autoComplete="off"
-          accept='image/jpg/jpeg/png'
+          accept='image/jpeg, image/png'
           disabled={ disabled }
           onChange={ e => {
             if(!file) dispatchUser({ type, position, value: e.target.value })
@@ -231,8 +235,8 @@ function TextField({ title, type, password, position, dispatchUser, disabled, va
               } ) }
             > { 
               visible && visible.type !== 'password' ?
-                <EyeOff className="block mb-2 w-7 h-7"  /> 
-                : <Eye className="block mb-2 w-7 h-7"/> 
+                <EyeOff className="block mb-2 w-5 h-5"  /> 
+                : <Eye className="block mb-2 w-5 h-5"/> 
               } </span> }
       </label>
       { file && value && <PreviewImage { ...{ file: value, setFeedback } } /> }
@@ -248,7 +252,7 @@ export function Selector({ title, dispatch, type, db, position, reducerPosition,
       className={`grid items-end gap-2 relative tuffy h-fit ${ classList }`}>
         <span
           tabIndex={0}
-          className="flex whitespace-nowrap h-fit w-full px-5 py-1 sm:py-2 rounded-sm text-white justify-between bg-green-600 cursor-pointer" 
+          className="flex whitespace-nowrap h-fit w-full px-3 hover:bg-green-950/90 py-2 items-center rounded-sm text-white justify-between bg-green-800 cursor-pointer" 
           onClick={ () => setIsVisible(c => !c) }
           onKeyDown={ e =>  (e.key === 'Enter') ? setIsVisible(c => !c) :''  }>
           Select { title }
@@ -290,7 +294,7 @@ function NextButton({ setter, location }){
     <button
       role="button"
       tabIndex={0}
-      className="flex items-center gap-3 whitespace-nowrap text-white font-bold w-fit px-5 py-2 rounded-sm bg-green-600 ml-auto cursor-pointer drop-shadow-md drop-shadow-gray-300"
+      className="flex items-center gap-3 whitespace-nowrap text-white w-fit px-8 py-2 rounded-sm bg-green-500/80 hover:bg-green-500 border-2 border-green-600 ml-auto cursor-pointer drop-shadow-md drop-shadow-gray-300"
       onClick={ e => {
         e.preventDefault()
         setter(location)
@@ -298,7 +302,7 @@ function NextButton({ setter, location }){
       } }
       >
         Next
-        <ArrowRight />
+        <MoveRight />
     </button>
   )
 }

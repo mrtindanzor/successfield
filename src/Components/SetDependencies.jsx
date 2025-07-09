@@ -5,42 +5,25 @@ import {
  } from '../Slices/settingsSlice'
 import { 
   coursesListSelector,
-  coursesSelector,
   fetchCourses,
  } from '../Slices/coursesSlice'
 import { 
   userSelector,
   refreshTokens,
-  addUserCourses,
   getStudentCourses,
   getUserCertificates,
   logout
  } from '../Slices/userSlice'
-import usePersister from '../utils/Persister'
 
 export default function SetDependencies({ children }){
   const dispatch = useDispatch()
-  const { isLoggedIn, loading, token } = useSelector( userSelector )
+  const { isLoggedIn, loading, token, courses } = useSelector( userSelector )
   const coursesList = useSelector( coursesListSelector )
-  const courses = useSelector( coursesSelector )
   const intervalId = useRef()
 
   const getMyCourses = useCallback( async () => {
-    if(isLoggedIn){
-      dispatch( getUserCertificates() )
-      coursesList.length > 0 && dispatch( getStudentCourses() )
-    }
-  }, [isLoggedIn, coursesList])
-  
-  useEffect( () => {
-    dispatch( fetchCourses() )
-    dispatch( refreshTokens() )
-      .then(() => dispatch( setLoader(false) ))
-  },[])
-
-  useEffect(() => {
-    if(isLoggedIn && !token) dispatch( logout() )
-  }, [token])
+    if(isLoggedIn) dispatch( getUserCertificates() )
+  }, [isLoggedIn])
 
   useEffect(() => {
     if(token) intervalId.current = setInterval(() =>  dispatch( refreshTokens() ), 14 * 60 * 1000)
@@ -49,6 +32,20 @@ export default function SetDependencies({ children }){
 
     return () => intervalId.current && clearInterval( intervalId.current )
   },[isLoggedIn, token, loading])
+
+  useEffect(() => {
+    if(isLoggedIn && !token) dispatch( logout() )
+  }, [token])
+
+  useEffect( () => {
+    dispatch( fetchCourses() )
+    dispatch( refreshTokens() )
+      .then(() => dispatch( setLoader(false) ))
+  },[])
+
+  useEffect(() => {
+    if(isLoggedIn && coursesList && coursesList.length > 0 && !courses) dispatch( getStudentCourses() )
+  }, [coursesList, courses, isLoggedIn])
 
   return children
 }

@@ -14,6 +14,12 @@ import NotFound from './pages/NotFound';
 import Login from './Components/Authentication/Login';
 import { Loading } from './Components/Loader'
 import FindPro from "./pages/FindPro";
+import AccountInformationList from "./pages/AccountInformation/AccountInformationList";
+import AccountInformation from "./pages/AccountInformation/AccountInformation";
+import MyCertificates from "./pages/Certificates/MyCertificates";
+import MyCertificate from "./pages/Certificates/MyCertificate";
+import MyCourses from "./pages/MyCourses/MyCourses";
+import LogoutConfirmation from "./pages/Dashboard/Logout";
 
 //lazy components
 const AdminHome = lazy(() => import('./Admin/Home/AdminHome'))
@@ -81,9 +87,45 @@ const router = createBrowserRouter(
             <Login />
           </SignedIn> } />
                                               
-        <Route path='dashboard/profile' element={ <NotAuthenticated>
+        <Route path='dashboard' element={ <NotAuthenticated>
             <Suspense fallback={ <Loading /> }>
               <Dashboard />
+            </Suspense>
+          </NotAuthenticated> } />
+
+        <Route path='dashboard/account-information' element={ <NotAuthenticated>
+            <Suspense fallback={ <Loading /> }>
+              <AccountInformation />
+            </Suspense>
+          </NotAuthenticated> } />
+
+        <Route path='dashboard/account-information/:section' element={ <NotAuthenticated>
+            <Suspense fallback={ <Loading /> }>
+              <AccountInformationList />
+            </Suspense>
+          </NotAuthenticated> } />
+
+        <Route path='dashboard/my-certificates' element={ <NotAuthenticated>
+            <Suspense fallback={ <Loading /> }>
+              <MyCertificates />
+            </Suspense>
+          </NotAuthenticated> } />
+
+        <Route path='dashboard/my-certificates/:certificateCode' element={ <NotAuthenticated>
+            <Suspense fallback={ <Loading /> }>
+              <MyCertificate />
+            </Suspense>
+          </NotAuthenticated> } />
+
+        <Route path='dashboard/my-courses' element={ <NotAuthenticated>
+            <Suspense fallback={ <Loading /> }>
+              <MyCourses />
+            </Suspense>
+          </NotAuthenticated> } />
+
+        <Route path='dashboard/logout' element={ <NotAuthenticated>
+            <Suspense fallback={ <Loading /> }>
+              <LogoutConfirmation />
             </Suspense>
           </NotAuthenticated> } />
 

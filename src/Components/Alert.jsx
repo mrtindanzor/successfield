@@ -16,11 +16,11 @@ export default function Alert(){
   
   return  (
     <div 
-      className={`${ !alertMessage ? 'hidden':'' } fixed z-10000 w-[95vw] grid items-center grid-cols-[1fr_auto] top-20 drop-shadow-gray-500 drop-shadow-md right-1/2 translate-x-1/2 bg-gray-200 text-black tuffy-bold rounded-sm border-2 uppercase border-gray-300 py-2 px-3`}>
+      className={`${ !alertMessage ? 'hidden':'' } fixed z-10000 w-[95vw] max-w-2xl grid items-center grid-cols-[1fr_auto] top-20 drop-shadow-gray-800 drop-shadow-md right-2 bg-gray-200 border-2 border-gray-950 text-gray-950 tuffy-bold rounded-sm uppercase py-2 px-3`}>
       { alertMessage } 
       <X 
         tabIndex={0}
-        className="cursor-pointer text-gray-500 hover:text-gray-700"
+        className="cursor-pointer text-gray-900 hover:text-gray-700"
         onClick={ () => dispatch( setAlertMessage('') ) }
         onKeyDown={ e => { if(e.key === 'Enter') dispatch( setAlertMessage('') ) } }
       />
