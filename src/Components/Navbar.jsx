@@ -3,27 +3,25 @@ import { Link, NavLink } from "react-router-dom";
 import { useSelector } from 'react-redux'
 import { userSelector } from '../Slices/userSlice'
 import { coursesListSelector } from '../Slices/coursesSlice'
-import { ChevronLeft, ChevronRight, FileText, X } from "lucide-react";
+import { AlignLeft, ChevronLeft, ChevronRight, FileText, X } from "lucide-react";
 
 export function MenuButton({ navbarActive, setNavbarActive }){
-  
-  const toggleWrapperClasses="flex items-center h-full *:first:w-10 *:first:h-10 text-white flex *:p-1 cursor-pointer md:hidden *:first:items-center *:first:justify-center *:first:rounded"
 
   return (
-    <>
-      <div className={ toggleWrapperClasses }>
+      <div 
+        className="flex items-center h-full *:first:w-10 *:first:h-10 text-white *:p-1 cursor-pointer md:hidden *:first:items-center *:first:justify-center *:first:rounded"
+      >
         <X  
         className={`bg-red-600 ${ navbarActive ? 'flex' : 'hidden' }`}
         onClick={ () => setNavbarActive(false) } />
         <div  
-          className={`w-10 h-10 gap-1.5 grid  ${ navbarActive ? 'hidden' : '' }`} 
+          className={`w-10 h-fit gap-1.5 grid text-gray-700 ${ navbarActive ? 'hidden' : '' }`} 
           onClick={() => setNavbarActive(true) }>
-          <div className="w-7 h-1 rounded-lg bg-gray-500"></div>
-          <div className="w-7 h-1 rounded-lg bg-gray-500 ml-auto"></div>
-          <div className="w-7 h-1 rounded-lg bg-gray-500"></div>
+          <AlignLeft 
+            className="w-10 h-10"
+          />
         </div>
       </div>
-    </>
   )
 }
 

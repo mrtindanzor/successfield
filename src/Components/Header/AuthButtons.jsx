@@ -24,13 +24,16 @@ function NotLoggedIn(){
 }
 
 function MyProfile(){
+  const { userPhoto } = useSelector( userSelector )
 
   return (
       <Link 
         to='/dashboard' 
-        className=" ml-auto py-2 px-4 bg-white border-2 h-[calc(100%-2px)] text-gray-950 rounded hover:bg-gray-950 hover:text-white flex items-center gap-x-2 ">
-        <UserCircle />
-        Profile
+        className="ml-auto">
+        <img
+          src={userPhoto}
+          className="w-13 h-13 rounded-full p-0.5 border-gray-500 border-2"
+        />
       </Link>
   )
 }
