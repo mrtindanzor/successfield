@@ -132,8 +132,8 @@ export const changePassword = createAsyncThunk('user/changePassword', async (pay
   const email = thunkApi.getState().auth.user.email
   try{
     const res = await axios.post(uri, { email, ...payload }, { withCredentials: true } )
-    if(res.data.status === 201 ) return { ...res.data }
-    throw Error(res.data.msg || 'Something went wrong')
+    return res.data
+    
   } catch(error){
     thunkApi.rejectWithValue(error.message)
   }
