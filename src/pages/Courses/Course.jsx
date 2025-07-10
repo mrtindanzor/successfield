@@ -7,7 +7,7 @@ import {
  } from '../../Slices/coursesSlice'
 import { setLoader } from '../../Slices/settingsSlice'
 import { Loading } from '../../Components/Loader'
-import { formatUrl } from "../../core";
+import { capitalize, formatUrl } from "../../core";
 
 export default function Course(){
   const dispatch = useDispatch()
@@ -25,6 +25,10 @@ export default function Course(){
   useEffect(() => {
     if(coursesList.length > 0) getCurrentCourse()
   },[course, coursesList])
+
+  useEffect(() => {
+    currentCourse && (document.title = 'Successfield | ' + capitalize(currentCourse.course))
+  }, [currentCourse])
 
   return (
     <section

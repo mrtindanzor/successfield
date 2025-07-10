@@ -3,7 +3,7 @@ import SlideShowSection from "../Components/SlideShowSection";
 import HomeContent from "../Components/HomeContent";
 
 export default function Home(){
-   document.title = 'Successfield College'
+   document.title = 'Successfield'
   return (
     <>
       <HeroSection />

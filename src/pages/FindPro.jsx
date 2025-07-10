@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 import { serverUriSelector } from '../Slices/settingsSlice'
@@ -33,6 +33,10 @@ const FindPro = () => {
       setSubmitted(false)
     }
   }, [credentials])
+
+  useEffect(() => {
+    document.title = 'Successfield | Find a professional'
+  }, [])
 
   return (
     <section

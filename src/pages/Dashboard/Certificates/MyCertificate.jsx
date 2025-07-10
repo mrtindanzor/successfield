@@ -1,10 +1,9 @@
 import { useSelector } from "react-redux"
-import MyCertificates from "./MyCertificates"
 import { useParams } from "react-router-dom"
-import { useMemo } from "react"
-import sample from '../../assets/images/certificate.jpg'
-import { Loading as Loader } from "../../Components/Loader"
-import { userSelector } from "../../Slices/userSlice"
+import { useEffect, useMemo } from "react"
+import sample from '../../../assets/images/certificate.jpg'
+import { Loading as Loader } from "../../../Components/Loader"
+import { userSelector } from "../../../Slices/userSlice"
 
 export default function MyCertificate(){
   const { certificates, loading } = useSelector( userSelector )
@@ -17,15 +16,14 @@ export default function MyCertificate(){
     return _c
   }, [certificateCode, certificates, loading])
 
+  useEffect(() => {
+    certificate && (document.title = 'Successfield | Certificate - ' + certificate.programme)
+  }, [certificate])
+
   if(loading) return <Loader />
 
-  return(
-    <MyCertificates>
-      { certificate && <Certificate
-        { ...{ certificate } }
-      /> }
-    </MyCertificates>
-  )
+  return certificate && <Certificate
+        { ...{ certificate } } />
 }
 
 function Certificate({ certificate }) {

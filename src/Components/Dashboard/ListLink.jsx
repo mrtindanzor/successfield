@@ -1,7 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function ListLink({ children, title, link }){
+export default function ListLink({ children, title, link, classes }){
 
   return (
     <li
@@ -9,7 +9,7 @@ export default function ListLink({ children, title, link }){
     >
       <Link
         to={ link }
-        className="grid grid-cols-[auto_1fr_auto] items-center border-2 border-transparent hover:border-gray-600 rounded-md gap-2 !first-letter:uppercase w-full px-3 py-2 hover:bg-gray-300"
+        className={`${ classes } grid grid-cols-[auto_1fr_auto] items-center border-y-2 border-transparent hover:border-gray-600 gap-2 !first-letter:uppercase w-full px-3 py-2 hover:bg-gray-300`}
       >
         { children }
         { title }

@@ -1,6 +1,11 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export default function NotFound(){
+
+  useEffect(() => {
+    document.title = 'Successfield | Page not found'
+  }, [])
 
   return (
     <div className=" grid gap-x-5 gap-y-2 w-[95%] grid-cols-[auto_1fr] absolute left-1/2 -translate-1/2 top-1/2 max-w-[500px] mx-auto justify-center items-center">

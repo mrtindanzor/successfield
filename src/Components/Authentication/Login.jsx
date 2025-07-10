@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { EyeOff, Eye } from 'lucide-react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -29,6 +29,10 @@ export default function Login(){
       setSubmitted(false)
     }
   }, [credentials])
+
+  useEffect(() => {
+    document.title = 'Successfield | Login'
+  }, [])
 
   return (
     <div

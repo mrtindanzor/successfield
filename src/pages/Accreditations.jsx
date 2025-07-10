@@ -12,6 +12,7 @@ const Accreditations = () => {
 
   useEffect(() => {
     dispatch( getAccreditations() )
+    document.title = 'Successfield | Accreditations'
   }, [])
 
   if(loading) return <Loading />

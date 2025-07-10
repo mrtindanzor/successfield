@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react'
+import { useRef, useState, useCallback, useEffect } from 'react'
 import DisplayNotification from '../Components/DisplayNotification'
 import SubmitButton from '../Components/SubmitButton'
 import axios from "axios";
@@ -26,6 +26,10 @@ export default function VerifyCerificate(){
     }
    
   }, [uri, certificateCode])
+
+  useEffect(() => {
+    document.title = 'Successfield | Verify student certificate'
+  }, [])
 
   return (
    <div

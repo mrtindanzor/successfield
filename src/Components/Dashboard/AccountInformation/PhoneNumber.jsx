@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { userSelector, changePhone } from '../../../Slices/userSlice'
 import { setLoader, setAlertMessage } from '../../../Slices/settingsSlice'
@@ -25,6 +25,10 @@ export default function PhoneNumber(){
       setSubmitted(false)
     }
   },[ phoneNumber ])
+
+  useEffect(() => {
+    document.title = 'Successfield | Phone number'
+  }, [])
 
   return (
     <form 

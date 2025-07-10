@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { userSelector, changeName } from '../../../Slices/userSlice'
 import { setLoader, setAlertMessage } from '../../../Slices/settingsSlice'
@@ -29,6 +29,10 @@ export default function Name(){
     }
 
   } )
+
+  useEffect(() => {
+    document.title = 'Successfied | Name'
+  }, [])
 
   return (
     <form 

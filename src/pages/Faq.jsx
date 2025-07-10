@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ChevronDown } from "lucide-react"
 import { useSelector, useDispatch } from 'react-redux'
 import { 
@@ -6,7 +6,6 @@ import {
   getFaqs
  } from '../Slices/FaqsSlice'
 import { Loading } from '../Components/Loader'
-import axios from 'axios'
 
 export default function Faq(){
   const dispatch = useDispatch()
@@ -14,6 +13,7 @@ export default function Faq(){
 
   useEffect(() => {
     dispatch( getFaqs() )
+    document.title = 'Successfield | FAQs'
   }, [])
 
   if(loading) return <Loading />

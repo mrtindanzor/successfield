@@ -1,4 +1,4 @@
-import {useState } from 'react'
+import {useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { userSelector } from '../../../Slices/userSlice'
 import { Loading as Loader } from '../../Loader'
@@ -22,6 +22,11 @@ function AdminPanelButton(){
 
 export default function DashboardTemplate({ children }){
   const { user, userFullName, userPhoto, loading  } = useSelector( userSelector )
+  const [imageloaded, setImageLoaded] = useState(false)
+
+  useEffect(() => {
+    userFullName && (document.title = 'Successfield | ' + userFullName)
+  }, [userFullName])
 
   if(loading) return <Loader />
   
@@ -34,7 +39,8 @@ export default function DashboardTemplate({ children }){
             : <img 
                 loading='lazy'
                 src={ userPhoto } 
-                className={`h-20 w-20 object-cover object-center-top text-gray-950 border-2 rounded-full`} 
+                onLoad={() => setImageLoaded(true)}
+                className={`${ imageloaded ? '':'blur-md' } h-20 w-20 object-cover object-center-top text-gray-950 border-2 rounded-full`} 
               /> }
         <div className='grid gap-3'>
           <b className=' text-gray-950 texturina text-3xl '> { userFullName } </b>

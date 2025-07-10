@@ -122,6 +122,7 @@ export const changeEmail = createAsyncThunk('user/changeEmail', async (payload, 
   try{
     const res = await axios.post(uri, { email, newEmail }, { withCredentials: true } )
   if(res.data.status === 201 ) return { ...res.data, email: newEmail }
+  if(res.data.msg) return { msg: res.data.msg }
   } catch(error){
     return thunkApi.rejectWithValue(error.message || 'Something went wrong')
   }
@@ -219,7 +220,7 @@ const UserSlice = createSlice({
         window.location.href = '/'
       } )
       .addCase( changeEmail.fulfilled, ( state, action ) => {
-        if(action.payload.status){
+        if(action.payload?.status){
           state.email = action.payload.email
           state.token = action.payload.token
         }

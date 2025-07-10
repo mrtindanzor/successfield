@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { userSelector, changeEmail } from '../../../Slices/userSlice'
 import { setLoader, setAlertMessage } from '../../../Slices/settingsSlice'
@@ -25,6 +25,10 @@ export default function Email(){
       setSubmitted(false)
     }
   },[ email ])
+
+  useEffect(() => {
+    document.title = 'Successfield | Email address'
+  }, [])
 
   return (
     <form 

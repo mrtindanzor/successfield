@@ -1,5 +1,6 @@
 import { List, LucideLogOut, UserCog2 } from "lucide-react"
 import ListLink from "./ListLink"
+import { useEffect } from "react"
 
 const Links = [
     {
@@ -25,6 +26,10 @@ const Links = [
   ]
 
 export default function MainList() {
+  useEffect(() => {
+    document.title = 'Successfield | Dashboard'
+  },[])
+
   return (
     <ul
       className="grid"

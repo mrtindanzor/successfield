@@ -14,12 +14,17 @@ import NotFound from './pages/NotFound';
 import Login from './Components/Authentication/Login';
 import { Loading } from './Components/Loader'
 import FindPro from "./pages/FindPro";
-import AccountInformationList from "./pages/AccountInformation/AccountInformationList";
-import AccountInformation from "./pages/AccountInformation/AccountInformation";
-import MyCertificates from "./pages/Certificates/MyCertificates";
-import MyCertificate from "./pages/Certificates/MyCertificate";
-import MyCourses from "./pages/MyCourses/MyCourses";
+import AccountInformationList from "./pages/Dashboard/AccountInformation/AccountInformationList";
+import AccountInformation from "./pages/Dashboard/AccountInformation/AccountInformation";
+import MyCertificates from "./pages/Dashboard/Certificates/MyCertificates";
+import MyCertificate from "./pages/Dashboard/Certificates/MyCertificate";
+import MyCourses from "./pages/Dashboard/MyCourses/MyCourses";
 import LogoutConfirmation from "./pages/Dashboard/Logout";
+import Dashboard_sub from "./Components/Dashboard/DashboardTemplates/Dashboard_sub";
+import Name from "./Components/Dashboard/AccountInformation/Name";
+import Email from "./Components/Dashboard/AccountInformation/Email";
+import ChangePassword from "./Components/Dashboard/AccountInformation/ChangePassword";
+import PhoneNumber from "./Components/Dashboard/AccountInformation/PhoneNumber";
 
 //lazy components
 const AdminHome = lazy(() => import('./Admin/Home/AdminHome'))
@@ -27,7 +32,6 @@ const Accreditations = lazy(() => import("./pages/Accreditations"))
 const Faq = lazy(() => import("./pages/Faq"))
 const Registration = lazy(() => import("./Components/Authentication/Registration"))
 const SignedIn = lazy(() => import('./Components/ProtectRoutes/SignedIn'))
-const Dashboard = lazy(() => import("./pages/Dashboard"))
 const OnlyAuthorizedForModule = lazy(() => import("./Components/ProtectRoutes/OnlyAuthorizedForModule"))
 const Course = lazy(() => import('./pages/Courses/Course'))
 const Module = lazy(() => import('./pages/Courses/Module/Module'))
@@ -87,47 +91,27 @@ const router = createBrowserRouter(
             <Login />
           </SignedIn> } />
                                               
-        <Route path='dashboard' element={ <NotAuthenticated>
+        <Route path='dashboard/' element={ <NotAuthenticated>
             <Suspense fallback={ <Loading /> }>
-              <Dashboard />
+              <Dashboard_sub />
             </Suspense>
-          </NotAuthenticated> } />
+          </NotAuthenticated> }>
+          
+          <Route path="account-information" element={ <AccountInformation /> }>
+            <Route path="name" element={ <Name /> } />
+            <Route path="email" element={ <Email /> } />
+            <Route path="change-password" element={ <ChangePassword /> } />
+            <Route path="phone-number" element={ <PhoneNumber /> } />
+          </Route>
 
-        <Route path='dashboard/account-information' element={ <NotAuthenticated>
-            <Suspense fallback={ <Loading /> }>
-              <AccountInformation />
-            </Suspense>
-          </NotAuthenticated> } />
+          <Route path="my-certificates" element={ <MyCertificates /> }>
+            <Route path=":certificateCode" element={ <MyCertificate /> } />       
+          </Route>
 
-        <Route path='dashboard/account-information/:section' element={ <NotAuthenticated>
-            <Suspense fallback={ <Loading /> }>
-              <AccountInformationList />
-            </Suspense>
-          </NotAuthenticated> } />
+          <Route path="my-courses" element={ <MyCourses /> } />
 
-        <Route path='dashboard/my-certificates' element={ <NotAuthenticated>
-            <Suspense fallback={ <Loading /> }>
-              <MyCertificates />
-            </Suspense>
-          </NotAuthenticated> } />
-
-        <Route path='dashboard/my-certificates/:certificateCode' element={ <NotAuthenticated>
-            <Suspense fallback={ <Loading /> }>
-              <MyCertificate />
-            </Suspense>
-          </NotAuthenticated> } />
-
-        <Route path='dashboard/my-courses' element={ <NotAuthenticated>
-            <Suspense fallback={ <Loading /> }>
-              <MyCourses />
-            </Suspense>
-          </NotAuthenticated> } />
-
-        <Route path='dashboard/logout' element={ <NotAuthenticated>
-            <Suspense fallback={ <Loading /> }>
-              <LogoutConfirmation />
-            </Suspense>
-          </NotAuthenticated> } />
+          <Route path="logout" element={ <LogoutConfirmation /> } />
+        </Route>
 
         <Route path='*' element={ <NotFound /> } />
       </Route>

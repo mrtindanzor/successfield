@@ -118,6 +118,10 @@ export default function Registration(){
     
   }, [user])
 
+  useEffect(() => {
+    document.title = 'Successfield | Create an account'
+  }, [])
+
   useEffect(() => { feedback.message && setTimeout(() => setFeedback({}), 7000); }, [feedback])
 
   return (
