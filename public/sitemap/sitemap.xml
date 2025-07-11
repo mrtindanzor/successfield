@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Static pages -->
+  <url><loc>https://www.successfieldcollege.com/</loc><priority>1.0</priority></url>
+  <url><loc>https://www.successfieldcollege.com/verify-certificate</loc><priority>0.8</priority></url>
+  <url><loc>https://www.successfieldcollege.com/accreditation</loc><priority>0.8</priority></url>
+  <url><loc>https://www.successfieldcollege.com/training-partners</loc><priority>0.8</priority></url>
+  <url><loc>https://www.successfieldcollege.com/about-us</loc><priority>0.8</priority></url>
+  <url><loc>https://www.successfieldcollege.com/contact-us</loc><priority>0.8</priority></url>
+  <url><loc>https://www.successfieldcollege.com/courses</loc><priority>0.8</priority></url>
+
+  <!-- Course pages -->
+  <url><loc>https://www.successfieldcollege.com/courses/professional%20diploma%20in%20nursing%20assistant%20studies%20%28healthcare%20assistant%20studies%29</loc><priority>0.7</priority></url>
+  <url><loc>https://www.successfieldcollege.com/courses/professional%20bachelor%20of%20nursing%20assistant%20studies%20%28healthcare%20assistant%20studies%29</loc><priority>0.7</priority></url>
+  <url><loc>https://www.successfieldcollege.com/courses/advanced%20diploma%20in%20project%20management%20%28certified%20project%20manager%29</loc><priority>0.7</priority></url>
+  <url><loc>https://www.successfieldcollege.com/courses/micromaster%20in%20business%20administration%20%28certified%20business%20administrator%29</loc><priority>0.7</priority></url>
+  <url><loc>https://www.successfieldcollege.com/courses/micromaster%20in%20business%20analytics%20%28certified%20business%20analyt%29</loc><priority>0.7</priority></url>
+  <url><loc>https://www.successfieldcollege.com/courses/micromaster%20in%20data%20science%20%28certified%20data%20scientist%29</loc><priority>0.7</priority></url>
+  <url><loc>https://www.successfieldcollege.com/courses/micromaster%20in%20digital%20marketing%20%28certified%20digital%20marketer%29</loc><priority>0.7</priority></url>
+  <url><loc>https://www.successfieldcollege.com/courses/professional%20diploma%20in%20fire%20safety%20%28certified%20fire%20warden%29</loc><priority>0.7</priority></url>
+  <url><loc>https://www.successfieldcollege.com/courses/professional%20diploma%20in%20emergency%20first%20aid</loc><priority>0.7</priority></url>
+  <url><loc>https://www.successfieldcollege.com/courses/micromaster%20in%20customer%20service%20and%20operations</loc><priority>0.7</priority></url>
+</urlset>
