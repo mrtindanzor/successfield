@@ -64,7 +64,6 @@ export const registration = async credentials => {
     if(!address.address1) return { msg: 'Add your street address', status: 403, currentForm: 3 }
     if(!phoneNumber) return { msg: 'Enter a valid phone number', status: 403, currentForm: 3 }
     if(!email) return { msg: 'Enter your email address', status: 403, currentForm: 4 }
-    if(!emailPattern.test(email)) return { msg: 'Email address contains invalid characters', status: 403, currentForm: 4 }
     if(!password) return { msg: 'Enter a password', status: 403, currentForm: 4 }
     if(password.length < 8) return { msg: 'Password must not be less than 8 characters', status: 403, currentForm: 4 }
 
@@ -152,7 +151,6 @@ export const login = createAsyncThunk('user/login', async (payload, thunkApi) =>
   try{
     if(!email) throw Error('Enter an email address')
     if(!password) throw Error('Enter your password')
-    if(!emailPattern.test(email)) throw Error('Enter a valid email address')
     const res = await axios.post(uri, { email, password }, { withCredentials: true })
     if(res.data.status !== 200) throw Error( res.data.msg )
     return res.data
