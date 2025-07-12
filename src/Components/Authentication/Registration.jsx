@@ -1,9 +1,7 @@
 import { useState, useReducer, useMemo, useEffect, useCallback } from "react";
 import { useSelector } from 'react-redux'
 import { registration } from '../../Slices/userSlice'
-import { 
-  setAlertMessage,
-  setLoader,
+import {
   serverUriSelector
  } from '../../Slices/settingsSlice'
 import { coursesListSelector } from '../../Slices/coursesSlice'

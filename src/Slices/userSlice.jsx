@@ -4,9 +4,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { allowedImageFormats } from "../Components/PreviewImage"
 import { getExtension } from "../utils/CheckExtension"
 
-const stringPattern = /^[\w\s.,-]+$/
-const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
-
 const initialState = {
   user: null,
   isLoggedIn: false,
@@ -51,12 +48,9 @@ export const registration = async credentials => {
     if(contact !== '') return { msg: 'Unable to complete registration at this time', status: 403, currentForm: 1 }
     if(!firstname) return { msg: 'Enter your first name', status: 403, currentForm: 1 }
     if(firstname.length < 3) return { msg: 'First name too short', status: 403, currentForm: 1 }
-    if(!stringPattern.test(firstname)) return { msg: 'First name contains invalid characters', status: 403, currentForm: 1 }
     if(middlename && middlename.length < 2) return { msg: 'Middle name too short', status: 403, currentForm: 1 }
-    if(middlename && !stringPattern.test(middlename)) return { msg: 'middle name contains invalid characters', status: 403, currentForm: 1 }
     if(!surname) return { msg: 'Enter your surname', status: 403, currentForm: 1 }
     if(surname.length < 3) return { msg: 'Surname too short', status: 403, currentForm: 1 }
-    if(!stringPattern.test(surname)) return { msg: 'Surname contains invalid characters', status: 403, currentForm: 1 }
     if(!gender) return { msg: 'Select your gender', status: 403, currentForm: 1 }
     if(!programme) return { msg: 'Select a programme', status: 403, currentForm: 2 }
     if(!educationLevel) return { msg: 'Select your highest level of education', status: 403, currentForm: 2 }
